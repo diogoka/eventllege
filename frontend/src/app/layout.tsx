@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import ThemeRegistry from './theme-registry';
+import { Container } from '@mui/material';
 
 import initializeFirebase from '@/auth/firebase';
 initializeFirebase();
@@ -20,7 +22,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <ThemeRegistry options={{ key: 'mui' }}>
+        <Container>
+          {children}
+        </Container>
+      </ThemeRegistry>
     </html>
   )
 }
