@@ -75,6 +75,11 @@ exports.up = async pgm => {
 
     pgm.createTable(events, {
         id_event: 'serial primary key',
+        id_owner: {
+            type: 'integer',
+            references: `${tableNameUsers}(id_user)`,
+            notNull: true
+        },
         name_event: { type: 'varchar(500)', notNull: true },
         description_event: { type: 'varchar(500)', notNull: true },
         date_event_start: { type: 'timestamp', notNull: true },
@@ -84,6 +89,13 @@ exports.up = async pgm => {
         price_event: { type: 'integer', notNull: true },
         image_event: { type: 'bytea', notNull: false },
         type_event: { type: 'varchar(500)', notNull: true }
+    });
+
+    pgm.addConstraint(events, 'fk_event_owner', {
+        foreignKeys: {
+            columns: 'id_owner',
+            references: `${tableNameUsers}(id_user)`,
+        }
     });
 
     pgm.createTable(reviews, {
