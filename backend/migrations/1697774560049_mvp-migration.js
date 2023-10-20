@@ -19,7 +19,7 @@ exports.up = async pgm => {
     });
 
     pgm.createTable(tableNameUsers, {
-        id_user: 'serial primary key',
+        id_user: 'varchar(100) primary key',
         id_user_type: {
             type: 'integer',
             references: `${tableNameUsersType}(id_user_type)`,
@@ -32,7 +32,7 @@ exports.up = async pgm => {
         avatar_user: { type: 'bytea', notNull: false }
     });
 
-    pgm.addConstraint(tableNameUsers, 'fk_user_user_type', {
+    pgm.addConstraint(tableNameUsers, 'fk_user_type', {
         foreignKeys: {
             columns: 'id_user_type',
             references: `${tableNameUsersType}(id_user_type)`,
@@ -48,7 +48,7 @@ exports.up = async pgm => {
     pgm.createTable(users_courses, {
         id_user_course: 'serial primary key',
         id_user: {
-            type: 'integer',
+            type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
             notNull: true
         },
@@ -76,7 +76,7 @@ exports.up = async pgm => {
     pgm.createTable(events, {
         id_event: 'serial primary key',
         id_owner: {
-            type: 'integer',
+            type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
             notNull: true
         },
@@ -101,7 +101,7 @@ exports.up = async pgm => {
     pgm.createTable(reviews, {
         id_review: 'serial primary key',
         id_user: {
-            type: 'integer',
+            type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
             notNull: true
         },
@@ -141,7 +141,7 @@ exports.up = async pgm => {
     pgm.createTable(attendees, {
         id_attendee: 'serial primary key',
         id_user: {
-            type: 'integer',
+            type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
             notNull: true
         },
