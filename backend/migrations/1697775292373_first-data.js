@@ -119,7 +119,7 @@ exports.up = async pgm => {
     for (const event of events) {
         await pgm.sql(`
             INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, type_event)
-            VALUES ('${event.id_owner}',${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
+            VALUES (${event.id_owner}, '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
         `);
     }
 
@@ -166,78 +166,37 @@ exports.up = async pgm => {
 };
 
 exports.down = async pgm => {
+
     pgm.sql(`
-        DELETE FROM users_type WHERE role_user = 'organizer';
-        DELETE FROM users_type WHERE role_user = 'student';
-        DELETE FROM users_type WHERE role_user = 'admin';
+        DELETE FROM users_type WHERE id_user_type < 3;
     `);
 
     pgm.sql(`
-        DELETE FROM users WHERE name_user = 'Diogo Krub de Almeida';
-        DELETE FROM users WHERE name_user = 'Daisuke Seki';
-        DELETE FROM users WHERE name_user = 'Seisuke Yamada';
-        DELETE FROM users WHERE name_user = 'Masashi Sawada';
-        DELETE FROM users WHERE name_user = 'Takashi Nakamura';
-        DELETE FROM users WHERE name_user = 'Yusuke Takahashi';
+        DELETE FROM users WHERE id_user < 6;
     `);
 
     pgm.sql(`
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 1.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 1.5';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 2.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 2.5';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 3.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 3.5';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 4.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 4.5';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 5.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 5.5';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses 6.0';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses Advance 1';
-        DELETE FROM courses WHERE name_course = 'English Languages Courses Advance 2';
-        DELETE FROM courses WHERE name_course = 'Web Application Development';
-        DELETE FROM courses WHERE name_course = 'Data Science';
-        DELETE FROM courses WHERE name_course = 'Network and System Solutions';
-        DELETE FROM courses WHERE name_course = 'UI/UX Design Specialist';
-        DELETE FROM courses WHERE name_course = 'International Business Management';
-        DELETE FROM courses WHERE name_course = 'Digital Marketing Specialist';
-        DELETE FROM courses WHERE name_course = 'Advanced Digital Marketing';
-        DELETE FROM courses WHERE name_course = 'Customer Relations Specialist';
-        DELETE FROM courses WHERE name_course = 'Hospitality Management';
+        DELETE FROM courses WHERE id_course < 21;
     `);
 
     pgm.sql(`
-        DELETE FROM users_courses WHERE id_user = 1;
-        DELETE FROM users_courses WHERE id_user = 2;
-        DELETE FROM users_courses WHERE id_user = 3;
-        DELETE FROM users_courses WHERE id_user = 4;
-        DELETE FROM users_courses WHERE id_user = 5;
-        DELETE FROM users_courses WHERE id_user = 6;
+        DELETE FROM users_courses WHERE id_user < 6;
     `);
 
     pgm.sql(`
-        DELETE FROM events WHERE name_event = 'Demo Day';
-        DELETE FROM events WHERE name_event = 'RED Talks';
-        DELETE FROM events WHERE name_event = 'RED Academy Open House';
+        DELETE FROM events WHERE id_event < 3;
     `);
 
     pgm.sql(`
-        DELETE FROM attendees WHERE id_user = 1;
-        DELETE FROM attendees WHERE id_user = 2;
-        DELETE FROM attendees WHERE id_user = 3;
-        DELETE FROM attendees WHERE id_user = 4;
-        DELETE FROM attendees WHERE id_user = 5;
-        DELETE FROM attendees WHERE id_user = 6;
+        DELETE FROM attendees WHERE id_attendee < 12;
     `);
 
     pgm.sql(`
-        DELETE FROM reviews WHERE id_user = 1;
-        DELETE FROM reviews WHERE id_user = 2;
-        DELETE FROM reviews WHERE id_user = 3;
-        DELETE FROM reviews WHERE id_user = 4;
-        DELETE FROM reviews WHERE id_user = 5;
-        DELETE FROM reviews WHERE id_user = 6;
+        DELETE FROM reviews WHERE id_review < 12;
     `);
+
+
+
 
 
 
