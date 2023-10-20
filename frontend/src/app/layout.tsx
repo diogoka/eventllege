@@ -22,11 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ThemeRegistry options={{ key: 'mui' }}>
-        <Container>
-          {children}
-        </Container>
-      </ThemeRegistry>
+      <body>
+        <ThemeRegistry options={{ key: 'mui' }}>
+          <Container>
+            {children}
+          </Container>
+        </ThemeRegistry>
+      </body>
     </html>
   )
 }
