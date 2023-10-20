@@ -10,7 +10,6 @@ const events = 'events';
 const reviews = 'reviews';
 const events_reviews = 'events_reviews';
 const attendees = 'attendees';
-const owners_events = 'owners_events';
 
 exports.up = async pgm => {
 
@@ -74,36 +73,13 @@ exports.up = async pgm => {
         }
     });
 
-    pgm.createTable(owners_events, {
-        id_owner_event: 'serial primary key',
-        id_user: {
-            type: 'integer',
-            references: `${tableNameUsers}(id_user)`,
-            notNull: true
-        },
-        id_event: {
-            type: 'integer',
-            references: `${events}(id_event)`,
-            notNull: true
-        },
-    });
-
-    pgm.addConstraint(owners_events, 'fk_owner_event_user', {
-        foreignKeys: {
-            columns: 'id_user',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
-    pgm.addConstraint(owners_events, 'fk_owner_event_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
     pgm.createTable(events, {
         id_event: 'serial primary key',
+        id_owner: {
+            type: 'integer',
+            references: `${tableNameUsers}(id_user)`,
+            notNull: true
+        },
         name_event: { type: 'varchar(500)', notNull: true },
         description_event: { type: 'varchar(500)', notNull: true },
         date_event_start: { type: 'timestamp', notNull: true },
@@ -113,6 +89,13 @@ exports.up = async pgm => {
         price_event: { type: 'integer', notNull: true },
         image_event: { type: 'bytea', notNull: false },
         type_event: { type: 'varchar(500)', notNull: true }
+    });
+
+    pgm.addConstraint(events, 'fk_event_owner', {
+        foreignKeys: {
+            columns: 'id_owner',
+            references: `${tableNameUsers}(id_user)`,
+        }
     });
 
     pgm.createTable(reviews, {

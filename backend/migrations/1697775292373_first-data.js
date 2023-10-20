@@ -76,23 +76,9 @@ exports.up = async pgm => {
     }
 
 
-    const owners_events = [
-        { id_user: 1, id_event: 1 },
-        { id_user: 1, id_event: 2 },
-        { id_user: 1, id_event: 3 }
-    ]
-
-
-    for (const owner_event of owners_events) {
-        await pgm.sql(`
-            INSERT INTO owners_events (id_user, id_event)
-            VALUES (${owner_event.id_user}, ${owner_event.id_event});
-        `);
-    }
-
-
     const events = [
         {
+            id_owner: 1,
             name_event: 'Demo Day',
             description_event: 'Demo Day is a showcase of the projects that our students have been working on during their time at RED Academy. This is a great opportunity for students to show off their work to friends, family, and industry professionals. It is also a chance for prospective students to get a glimpse of what they can expect to learn at RED Academy.',
             date_event_start: '2023-11-01 01:00:00',
@@ -104,6 +90,7 @@ exports.up = async pgm => {
             type_event: 'Tech'
         },
         {
+            id_owner: 1,
             name_event: 'RED Talks',
             description_event: 'RED Talks is a series of presentations by industry experts on a wide range of topics relevant to people in tech. RED Talks are a great opportunity to learn something new and network with other people in the industry.',
             date_event_start: '2023-11-01 01:00:00',
@@ -115,6 +102,7 @@ exports.up = async pgm => {
             type_event: 'Tech'
         },
         {
+            id_owner: 1,
             name_event: 'RED Academy Open House',
             description_event: 'Our Open House is a great opportunity to learn more about our programs, tour our campus, and meet our team. Come and see why RED Academy is a great place to learn.',
             date_event_start: '2023-11-01 01:00:00',
@@ -130,8 +118,8 @@ exports.up = async pgm => {
 
     for (const event of events) {
         await pgm.sql(`
-            INSERT INTO events (name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, type_event)
-            VALUES ('${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
+            INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, type_event)
+            VALUES ('${event.id_owner}',${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
         `);
     }
 
