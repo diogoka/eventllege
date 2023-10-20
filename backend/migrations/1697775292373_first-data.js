@@ -76,6 +76,21 @@ exports.up = async pgm => {
     }
 
 
+    const owners_events = [
+        { id_user: 1, id_event: 1 },
+        { id_user: 1, id_event: 2 },
+        { id_user: 1, id_event: 3 }
+    ]
+
+
+    for (const owner_event of owners_events) {
+        await pgm.sql(`
+            INSERT INTO owners_events (id_user, id_event)
+            VALUES (${owner_event.id_user}, ${owner_event.id_event});
+        `);
+    }
+
+
     const events = [
         {
             name_event: 'Demo Day',
