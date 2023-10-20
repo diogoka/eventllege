@@ -11,6 +11,7 @@ const port_db = Number(process.env.PORT_DB);
 const pool = new Pool.Pool({
     user: user,
     host: host,
+    password: password,
     database: database,
     port: port_db
 });
