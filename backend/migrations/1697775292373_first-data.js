@@ -10,19 +10,19 @@ exports.up = async pgm => {
     `);
 
     const usersData = [
-        { id_user_type: 1, name_user: 'Diogo Krub de Almeida', email_user: 'diogokalmeida@gmail.com', postal_code_user: 'V5K2X1', phone_user: '123-456-7890' },
-        { id_user_type: 1, name_user: 'Daisuke Seki', email_user: 'ds@example.com', postal_code_user: '54321', phone_user: '987-654-3210' },
-        { id_user_type: 1, name_user: 'Seisuke Yamada', email_user: 'sei@gmail.com', postal_code_user: '12345', phone_user: '123-456-7890' },
-        { id_user_type: 1, name_user: 'Masashi Sawada', email_user: 'mas@gmail.com', postal_code_user: '54321', phone_user: '987-654-3210' },
-        { id_user_type: 2, name_user: 'Takashi Nakamura', email_user: 'takashi@gmail.conm', postal_code_user: 'V5K2X1', phone_user: '123-456-7890' },
-        { id_user_type: 2, name_user: 'Yusuke Takahashi', email_user: 'yt@gmail.com', postal_code_user: '54321', phone_user: '987-654-3210' },
+        { id_user: 'A', id_user_type: 1, name_user: 'Diogo Krub de Almeida', email_user: 'diogokalmeida@gmail.com', postal_code_user: 'V5K2X1', phone_user: '123-456-7890' },
+        { id_user: 'B', id_user_type: 1, name_user: 'Daisuke Seki', email_user: 'ds@example.com', postal_code_user: '54321', phone_user: '987-654-3210' },
+        { id_user: 'C', id_user_type: 1, name_user: 'Seisuke Yamada', email_user: 'sei@gmail.com', postal_code_user: '12345', phone_user: '123-456-7890' },
+        { id_user: 'D', id_user_type: 1, name_user: 'Masashi Sawada', email_user: 'mas@gmail.com', postal_code_user: '54321', phone_user: '987-654-3210' },
+        { id_user: 'E', id_user_type: 2, name_user: 'Takashi Nakamura', email_user: 'takashi@gmail.conm', postal_code_user: 'V5K2X1', phone_user: '123-456-7890' },
+        { id_user: 'F', id_user_type: 2, name_user: 'Yusuke Takahashi', email_user: 'yt@gmail.com', postal_code_user: '54321', phone_user: '987-654-3210' },
 
     ];
 
     for (const user of usersData) {
         await pgm.sql(`
-            INSERT INTO users (id_user_type, name_user, email_user, postal_code_user, phone_user)
-            VALUES (${user.id_user_type}, '${user.name_user}', '${user.email_user}', '${user.postal_code_user}', '${user.phone_user}');
+            INSERT INTO users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user)
+            VALUES ('${user.id_user}', ${user.id_user_type}, '${user.name_user}', '${user.email_user}', '${user.postal_code_user}', '${user.phone_user}');
         `);
     }
 
@@ -60,25 +60,26 @@ exports.up = async pgm => {
     }
 
     const users_courses = [
-        { id_user: 1, id_course: 14 },
-        { id_user: 2, id_course: 14 },
-        { id_user: 3, id_course: 14 },
-        { id_user: 4, id_course: 14 },
-        { id_user: 5, id_course: 17 },
-        { id_user: 6, id_course: 17 }
+        { id_user: 'A', id_course: 14 },
+        { id_user: 'B', id_course: 14 },
+        { id_user: 'C', id_course: 14 },
+        { id_user: 'D', id_course: 14 },
+        { id_user: 'E', id_course: 16 },
+        { id_user: 'F', id_course: 16 },
+
     ]
 
     for (const user_course of users_courses) {
         await pgm.sql(`
             INSERT INTO users_courses (id_user, id_course)
-            VALUES (${user_course.id_user}, ${user_course.id_course});
+            VALUES ('${user_course.id_user}', ${user_course.id_course});
         `);
     }
 
 
     const events = [
         {
-            id_owner: 1,
+            id_owner: 'A',
             name_event: 'Demo Day',
             description_event: 'Demo Day is a showcase of the projects that our students have been working on during their time at RED Academy. This is a great opportunity for students to show off their work to friends, family, and industry professionals. It is also a chance for prospective students to get a glimpse of what they can expect to learn at RED Academy.',
             date_event_start: '2023-11-01 01:00:00',
@@ -90,7 +91,7 @@ exports.up = async pgm => {
             type_event: 'Tech'
         },
         {
-            id_owner: 1,
+            id_owner: 'A',
             name_event: 'RED Talks',
             description_event: 'RED Talks is a series of presentations by industry experts on a wide range of topics relevant to people in tech. RED Talks are a great opportunity to learn something new and network with other people in the industry.',
             date_event_start: '2023-11-01 01:00:00',
@@ -102,7 +103,7 @@ exports.up = async pgm => {
             type_event: 'Tech'
         },
         {
-            id_owner: 1,
+            id_owner: "B",
             name_event: 'RED Academy Open House',
             description_event: 'Our Open House is a great opportunity to learn more about our programs, tour our campus, and meet our team. Come and see why RED Academy is a great place to learn.',
             date_event_start: '2023-11-01 01:00:00',
@@ -119,87 +120,67 @@ exports.up = async pgm => {
     for (const event of events) {
         await pgm.sql(`
             INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, type_event)
-            VALUES (${event.id_owner}, '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
+            VALUES ('${event.id_owner}', '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
         `);
     }
 
+
     const attendees = [
-        { id_user: 1, id_event: 1 },
-        { id_user: 2, id_event: 1 },
-        { id_user: 3, id_event: 1 },
-        { id_user: 4, id_event: 1 },
-        { id_user: 5, id_event: 2 },
-        { id_user: 6, id_event: 2 },
-        { id_user: 1, id_event: 3 },
-        { id_user: 2, id_event: 3 },
-        { id_user: 3, id_event: 3 },
-        { id_user: 4, id_event: 3 },
-        { id_user: 5, id_event: 3 },
-        { id_user: 6, id_event: 3 }
+        { id_user: 'C', id_event: 1 },
+        { id_user: 'D', id_event: 2 },
+        { id_user: 'E', id_event: 2 },
     ]
 
     for (const attendee of attendees) {
         await pgm.sql(`
             INSERT INTO attendees (id_user, id_event)
-            VALUES (${attendee.id_user}, ${attendee.id_event});
+            VALUES ('${attendee.id_user}', ${attendee.id_event});
         `);
     }
 
 
     const reviews = [
-        { id_user: 1, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 2, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 3, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 4, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 5, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 6, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 1, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 2, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 3, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 4, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 5, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
-        { id_user: 6, description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' }
+        { id_user: 'C', description_review: 'Great event!', rating: 5, date_review: '2023-11-01 01:00:00' },
+        { id_user: 'D', description_review: 'Great event!', rating: 3, date_review: '2023-11-01 01:00:00' },
+        { id_user: 'E', description_review: 'Great event!', rating: 2, date_review: '2023-11-01 01:00:00' },
     ]
 
+    for (const review of reviews) {
+        await pgm.sql(`
+            INSERT INTO reviews (id_user, description_review, rating, date_review)
+            VALUES ('${review.id_user}', '${review.description_review}', ${review.rating}, '${review.date_review}');
+        `);
+    }
+
+    const events_reviews = [
+        { id_event: 1, id_review: 1 },
+        { id_event: 2, id_review: 2 },
+        { id_event: 2, id_review: 3 },
+    ]
+
+    for (const event_review of events_reviews) {
+        await pgm.sql(`
+            INSERT INTO events_reviews (id_event, id_review)
+            VALUES (${event_review.id_event}, ${event_review.id_review});
+        `);
+    }
 
 
 };
 
 exports.down = async pgm => {
 
-    pgm.sql(`
-        DELETE FROM users_type WHERE id_user_type < 3;
-    `);
 
     pgm.sql(`
-        DELETE FROM users WHERE id_user < 6;
+        DELETE FROM events_reviews;
+        DELETE FROM reviews;
+        DELETE FROM attendees;
+        DELETE FROM events;
+        DELETE FROM users_courses;
+        DELETE FROM courses;
+        DELETE FROM users;
+        DELETE FROM users_type;
     `);
-
-    pgm.sql(`
-        DELETE FROM courses WHERE id_course < 21;
-    `);
-
-    pgm.sql(`
-        DELETE FROM users_courses WHERE id_user < 6;
-    `);
-
-    pgm.sql(`
-        DELETE FROM events WHERE id_event < 3;
-    `);
-
-    pgm.sql(`
-        DELETE FROM attendees WHERE id_attendee < 12;
-    `);
-
-    pgm.sql(`
-        DELETE FROM reviews WHERE id_review < 12;
-    `);
-
-
-
-
-
-
 
 };
 
