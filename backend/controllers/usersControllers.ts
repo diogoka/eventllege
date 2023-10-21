@@ -23,11 +23,11 @@ export const createUser = async (req: express.Request, res: express.Response) =>
     } else if(!/^[^@]+@[^.]+\..+$/.test(email)) {
         res.status(500).send("Invalid Email");
         return;
-    } else if(!/^[A-Za-z0-9]{3}(-|\s)?[A-Za-z0-9]{3}$/.test(postalCode)) {
+    } else if(!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(postalCode)) {
         res.status(500).send("Invalid Postal Code");
         return;
-    } else if(!/^[A-Za-z0-9]{,15}$/.test(phone)) {
-        res.status(500).send("Invalid Postal Code");
+    } else if(!/^[0-9]+$/.test(phone)) {
+        res.status(500).send("Invalid Phone Number");
         return;
     }
 
