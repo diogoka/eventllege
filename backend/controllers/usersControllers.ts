@@ -12,26 +12,31 @@ export const getUsers = async (req: express.Request, res: express.Response) => {
 
 export const createUser = async (req: express.Request, res: express.Response) => {
 
-    const { id, type, name, email, postalCode, phone, avatar } = req.body;
+    console.log(req.body);
+    const { id, type, courseId, name, email, postalCode, phone, avatar } = req.body;
 
-    if(!/^[A-Za-z0-9]{10,}$/.test(id)) {
+    if (!/^[A-Za-z0-9]{10,}$/.test(id)) {
         res.status(500).send("Invalid ID");
         return;
-    } else if(!/^[1-3]{1}$/.test(type)) {
+    } else if (isNaN(type)) {
         res.status(500).send("Invalid User Type");
         return;
-    } else if(!/^[^@]+@[^.]+\..+$/.test(email)) {
+    } else if (isNaN(courseId)) {
+        res.status(500).send("Invalid Course ID");
+        return;
+    } else if (!/^[^@]+@[^.]+\..+$/.test(email)) {
         res.status(500).send("Invalid Email");
         return;
-    } else if(!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(postalCode)) {
+    } else if (!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(postalCode)) {
         res.status(500).send("Invalid Postal Code");
         return;
-    } else if(!/^[0-9]+$/.test(phone)) {
+    } else if (!/^[0-9]+$/.test(phone)) {
         res.status(500).send("Invalid Phone Number");
         return;
     }
 
     try {
+        // Add a new user to DB
         const user = await pool.query(`
             INSERT INTO
                 users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user, avatar_user)
@@ -40,6 +45,17 @@ export const createUser = async (req: express.Request, res: express.Response) =>
             RETURNING
                 *;
             `, [id, type, name, email, postalCode, phone, avatar]);
+
+        // Add user's course to DB
+        await pool.query(`
+            INSERT INTO
+                users_courses (id_user, id_course)
+            VALUES
+                ($1, $2)
+            RETURNING
+                *;
+        `, [id, courseId]);
+
         res.status(200).json(user.rows);
     } catch (err) {
         res.status(500).send(err.message);

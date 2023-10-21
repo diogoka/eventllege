@@ -1,6 +1,7 @@
 import express from 'express';
 import pool from './db/db';
-import usersRoutes from './routes/usersRoutes';
+import usersRouter from './routes/usersRoutes';
+import coursesRouter from './routes/coursesRoutes';
 
 
 type Express = express.Application;
@@ -22,7 +23,8 @@ pool
 
 
 
-app.use('/api/users', usersRoutes)
+app.use('/api/users', usersRouter);
+app.use('/api/courses', coursesRouter);
 
 
 
