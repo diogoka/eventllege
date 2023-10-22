@@ -10,6 +10,7 @@ export const getUsers = async (req: express.Request, res: express.Response) => {
     }
 }
 
+
 export const createUser = async (req: express.Request, res: express.Response) => {
 
     console.log(req.body);
@@ -57,7 +58,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
         `, [id, courseId]);
 
         res.status(200).json(user.rows);
-    } catch (err) {
+    } catch (err:any) {
         res.status(500).send(err.message);
     }
 }

@@ -1,8 +1,10 @@
-import express from "express";
-import pool from "./db/db";
-import usersRouter from "./routes/usersRoutes";
-import eventsRouter from "./routes/eventsRoutes";
-import coursesRouter from "./routes/coursesRoutes";
+
+import express from 'express';
+import pool from './db/db';
+import usersRouter from './routes/usersRoutes';
+import coursesRouter from './routes/coursesRoutes';
+import eventsRoutes from './routes/eventsRoutes';
+
 
 type Express = express.Application;
 
@@ -19,6 +21,7 @@ pool
   .connect()
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Error connecting to database", err));
+
 
 app.use("/api/users", usersRouter);
 app.use("/api/courses", coursesRouter);
