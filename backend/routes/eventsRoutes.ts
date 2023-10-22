@@ -3,8 +3,6 @@ import { createEvent } from "../controllers/eventsControllers";
 
 const eventsRouter: Router = express.Router();
 
-eventsRouter.post("/events", async (req: express.Request, res: express.Response) => {
-  createEvent(req, res);
-});
+eventsRouter.post("/new", createEvent);
 
 export default eventsRouter;

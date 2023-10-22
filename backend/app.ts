@@ -15,6 +15,6 @@ pool
   .catch((err) => console.log("Error connecting to database", err));
 
 app.use("/api/users", usersRoutes);
-app.use("/api/users", eventsRoutes);
+app.use("/api/events", eventsRoutes);
 
 export default app;
