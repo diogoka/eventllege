@@ -1,18 +1,16 @@
-import pool from '../db/db';
-import express from 'express';
+import pool from "../db/db";
+import express from "express";
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
-    try {
-        const users = await pool.query('SELECT * FROM events');
-        res.json(users.rows);
-        
-    } catch (_err) {
-        // console.log(err.message);
-    }
+  try {
+    const users = await pool.query("SELECT * FROM events");
+    res.json(users.rows);
+  } catch (_err) {
+    // console.log(err.message);
+  }
+};
 
-}
-
-export const createEvent = async (req: express.Request, res: express.Response) => {
+export const createEvents = async (req: express.Request, res: express.Response) => {
   console.log(req.body);
   const { id_owner, name, description, date_event_start, date_event_end, location, capacity, price, image, type } =
     req.body;
@@ -35,3 +33,5 @@ export const createEvent = async (req: express.Request, res: express.Response) =
     res.status(500).send(err.message);
   }
 };
+
+export const deleteEvents = async (req: express.Request, res: express.Response) => {};
