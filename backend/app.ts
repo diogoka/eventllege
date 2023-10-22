@@ -1,7 +1,7 @@
 import express from "express";
 import pool from "./db/db";
 import usersRouter from "./routes/usersRoutes";
-import eventsRoutes from "./routes/eventsRoutes";
+import eventsRouter from "./routes/eventsRoutes";
 import coursesRouter from "./routes/coursesRoutes";
 
 type Express = express.Application;
@@ -22,6 +22,6 @@ pool
 
 app.use("/api/users", usersRouter);
 app.use("/api/courses", coursesRouter);
-app.use("/api/events", eventsRoutes);
+app.use("/api/events", eventsRouter);
 
 export default app;
