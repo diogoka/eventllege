@@ -7,7 +7,7 @@ eventsRouter.get("/", getEvents);
 
 eventsRouter.post("/new", createEvents);
 
-eventsRouter.delete("/", deleteEvents);
+eventsRouter.delete("/:id", deleteEvents);
 
 eventsRouter.post("/attendee", newAttendee);
 
