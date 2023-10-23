@@ -7,6 +7,12 @@ export default function EventsPage() {
 
   const [events, setEvents]= useState([]);
 
+  const[user, setUser]= useState({
+    id_user: "F",
+    name: "John",
+    surname: "Doe",
+  });
+
   useEffect(() => {
     
     axios.get("http://localhost:3001/api/events")
@@ -14,8 +20,22 @@ export default function EventsPage() {
       console.log("res",res.data)
       setEvents(res.data)
   })
+
+  console.log("user",user)
   
 },[])
+
+const newAttendee = (id_event: number) => {
+  axios.post("http://localhost:3001/api/events/attendee",{
+    id_event: id_event,
+    id_user: user.id_user
+  })
+  .then((res: any) => {
+    console.log("res",res.data)
+    
+  }
+  )
+}
 
   return (
     <>
@@ -31,6 +51,8 @@ export default function EventsPage() {
               <div>Price: {elm["price_event"]}</div>
               <div>ID: {elm["id_event"]}</div>
               <div>Owner: {elm["id_owner"]}</div>
+              <button onClick={() => newAttendee(elm["id_event"])}>New Attendee</button>
+              
             </div>)
           })}
       </Stack>

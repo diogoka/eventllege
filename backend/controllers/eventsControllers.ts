@@ -29,9 +29,33 @@ export const createEvents = async (req: express.Request, res: express.Response) 
     console.log("post success");
 
     res.status(200).json(events.rows);
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).send(err.message);
   }
 };
 
 export const deleteEvents = async (req: express.Request, res: express.Response) => {};
+
+export const newAttendee = async (req: express.Request, res: express.Response) => {
+  if(!req.body.id_event || !req.body.id_user) {
+    res.status(400).send("Missing parameters");
+    return;
+  }
+  const { id_event, id_user } = req.body;
+  try {
+    const events = await pool.query(
+      `INSERT INTO
+          attendees (id_event, id_user)
+         VALUES
+          ($1, $2)
+         RETURNING
+         *;
+         `,
+      [id_event, id_user]
+    );
+
+    res.status(200).json(events.rows);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+}
