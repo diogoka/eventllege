@@ -14,7 +14,6 @@ type User = {
   email: string;
   postalCode: string;
   phone: string;
-  // avatar: any;
 }
 
 export default function UserPage() {
@@ -33,8 +32,6 @@ export default function UserPage() {
       })
   }, []);
 
-  // console.log(typeof user?.avatar);
-
   return (
     <Stack width={1 / 3}>
       <h1>User Page</h1>
@@ -44,7 +41,7 @@ export default function UserPage() {
       <div>{user?.email}</div>
       <div>{user?.postalCode}</div>
       <div>{user?.phone}</div>
-      <img src={`http://localhost:3001/img/users/${user?.id}.png`} width={'30px'}/>
+      <img src={`http://localhost:3001/img/users/${user?.id}`} width={'30px'}/>
     </Stack>
   )
 }

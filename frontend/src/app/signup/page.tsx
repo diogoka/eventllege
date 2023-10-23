@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
+import imageCompression from 'browser-image-compression';
 
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
@@ -64,11 +65,24 @@ export default function SignUpPage() {
       })
   };
 
-  const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return;
     const file: File = e.target.files[0];
-    if(file.size < MAX_IMAGE_SIZE) {
-      setAvatar(file);
+    if (file.size < MAX_IMAGE_SIZE) {
+      const options = {
+        maxSizeMB: 0.1,
+        maxWidthOrHeight: 480,
+        fileType: 'img/png',
+        useWebWorker: true,
+      }
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setAvatar(compressedFile);
+
+      } catch (error) {
+        console.log(error);
+      }
+
     } else {
       setImageSizeWarning('Please upload an image that is 10MB or smaller.');
     }
@@ -79,7 +93,7 @@ export default function SignUpPage() {
       Sign Up Page
       <form onSubmit={handleSubmit}>
 
-        <select onChange={(e) => {setCourseId(Number(e.target.value))}}>
+        <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
           {courses.map((course: Course, index: number) => {
             return (
               <option key={index} value={course.id}>{course.name}</option>
