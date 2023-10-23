@@ -11,15 +11,13 @@ import {
 const eventsRouter: Router = express.Router();
 
 eventsRouter.get("/", getEvents);
-
 eventsRouter.post("/new", createEvents);
+
+eventsRouter.post("/attendee", newAttendee);
+eventsRouter.delete("/attendee", deleteAttendee);
 
 eventsRouter.put("/:id", updateEvents);
 
 eventsRouter.delete("/:id", deleteEvents);
-
-eventsRouter.post("/attendee", newAttendee);
-
-eventsRouter.delete("/attendee", deleteAttendee);
 
 export default eventsRouter;

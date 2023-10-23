@@ -1,10 +1,25 @@
 import express, { Router } from 'express';
-import { getUsers, createUser } from '../controllers/usersControllers';
+import { getUsers, getUser, createUser } from '../controllers/usersControllers';
+import multer from 'multer';
+import path from 'path';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/img/users')
+  },
+  
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const fileName = req.body.id + ext;
+    cb(null, fileName)
+  }
+})
+export const upload = multer({ storage: storage })
 
 const usersRouter: Router = express.Router();
 
 usersRouter.get('/', getUsers);
-usersRouter.post('/', createUser);
-
+usersRouter.get('/:id', getUser);
+usersRouter.post('/', upload.single('avatar'), createUser);
 
 export default usersRouter;
