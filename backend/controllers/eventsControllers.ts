@@ -34,10 +34,24 @@ export const createEvents = async (req: express.Request, res: express.Response) 
   }
 };
 
-export const deleteEvents = async (req: express.Request, res: express.Response) => {};
+export const deleteEvents = async (req: express.Request, res: express.Response) => {
+  const id = parseInt(req.params.id);
+
+  if (!id) {
+    console.log("id does not match");
+    res.status(404).send("Delete events failed");
+  } else {
+    try {
+      const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
+      res.status(200).json(events.rows);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
+};
 
 export const newAttendee = async (req: express.Request, res: express.Response) => {
-  if(!req.body.id_event || !req.body.id_user) {
+  if (!req.body.id_event || !req.body.id_user) {
     res.status(400).send("Missing parameters");
     return;
   }
