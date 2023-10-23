@@ -7,6 +7,6 @@ eventsRouter.get("/", getEvents);
 
 eventsRouter.post("/new", createEvents);
 
-eventsRouter.delete("/", deleteEvents);
+eventsRouter.delete("/:id", deleteEvents);
 
 export default eventsRouter;
