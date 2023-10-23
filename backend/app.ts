@@ -4,9 +4,12 @@ import usersRouter from "./routes/usersRoutes";
 import coursesRouter from "./routes/coursesRoutes";
 import eventsRouter from "./routes/eventsRoutes";
 import cors from "cors";
+import 'dotenv/config'
+
+
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_URL,
   methods: "GET, POST, PUT, DELETE"
 };
 
