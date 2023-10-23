@@ -4,11 +4,11 @@ import multer from 'multer';
 import path from 'path';
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (req: express.Request, file: Express.Multer.File, cb) {
     cb(null, 'public/img/users')
   },
   
-  filename: function (req, file, cb) {
+  filename: function (req: express.Request, file: Express.Multer.File, cb) {
     const ext = path.extname(file.originalname);
     const fileName = req.body.id + ext;
     cb(null, fileName)
