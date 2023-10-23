@@ -34,6 +34,26 @@ export const createEvents = async (req: express.Request, res: express.Response) 
   }
 };
 
+export const updateEvents = async (req: express.Request, res: express.Response) => {
+  const id = parseInt(req.params.id);
+  const { name, description, date_event_start, date_event_end, location, capacity, price, image, type } = req.body;
+
+  if (!id) {
+    console.log("id does not match");
+    res.status(404).send("Update events failed");
+  } else {
+    try {
+      const events = await pool.query(
+        `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, image_event = $8, type_event = $9 WHERE id_event = $10 RETURNING *`,
+        [name, description, date_event_start, date_event_end, location, capacity, price, image, type, id]
+      );
+      res.status(200).json(events.rows);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
+};
+
 export const deleteEvents = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
 
@@ -72,12 +92,11 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
 
 export const deleteAttendee = async (req: express.Request, res: express.Response) => {
-
   console.log(req.body);
-  if(!req.body.id_event || !req.body.id_user) {
+  if (!req.body.id_event || !req.body.id_user) {
     res.status(400).send("Missing parameters");
     return;
   }
@@ -98,4 +117,4 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
