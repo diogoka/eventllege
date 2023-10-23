@@ -21,7 +21,7 @@ export const createEvent = async (req: express.Request, res: express.Response) =
     console.log("post success");
 
     res.status(200).json(events.rows);
-  } catch (err) {
+  } catch (err:any) {
     res.status(500).send(err.message);
   }
 };
