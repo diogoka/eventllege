@@ -3,6 +3,8 @@ import { useState, useEffect } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
 
+const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
+
 type Course = {
   id: number;
   name: string;
@@ -23,6 +25,8 @@ export default function SignUpPage() {
   // Course data from server
   const [courses, setCourses] = useState([]);
 
+  const [imageSizeWarning, setImageSizeWarning] = useState("");
+
   // Get course data from server to show course names
   useEffect(() => {
     axios
@@ -34,28 +38,6 @@ export default function SignUpPage() {
         console.error(error.response.data);
       })
   }, []);
-
-  // Send the user input to create an account
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   axios
-  //     .post('http://localhost:3001/api/users', {
-  //       id: id,
-  //       type: 2,
-  //       email: email,
-  //       name: name,
-  //       postalCode: postalCode,
-  //       courseId: courseId,
-  //       phone: phone,
-  //     })
-  //     .then((res) => {
-  //       // console.log(res.data)
-  //     })
-  //     .catch((error) => {
-  //       console.error(error.response.data);
-  //     })
-  // };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -83,9 +65,13 @@ export default function SignUpPage() {
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    if (e.target.files?.length !== 1) return;
     const file: File = e.target.files[0];
-    setAvatar(file);
+    if(file.size < MAX_IMAGE_SIZE) {
+      setAvatar(file);
+    } else {
+      setImageSizeWarning('Please upload an image that is 10MB or smaller.');
+    }
   };
 
   return (
@@ -106,6 +92,7 @@ export default function SignUpPage() {
         <input type="text" placeholder="postal code" onChange={(event) => setPostalCode(event.target.value)} />
         <input type="text" placeholder="phone" onChange={(event) => setPhone(event.target.value)} />
         <input type="file" accept="image/*" onChange={onFileInputChange} />
+        <div>{imageSizeWarning}</div>
 
         <input type="submit" value="Register" />
       </form>
