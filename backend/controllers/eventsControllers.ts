@@ -37,7 +37,6 @@ export const createEvents = async (req: express.Request, res: express.Response) 
 export const deleteEvents = async (req: express.Request, res: express.Response) => {};
 
 export const newAttendee = async (req: express.Request, res: express.Response) => {
-
   if(!req.body.id_event || !req.body.id_user) {
     res.status(400).send("Missing parameters");
     return;
