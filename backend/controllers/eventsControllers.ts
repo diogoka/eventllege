@@ -92,12 +92,11 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
 
 export const deleteAttendee = async (req: express.Request, res: express.Response) => {
-
   console.log(req.body);
-  if(!req.body.id_event || !req.body.id_user) {
+  if (!req.body.id_event || !req.body.id_user) {
     res.status(400).send("Missing parameters");
     return;
   }
@@ -118,4 +117,4 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
