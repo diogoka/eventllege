@@ -92,4 +92,30 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-};
+}
+
+export const deleteAttendee = async (req: express.Request, res: express.Response) => {
+
+  console.log(req.body);
+  if(!req.body.id_event || !req.body.id_user) {
+    res.status(400).send("Missing parameters");
+    return;
+  }
+  const { id_event, id_user } = req.body;
+  try {
+    const events = await pool.query(
+      `DELETE FROM
+          attendees
+         WHERE
+          id_event = $1 AND id_user = $2
+         RETURNING
+         *;
+         `,
+      [id_event, id_user]
+    );
+
+    res.status(200).json(events.rows);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+}

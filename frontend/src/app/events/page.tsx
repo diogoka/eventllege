@@ -37,6 +37,22 @@ const newAttendee = (id_event: number) => {
   )
 }
 
+const deleteAttendee = (id_event: number) => {
+  axios.delete("http://localhost:3001/api/events/attendee",{
+    data: {
+      id_event: id_event,
+      id_user: user.id_user
+    }  
+  })
+  .then((res: any) => {
+    console.log("res",res.data)
+    
+  }
+  )
+}
+
+
+
   return (
     <>
       <Typography variant="h3">Events Page</Typography>
@@ -52,6 +68,7 @@ const newAttendee = (id_event: number) => {
               <div>ID: {elm["id_event"]}</div>
               <div>Owner: {elm["id_owner"]}</div>
               <button onClick={() => newAttendee(elm["id_event"])}>New Attendee</button>
+              <button onClick={() => deleteAttendee(elm["id_event"])}>Delete Attendee</button>
               
             </div>)
           })}
