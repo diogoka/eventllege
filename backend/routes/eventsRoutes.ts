@@ -4,13 +4,11 @@ import { createEvents, getEvents, deleteEvents, newAttendee, deleteAttendee } fr
 const eventsRouter: Router = express.Router();
 
 eventsRouter.get("/", getEvents);
-
 eventsRouter.post("/new", createEvents);
 
-eventsRouter.delete("/:id", deleteEvents);
-
 eventsRouter.post("/attendee", newAttendee);
+eventsRouter.delete("/attendee", deleteAttendee);
 
-eventsRouter.delete("/attendee", deleteAttendee)
+eventsRouter.delete("/:id", deleteEvents);
 
 export default eventsRouter;

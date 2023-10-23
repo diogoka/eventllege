@@ -10,10 +10,40 @@ export const getUsers = async (req: express.Request, res: express.Response) => {
     }
 }
 
+export const getUser = async (req: express.Request, res: express.Response) => {
+
+    const userId = req.params.id;
+
+    try {
+        const result = await pool.query(`
+        SELECT
+            users.id_user AS id,
+            users_type.role_user AS role,
+            users.name_user AS name,
+            users.email_user AS email,
+            users.postal_code_user AS postal_code,
+            users.phone_user AS phone
+        FROM
+            users
+        JOIN
+            users_type ON users.id_user_type = users_type.id_user_type
+        WHERE
+            users.id_user = $1
+        `, [userId]);
+
+        const user = result.rows[0];
+        user.postalCode = user.postal_code;
+        console.log(user);
+        delete user.postal_code;
+        res.json(user);
+
+    } catch (err: any) {
+        console.log(err.message);
+    }
+}
 
 export const createUser = async (req: express.Request, res: express.Response) => {
 
-    console.log(req.body);
     const { id, type, courseId, name, email, postalCode, phone, avatar } = req.body;
 
     if (!/^[A-Za-z0-9]{10,}$/.test(id)) {
@@ -58,7 +88,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
         `, [id, courseId]);
 
         res.status(200).json(user.rows);
-    } catch (err:any) {
+    } catch (err: any) {
         res.status(500).send(err.message);
     }
 }
