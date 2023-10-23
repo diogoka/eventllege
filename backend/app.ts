@@ -3,10 +3,18 @@ import pool from "./db/db";
 import usersRouter from "./routes/usersRoutes";
 import coursesRouter from "./routes/coursesRoutes";
 import eventsRouter from "./routes/eventsRoutes";
+import cors from "cors";
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: "GET, POST, PUT, DELETE"
+};
+
 
 type Express = express.Application;
 
 const app: Express = express();
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
