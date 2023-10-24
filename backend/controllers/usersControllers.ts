@@ -1,6 +1,16 @@
 import pool from '../db/db';
 import express from 'express';
 
+type UserInput = {
+    id: string;
+    type: number;
+    courseId: number;
+    name: string;
+    email: string;
+    postalCode: string;
+    phone: string;
+}
+
 export const getUsers = async (req: express.Request, res: express.Response) => {
     try {
         const users = await pool.query('SELECT * FROM users');
@@ -57,40 +67,67 @@ export const getUser = async (req: express.Request, res: express.Response) => {
     }
 }
 
-export const createUser = async (req: express.Request, res: express.Response) => {
 
-    const { id, type, courseId, name, email, postalCode, phone, avatar } = req.body;
+export const editUser = async (req: express.Request, res: express.Response) => {
 
-    if (!/^[A-Za-z0-9]{10,}$/.test(id)) {
-        res.status(500).send("Invalid ID");
-        return;
-    } else if (isNaN(type)) {
-        res.status(500).send("Invalid User Type");
-        return;
-    } else if (isNaN(courseId)) {
-        res.status(500).send("Invalid Course ID");
-        return;
-    } else if (!/^[^@]+@[^.]+\..+$/.test(email)) {
-        res.status(500).send("Invalid Email");
-        return;
-    } else if (!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(postalCode)) {
-        res.status(500).send("Invalid Postal Code");
-        return;
-    } else if (!/^[0-9]+$/.test(phone)) {
-        res.status(500).send("Invalid Phone Number");
+    const userInput: UserInput = req.body;
+    console.log(req.body);
+    const { result, message } = validateUserInput(userInput);
+    if (!result) {
+        res.status(500).send(message);
         return;
     }
 
     try {
         // Add a new user to DB
-        const user = await pool.query(`
-            INSERT INTO
-                users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user, avatar_user)
-            VALUES
-                ($1, $2, $3, $4, $5, $6, $7)
+        const userResult = await pool.query(`
+            UPDATE
+                users
+            SET
+                id_user_type = $1, name_user = $2, email_user = $3, postal_code_user = $4, phone_user = $5
+            WHERE
+                id_user = $6
             RETURNING
                 *;
-            `, [id, type, name, email, postalCode, phone, avatar]);
+            `, [userInput.type, userInput.name, userInput.email, userInput.postalCode, userInput.phone, userInput.id]);
+
+        // Add user's course to DB
+        await pool.query(`
+            UPDATE
+                users_courses
+            SET
+                id_course = $1
+            WHERE
+                id_user = $2
+            RETURNING
+                *;
+        `, [userInput.courseId, userInput.id]);
+
+        res.status(200).json(userResult.rows[0]);
+    } catch (err: any) {
+        res.status(500).send(err.message);
+    }
+}
+
+export const createUser = async (req: express.Request, res: express.Response) => {
+
+    const userInput: UserInput = req.body;
+    const { result, message } = validateUserInput(userInput);
+    if (!result) {
+        res.status(500).send(message);
+        return;
+    }
+
+    try {
+        // Add a new user to DB
+        const userResult = await pool.query(`
+            INSERT INTO
+                users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user)
+            VALUES
+                ($1, $2, $3, $4, $5, $6)
+            RETURNING
+                *;
+            `, [userInput.id, userInput.type, userInput.name, userInput.email, userInput.postalCode, userInput.phone]);
 
         // Add user's course to DB
         await pool.query(`
@@ -100,10 +137,36 @@ export const createUser = async (req: express.Request, res: express.Response) =>
                 ($1, $2)
             RETURNING
                 *;
-        `, [id, courseId]);
+        `, [userInput.id, userInput.courseId]);
 
-        res.status(200).json(user.rows);
+        res.status(200).json(userResult.rows[0]);
     } catch (err: any) {
         res.status(500).send(err.message);
     }
+}
+
+function validateUserInput(userInput: UserInput): { result: boolean; message: string; } {
+
+    let result = false;
+    let message = '';
+    
+    if (!userInput.id) {
+        message = 'Invalid user ID'
+    } else if (isNaN(userInput.type)) {
+        message = 'Invalid User Type';
+    } else if (isNaN(userInput.courseId)) {
+        message = 'Invalid Course ID';
+    } else if (!/^[^@]+@[^.]+\..+$/.test(userInput.email)) {
+        message = 'Invalid Email';
+    } else if (!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(userInput.postalCode)) {
+        message = 'Invalid Postal Code';
+    } else if (!/^[0-9-]+$/.test(userInput.phone)) {
+        message = 'Invalid Phone Number';
+    } else {
+        result = true;
+    }
+
+    return {
+        result, message
+    };
 }

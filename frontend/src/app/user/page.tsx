@@ -97,6 +97,7 @@ export default function UserPage() {
       })
       .then((res) => {
         console.log(res.data);
+        setIsEditing(false);
       })
       .catch((error) => {
         console.error(error.response.data);

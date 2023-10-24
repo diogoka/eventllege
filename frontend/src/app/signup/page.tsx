@@ -4,7 +4,6 @@ import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
 
-
 type Course = {
   id: number;
   name: string;
@@ -47,9 +46,9 @@ export default function SignUpPage() {
     formData.append("courseId", courseId.toString());
     formData.append("email", email);
     formData.append("name", name);
-    if(postalCode) formData.append("postalCode", postalCode);
-    if(phone) formData.append("phone", phone);
-    if(image) formData.append("avatar", image);
+    if (postalCode) formData.append("postalCode", postalCode);
+    if (phone) formData.append("phone", phone);
+    formData.append("avatar", image!);
 
     axios
       .post('http://localhost:3001/api/users', formData, {

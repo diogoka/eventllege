@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { getUsers, getUser, createUser } from '../controllers/usersControllers';
+import { getUsers, getUser, createUser, editUser } from '../controllers/usersControllers';
 import multer from 'multer';
 import path from 'path';
 
@@ -21,5 +21,6 @@ const usersRouter: Router = express.Router();
 usersRouter.get('/', getUsers);
 usersRouter.get('/:id', getUser);
 usersRouter.post('/', upload.single('avatar'), createUser);
+usersRouter.put('/', upload.single('avatar'), editUser);
 
 export default usersRouter;
