@@ -77,6 +77,31 @@ exports.up = async pgm => {
     }
 
 
+    const tags = [
+        { name_tag: 'Workshop' },
+        { name_tag: 'Sports' },
+        { name_tag: 'Party' },
+        { name_tag: 'Dinner' },
+        { name_tag: 'Lunch' },
+        { name_tag: 'Hike' },
+        { name_tag: 'Others' },
+        { name_tag: 'Bring your food' },
+        { name_tag: 'Picnic' },
+        { name_tag: 'Lesson' },
+        { name_tag: 'Network' },
+        { name_tag: 'Conversation' },
+        { name_tag: 'Heritage Place' },
+        { name_tag: 'Culture' },
+        { name_tag: 'Music' },
+    ]
+
+    for (const tag of tags) {
+        await pgm.sql(`
+            INSERT INTO tags (name_tag)
+            VALUES ('${tag.name_tag}');
+        `);
+    }
+
     const events = [
         {
             id_owner: 'A',
@@ -125,6 +150,22 @@ exports.up = async pgm => {
     }
 
 
+    const events_tags = [
+        { id_event: 1, id_tag: 1 },
+        { id_event: 1, id_tag: 2 },
+        { id_event: 2, id_tag: 3 },
+        { id_event: 2, id_tag: 4 },
+        { id_event: 3, id_tag: 6 },
+        { id_event: 3, id_tag: 7 },
+    ]
+
+    for (const event_tag of events_tags) {
+        await pgm.sql(`
+            INSERT INTO events_tags (id_event, id_tag)
+            VALUES (${event_tag.id_event}, ${event_tag.id_tag});
+        `);
+    }
+
     const attendees = [
         { id_user: 'C', id_event: 1 },
         { id_user: 'D', id_event: 2 },
@@ -172,6 +213,8 @@ exports.down = async pgm => {
 
 
     pgm.sql(`
+        DELETE FROM events_tags;
+        DELETE FROM tags;
         DELETE FROM events_reviews;
         DELETE FROM reviews;
         DELETE FROM attendees;
