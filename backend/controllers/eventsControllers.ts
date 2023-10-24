@@ -12,8 +12,7 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
   console.log(req.body);
-  const { id_owner, name, description, date_event_start, date_event_end, location, capacity, price, image, type } =
-    req.body;
+  const { owner, title, description, date_event_start, date_event_end, location, spots, price, image, type } = req.body;
 
   try {
     const events = await pool.query(
@@ -24,7 +23,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
          RETURNING
          *;
          `,
-      [id_owner, name, description, date_event_start, date_event_end, location, capacity, price, image, type]
+      [owner, title, description, date_event_start, date_event_end, location, spots, price, image, type]
     );
     console.log("post success");
 
@@ -48,7 +47,7 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
         [name, description, date_event_start, date_event_end, location, capacity, price, image, type, id]
       );
       res.status(200).json(events.rows);
-    } catch (err:any) {
+    } catch (err: any) {
       res.status(500).send(err.message);
     }
   }
@@ -64,7 +63,7 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
     try {
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
       res.status(200).json(events.rows);
-    } catch (err:any) {
+    } catch (err: any) {
       res.status(500).send(err.message);
     }
   }
