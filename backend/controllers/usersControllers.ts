@@ -158,9 +158,9 @@ function validateUserInput(userInput: UserInput): { result: boolean; message: st
         message = 'Invalid Course ID';
     } else if (!/^[^@]+@[^.]+\..+$/.test(userInput.email)) {
         message = 'Invalid Email';
-    } else if (!/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(userInput.postalCode)) {
+    } else if (userInput.postalCode && !/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(userInput.postalCode)) {
         message = 'Invalid Postal Code';
-    } else if (!/^[0-9-]+$/.test(userInput.phone)) {
+    } else if (userInput.phone && !/^[0-9-]+$/.test(userInput.phone)) {
         message = 'Invalid Phone Number';
     } else {
         result = true;
