@@ -28,6 +28,8 @@ export default function useUploadImage(
         }
         const compressedImage = await imageCompression(file, options);
         setImage(compressedImage);
+      } else {
+        setWarning(`Please upload an image that is ${maxAcceptedSizeMB}MB or smaller.`);
       }
     }
   }

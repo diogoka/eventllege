@@ -20,7 +20,6 @@ export default function SignUpPage() {
   const [name, setName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatar, setAvatar] = useState<File>();
 
   // Course data from server
   const [courses, setCourses] = useState([]);

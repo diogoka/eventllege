@@ -111,7 +111,7 @@ export default function UserPage() {
           <input type="file" accept="image/*" onChange={onFileInputChange} />
           <div>{warning}</div>
 
-          <input type="submit" value="Register" />
+          <input type="submit" value="OK" />
         </form>
       ) : (
         <>
