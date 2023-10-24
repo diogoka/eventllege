@@ -1,15 +1,10 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
 import { Select, MenuItem } from "@mui/material";
-
-// For now, display info of the user whose ID is A
-// Use ID of the logged-in user later
-const SAMPLE_USER_ID = 'A';
-
-
+import { UserContext, User } from "@/context/userContext";
 
 type Course = {
   id: number;
@@ -17,11 +12,10 @@ type Course = {
   category: string;
 }
 
-
 export default function UserPage() {
 
-  const [user, setUser] = useState<User>();
-  const [userInEdit, setUserInEdit] = useState<User>();
+  const { user } = useContext(UserContext);
+
   const [isEditting, setIsEditing] = useState(false);
 
   // User Input
@@ -34,18 +28,6 @@ export default function UserPage() {
 
   // Course data from server
   const [courses, setCourses] = useState([]);
-
-  // Get user data from server
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/users/${SAMPLE_USER_ID}`)
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      })
-  }, []);
 
   useEffect(() => {
     if (user) {
@@ -72,8 +54,12 @@ export default function UserPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if(!user) {
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("id", SAMPLE_USER_ID);
+    formData.append("id", user.id);
     formData.append("type", "2");
     formData.append("courseId", courseId.toString());
     formData.append("email", email);

@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, ReactNode, useState } from "react";
 
-type User = {
+export type User = {
   id: string;
   role: string;
   courseId: number;
