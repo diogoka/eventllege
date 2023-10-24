@@ -48,7 +48,7 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
         [name, description, date_event_start, date_event_end, location, capacity, price, image, type, id]
       );
       res.status(200).json(events.rows);
-    } catch (err) {
+    } catch (err:any) {
       res.status(500).send(err.message);
     }
   }
@@ -64,7 +64,7 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
     try {
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
       res.status(200).json(events.rows);
-    } catch (err) {
+    } catch (err:any) {
       res.status(500).send(err.message);
     }
   }
