@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
+import { Select, MenuItem } from "@mui/material";
 
 // For now, display info of the user whose ID is A
 // Use ID of the logged-in user later
@@ -11,7 +12,8 @@ const SAMPLE_USER_ID = 'A';
 type User = {
   id: string;
   role: string;
-  course: string;
+  courseId: number;
+  courseName: string;
   name: string;
   email: string;
   postalCode: string;
@@ -32,7 +34,7 @@ export default function UserPage() {
   const [isEditting, setIsEditing] = useState(false);
 
   // User Input
-  const [courseId, setCourseId] = useState(1);
+  const [courseId, setCourseId] = useState(0);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -53,6 +55,16 @@ export default function UserPage() {
         console.error(error.response.data);
       })
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setCourseId(user.courseId);
+      setPostalCode(user.postalCode);
+      setPhone(user.phone);
+    }
+  }, [user]);
 
   // Get course data from server to show course names
   useEffect(() => {
@@ -95,19 +107,22 @@ export default function UserPage() {
     <Stack width={1 / 3}>
       {isEditting ? (
         <form onSubmit={handleSubmit}>
-
-          <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
+          <Select
+            value={courseId}
+            label="Course"
+            onChange={(e) => { setCourseId(Number(e.target.value)) }}
+          >
             {courses.map((course: Course, index: number) => {
               return (
-                <option key={index} value={course.id}>{course.name}</option>
+                <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
               )
             })}
-          </select>
+          </Select>
 
-          <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} />
-          <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} />
-          <input type="text" placeholder="postal code" onChange={(event) => setPostalCode(event.target.value)} />
-          <input type="text" placeholder="phone" onChange={(event) => setPhone(event.target.value)} />
+          <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+          <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} />
+          <input type="text" placeholder="postal code" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} />
+          <input type="text" placeholder="phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
           <input type="file" accept="image/*" onChange={onFileInputChange} />
           <div>{warning}</div>
 
@@ -120,7 +135,7 @@ export default function UserPage() {
           <div>{user?.name}</div>
           <div>{user?.role}</div>
           <div>{user?.email}</div>
-          <div>{user?.course}</div>
+          <div>{user?.courseName}</div>
           <div>{user?.postalCode}</div>
           <div>{user?.phone}</div>
           <img src={`http://localhost:3001/img/users/${user?.id}`} width={'30px'} />

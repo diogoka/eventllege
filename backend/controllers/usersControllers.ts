@@ -37,7 +37,8 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 
         const courseResult = await pool.query(`
         SELECT
-            courses.name_course AS course
+            courses.id_course AS course_id,
+            courses.name_course AS course_name
         FROM
             users_courses
         JOIN
@@ -46,7 +47,8 @@ export const getUser = async (req: express.Request, res: express.Response) => {
             users_courses.id_user = $1
         `, [userId]);
 
-        user.course = courseResult.rows[0].course;
+        user.courseId = courseResult.rows[0].course_id;
+        user.courseName = courseResult.rows[0].course_name;
 
         res.json(user);
 
