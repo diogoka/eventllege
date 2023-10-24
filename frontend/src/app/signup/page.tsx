@@ -2,9 +2,7 @@
 import { useState, useEffect } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
-import imageCompression from 'browser-image-compression';
-
-const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
+import useUploadImage from "@/services/imageInput";
 
 type Course = {
   id: number;
@@ -21,12 +19,11 @@ export default function SignUpPage() {
   const [name, setName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatar, setAvatar] = useState<File>();
 
   // Course data from server
   const [courses, setCourses] = useState([]);
 
-  const [imageSizeWarning, setImageSizeWarning] = useState("");
+  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   // Get course data from server to show course names
   useEffect(() => {
@@ -49,9 +46,9 @@ export default function SignUpPage() {
     formData.append("courseId", courseId.toString());
     formData.append("email", email);
     formData.append("name", name);
-    formData.append("postalCode", postalCode);
-    formData.append("phone", phone);
-    formData.append("avatar", avatar!);
+    if (postalCode) formData.append("postalCode", postalCode);
+    if (phone) formData.append("phone", phone);
+    formData.append("avatar", image!);
 
     axios
       .post('http://localhost:3001/api/users', formData, {
@@ -63,29 +60,6 @@ export default function SignUpPage() {
       .catch((error) => {
         console.error(error.response.data);
       })
-  };
-
-  const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length !== 1) return;
-    const file: File = e.target.files[0];
-    if (file.size < MAX_IMAGE_SIZE) {
-      const options = {
-        maxSizeMB: 0.1,
-        maxWidthOrHeight: 480,
-        fileType: 'img/png',
-        useWebWorker: true,
-      }
-      try {
-        const compressedFile = await imageCompression(file, options);
-        setAvatar(compressedFile);
-
-      } catch (error) {
-        console.log(error);
-      }
-
-    } else {
-      setImageSizeWarning('Please upload an image that is 10MB or smaller.');
-    }
   };
 
   return (
@@ -106,7 +80,7 @@ export default function SignUpPage() {
         <input type="text" placeholder="postal code" onChange={(event) => setPostalCode(event.target.value)} />
         <input type="text" placeholder="phone" onChange={(event) => setPhone(event.target.value)} />
         <input type="file" accept="image/*" onChange={onFileInputChange} />
-        <div>{imageSizeWarning}</div>
+        <div>{warning}</div>
 
         <input type="submit" value="Register" />
       </form>
