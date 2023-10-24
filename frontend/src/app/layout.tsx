@@ -3,9 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeRegistry from './theme-registry';
 import { Container } from '@mui/material';
-
-import initializeFirebase from '@/auth/firebase';
-initializeFirebase();
+import Header from '@/components/header';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
+          <Header />
           <Container>
             {children}
           </Container>
