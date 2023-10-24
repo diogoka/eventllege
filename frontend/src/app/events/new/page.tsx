@@ -9,7 +9,7 @@ const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 export default function NewEventPage() {
   //User Input
   const [owner, setOwner] = useState("");
-  const [tittle, setTittle] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("2023-10-29T08:00:00.000Z");
   const [spots, setSpots] = useState(0);
@@ -22,25 +22,35 @@ export default function NewEventPage() {
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("owner", owner);
-    formData.append("tittle", tittle);
-    formData.append("description", description);
-    formData.append("date", date);
-    formData.append("spots", spots.toString());
-    formData.append("location", location);
-    formData.append("price", price.toString());
+    // const formData = new FormData();
+    // formData.append("owner", owner);
+    // formData.append("tittle", tittle);
+    // formData.append("description", description);
+    // formData.append("date", date);
+    // formData.append("spots", spots.toString());
+    // formData.append("location", location);
+    // formData.append("price", price.toString());
+    // formData.append("image_event", picture!);
 
-    console.log("here", owner);
+    const formData = {
+      owner,
+      title,
+      description,
+      date,
+      spots,
+      location,
+      price,
+      picture,
+    };
+
+    console.log("here", formData);
 
     axios
       .post("http://localhost:3001/api/events/new", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
-        console.log("axios");
-
-        console.log(res.data);
+        console.log("axios", res.data);
       })
       .catch((err) => {
         console.error(err.response.data);
@@ -71,13 +81,13 @@ export default function NewEventPage() {
       Create Events Page
       <form onSubmit={submitHandler}>
         <input type="text" placeholder="owner" onChange={(event) => setOwner(event.target.value)} />
-        <input type="text" name="tittle" placeholder="tittle" onChange={(event) => setTittle(event.target.value)} />
+        <input type="text" name="tittle" placeholder="tittle" onChange={(event) => setTitle(event.target.value)} />
         <textarea
           name="description"
           placeholder="description"
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
-        <input type="file" accept="image/*" />
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
         <input
           type="radio"
           name="date"
