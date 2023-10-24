@@ -9,16 +9,7 @@ import { Select, MenuItem } from "@mui/material";
 // Use ID of the logged-in user later
 const SAMPLE_USER_ID = 'A';
 
-type User = {
-  id: string;
-  role: string;
-  courseId: number;
-  courseName: string;
-  name: string;
-  email: string;
-  postalCode: string;
-  phone: string;
-}
+
 
 type Course = {
   id: number;
@@ -44,7 +35,7 @@ export default function UserPage() {
   // Course data from server
   const [courses, setCourses] = useState([]);
 
-  // Get course data from server to show course names
+  // Get user data from server
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/users/${SAMPLE_USER_ID}`)
