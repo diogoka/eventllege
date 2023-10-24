@@ -10,6 +10,8 @@ const events = 'events';
 const reviews = 'reviews';
 const events_reviews = 'events_reviews';
 const attendees = 'attendees';
+const tags = 'tags';
+const events_tags = 'events_tags';
 
 exports.up = async pgm => {
 
@@ -97,6 +99,40 @@ exports.up = async pgm => {
             references: `${tableNameUsers}(id_user)`,
         }
     });
+
+    pgm.createTable(tags, {
+        id_tag: 'serial primary key',
+        name_tag: { type: 'varchar(500)', notNull: true },
+    });
+
+    pgm.createTable(events_tags, {
+        id_event_tag: 'serial primary key',
+        id_event: {
+            type: 'integer',
+            references: `${events}(id_event)`,
+            notNull: true
+        },
+        id_tag: {
+            type: 'integer',
+            references: `${tags}(id_tag)`,
+            notNull: true
+        },
+    });
+
+    pgm.addConstraint(events_tags, 'fk_event_tag_event', {
+        foreignKeys: {
+            columns: 'id_event',
+            references: `${events}(id_event)`,
+        }
+    });
+
+    pgm.addConstraint(events_tags, 'fk_event_tag_tag', {
+        foreignKeys: {
+            columns: 'id_tag',
+            references: `${tags}(id_tag)`,
+        }
+    });
+
 
     pgm.createTable(reviews, {
         id_review: 'serial primary key',
