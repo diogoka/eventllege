@@ -15,7 +15,7 @@ export const getUser = async (req: express.Request, res: express.Response) => {
     const userId = req.params.id;
 
     try {
-        const result = await pool.query(`
+        const userResult = await pool.query(`
         SELECT
             users.id_user AS id,
             users_type.role_user AS role,
@@ -31,10 +31,23 @@ export const getUser = async (req: express.Request, res: express.Response) => {
             users.id_user = $1
         `, [userId]);
 
-        const user = result.rows[0];
+        const user = userResult.rows[0];
         user.postalCode = user.postal_code;
-        console.log(user);
         delete user.postal_code;
+
+        const courseResult = await pool.query(`
+        SELECT
+            courses.name_course AS course
+        FROM
+            users_courses
+        JOIN
+            courses ON users_courses.id_course = courses.id_course
+        WHERE
+            users_courses.id_user = $1
+        `, [userId]);
+
+        user.course = courseResult.rows[0].course;
+
         res.json(user);
 
     } catch (err: any) {

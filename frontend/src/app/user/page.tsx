@@ -120,6 +120,7 @@ export default function UserPage() {
           <div>{user?.name}</div>
           <div>{user?.role}</div>
           <div>{user?.email}</div>
+          <div>{user?.course}</div>
           <div>{user?.postalCode}</div>
           <div>{user?.phone}</div>
           <img src={`http://localhost:3001/img/users/${user?.id}`} width={'30px'} />
