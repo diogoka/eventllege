@@ -3,9 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeRegistry from './theme-registry';
 import { Container } from '@mui/material';
-
-import initializeFirebase from '@/auth/firebase';
-initializeFirebase();
+import Header from '@/components/header';
+import { UserContextProvider } from '@/context/userContext';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,9 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
-          <Container>
-            {children}
-          </Container>
+          <UserContextProvider>
+            <Header />
+            <Container>
+              {children}
+            </Container>
+          </UserContextProvider>
         </ThemeRegistry>
       </body>
     </html>

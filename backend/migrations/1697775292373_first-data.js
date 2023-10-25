@@ -152,7 +152,7 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      type_event: "Tech",
+      category_event: "Tech",
     },
     {
       id_owner: "A",
@@ -165,7 +165,7 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      type_event: "Tech",
+      category_event: "Tech",
     },
     {
       id_owner: "B",
@@ -178,14 +178,14 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      type_event: "Tech",
+      category_event: "Tech",
     },
   ];
 
   for (const event of events) {
     await pgm.sql(`
-            INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, type_event)
-            VALUES ('${event.id_owner}', '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.type_event}');
+            INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
+            VALUES ('${event.id_owner}', '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.category_event}');
         `);
   }
 

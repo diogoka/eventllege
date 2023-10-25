@@ -1,8 +1,14 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
+import { UserContext } from "@/context/userContext";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "firebase/auth";
 
 type Course = {
   id: number;
@@ -12,10 +18,12 @@ type Course = {
 
 export default function SignUpPage() {
 
+  const { setUser } = useContext(UserContext);
+
   // User Input
-  const [id, setId] = useState(generateUserId());
   const [courseId, setCourseId] = useState(1);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,32 +48,40 @@ export default function SignUpPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("type", "2");
-    formData.append("courseId", courseId.toString());
-    formData.append("email", email);
-    formData.append("name", name);
-    if (postalCode) formData.append("postalCode", postalCode);
-    if (phone) formData.append("phone", phone);
-    formData.append("avatar", image!);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
 
-    axios
-      .post('http://localhost:3001/api/users', formData, {
-        headers: { 'content-type': 'multipart/form-data' }
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      })
+      const formData = new FormData();
+      formData.append("id", userCredential.user.uid);
+      formData.append("type", "2");
+      formData.append("courseId", courseId.toString());
+      formData.append("email", email);
+      formData.append("name", name);
+      if (postalCode) formData.append("postalCode", postalCode);
+      if (phone) formData.append("phone", phone);
+      formData.append("avatar", image!);
+
+      axios
+        .post('http://localhost:3001/api/users', formData, {
+          headers: { 'content-type': 'multipart/form-data' }
+        })
+        .then((res) => {
+          console.log(res.data);
+          setUser(res.data);
+        })
+        .catch((error) => {
+          console.error(error.response.data);
+        })
+    } catch (error: any) {
+      console.error(error);
+    }
+
   };
 
   return (
     <Stack width={1 / 3}>
       Sign Up Page
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
 
         <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
           {courses.map((course: Course, index: number) => {
@@ -75,10 +91,11 @@ export default function SignUpPage() {
           })}
         </select>
 
-        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} />
-        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} />
-        <input type="text" placeholder="postal code" onChange={(event) => setPostalCode(event.target.value)} />
-        <input type="text" placeholder="phone" onChange={(event) => setPhone(event.target.value)} />
+        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
+        <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
+        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
+        <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
+        <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
         <input type="file" accept="image/*" onChange={onFileInputChange} />
         <div>{warning}</div>
 
@@ -86,17 +103,4 @@ export default function SignUpPage() {
       </form>
     </Stack>
   )
-}
-
-// Create random user ID until Firebase is done
-function generateUserId(): string {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-
-  for (let i = 0; i < 15; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters.charAt(randomIndex);
-  }
-
-  return result;
 }
