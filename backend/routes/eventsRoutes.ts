@@ -7,6 +7,7 @@ import {
   deleteEvents,
   newAttendee,
   deleteAttendee,
+  newReview,
 } from "../controllers/eventsControllers";
 
 
@@ -22,6 +23,8 @@ eventsRouter.delete("/attendee", deleteAttendee);
 eventsRouter.put("/:id", updateEvents);
 
 eventsRouter.delete("/:id", deleteEvents);
+
+eventsRouter.post("/review/new", newReview);
 
 export default eventsRouter;
 
