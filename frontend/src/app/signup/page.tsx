@@ -81,7 +81,7 @@ export default function SignUpPage() {
   return (
     <Stack width={1 / 3}>
       Sign Up Page
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
 
         <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
           {courses.map((course: Course, index: number) => {
@@ -91,11 +91,11 @@ export default function SignUpPage() {
           })}
         </select>
 
-        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} />
-        <input type="text" placeholder="password" onChange={(event) => setPassword(event.target.value)} />
-        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} />
-        <input type="text" placeholder="postal code" onChange={(event) => setPostalCode(event.target.value)} />
-        <input type="text" placeholder="phone" onChange={(event) => setPhone(event.target.value)} />
+        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
+        <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
+        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
+        <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
+        <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
         <input type="file" accept="image/*" onChange={onFileInputChange} />
         <div>{warning}</div>
 

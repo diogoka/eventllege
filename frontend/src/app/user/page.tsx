@@ -83,23 +83,19 @@ export default function UserPage() {
   return (
     <Stack width={1 / 3}>
       {isEditting ? (
-        <form onSubmit={handleSubmit}>
-          <Select
-            value={courseId}
-            label="Course"
-            onChange={(e) => { setCourseId(Number(e.target.value)) }}
-          >
-            {courses.map((course: Course, index: number) => {
-              return (
-                <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
-              )
-            })}
-          </Select>
+        <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+        <select value={user?.courseId} onChange={(e) => { setCourseId(Number(e.target.value)) }}>
+          {courses.map((course: Course, index: number) => {
+            return (
+              <option key={index} value={course.id}>{course.name}</option>
+            )
+          })}
+        </select>
 
-          <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-          <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} />
-          <input type="text" placeholder="postal code" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} />
-          <input type="text" placeholder="phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
+          <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+          <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} required />
+          <input type="text" placeholder="postal code(optional)" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} />
+          <input type="text" placeholder="phone(optional)" value={phone} onChange={(event) => setPhone(event.target.value)} />
           <input type="file" accept="image/*" onChange={onFileInputChange} />
           <div>{warning}</div>
 
