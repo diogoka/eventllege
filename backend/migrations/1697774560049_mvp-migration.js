@@ -90,7 +90,7 @@ exports.up = async pgm => {
         capacity_event: { type: 'integer', notNull: true },
         price_event: { type: 'integer', notNull: true },
         image_event: { type: 'bytea', notNull: false },
-        type_event: { type: 'varchar(500)', notNull: true }
+        category_event: { type: 'varchar(500)', notNull: true }
     });
 
     pgm.addConstraint(events, 'fk_event_owner', {
@@ -205,6 +205,8 @@ exports.up = async pgm => {
 };
 
 exports.down = async pgm => {
+    pgm.dropTable(events_tags);
+    pgm.dropTable(tags);
     pgm.dropTable(attendees);
     pgm.dropTable(events_reviews);
     pgm.dropTable(reviews);
