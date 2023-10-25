@@ -23,9 +23,13 @@ export default function OrganizerEventsPage() {
 
   const [events, setEvents] = useState<Array<Event>>();
 
+  const SAMPLE_USER_ID = 'A';
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/organizer-events`)
+      .get(`http://localhost:3001/api/organizer-events`, {
+        params: { id_organizer : SAMPLE_USER_ID }
+      })
       .then((res) => {
         setEvents(res.data);
       })
