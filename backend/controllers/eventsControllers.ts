@@ -126,3 +126,28 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
     res.status(500).send(err.message);
   }
 };
+
+export const newReview = async (req: express.Request, res: express.Response) => {
+  if (!req.body.id_event || !req.body.id_user || !req.body.review) {
+    res.status(400).send("Missing parameters");
+    return;
+  }
+  const { id_event, id_user, review } = req.body;
+  try {
+    const newReview = await pool.query(
+      `INSERT INTO reviews (id_user, description_review, rating, date_review)
+         VALUES ($1, $2, $3, $4)`
+    ,
+      [id_user, review.description, review.rating, review.date]);
+
+    const newEventReview = await pool.query(
+      `INSERT INTO event_reviews (id_event, id_review)
+         VALUES ($1, $2)`
+    ,
+      [id_event, newReview.rows[0].id_review]);
+    
+    res.status(200).json(newEventReview.rows);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+}
