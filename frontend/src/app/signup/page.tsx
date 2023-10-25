@@ -1,8 +1,9 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
+import { UserContext } from "@/context/userContext";
 
 import {
   getAuth,
@@ -16,6 +17,8 @@ type Course = {
 }
 
 export default function SignUpPage() {
+
+  const { setUser } = useContext(UserContext);
 
   // User Input
   const [courseId, setCourseId] = useState(1);
@@ -64,6 +67,7 @@ export default function SignUpPage() {
         })
         .then((res) => {
           console.log(res.data);
+          setUser(res.data);
         })
         .catch((error) => {
           console.error(error.response.data);

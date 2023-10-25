@@ -73,7 +73,6 @@ export default function UserPage() {
         headers: { 'content-type': 'multipart/form-data' }
       })
       .then((res) => {
-        console.log(res.data);
         setIsEditing(false);
       })
       .catch((error) => {
