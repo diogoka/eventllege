@@ -6,18 +6,39 @@ import imageCompression from "browser-image-compression";
 
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
+type Tag = {
+  id: number;
+  name: string;
+};
+
 export default function NewEventPage() {
   //User Input
   const [owner, setOwner] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("2023-10-29T08:00:00.000Z");
+  const [dateStart, setDateStart] = useState("2023-10-29T08:00:00.000Z");
+  const [dateEnd, setDateEnd] = useState("2023-10-30T08:00:00.000Z");
   const [spots, setSpots] = useState(0);
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
   const [picture, setPicture] = useState<File>();
+  const [tagId, setTagId] = useState(1);
+
+  //Tag data from server
+  const [tags, setTags] = useState([]);
 
   const [imageSizeWarning, setImageSizeWarning] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/tags")
+      .then((res) => {
+        setTags(res.data);
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+      });
+  }, []);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,11 +57,13 @@ export default function NewEventPage() {
       owner,
       title,
       description,
-      date,
+      dateStart,
+      dateEnd,
       spots,
       location,
       price,
       picture,
+      tagId,
     };
 
     console.log("here", formData);
@@ -80,6 +103,19 @@ export default function NewEventPage() {
     <Stack>
       Create Events Page
       <form onSubmit={submitHandler}>
+        <select
+          onChange={(e) => {
+            setTagId(Number(e.target.value));
+          }}
+        >
+          {tags.map((tag: Tag, index) => {
+            return (
+              <option key={index} value={tag.id}>
+                {tag.name}
+              </option>
+            );
+          })}
+        </select>
         <input type="text" placeholder="owner" onChange={(event) => setOwner(event.target.value)} />
         <input type="text" name="tittle" placeholder="tittle" onChange={(event) => setTitle(event.target.value)} />
         <textarea
@@ -88,20 +124,24 @@ export default function NewEventPage() {
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
         <input type="file" accept="image/*" onChange={handleImageUpload} />
+
         <input
-          type="radio"
+          type="checkbox"
           name="date"
+          id="dateStart"
           value={"2023-10-29T08:00:00.000Z"}
-          onChange={(event) => setDate(event.target.value)}
+          onChange={(event) => setDateStart(event.target.value)}
         />
-        Once
+        <label htmlFor="dateStart">start date</label>
+
         <input
-          type="radio"
+          type="checkbox"
           name="date"
-          value={"2023-10-31T08:00:00.000Z"}
-          onChange={(event) => setDate(event.target.value)}
+          id="dateEnd"
+          value={"2023-10-30T08:00:00.000Z"}
+          onChange={(event) => setDateEnd(event.target.value)}
         />
-        Multiple
+        <label htmlFor="dateEnd">end date</label>
         <input type="number" placeholder="Max spots" onChange={(event) => setSpots(+event.target.value)} />
         <input type="text" placeholder="location" onChange={(event) => setLocation(event.target.value)} />
         <label htmlFor="price">Price</label>
