@@ -11,6 +11,11 @@ type Tag = {
   name: string;
 };
 
+type Type = {
+  id: number;
+  category_course: string;
+};
+
 export default function NewEventPage() {
   //User Input
   const [owner, setOwner] = useState("");
@@ -23,10 +28,11 @@ export default function NewEventPage() {
   const [price, setPrice] = useState(0);
   const [picture, setPicture] = useState<File>();
   const [tagId, setTagId] = useState(1);
+  const [category, setCategory] = useState(1);
 
   //Tag data from server
   const [tags, setTags] = useState([]);
-
+  const [types, setTypes] = useState([]);
   const [imageSizeWarning, setImageSizeWarning] = useState("");
 
   useEffect(() => {
@@ -34,6 +40,18 @@ export default function NewEventPage() {
       .get("http://localhost:3001/api/tags")
       .then((res) => {
         setTags(res.data);
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/courses/category")
+      .then((res) => {
+        setTypes(res.data);
+        console.log(res.data);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -64,6 +82,7 @@ export default function NewEventPage() {
       price,
       picture,
       tagId,
+      category,
     };
 
     console.log("here", formData);
@@ -116,6 +135,7 @@ export default function NewEventPage() {
             );
           })}
         </select>
+
         <input type="text" placeholder="owner" onChange={(event) => setOwner(event.target.value)} />
         <input type="text" name="tittle" placeholder="tittle" onChange={(event) => setTitle(event.target.value)} />
         <textarea
@@ -146,7 +166,18 @@ export default function NewEventPage() {
         <input type="text" placeholder="location" onChange={(event) => setLocation(event.target.value)} />
         <label htmlFor="price">Price</label>
         <input type="number" id="price" onChange={(event) => setPrice(+event.target.value)} />
+
         <div>{imageSizeWarning}</div>
+        <select
+          onChange={(e) => {
+            setCategory(Number(e.target.value));
+          }}
+        >
+          {types.map((type: Type, index) => {
+            return <option key={index}>{type.category_course}</option>;
+          })}
+        </select>
+
         <input type="submit" value="Submit" />
       </form>
     </Stack>
