@@ -3,6 +3,7 @@ import pool from "./db/db";
 import usersRouter from "./routes/usersRoutes";
 import coursesRouter from "./routes/coursesRoutes";
 import eventsRouter from "./routes/eventsRoutes";
+import organizerRouter from "./routes/organizerRoutes";
 import cors from "cors";
 import 'dotenv/config'
 
@@ -35,5 +36,6 @@ pool
 app.use("/api/users", usersRouter);
 app.use("/api/courses", coursesRouter);
 app.use("/api/events", eventsRouter);
+app.use("/api/organizer-events", organizerRouter);
 
 export default app;
