@@ -1,9 +1,11 @@
-import pool from "../db/db";
-import express from "express";
+import pool from '../db/db';
+import express from 'express';
+
+type eventInput = {};
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
   try {
-    const users = await pool.query("SELECT * FROM events");
+    const users = await pool.query('SELECT * FROM events');
     res.json(users.rows);
   } catch (_err) {
     // console.log(err.message);
@@ -26,7 +28,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
       [owner, title, description, dateStart, dateEnd, location, spots, price, image, type]
     );
     await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [id, tag]);
-    console.log("post success");
+    console.log('post success');
 
     res.status(200).json(events.rows);
   } catch (err: any) {
@@ -36,16 +38,16 @@ export const createEvents = async (req: express.Request, res: express.Response) 
 
 export const updateEvents = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
-  const { name, description, date_event_start, date_event_end, location, capacity, price, image, type } = req.body;
+  const { title, description, dateStart, dateEnd, location, spots, price, image, type } = req.body;
 
   if (!id) {
-    console.log("id does not match");
-    res.status(404).send("Update events failed");
+    console.log('id does not match');
+    res.status(404).send('Update events failed');
   } else {
     try {
       const events = await pool.query(
         `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, image_event = $8, type_event = $9 WHERE id_event = $10 RETURNING *`,
-        [name, description, date_event_start, date_event_end, location, capacity, price, image, type, id]
+        [title, description, dateStart, dateEnd, location, spots, price, image, type, id]
       );
       res.status(200).json(events.rows);
     } catch (err: any) {
@@ -58,8 +60,8 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
   const id = parseInt(req.params.id);
 
   if (!id) {
-    console.log("id does not match");
-    res.status(404).send("Delete events failed");
+    console.log('id does not match');
+    res.status(404).send('Delete events failed');
   } else {
     try {
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
@@ -72,7 +74,7 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
 
 export const newAttendee = async (req: express.Request, res: express.Response) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -97,7 +99,7 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
 export const deleteAttendee = async (req: express.Request, res: express.Response) => {
   console.log(req.body);
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -118,3 +120,5 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
     res.status(500).send(err.message);
   }
 };
+
+function validateEventInput(eventInput) {}
