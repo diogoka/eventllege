@@ -11,7 +11,7 @@ type Tag = {
   name: string;
 };
 
-type Type = {
+type Category = {
   id: number;
   category_course: string;
 };
@@ -32,7 +32,7 @@ export default function NewEventPage() {
 
   //Tag data from server
   const [tags, setTags] = useState([]);
-  const [types, setTypes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [imageSizeWarning, setImageSizeWarning] = useState('');
 
   useEffect(() => {
@@ -50,8 +50,7 @@ export default function NewEventPage() {
     axios
       .get('http://localhost:3001/api/courses/category')
       .then((res) => {
-        setTypes(res.data);
-        console.log(res.data);
+        setCategories(res.data);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -60,16 +59,6 @@ export default function NewEventPage() {
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    // const formData = new FormData();
-    // formData.append("owner", owner);
-    // formData.append("tittle", tittle);
-    // formData.append("description", description);
-    // formData.append("date", date);
-    // formData.append("spots", spots.toString());
-    // formData.append("location", location);
-    // formData.append("price", price.toString());
-    // formData.append("image_event", picture!);
 
     const formData = {
       owner,
@@ -173,8 +162,8 @@ export default function NewEventPage() {
             setCategory(Number(e.target.value));
           }}
         >
-          {types.map((type: Type, index) => {
-            return <option key={index}>{type.category_course}</option>;
+          {categories.map((elm: Category, index) => {
+            return <option key={index}>{elm.category_course}</option>;
           })}
         </select>
 
