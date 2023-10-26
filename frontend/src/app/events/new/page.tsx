@@ -17,7 +17,6 @@ type Category = {
 
 export default function NewEventPage() {
   //User Input
-  const [owner, setOwner] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState('2023-10-29T08:00:00.000Z');
@@ -60,7 +59,7 @@ export default function NewEventPage() {
     event.preventDefault();
 
     const formData = {
-      owner,
+      owner: 'A',
       title,
       description,
       dateStart,
@@ -110,7 +109,6 @@ export default function NewEventPage() {
     <Stack>
       Create Events Page
       <form onSubmit={submitHandler}>
-        <input type='text' placeholder='owner' onChange={(event) => setOwner(event.target.value)} />
         <input type='text' name='tittle' placeholder='tittle' onChange={(event) => setTitle(event.target.value)} />
         <textarea
           name='description'

@@ -30,8 +30,7 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
 };
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
-  console.log('createEvents', req.body);
-  const { id, owner, title, description, dateStart, dateEnd, location, spots, price, image, tag, category } = req.body;
+  const { owner, title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
 
   try {
     const events = await pool.query(
@@ -44,7 +43,11 @@ export const createEvents = async (req: express.Request, res: express.Response) 
          `,
       [owner, title, description, dateStart, dateEnd, location, spots, price, image, category]
     );
-    await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [id, tag]);
+
+    await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [
+      events.rows[0].id_event,
+      tagId,
+    ]);
     console.log('post success');
 
     res.status(200).json(events.rows);
