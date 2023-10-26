@@ -6,6 +6,7 @@ import {
   deleteEvents,
   newAttendee,
   deleteAttendee,
+  newReview,
 } from '../controllers/eventsControllers';
 import multer from 'multer';
 import path from 'path';
@@ -33,6 +34,10 @@ eventsRouter.delete('/attendee', deleteAttendee);
 
 eventsRouter.put('/:id', updateEvents);
 
+eventsRouter.put('/:id', updateEvents);
+
 eventsRouter.delete('/:id', deleteEvents);
+
+eventsRouter.post('/review/new', newReview);
 
 export default eventsRouter;

@@ -6,6 +6,7 @@ import axios from "axios"
 export default function EventsPage() {
 
   const [events, setEvents]= useState([]);
+  const [tags, setTags]= useState([]);
 
   const[user, setUser]= useState({
     id_user: "F",
@@ -18,7 +19,8 @@ export default function EventsPage() {
     axios.get("http://localhost:3001/api/events")
     .then((res) => {
       console.log("res",res.data)
-      setEvents(res.data)
+      setEvents(res.data.events)
+      setTags(res.data.tags)
   })
 
   console.log("user",user)
@@ -67,6 +69,13 @@ const deleteAttendee = (id_event: number) => {
               <div>Price: {elm["price_event"]}</div>
               <div>ID: {elm["id_event"]}</div>
               <div>Owner: {elm["id_owner"]}</div>
+              <div>Tags:&nbsp;
+
+              {tags.map(tag=>{
+                return elm["id_event"]==tag["id_event"]? <span>{tag["name_tag"]},&nbsp;</span> : null;
+              })}
+              
+              </div>
               <button onClick={() => newAttendee(elm["id_event"])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm["id_event"])}>Delete Attendee</button>
               

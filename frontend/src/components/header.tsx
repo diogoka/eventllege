@@ -62,14 +62,19 @@ export default function Header() {
       columnGap: '1rem',
       padding: '.5rem',
     }}>
+
+      <button onClick={() => router.push('/')}>Home(Events)</button>
+      <button onClick={() => router.push('/events/new')}>Create Event</button>
+      <button onClick={() => router.push('/organizer-events')}>Organizer Events</button>
+      <button onClick={() => router.push('/user')}>User</button>
+      <button onClick={() => router.push('/signup')}>Signup</button>
+      <button onClick={() => router.push('/login')}>Login</button>
+      <button onClick={handleLogout}>Logout</button>
       {user ? (
         <div>You are logged in as {user.name}</div>
       ) : (
         <div>You are not logged in</div>
       )}
-      <button onClick={() => router.push('/signup')}>Signup</button>
-      <button onClick={() => router.push('/login')}>Login</button>
-      <button onClick={handleLogout}>Logout</button>
     </div>
   )
 }
