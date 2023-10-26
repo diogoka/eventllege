@@ -1,14 +1,15 @@
 import pool from "../db/db";
 import express from "express";
+import { sendEmail, EmailOption } from "../helpers/mail";
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
   try {
     const events = await pool.query("SELECT * FROM events");
     const tags = await pool.query(
-      "SELECT events.id_event, tags.name_tag FROM events "+
-      "inner join events_tags on events.id_event = events_tags.id_event "+
+      "SELECT events.id_event, tags.name_tag FROM events " +
+      "inner join events_tags on events.id_event = events_tags.id_event " +
       "inner join tags on events_tags.id_tag = tags.id_tag"
-      );
+    );
     res.json({
       events: events.rows,
       tags: tags.rows
@@ -56,7 +57,7 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
         [name, description, date_event_start, date_event_end, location, capacity, price, image, type, id]
       );
       res.status(200).json(events.rows);
-    } catch (err:any) {
+    } catch (err: any) {
       res.status(500).send(err.message);
     }
   }
@@ -72,7 +73,7 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
     try {
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
       res.status(200).json(events.rows);
-    } catch (err:any) {
+    } catch (err: any) {
       res.status(500).send(err.message);
     }
   }
@@ -95,6 +96,8 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
          `,
       [id_event, id_user]
     );
+
+    await sendTicket(id_event, id_user);
 
     res.status(200).json(events.rows);
   } catch (err: any) {
@@ -139,9 +142,9 @@ export const newReview = async (req: express.Request, res: express.Response) => 
       `INSERT INTO reviews (id_user, description_review, rating, date_review)
          VALUES ($1, $2, $3, $4)
          RETURNING *`
-    ,
+      ,
       [id_user, review.description, review.rating, review.date]);
-      const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
+    const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
 
     res.status(200).json(newReview.rows);
   } catch (err: any) {
@@ -149,17 +152,60 @@ export const newReview = async (req: express.Request, res: express.Response) => 
   }
 }
 
-const newEventReview = async (id_event : Number, id_review: Number) => {
+const newEventReview = async (id_event: Number, id_review: Number) => {
   try {
     const newEventReview = await pool.query(
       `INSERT INTO events_reviews (id_event, id_review)
          VALUES ($1, $2)`
-    ,
-      [id_event, id_review] );
-    
+      ,
+      [id_event, id_review]);
+
     return newEventReview.rows;
   } catch (err: any) {
     console.log(err.message);
     return err.message;
   }
 }
+
+export const sendTicket = async (eventId, userId) => {
+
+  try {
+    const eventResult = await pool.query(`
+    SELECT
+      *
+    FROM
+      events
+    WHERE
+      id_event = $1
+    `, [eventId]
+    );
+    const event = eventResult.rows[0];
+
+    const userResult = await pool.query(`
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id_user = $1
+      `, [userId]
+    );
+    const user = userResult.rows[0];
+
+    await sendEmail({
+      to: [user.email_user],
+      subject: `
+        Your Ticket for ${event.name_event}
+      `,
+      text: `
+        Hi, ${user.name_user}. Thank you for joining our event.
+        This is your ticket.
+        Event Name: ${event.name_event}
+        Date: ${event.date_event_start.toDateString()}
+        Place: ${event.location_event}
+      `
+    });
+  } catch (err: any) {
+    console.error(err);
+  }
+};
