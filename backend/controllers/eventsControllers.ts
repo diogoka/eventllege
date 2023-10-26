@@ -10,7 +10,6 @@ type EventInput = {
   price: number;
   image: string;
   tag: number;
-  category: string;
 };
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
@@ -149,8 +148,6 @@ function validateEventInput(eventInput: EventInput): { result: boolean; message:
     message = 'Invalid price';
   } else if (isNaN(eventInput.tag)) {
     message = 'Invalid tag';
-  } else if (eventInput.category) {
-    message = '';
   } else {
     result = true;
   }
