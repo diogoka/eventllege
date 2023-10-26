@@ -1,16 +1,17 @@
 import pool from '../db/db';
 import express from 'express';
+import { sendEmail, EmailOption } from '../helpers/mail';
 
-type EventInput = {
-  owner: string;
-  title: string;
-  description: string;
-  location: string;
-  spots: number;
-  price: number;
-  image: string;
-  tag: number;
-};
+// type EventInput = {
+//   owner: string;
+//   title: string;
+//   description: string;
+//   location: string;
+//   spots: number;
+//   price: number;
+//   image: string;
+//   tag: number;
+// };
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
   try {
@@ -110,6 +111,8 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
       [id_event, id_user]
     );
 
+    await sendTicket(id_event, id_user);
+
     res.status(200).json(events.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
@@ -174,6 +177,52 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   } catch (err: any) {
     console.log(err.message);
     return err.message;
+  }
+};
+
+export const sendTicket = async (eventId, userId) => {
+  try {
+    const eventResult = await pool.query(
+      `
+    SELECT
+      *
+    FROM
+      events
+    WHERE
+      id_event = $1
+    `,
+      [eventId]
+    );
+    const event = eventResult.rows[0];
+
+    const userResult = await pool.query(
+      `
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id_user = $1
+      `,
+      [userId]
+    );
+    const user = userResult.rows[0];
+
+    await sendEmail({
+      to: [user.email_user],
+      subject: `
+        Your Ticket for ${event.name_event}
+      `,
+      text: `
+        Hi, ${user.name_user}. Thank you for joining our event.
+        This is your ticket.
+        Event Name: ${event.name_event}
+        Date: ${event.date_event_start.toDateString()}
+        Place: ${event.location_event}
+      `,
+    });
+  } catch (err: any) {
+    console.error(err);
   }
 };
 
