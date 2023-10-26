@@ -4,6 +4,7 @@ import usersRouter from './routes/usersRoutes';
 import coursesRouter from './routes/coursesRoutes';
 import eventsRouter from './routes/eventsRoutes';
 import organizerRouter from './routes/organizerRoutes';
+import tagsRouter from './routes/tagsRoutes';
 import cors from 'cors';
 import 'dotenv/config';
 
@@ -34,5 +35,6 @@ app.use('/api/users', usersRouter);
 app.use('/api/courses', coursesRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/organizer-events', organizerRouter);
+app.use('/api/tags', tagsRouter);
 
 export default app;
