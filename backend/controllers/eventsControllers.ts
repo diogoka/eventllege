@@ -3,8 +3,16 @@ import express from "express";
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
   try {
-    const users = await pool.query("SELECT * FROM events");
-    res.json(users.rows);
+    const events = await pool.query("SELECT * FROM events");
+    const tags = await pool.query(
+      "SELECT events.id_event, tags.name_tag FROM events "+
+      "inner join events_tags on events.id_event = events_tags.id_event "+
+      "inner join tags on events_tags.id_tag = tags.id_tag"
+      );
+    res.json({
+      events: events.rows,
+      tags: tags.rows
+    });
   } catch (_err) {
     // console.log(err.message);
   }
