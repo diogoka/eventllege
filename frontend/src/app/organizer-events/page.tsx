@@ -19,9 +19,15 @@ type Event = {
   type_event: string
 }
 
+type Tag = {
+  id_event: number,
+  name_tag: string
+}
+
 export default function OrganizerEventsPage() {
 
   const [events, setEvents] = useState<Array<Event>>();
+  const [tags, setTags] = useState<Array<Tag>>();
 
   const SAMPLE_USER_ID = 'A';
 
@@ -31,7 +37,8 @@ export default function OrganizerEventsPage() {
         params: { id_organizer : SAMPLE_USER_ID }
       })
       .then((res) => {
-        setEvents(res.data);
+        setEvents(res.data.events);
+        setTags(res.data.tags);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -58,6 +65,13 @@ export default function OrganizerEventsPage() {
         <div><b>price_event:</b>{val.price_event}</div>
         <div><b>type_event:</b>{val.type_event}</div>
         <div><b>image_event:</b>{val.image_event}</div>
+        <div><b>tags:</b>
+        
+        {tags?.map((tag:Tag) => {
+          return tag.id_event==val.id_event? <span>{tag.name_tag},&nbsp;</span> : null
+          })}
+        
+        </div>
 
       </div>)
     })}
