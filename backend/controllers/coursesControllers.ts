@@ -21,7 +21,7 @@ export const getCategories = async (req: express.Request, res: express.Response)
   try {
     const courseCategory = await pool.query("SELECT DISTINCT courses.category_course FROM courses");
     res.json(courseCategory.rows);
-  } catch (error) {
+  } catch (error:any) {
     console.log(error.message);
   }
 };

@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import {
   createEvents,
   getEvents,
+  getEvent,
   updateEvents,
   deleteEvents,
   newAttendee,
@@ -27,6 +28,7 @@ const storage = multer.diskStorage({
 const eventsRouter: Router = express.Router();
 
 eventsRouter.get('/', getEvents);
+eventsRouter.get('/:id', getEvent);
 eventsRouter.post('/new', upload.single('picture'), createEvents);
 
 eventsRouter.post('/attendee', newAttendee);
