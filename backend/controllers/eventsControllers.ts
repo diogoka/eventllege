@@ -30,7 +30,7 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
 };
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
-  console.log(req.body);
+  console.log('createEvents', req.body);
   const { id, owner, title, description, dateStart, dateEnd, location, spots, price, image, tag, category } = req.body;
 
   try {
@@ -174,30 +174,30 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   }
 };
 
-function validateEventInput(eventInput: EventInput): { result: boolean; message: string } {
-  let result = false;
-  let message = '';
+// function validateEventInput(eventInput: EventInput): { result: boolean; message: string } {
+//   let result = false;
+//   let message = '';
 
-  if (!/.+/.test(eventInput.owner)) {
-    message = 'Please enter a owner';
-  } else if (!/.+/.test(eventInput.title)) {
-    message = 'Please enter a title';
-  } else if (!/.+/.test(eventInput.description)) {
-    message = 'Please enter a description';
-  } else if (!/.+/.test(eventInput.location)) {
-    message = 'Please enter a location';
-  } else if (isNaN(eventInput.spots)) {
-    message = 'Invalid Number';
-  } else if (isNaN(eventInput.price)) {
-    message = 'Invalid price';
-  } else if (isNaN(eventInput.tag)) {
-    message = 'Invalid tag';
-  } else {
-    result = true;
-  }
+//   if (!/.+/.test(eventInput.owner)) {
+//     message = 'Please enter a owner';
+//   } else if (!/.+/.test(eventInput.title)) {
+//     message = 'Please enter a title';
+//   } else if (!/.+/.test(eventInput.description)) {
+//     message = 'Please enter a description';
+//   } else if (!/.+/.test(eventInput.location)) {
+//     message = 'Please enter a location';
+//   } else if (isNaN(eventInput.spots)) {
+//     message = 'Invalid Number';
+//   } else if (isNaN(eventInput.price)) {
+//     message = 'Invalid price';
+//   } else if (isNaN(eventInput.tag)) {
+//     message = 'Invalid tag';
+//   } else {
+//     result = true;
+//   }
 
-  return {
-    result,
-    message,
-  };
-}
+//   return {
+//     result,
+//     message,
+//   };
+// }

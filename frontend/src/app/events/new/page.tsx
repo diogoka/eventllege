@@ -7,12 +7,11 @@ import imageCompression from 'browser-image-compression';
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
 type Tag = {
-  id: number;
-  name: string;
+  id_tag: number;
+  name_tag: string;
 };
 
 type Category = {
-  id: number;
   category_course: string;
 };
 
@@ -28,7 +27,7 @@ export default function NewEventPage() {
   const [price, setPrice] = useState(0);
   const [picture, setPicture] = useState<File>();
   const [tagId, setTagId] = useState(1);
-  const [category, setCategory] = useState(1);
+  const [category, setCategory] = useState('');
 
   //Tag data from server
   const [tags, setTags] = useState([]);
@@ -70,7 +69,7 @@ export default function NewEventPage() {
       location,
       price,
       picture,
-      tagId,
+      tagId: tagId.toString(),
       category,
     };
 
@@ -111,20 +110,6 @@ export default function NewEventPage() {
     <Stack>
       Create Events Page
       <form onSubmit={submitHandler}>
-        <select
-          onChange={(e) => {
-            setTagId(Number(e.target.value));
-          }}
-        >
-          {tags.map((tag: Tag, index) => {
-            return (
-              <option key={index} value={tag.id}>
-                {tag.name}
-              </option>
-            );
-          })}
-        </select>
-
         <input type='text' placeholder='owner' onChange={(event) => setOwner(event.target.value)} />
         <input type='text' name='tittle' placeholder='tittle' onChange={(event) => setTitle(event.target.value)} />
         <textarea
@@ -157,12 +142,27 @@ export default function NewEventPage() {
         <input type='number' id='price' onChange={(event) => setPrice(+event.target.value)} />
 
         <div>{imageSizeWarning}</div>
+
         <select
           onChange={(e) => {
-            setCategory(Number(e.target.value));
+            setTagId(Number(e.target.value));
           }}
         >
-          {categories.map((elm: Category, index) => {
+          {tags.map((tag: Tag, index: number) => {
+            return (
+              <option key={index} value={tag.id_tag}>
+                {tag.name_tag}
+              </option>
+            );
+          })}
+        </select>
+
+        <select
+          onChange={(e) => {
+            setCategory(e.target.value);
+          }}
+        >
+          {categories.map((elm: Category, index: number) => {
             return <option key={index}>{elm.category_course}</option>;
           })}
         </select>
