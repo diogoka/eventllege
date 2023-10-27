@@ -53,8 +53,8 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       
     res.json({event:
       {...events.rows[0],
-      tags : tags.rows.map(val => {return Object.values(val)[0]}),
-      attendees : attendees.rows.map(val => {return Object.values(val)[0]})
+      tags : tags.rows.map(val => {return val.name_tag}),
+      attendees : attendees.rows.map(val => {return val.name_user})
       }});
 
   } catch (_err) {
