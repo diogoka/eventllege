@@ -133,6 +133,7 @@ export const newReview = async (req: express.Request, res: express.Response) => 
     res.status(400).send("Missing parameters");
     return;
   }
+  console.log("Body",req.body);
   const { id_event, id_user, review } = req.body;
   try {
     const newReview = await pool.query(
