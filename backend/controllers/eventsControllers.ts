@@ -31,23 +31,22 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
 };
 
 export const getEvent = async (req: express.Request, res: express.Response) => {
-
-  const EVENT_ID = req.originalUrl.split("/api/events/")[1]
+  const EVENT_ID = req.originalUrl.split('/api/events/')[1];
 
   try {
-    const events = await pool.query("SELECT * FROM events where id_event=$1", [EVENT_ID]);
+    const events = await pool.query('SELECT * FROM events where id_event=$1', [EVENT_ID]);
     const tags = await pool.query(
-      "SELECT events.id_event, tags.name_tag FROM events "+
-      // "SELECT * FROM events "+
-      "inner join events_tags on events.id_event = events_tags.id_event "+
-      "inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1", [EVENT_ID]
-      );
-      
+      'SELECT events.id_event, tags.name_tag FROM events ' +
+        // "SELECT * FROM events "+
+        'inner join events_tags on events.id_event = events_tags.id_event ' +
+        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
+      [EVENT_ID]
+    );
+
     res.json({
       events: events.rows,
-      tags:tags.rows
+      tags: tags.rows,
     });
-    
   } catch (_err) {
     // console.log(err.message);
   }
@@ -82,6 +81,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
 
 export const updateEvents = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
+
   const { title, description, dateStart, dateEnd, location, spots, price, image, category } = req.body;
 
   if (!id) {
@@ -101,13 +101,17 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
 };
 
 export const deleteEvents = async (req: express.Request, res: express.Response) => {
+  console.log(req.params);
+
   const id = parseInt(req.params.id);
+  console.log('here', id);
 
   if (!id) {
     console.log('id does not match');
     res.status(404).send('Delete events failed');
   } else {
     try {
+      console.log('here1');
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
       res.status(200).json(events.rows);
     } catch (err: any) {
@@ -203,7 +207,7 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   }
 };
 
-export const sendTicket = async (eventId:any, userId:any) => {
+export const sendTicket = async (eventId: any, userId: any) => {
   try {
     const eventResult = await pool.query(
       `
