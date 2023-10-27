@@ -9,12 +9,20 @@ export type EmailOption = {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: 'eventllege.info@gmail.com',
-      pass: process.env.MAIL_PASSWORD
+    user: 'eventllege.info@gmail.com',
+    pass: process.env.MAIL_PASSWORD
   }
 });
 
-export const sendEmail = (option: EmailOption) => {
+const defaultCallBack = (error: any, info: any) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+}
+
+export const sendEmail = (option: EmailOption, cb = defaultCallBack) => {
 
   const mailOptions = {
     from: 'eventllege.info@gmail.com',
@@ -23,12 +31,6 @@ export const sendEmail = (option: EmailOption) => {
     text: option.text
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-      // do something useful
-    }
-  });
+  transporter.sendMail(mailOptions, cb);
+  return;
 }
