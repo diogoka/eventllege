@@ -141,7 +141,7 @@ export const newReview = async (req: express.Request, res: express.Response) => 
          VALUES ($1, $2, $3, $4)
          RETURNING *`
     ,
-      [id_user, review.description, review.rating, review.date]);
+      [id_user, review.description, review.rating, review.date_review]);
       const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
 
     res.status(200).json(newReview.rows);

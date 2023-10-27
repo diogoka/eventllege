@@ -5,6 +5,8 @@ import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import Rating from '@mui/material/Rating';
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -18,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal(props: any) {
+export default function ModalRating(props: any) {
   const [open, setOpen] = useState(false);
   const [review, setReview] = useState({
       id_user: props.userid,
@@ -31,8 +33,8 @@ export default function BasicModal(props: any) {
     
 
         
-        const handleOpen = () => setOpen(true);
-        const handleClose = () => setOpen(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const handleNewReview = async (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
@@ -87,9 +89,9 @@ export default function BasicModal(props: any) {
         {...props}
       >
         <Box sx={style}>
-            <Stack height={1/3}>
+            <Stack height={1/3} style={{display: 'flex', flexDirection: 'column'}}>
                 <form onSubmit={handleNewReview}>
-                <input type="number" placeholder='rating' onChange={(event) => setRating(Number(event.target.value))}/>
+                <Rating name="half-rating" defaultValue={2.5} precision={0.5} onChange={(event, newValue) => setRating(Number(newValue))} />
                 <input type="text" placeholder='description' onChange={(event) => setDescription(event.target.value)}/>
                 <input type="submit" value="Register" />
                 </form>

@@ -2,7 +2,7 @@
 import { useEffect,useState } from "react"
 import { Container, Stack, Typography } from "@mui/material"
 import axios from "axios"
-import BasicModal from "@/components/modal"
+import ModalRating from "@/components/modal"
 
 export default function EventsPage() {
 
@@ -80,7 +80,7 @@ const deleteAttendee = (id_event: number) => {
               <button onClick={() => newAttendee(elm["id_event"])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm["id_event"])}>Delete Attendee</button>
               
-              <BasicModal eventid = {elm["id_event"]} userid = {user.id_user}/>
+              <ModalRating eventid = {elm["id_event"]} userid = {user.id_user}/>
             </div>)
           })}
       </Stack>
