@@ -21,10 +21,33 @@ type Tag = {
   name_tag: string
 }
 
+type Attendee = {
+  id_event: number,
+  id_owner: string,
+  name_event: string,
+  description_event: string,
+  date_event_start: string,
+  date_event_end: string,
+  location_event: string,
+  capacity_event: number,
+  price_event: number,
+  image_event: string,
+  category_event: string,
+  id_attendee: number,
+  id_user: string,
+  id_user_type: number,
+  name_user: string,
+  email_user: string,
+  postal_code_user: string,
+  phone_user: string,
+  avatar_user: string
+}
+
 export default function EventPage() {
 
   const [events, setEvents] = useState<Array<Event>>();
   const [tags, setTags] = useState<Array<Tag>>();
+  const [attendees, setAttendees] = useState<Array<Attendee>>();
 
   const EVENT_ID = typeof window !== "undefined"? window.location.pathname.split("/events/")[1] : null
 
@@ -34,6 +57,7 @@ export default function EventPage() {
       .then((res) => {
         setEvents(res.data.events);
         setTags(res.data.tags);
+        setAttendees(res.data.attendees);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -61,6 +85,12 @@ export default function EventPage() {
 
                 {tags?.map((tag:Tag, key:number) => {
                   return <span key={key}>{tag.name_tag},&nbsp;</span>
+                })}
+              </div>
+
+              <div><b>attendees: </b>
+                {attendees?.map((att:Attendee, key:number) => {
+                  return <span key={key}>{att.name_user},&nbsp;</span>
                 })}
               </div>
             </div>
