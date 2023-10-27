@@ -13,41 +13,14 @@ type Event = {
   capacity_event: number,
   price_event: number,
   image_event: string,
-  category_event: string
-}
-
-type Tag = {
-  id_event: number,
-  name_tag: string
-}
-
-type Attendee = {
-  id_event: number,
-  id_owner: string,
-  name_event: string,
-  description_event: string,
-  date_event_start: string,
-  date_event_end: string,
-  location_event: string,
-  capacity_event: number,
-  price_event: number,
-  image_event: string,
   category_event: string,
-  id_attendee: number,
-  id_user: string,
-  id_user_type: number,
-  name_user: string,
-  email_user: string,
-  postal_code_user: string,
-  phone_user: string,
-  avatar_user: string
+  tags: Array<string>,
+  attendees: Array<string>
 }
 
 export default function EventPage() {
 
-  const [events, setEvents] = useState<Array<Event>>();
-  const [tags, setTags] = useState<Array<Tag>>();
-  const [attendees, setAttendees] = useState<Array<Attendee>>();
+  const [event, setEvent] = useState<Event>();
 
   const EVENT_ID = typeof window !== "undefined"? window.location.pathname.split("/events/")[1] : null
 
@@ -55,9 +28,7 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-        setEvents(res.data.events);
-        setTags(res.data.tags);
-        setAttendees(res.data.attendees);
+        setEvent(res.data.event);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -68,34 +39,29 @@ export default function EventPage() {
     <>
       <div style={{ border: "1px solid grey", margin: "5px" }}>
         <h3>Event Detail:</h3>
-        {events?.map((elm:Event, key:number) => {
-          return (
-            <div key={key}>
-              <div><b>id_event: </b>{elm.id_event}</div>
-              <div><b>id_owner: </b>{elm.id_owner}</div>
-              <div><b>name_event: </b>{elm.name_event}</div>
-              <div><b>description_event: </b>{elm.description_event}</div>
-              <div><b>date_event_start: </b>{elm.date_event_start}</div>
-              <div><b>date_event_end: </b>{elm.date_event_end}</div>
-              <div><b>location_event: </b>{elm.location_event}</div>
-              <div><b>capacity_event: </b>{elm.capacity_event}</div>
-              <div><b>price_event: </b>{elm.price_event}</div>
-              <div><b>category_event: </b>{elm.category_event}</div>
-              <div><b>tags: </b>
+        <div><b>ID: </b>{event?.id_event}</div>
+        <div><b>Owner: </b>{event?.id_owner}</div>
+        <div><b>Name: </b>{event?.name_event}</div>
+        <div><b>Description: </b>{event?.description_event}</div>
+        <div><b>Start: </b>{event?.date_event_start}</div>
+        <div><b>End: </b>{event?.date_event_end}</div>
+        <div><b>Location: </b>{event?.location_event}</div>
+        <div><b>Capacity: </b>{event?.capacity_event}</div>
+        <div><b>Price: </b>{event?.price_event}</div>
+        <div><b>Category: </b>{event?.category_event}</div>
 
-                {tags?.map((tag:Tag, key:number) => {
-                  return <span key={key}>{tag.name_tag},&nbsp;</span>
-                })}
-              </div>
+        <div><b>Tags: </b>
+          {event?.tags.map((tag:string, key:number)=>{
+            return(<span key={key}>{tag}, </span>)
+          })}
+        </div>
 
-              <div><b>attendees: </b>
-                {attendees?.map((att:Attendee, key:number) => {
-                  return <span key={key}>{att.name_user},&nbsp;</span>
-                })}
-              </div>
-            </div>
-          )
-        })}
+        <div><b>Attendees: </b>
+          {event?.attendees.map((att:string, key:number)=>{
+            return(<span key={key}>{att}, </span>)
+          })}
+        </div>
+        
       </div>
     </>
   )

@@ -45,18 +45,18 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       );
 
     const attendees = await pool.query(
-      // "SELECT events.id_event, tags.name_tag FROM events "+
-      "SELECT * FROM events "+
+      "SELECT events.id_event, users.name_user FROM events "+
+      // "SELECT * FROM events "+
       "inner join attendees on events.id_event = attendees.id_event "+
       "inner join users on attendees.id_user = users.id_user where events.id_event=$1", [EVENT_ID]
       );
       
-    res.json({
-      events: events.rows,
-      tags: tags.rows,
-      attendees: attendees.rows
-    });
-    
+    res.json({event:
+      {...events.rows[0],
+      tags : tags.rows.map(val => {return Object.values(val)[1]}),
+      attendees : attendees.rows.map(val => {return Object.values(val)[1]})
+      }});
+
   } catch (_err) {
     // console.log(err.message);
   }
