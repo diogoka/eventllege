@@ -79,14 +79,6 @@ const deleteAttendee = (id_event: number) => {
       <Typography variant="h3">Events Page</Typography>
       <Stack>
           {events.map((elm:Event, key:number)=>{
-
-          const eventDay = new Date(elm.date_event_start)
-          const today = new Date()
-
-          const eventDaySum = 10000*eventDay.getFullYear()+100*eventDay.getMonth()+eventDay.getDate()
-          const todaySum = 10000*today.getFullYear()+100*today.getMonth()+today.getDate()
-
-          if(todaySum <= eventDaySum){
             return (
             <div key={key} style={{border:"1px solid grey", margin:"5px"}}>
               <div><b>Name: </b>{elm.name_event}</div>
@@ -109,7 +101,7 @@ const deleteAttendee = (id_event: number) => {
               <button onClick={() => deleteAttendee(elm["id_event"])}>Delete Attendee</button>
               
             </div>
-            )}
+            )
           })}
       </Stack>
     </>

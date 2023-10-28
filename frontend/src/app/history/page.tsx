@@ -29,9 +29,9 @@ export default function PastEvent() {
   
   useEffect(() => {
     
-    axios.get("http://localhost:3001/api/events/")
+    axios.get("http://localhost:3001/api/events/past")
     .then((res) => {
-      console.log("res",res.data)
+      console.log("res:",res.data)
       setEvents(res.data.events)
       setTags(res.data.tags)
   })
@@ -39,17 +39,9 @@ export default function PastEvent() {
 
   return (
     <>
-    <Typography variant="h3">History</Typography>
+    <Typography variant="h3">Past events:</Typography>
     <Stack>
         {events.map((elm:Event, key:number)=>{
-
-          const eventDay = new Date(elm.date_event_start)
-          const today = new Date()
-
-          const eventDaySum = 10000*eventDay.getFullYear()+100*eventDay.getMonth()+eventDay.getDate()
-          const todaySum = 10000*today.getFullYear()+100*today.getMonth()+today.getDate()
-
-          if(eventDaySum < todaySum){
 
           return (
             <div key={key} style={{border:"1px solid grey", margin:"5px"}}>
@@ -71,7 +63,7 @@ export default function PastEvent() {
               </div>
               
             </div>
-          )}
+          )
         })}
     </Stack>
   </>
