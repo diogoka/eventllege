@@ -25,20 +25,14 @@ exports.up = async pgm => {
         id_user_type: {
             type: 'integer',
             references: `${tableNameUsersType}(id_user_type)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         name_user: { type: 'varchar(500)', notNull: true },
         email_user: { type: 'varchar(500)', notNull: true },
         postal_code_user: { type: 'varchar(500)', notNull: false },
         phone_user: { type: 'varchar(500)', notNull: false },
         avatar_user: { type: 'bytea', notNull: false }
-    });
-
-    pgm.addConstraint(tableNameUsers, 'fk_user_type', {
-        foreignKeys: {
-            columns: 'id_user_type',
-            references: `${tableNameUsersType}(id_user_type)`,
-        }
     });
 
     pgm.createTable(courses, {
@@ -52,27 +46,15 @@ exports.up = async pgm => {
         id_user: {
             type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         id_course: {
             type: 'integer',
             references: `${courses}(id_course)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
-    });
-
-    pgm.addConstraint(users_courses, 'fk_user_course_user', {
-        foreignKeys: {
-            columns: 'id_user',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
-    pgm.addConstraint(users_courses, 'fk_user_course_course', {
-        foreignKeys: {
-            columns: 'id_course',
-            references: `${courses}(id_course)`,
-        }
     });
 
     pgm.createTable(events, {
@@ -80,7 +62,8 @@ exports.up = async pgm => {
         id_owner: {
             type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         name_event: { type: 'varchar(500)', notNull: true },
         description_event: { type: 'varchar(500)', notNull: true },
@@ -93,13 +76,6 @@ exports.up = async pgm => {
         category_event: { type: 'varchar(500)', notNull: true }
     });
 
-    pgm.addConstraint(events, 'fk_event_owner', {
-        foreignKeys: {
-            columns: 'id_owner',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
     pgm.createTable(tags, {
         id_tag: 'serial primary key',
         name_tag: { type: 'varchar(500)', notNull: true },
@@ -110,29 +86,16 @@ exports.up = async pgm => {
         id_event: {
             type: 'integer',
             references: `${events}(id_event)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         id_tag: {
             type: 'integer',
             references: `${tags}(id_tag)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
     });
-
-    pgm.addConstraint(events_tags, 'fk_event_tag_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
-    pgm.addConstraint(events_tags, 'fk_event_tag_tag', {
-        foreignKeys: {
-            columns: 'id_tag',
-            references: `${tags}(id_tag)`,
-        }
-    });
-
 
     pgm.createTable(reviews, {
         id_review: 'serial primary key',
@@ -151,27 +114,15 @@ exports.up = async pgm => {
         id_event: {
             type: 'integer',
             references: `${events}(id_event)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         id_review: {
             type: 'integer',
             references: `${reviews}(id_review)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
-    });
-
-    pgm.addConstraint(events_reviews, 'fk_event_review_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
-    pgm.addConstraint(events_reviews, 'fk_event_review_review', {
-        foreignKeys: {
-            columns: 'id_review',
-            references: `${reviews}(id_review)`,
-        }
     });
 
     pgm.createTable(attendees, {
@@ -179,27 +130,15 @@ exports.up = async pgm => {
         id_user: {
             type: 'VARCHAR(100)',
             references: `${tableNameUsers}(id_user)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
         id_event: {
             type: 'integer',
             references: `${events}(id_event)`,
-            notNull: true
+            notNull: true,
+            onDelete: 'CASCADE'
         },
-    });
-
-    pgm.addConstraint(attendees, 'fk_attendee_user', {
-        foreignKeys: {
-            columns: 'id_user',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
-    pgm.addConstraint(attendees, 'fk_attendee_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
     });
 
 };
