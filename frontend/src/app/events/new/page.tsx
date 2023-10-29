@@ -121,7 +121,7 @@ export default function NewEventPage() {
           type='checkbox'
           name='date'
           id='dateStart'
-          value={'2023-10-29T08:00:00.000Z'}
+          value={'2023-11-15T08:00:00.000Z'}
           onChange={(event) => setDateStart(event.target.value)}
         />
         <label htmlFor='dateStart'>start date</label>
@@ -130,7 +130,7 @@ export default function NewEventPage() {
           type='checkbox'
           name='date'
           id='dateEnd'
-          value={'2023-10-30T08:00:00.000Z'}
+          value={'2023-11-16T08:00:00.000Z'}
           onChange={(event) => setDateEnd(event.target.value)}
         />
         <label htmlFor='dateEnd'>end date</label>
