@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 type Event = {
   id_event: number;
@@ -20,6 +21,7 @@ type Event = {
 
 export default function EventPage() {
   const [event, setEvent] = useState<Event>();
+  const router = useRouter();
 
   const EVENT_ID = typeof window !== 'undefined' ? window.location.pathname.split('/events/')[1] : null;
 
@@ -46,6 +48,7 @@ export default function EventPage() {
       .then((res: any) => {
         console.log('res', res.data.json);
       });
+    router.push('/events');
   };
 
   return (

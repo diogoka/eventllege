@@ -72,8 +72,6 @@ export default function NewEventPage() {
       category,
     };
 
-    console.log('here', formData);
-
     axios
       .post('http://localhost:3001/api/events/new', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -84,6 +82,13 @@ export default function NewEventPage() {
       .catch((err) => {
         console.error(err.response.data);
       });
+    if (formData) {
+      setTitle('');
+      setDescription('');
+      setSpots(0);
+      setLocation('');
+      setPrice(0);
+    }
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,10 +114,17 @@ export default function NewEventPage() {
     <Stack>
       Create Events Page
       <form onSubmit={submitHandler}>
-        <input type='text' name='tittle' placeholder='tittle' onChange={(event) => setTitle(event.target.value)} />
+        <input
+          type='text'
+          name='tittle'
+          placeholder='tittle'
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
         <textarea
           name='description'
           placeholder='description'
+          value={description}
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
         <input type='file' accept='image/*' onChange={handleImageUpload} />
@@ -134,10 +146,20 @@ export default function NewEventPage() {
           onChange={(event) => setDateEnd(event.target.value)}
         />
         <label htmlFor='dateEnd'>end date</label>
-        <input type='number' placeholder='Max spots' onChange={(event) => setSpots(+event.target.value)} />
-        <input type='text' placeholder='location' onChange={(event) => setLocation(event.target.value)} />
+        <input
+          type='number'
+          placeholder='Max spots'
+          value={spots}
+          onChange={(event) => setSpots(+event.target.value)}
+        />
+        <input
+          type='text'
+          placeholder='location'
+          value={location}
+          onChange={(event) => setLocation(event.target.value)}
+        />
         <label htmlFor='price'>Price</label>
-        <input type='number' id='price' onChange={(event) => setPrice(+event.target.value)} />
+        <input type='number' id='price' value={price} onChange={(event) => setPrice(+event.target.value)} />
 
         <div>{imageSizeWarning}</div>
 
