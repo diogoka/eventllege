@@ -5,8 +5,27 @@ import axios from "axios"
 
 export default function EventsPage() {
 
-  const [events, setEvents]= useState([]);
-  const [tags, setTags]= useState([]);
+  type Event={
+    capacity_event: number,
+    category_event: string,
+    date_event_end: string,
+    date_event_start: string,
+    description_event: string,
+    id_event: number,
+    id_owner: string,
+    image_event: string,
+    location_event: string,
+    name_event: string,
+    price_event: number
+  }
+
+  type Tag={
+    id_event: number,
+    name_tag: string
+  }
+
+  const [events, setEvents]= useState<Array<Event>>([]);
+  const [tags, setTags]= useState<Array<Tag>>([]);
 
   const[user, setUser]= useState({
     id_user: "F",
@@ -59,27 +78,30 @@ const deleteAttendee = (id_event: number) => {
     <>
       <Typography variant="h3">Events Page</Typography>
       <Stack>
-          {events.map((elm, key)=>{
-            return (<div key={key} style={{border:"1px solid grey", margin:"5px"}}>
-              <div>Name: {elm["name_event"]}</div>
-              <div>Start: {elm["date_event_start"]}</div>
-              <div>Start: {elm["date_event_end"]}</div>
-              <div>Location: {elm["location_event"]}</div>
-              <div>Category: {elm["category_event"]}</div>
-              <div>Price: {elm["price_event"]}</div>
-              <div>ID: {elm["id_event"]}</div>
-              <div>Owner: {elm["id_owner"]}</div>
-              <div>Tags:&nbsp;
+          {events.map((elm:Event, key:number)=>{
+            return (
+            <div key={key} style={{border:"1px solid grey", margin:"5px"}}>
+              <div><b>Name: </b>{elm.name_event}</div>
+              <div><b>Description: </b>{elm.description_event}</div>
+              <div><b>Start: </b>{elm.date_event_start}</div>
+              <div><b>End: </b>{elm.date_event_end}</div>
+              <div><b>Location: </b>{elm.location_event}</div>
+              <div><b>Category: </b>{elm.category_event}</div>
+              <div><b>Price: </b>{elm.price_event}</div>
+              <div><b>ID: </b>{elm.id_event}</div>
+              <div><b>Owner: </b>{elm.id_owner}</div>
+              <div><b>Tags: </b>
 
-              {tags.map((tag, key)=>{
-                return elm["id_event"]==tag["id_event"]? <span key={key}>{tag["name_tag"]},&nbsp;</span> : null;
+              {tags.map((tag:Tag, key:number)=>{
+                return elm.id_event==tag.id_event? <span key={key}>{tag.name_tag},&nbsp;</span> : null;
               })}
               
               </div>
               <button onClick={() => newAttendee(elm["id_event"])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm["id_event"])}>Delete Attendee</button>
               
-            </div>)
+            </div>
+            )
           })}
       </Stack>
     </>

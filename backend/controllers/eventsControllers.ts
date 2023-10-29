@@ -14,8 +14,11 @@ import { sendEmail, EmailOption } from '../helpers/mail';
 // };
 
 export const getEvents = async (req: express.Request, res: express.Response) => {
+
+  const date = new Date()
+
   try {
-    const events = await pool.query('SELECT * FROM events');
+    const events = await pool.query('SELECT * FROM events where events.date_event_start >= $1',[date]);
     const tags = await pool.query(
       'SELECT events.id_event, tags.name_tag FROM events ' +
         'inner join events_tags on events.id_event = events_tags.id_event ' +
@@ -30,13 +33,14 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
   }
 };
 
-export const getEvent = async (req: express.Request, res: express.Response) => {
 
+export const getEvent = async (req: express.Request, res: express.Response) => {
+  
   const EVENT_ID = req.originalUrl.split("/api/events/")[1]
 
   try {
     const events = await pool.query("SELECT * FROM events where id_event=$1", [EVENT_ID]);
-
+    
     const tags = await pool.query(
       "SELECT tags.name_tag FROM events "+
       // "SELECT * FROM events "+
@@ -51,16 +55,37 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       "inner join users on attendees.id_user = users.id_user where events.id_event=$1", [EVENT_ID]
       );
       
-    res.json({event:
+      res.json({event:
       {...events.rows[0],
       tags : tags.rows.map(val => {return val.name_tag}),
       attendees : attendees.rows.map(val => {return val.name_user})
       }});
+      
+    } catch (_err) {
+      // console.log(err.message);
+    }
+  };
 
-  } catch (_err) {
-    // console.log(err.message);
-  }
-};
+
+  export const getPastEvents = async (req: express.Request, res: express.Response) => {
+  
+    const date = new Date()
+  
+    try {
+      const events = await pool.query('SELECT * FROM events where events.date_event_start < $1',[date]);
+      const tags = await pool.query(
+        'SELECT events.id_event, tags.name_tag FROM events ' +
+          'inner join events_tags on events.id_event = events_tags.id_event ' +
+          'inner join tags on events_tags.id_tag = tags.id_tag'
+      );
+      res.json({
+        events: events.rows,
+        tags: tags.rows,
+      });
+    } catch (_err) {
+      // console.log(err.message);
+    }
+  };
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
   const { owner, title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
