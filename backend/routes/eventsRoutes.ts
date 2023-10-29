@@ -3,6 +3,7 @@ import {
   createEvents,
   getEvents,
   getEvent,
+  getPastEvents,
   updateEvents,
   deleteEvents,
   newAttendee,
@@ -28,8 +29,12 @@ export const upload = multer({ storage: storage });
 
 const eventsRouter: Router = express.Router();
 
+eventsRouter.get('/past', getPastEvents);
+
 eventsRouter.get('/', getEvents);
 eventsRouter.get('/:id', getEvent);
+
+
 eventsRouter.post('/new', upload.single('picture'), createEvents);
 
 eventsRouter.post('/attendee', newAttendee);
