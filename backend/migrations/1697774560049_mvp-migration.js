@@ -13,207 +13,143 @@ const attendees = 'attendees';
 const tags = 'tags';
 const events_tags = 'events_tags';
 
-exports.up = async pgm => {
+exports.up = async (pgm) => {
+  pgm.createTable(tableNameUsersType, {
+    id_user_type: 'serial primary key',
+    role_user: { type: 'varchar(100)', notNull: true },
+  });
 
-    pgm.createTable(tableNameUsersType, {
-        id_user_type: 'serial primary key',
-        role_user: { type: 'varchar(100)', notNull: true }
-    });
+  pgm.createTable(tableNameUsers, {
+    id_user: 'varchar(100) primary key',
+    id_user_type: {
+      type: 'integer',
+      references: `${tableNameUsersType}(id_user_type)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    name_user: { type: 'varchar(500)', notNull: true },
+    email_user: { type: 'varchar(500)', notNull: true },
+    postal_code_user: { type: 'varchar(500)', notNull: false },
+    phone_user: { type: 'varchar(500)', notNull: false },
+    avatar_user: { type: 'bytea', notNull: false },
+  });
 
-    pgm.createTable(tableNameUsers, {
-        id_user: 'varchar(100) primary key',
-        id_user_type: {
-            type: 'integer',
-            references: `${tableNameUsersType}(id_user_type)`,
-            notNull: true
-        },
-        name_user: { type: 'varchar(500)', notNull: true },
-        email_user: { type: 'varchar(500)', notNull: true },
-        postal_code_user: { type: 'varchar(500)', notNull: false },
-        phone_user: { type: 'varchar(500)', notNull: false },
-        avatar_user: { type: 'bytea', notNull: false }
-    });
+  pgm.createTable(courses, {
+    id_course: 'serial primary key',
+    name_course: { type: 'varchar(500)', notNull: true },
+    category_course: { type: 'varchar(500)', notNull: true },
+  });
 
-    pgm.addConstraint(tableNameUsers, 'fk_user_type', {
-        foreignKeys: {
-            columns: 'id_user_type',
-            references: `${tableNameUsersType}(id_user_type)`,
-        }
-    });
+  pgm.createTable(users_courses, {
+    id_user_course: 'serial primary key',
+    id_user: {
+      type: 'VARCHAR(100)',
+      references: `${tableNameUsers}(id_user)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    id_course: {
+      type: 'integer',
+      references: `${courses}(id_course)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+  });
 
-    pgm.createTable(courses, {
-        id_course: 'serial primary key',
-        name_course: { type: 'varchar(500)', notNull: true },
-        category_course: { type: 'varchar(500)', notNull: true },
-    });
+  pgm.createTable(events, {
+    id_event: 'serial primary key',
+    id_owner: {
+      type: 'VARCHAR(100)',
+      references: `${tableNameUsers}(id_user)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    name_event: { type: 'varchar(500)', notNull: true },
+    description_event: { type: 'varchar(500)', notNull: true },
+    date_event_start: { type: 'timestamp', notNull: true },
+    date_event_end: { type: 'timestamp', notNull: true },
+    location_event: { type: 'varchar(500)', notNull: true },
+    capacity_event: { type: 'integer', notNull: true },
+    price_event: { type: 'integer', notNull: true },
+    image_event: { type: 'bytea', notNull: false },
+    category_event: { type: 'varchar(500)', notNull: true },
+  });
 
-    pgm.createTable(users_courses, {
-        id_user_course: 'serial primary key',
-        id_user: {
-            type: 'VARCHAR(100)',
-            references: `${tableNameUsers}(id_user)`,
-            notNull: true
-        },
-        id_course: {
-            type: 'integer',
-            references: `${courses}(id_course)`,
-            notNull: true
-        },
-    });
+  pgm.createTable(tags, {
+    id_tag: 'serial primary key',
+    name_tag: { type: 'varchar(500)', notNull: true },
+  });
 
-    pgm.addConstraint(users_courses, 'fk_user_course_user', {
-        foreignKeys: {
-            columns: 'id_user',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
+  pgm.createTable(events_tags, {
+    id_event_tag: 'serial primary key',
+    id_event: {
+      type: 'integer',
+      references: `${events}(id_event)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    id_tag: {
+      type: 'integer',
+      references: `${tags}(id_tag)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+  });
 
-    pgm.addConstraint(users_courses, 'fk_user_course_course', {
-        foreignKeys: {
-            columns: 'id_course',
-            references: `${courses}(id_course)`,
-        }
-    });
+  pgm.createTable(reviews, {
+    id_review: 'serial primary key',
+    id_user: {
+      type: 'VARCHAR(100)',
+      references: `${tableNameUsers}(id_user)`,
+      notNull: true,
+    },
+    description_review: { type: 'varchar(500)', notNull: true },
+    rating: { type: 'integer', notNull: true },
+    date_review: { type: 'timestamp', notNull: true },
+  });
 
-    pgm.createTable(events, {
-        id_event: 'serial primary key',
-        id_owner: {
-            type: 'VARCHAR(100)',
-            references: `${tableNameUsers}(id_user)`,
-            notNull: true
-        },
-        name_event: { type: 'varchar(500)', notNull: true },
-        description_event: { type: 'varchar(500)', notNull: true },
-        date_event_start: { type: 'timestamp', notNull: true },
-        date_event_end: { type: 'timestamp', notNull: true },
-        location_event: { type: 'varchar(500)', notNull: true },
-        capacity_event: { type: 'integer', notNull: true },
-        price_event: { type: 'integer', notNull: true },
-        image_event: { type: 'bytea', notNull: false },
-        category_event: { type: 'varchar(500)', notNull: true }
-    });
+  pgm.createTable(events_reviews, {
+    id_event_review: 'serial primary key',
+    id_event: {
+      type: 'integer',
+      references: `${events}(id_event)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    id_review: {
+      type: 'integer',
+      references: `${reviews}(id_review)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+  });
 
-    pgm.addConstraint(events, 'fk_event_owner', {
-        foreignKeys: {
-            columns: 'id_owner',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
-    pgm.createTable(tags, {
-        id_tag: 'serial primary key',
-        name_tag: { type: 'varchar(500)', notNull: true },
-    });
-
-    pgm.createTable(events_tags, {
-        id_event_tag: 'serial primary key',
-        id_event: {
-            type: 'integer',
-            references: `${events}(id_event)`,
-            notNull: true
-        },
-        id_tag: {
-            type: 'integer',
-            references: `${tags}(id_tag)`,
-            notNull: true
-        },
-    });
-
-    pgm.addConstraint(events_tags, 'fk_event_tag_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
-    pgm.addConstraint(events_tags, 'fk_event_tag_tag', {
-        foreignKeys: {
-            columns: 'id_tag',
-            references: `${tags}(id_tag)`,
-        }
-    });
-
-
-    pgm.createTable(reviews, {
-        id_review: 'serial primary key',
-        id_user: {
-            type: 'VARCHAR(100)',
-            references: `${tableNameUsers}(id_user)`,
-            notNull: true
-        },
-        description_review: { type: 'varchar(500)', notNull: true },
-        rating: { type: 'integer', notNull: true },
-        date_review: { type: 'timestamp', notNull: true },
-    });
-
-    pgm.createTable(events_reviews, {
-        id_event_review: 'serial primary key',
-        id_event: {
-            type: 'integer',
-            references: `${events}(id_event)`,
-            notNull: true
-        },
-        id_review: {
-            type: 'integer',
-            references: `${reviews}(id_review)`,
-            notNull: true
-        },
-    });
-
-    pgm.addConstraint(events_reviews, 'fk_event_review_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
-    pgm.addConstraint(events_reviews, 'fk_event_review_review', {
-        foreignKeys: {
-            columns: 'id_review',
-            references: `${reviews}(id_review)`,
-        }
-    });
-
-    pgm.createTable(attendees, {
-        id_attendee: 'serial primary key',
-        id_user: {
-            type: 'VARCHAR(100)',
-            references: `${tableNameUsers}(id_user)`,
-            notNull: true
-        },
-        id_event: {
-            type: 'integer',
-            references: `${events}(id_event)`,
-            notNull: true
-        },
-    });
-
-    pgm.addConstraint(attendees, 'fk_attendee_user', {
-        foreignKeys: {
-            columns: 'id_user',
-            references: `${tableNameUsers}(id_user)`,
-        }
-    });
-
-    pgm.addConstraint(attendees, 'fk_attendee_event', {
-        foreignKeys: {
-            columns: 'id_event',
-            references: `${events}(id_event)`,
-        }
-    });
-
+  pgm.createTable(attendees, {
+    id_attendee: 'serial primary key',
+    id_user: {
+      type: 'VARCHAR(100)',
+      references: `${tableNameUsers}(id_user)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+    id_event: {
+      type: 'integer',
+      references: `${events}(id_event)`,
+      notNull: true,
+      onDelete: 'CASCADE',
+    },
+  });
 };
 
-exports.down = async pgm => {
-    pgm.dropTable(events_tags);
-    pgm.dropTable(tags);
-    pgm.dropTable(attendees);
-    pgm.dropTable(events_reviews);
-    pgm.dropTable(reviews);
-    pgm.dropTable(events);
-    pgm.dropTable(users_courses);
-    pgm.dropTable(courses);
-    pgm.dropTable(tableNameUsers);
-    pgm.dropTable(tableNameUsersType);
+exports.down = async (pgm) => {
+  pgm.dropTable(events_tags);
+  pgm.dropTable(tags);
+  pgm.dropTable(attendees);
+  pgm.dropTable(events_reviews);
+  pgm.dropTable(reviews);
+  pgm.dropTable(events);
+  pgm.dropTable(users_courses);
+  pgm.dropTable(courses);
+  pgm.dropTable(tableNameUsers);
+  pgm.dropTable(tableNameUsersType);
 };
-
