@@ -16,7 +16,7 @@ type Event = {
   capacity_event: number,
   price_event: number,
   image_event: string,
-  type_event: string
+  category_event: string
 }
 
 type Tag = {
@@ -49,7 +49,7 @@ export default function OrganizerEventsPage() {
     <>
     <h3>Organizer-Events</h3>
 
-    {events?.map((val:Event, key)=>{
+    {events?.map((val:Event, key:number)=>{
 
       return (
       <div key={key} style={{border:"1px solid grey",margin: "5px"}}>
@@ -63,12 +63,12 @@ export default function OrganizerEventsPage() {
         <div><b>location_event:</b>{val.location_event}</div>
         <div><b>capacity_event:</b>{val.capacity_event}</div>
         <div><b>price_event:</b>{val.price_event}</div>
-        <div><b>type_event:</b>{val.type_event}</div>
+        <div><b>category_event:</b>{val.category_event}</div>
         <div><b>image_event:</b>{val.image_event}</div>
         <div><b>tags:</b>
         
-        {tags?.map((tag:Tag) => {
-          return tag.id_event==val.id_event? <span>{tag.name_tag},&nbsp;</span> : null
+        {tags?.map((tag:Tag, key:number) => {
+          return tag.id_event==val.id_event? <span key={key}>{tag.name_tag},&nbsp;</span> : null
           })}
         
         </div>
