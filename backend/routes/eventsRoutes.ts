@@ -24,7 +24,9 @@ const storage = multer.diskStorage({
     cb(null, fileName);
   },
 });
+
 export const upload = multer({ storage: storage });
+
 const eventsRouter: Router = express.Router();
 
 eventsRouter.get("/past", getPastEvents);

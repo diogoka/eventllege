@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation";
 
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
-type Id = {
-  id: number;
+type Params = {
+  params: {
+    id: number;
+  };
 };
 
 type Tag = {
@@ -20,8 +22,8 @@ type Category = {
   category_course: string;
 };
 
-export default function EditEventPage(id: Id) {
-  console.log("edit", id);
+export default function EditEventPage({ params }: Params) {
+  console.log("edit", params.id);
 
   const router = useRouter();
 
@@ -67,6 +69,7 @@ export default function EditEventPage(id: Id) {
     event.preventDefault();
 
     const formData = {
+      params: params.id,
       owner: "A",
       title,
       description,
@@ -83,7 +86,7 @@ export default function EditEventPage(id: Id) {
     console.log("here", formData);
 
     axios
-      .put(`http://localhost:3001/api/events/${id}`, formData, {
+      .put(`http://localhost:3001/api/events/${params.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {

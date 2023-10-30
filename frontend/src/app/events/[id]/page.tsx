@@ -36,6 +36,21 @@ export default function EventPage() {
       });
   }, []);
 
+  const deleteEvent = (id: number) => {
+    console.log("delete", id);
+
+    axios
+      .delete(`http://localhost:3001/api/events/${id}`, {
+        data: {
+          id,
+        },
+      })
+      .then((res: any) => {
+        console.log("res", res.data.json);
+      });
+    router.push("/events");
+  };
+
   const editEventHandler = (id: number) => {
     if (!id) {
       console.log("Id does not exist");
@@ -94,18 +109,26 @@ export default function EventPage() {
             return <span key={key}>{tag}, </span>;
           })}
         </div>
-
         <div>
           <b>Attendees: </b>
           {event?.attendees.map((att: string, key: number) => {
             return <span key={key}>{att}, </span>;
           })}
         </div>
-        {event?.id_event ? (
-          <button onClick={() => editEventHandler(event.id_event)}>Edit</button>
-        ) : (
-          <div>Id is not found</div>
-        )}
+        <div>
+          {event?.id_event ? (
+            <button onClick={() => editEventHandler(event.id_event)}>Edit</button>
+          ) : (
+            <div>Id is not found</div>
+          )}
+        </div>
+        <div>
+          {event?.id_event ? (
+            <button onClick={() => deleteEvent(event.id_event)}>Delete Event</button>
+          ) : (
+            <div>Id is not found</div>
+          )}
+        </div>
       </div>
     </>
   );
