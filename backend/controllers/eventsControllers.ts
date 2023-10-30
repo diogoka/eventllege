@@ -211,15 +211,16 @@ export const newReview = async (req: express.Request, res: express.Response) => 
     res.status(400).send('Missing parameters');
     return;
   }
+  console.log("Body",req.body);
   const { id_event, id_user, review } = req.body;
   try {
     const newReview = await pool.query(
       `INSERT INTO reviews (id_user, description_review, rating, date_review)
          VALUES ($1, $2, $3, $4)
-         RETURNING *`,
-      [id_user, review.description, review.rating, review.date]
-    );
-    const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
+         RETURNING *`
+    ,
+      [id_user, review.description, review.rating, review.date_review]);
+      const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
 
     res.status(200).json(newReview.rows);
   } catch (err: any) {

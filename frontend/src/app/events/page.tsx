@@ -1,7 +1,8 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Container, Stack, Typography } from '@mui/material';
-import axios from 'axios';
+"use client";
+import { useEffect,useState } from "react"
+import { Container, Stack, Typography } from "@mui/material"
+import axios from "axios"
+import ModalRating from "@/components/modal"
 
 export default function EventsPage() {
   type Event = {
@@ -115,6 +116,7 @@ export default function EventsPage() {
               </div>
               <button onClick={() => newAttendee(elm['id_event'])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm['id_event'])}>Delete Attendee</button>
+              <ModalRating eventid = {elm["id_event"]} userid = {user.id_user}/>
             </div>
           );
         })}
