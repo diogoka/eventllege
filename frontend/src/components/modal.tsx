@@ -89,11 +89,13 @@ export default function ModalRating(props: any) {
         {...props}
       >
         <Box sx={style}>
-            <Stack height={1/3} style={{display: 'flex', flexDirection: 'column'}}>
-                <form onSubmit={handleNewReview}>
+            <Stack height={1/3} >
+                <form onSubmit={handleNewReview} style={{display: 'flex', flexDirection: 'column', rowGap: "1rem"}}>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} onChange={(event, newValue) => setRating(Number(newValue))} />
-                <input type="text" placeholder='description' onChange={(event) => setDescription(event.target.value)}/>
-                <input type="submit" value="Register" />
+                <input type="text" placeholder='Tell us about your experience!' onChange={(event) => setDescription(event.target.value)} style={{height: '3rem'}}/>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                  <input type="submit" value="New Review" style={{width: '50%'}}/>
+                </div>
                 </form>
             </Stack>
         </Box>
