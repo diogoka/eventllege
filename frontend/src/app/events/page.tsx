@@ -116,6 +116,7 @@ export default function EventsPage() {
               </div>
               <button onClick={() => newAttendee(elm['id_event'])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm['id_event'])}>Delete Attendee</button>
+              <ModalRating eventid = {elm["id_event"]} userid = {user.id_user}/>
             </div>
           );
         })}

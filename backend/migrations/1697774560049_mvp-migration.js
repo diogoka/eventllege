@@ -25,21 +25,6 @@ exports.up = async (pgm) => {
       type: 'integer',
       references: `${tableNameUsersType}(id_user_type)`,
       notNull: true,
-      onDelete: 'CASCADE',
-    },
-    name_user: { type: 'varchar(500)', notNull: true },
-    email_user: { type: 'varchar(500)', notNull: true },
-    postal_code_user: { type: 'varchar(500)', notNull: false },
-    phone_user: { type: 'varchar(500)', notNull: false },
-    avatar_user: { type: 'bytea', notNull: false },
-  });
-
-  pgm.createTable(tableNameUsers, {
-    id_user: 'varchar(100) primary key',
-    id_user_type: {
-      type: 'integer',
-      references: `${tableNameUsersType}(id_user_type)`,
-      notNull: true,
       onDelete: 'CASCADE'
     },
     name_user: { type: 'varchar(500)', notNull: true },
@@ -119,7 +104,7 @@ exports.up = async (pgm) => {
       notNull: true
     },
     description_review: { type: 'varchar(500)', notNull: true },
-    rating: { type: 'integer', notNull: true },
+    rating: { type: 'numeric(2,1)', notNull: true },
     date_review: { type: 'timestamp', notNull: true },
   });
 
