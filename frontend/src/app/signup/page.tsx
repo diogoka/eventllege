@@ -7,7 +7,9 @@ import { UserContext } from "@/context/userContext";
 
 import {
   getAuth,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 
 type Course = {
@@ -18,15 +20,15 @@ type Course = {
 
 export default function SignUpPage() {
 
-  const { setUser } = useContext(UserContext);
+  const { setUser, firebaseAccount } = useContext(UserContext);
 
   // User Input
   const [courseId, setCourseId] = useState(1);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [phone, setPhone] = useState('');
 
   // Course data from server
   const [courses, setCourses] = useState([]);
@@ -45,17 +47,33 @@ export default function SignUpPage() {
       })
   }, []);
 
+  // useEffect(() => {
+  //   if(firebaseAccount) {
+  //     if(firebaseAccount.email) setEmail(firebaseAccount.email);
+  //     if(firebaseAccount.displayName) setName(firebaseAccount.displayName);
+  //   }
+  // }, [firebaseAccount]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+      let reqUserId = '';
+      let reqEmail = '';
+      if(firebaseAccount) {
+        reqUserId = firebaseAccount.uid;
+        reqEmail = firebaseAccount.email!;
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+        reqUserId = userCredential.user.uid;
+        reqEmail = userCredential.user.email!;
+      }
 
       const formData = new FormData();
-      formData.append("id", userCredential.user.uid);
+      formData.append("id", reqUserId);
       formData.append("type", "2");
       formData.append("courseId", courseId.toString());
-      formData.append("email", email);
+      formData.append("email", reqEmail);
       formData.append("name", name);
       if (postalCode) formData.append("postalCode", postalCode);
       if (phone) formData.append("phone", phone);
@@ -78,10 +96,17 @@ export default function SignUpPage() {
 
   };
 
+  const handleGoogleSignup = async () => {
+    signInWithPopup(getAuth(), new GoogleAuthProvider())
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <Stack width={1 / 3}>
       Sign Up Page
-      <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
 
         <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
           {courses.map((course: Course, index: number) => {
@@ -91,8 +116,12 @@ export default function SignUpPage() {
           })}
         </select>
 
-        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
-        <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
+        {!firebaseAccount && (
+          <>
+            <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
+            <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
+          </>
+        )}
         <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
         <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
         <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
@@ -101,6 +130,8 @@ export default function SignUpPage() {
 
         <input type="submit" value="Register" />
       </form>
+
+      <button onClick={handleGoogleSignup}>Sign up with Google</button>
     </Stack>
   )
 }

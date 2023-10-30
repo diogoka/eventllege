@@ -5,6 +5,7 @@ import ThemeRegistry from './theme-registry';
 import { Container } from '@mui/material';
 import Header from '@/components/header';
 import { UserContextProvider } from '@/context/userContext';
+import AuthProvider from '@/auth/auth-provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
           <UserContextProvider>
+            <AuthProvider/>
             <Header />
             <Container>
               {children}
