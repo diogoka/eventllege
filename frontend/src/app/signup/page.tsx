@@ -84,7 +84,6 @@ export default function SignUpPage() {
           headers: { 'content-type': 'multipart/form-data' }
         })
         .then((res) => {
-          console.log(res.data);
           setUser(res.data);
         })
         .catch((error) => {

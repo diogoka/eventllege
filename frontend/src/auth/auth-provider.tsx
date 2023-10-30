@@ -1,16 +1,49 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { use, useContext, useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
+import { Container } from '@mui/material';
+import Header from '@/components/header';
 
 import { UserContext } from '@/context/userContext';
 
-export default function AuthProvider() {
-  const router = useRouter();
+const allowedPages = [
+  /^\/signup$/,
+  /^\/login$/,
+  /^\/events$/,
+  /^\/events\/\d+$/,
+]
 
-  const { setUser, setFirebaseAccount } = useContext(UserContext);
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { user, setUser, firebaseAccount, setFirebaseAccount } = useContext(UserContext);
+
+  const isAllowed = allowedPages.some((allowedPage) => {
+    return allowedPage.test(pathname);
+  });
+
+  useEffect(() => {
+    if(!user) {
+      // User is in the process of sign-up
+      if(firebaseAccount) {
+        router.replace('/signup');
+      }
+      // User is not logged in
+      else {
+        if(pathname !== '/signup') {
+          router.replace('/login');
+        }
+      }
+    }
+  }, [pathname, firebaseAccount, user])
 
   useEffect(() => {
 
@@ -21,8 +54,6 @@ export default function AuthProvider() {
     // - Logout -> Log in
     // - Log in -> Log out
     getAuth().onAuthStateChanged(async (firebaseAccount) => {
-
-      console.log(firebaseAccount);
 
       if (firebaseAccount) {
 
@@ -37,10 +68,6 @@ export default function AuthProvider() {
           .catch((error) => {
             console.error(error);
             setUser(null);
-
-            // If the user is signed up for Firebase but not signed up for our app,
-            // Go to signup page and continue to fill out required fields
-            router.replace('/signup');
           })
       }
       // When the user logged out or doesn't have an account
@@ -54,6 +81,14 @@ export default function AuthProvider() {
 
   return (
     <>
+      <Header />
+      {(isAllowed || user) && (
+        <>
+          <Container>
+            {children}
+          </Container>
+        </>
+      )}
     </>
   )
 }
