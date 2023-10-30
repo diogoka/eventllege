@@ -4,6 +4,7 @@ import {
   getEvents,
   getEvent,
   getPastEvents,
+  getUserEvents,
   updateEvents,
   deleteEvents,
   newAttendee,
@@ -30,6 +31,7 @@ export const upload = multer({ storage: storage });
 const eventsRouter: Router = express.Router();
 
 eventsRouter.get('/past', getPastEvents);
+eventsRouter.get('/user', getUserEvents);
 
 eventsRouter.get('/', getEvents);
 eventsRouter.get('/:id', getEvent);

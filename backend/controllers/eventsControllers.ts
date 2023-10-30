@@ -87,6 +87,56 @@ export const getPastEvents = async (req: express.Request, res: express.Response)
   }
 };
 
+export const getUserEvents = async (req: express.Request, res: express.Response) => {
+  
+  const date = new Date()
+  const SAMPLE_USER = req.query.id_user;
+
+  try {
+
+    const att = await pool.query(
+      'SELECT * FROM attendees ' +
+      'inner join events on attendees.id_event = events.id_event ' +
+      'where attendees.id_user = $1 and events.date_event_start >= $2', [SAMPLE_USER, date]
+    );
+
+    const ids = att.rows.map(val => { return val.id_event })
+
+    const tags = await pool.query(
+      `SELECT events.id_event, tags.name_tag FROM events `+
+      `inner join events_tags on events.id_event = events_tags.id_event `+
+      `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
+    );
+
+    const attendees = await pool.query(
+      `SELECT users.name_user,attendees.id_event FROM events `+
+      `inner join attendees on events.id_event = attendees.id_event `+
+      `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
+      );
+
+    const events = att.rows.map(val => {
+      return { ...val,
+        
+        tags: tags.rows.filter(tag => {
+          return val.id_event == tag.id_event? true : false
+        }).map(t => { return t.name_tag }),
+
+        attendees: attendees.rows.filter(att => {
+          return val.id_event == att.id_event? true : false
+        }).map(a => { return a.name_user })
+        
+      }
+    })
+    
+    res.json({
+      events: events
+    });
+    
+  } catch (_err) {
+    // console.log(err.message);
+  }
+};
+
 export const createEvents = async (req: express.Request, res: express.Response) => {
   const { owner, title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
 
