@@ -243,6 +243,36 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   }
 };
 
+
+export const getReviews = async (req: express.Request, res: express.Response) => {
+  const event_id = req.params.id;
+
+  try {
+    const reviews = await pool.query(`
+    SELECT
+      u.name_user,
+      r.description_review,
+      r.rating,
+      r.date_review
+    FROM
+      events_reviews er
+    JOIN
+      reviews r ON er.id_review = r.id_review
+    JOIN
+      users u ON r.id_user = u.id_user
+    WHERE
+      er.id_event = $1;`,
+      [event_id]
+    );
+
+    res.json({
+      reviews: reviews.rows,
+    });
+  } catch (_err) {
+    // console.log(err.message);
+  }
+}
+
 export const sendTicket = async (eventId: any, userId: any) => {
   try {
     const eventResult = await pool.query(
