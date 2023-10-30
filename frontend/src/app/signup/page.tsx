@@ -60,7 +60,7 @@ export default function SignUpPage() {
     try {
       let reqUserId = '';
       let reqEmail = '';
-      if(firebaseAccount) {
+      if (firebaseAccount) {
         reqUserId = firebaseAccount.uid;
         reqEmail = firebaseAccount.email!;
       } else {
@@ -131,7 +131,9 @@ export default function SignUpPage() {
         <input type="submit" value="Register" />
       </form>
 
-      <button onClick={handleGoogleSignup}>Sign up with Google</button>
+      {!firebaseAccount && (
+        <button onClick={handleGoogleSignup}>Sign up with Google</button>
+      )}
     </Stack>
   )
 }

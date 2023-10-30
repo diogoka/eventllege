@@ -22,6 +22,8 @@ export default function AuthProvider() {
     // - Log in -> Log out
     getAuth().onAuthStateChanged(async (firebaseAccount) => {
 
+      console.log(firebaseAccount);
+
       if (firebaseAccount) {
 
         setFirebaseAccount(firebaseAccount);
