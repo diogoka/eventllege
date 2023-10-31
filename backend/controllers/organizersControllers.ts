@@ -13,12 +13,12 @@ export const getOrganizerEvents = async (req: express.Request, res: express.Resp
       "inner join tags on events_tags.id_tag = tags.id_tag where id_owner= $1", [SAMPLE_USER_ID]
       );
       console.log("tags",tags.rows)
-      res.json({
+      res.status(200).json({
         events: events.rows,
         tags: tags.rows
       });
-  } catch (_err) {
-    // console.log(err.message);
+  } catch (err: any) {
+    res.status(500).send(err.message);
   }
   
 };

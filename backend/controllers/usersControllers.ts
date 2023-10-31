@@ -14,9 +14,9 @@ type UserInput = {
 export const getUsers = async (req: express.Request, res: express.Response) => {
     try {
         const users = await pool.query('SELECT * FROM users');
-        res.json(users.rows);
+        res.status(200).json(users.rows);
     } catch (err: any) {
-        console.log(err.message);
+        res.status(500).send(err.message);
     }
 }
 
@@ -26,9 +26,9 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 
     try {
         const user = await getUserResponse(userId);
-        res.json(user);
+        res.status(200).json(user);
     } catch (err: any) {
-        console.log(err.message);
+        res.status(500).send(err.message);
     }
 }
 

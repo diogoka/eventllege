@@ -11,17 +11,17 @@ export const getCourses = async (req: express.Request, res: express.Response) =>
         category: row.category_course,
       };
     });
-    res.json(resData);
-  } catch (_err) {
-    // console.log(err.message);
+    res.status(200).json(resData);
+  } catch (err: any) {
+    res.status(500).send(err.message);
   }
 };
 
 export const getCategories = async (req: express.Request, res: express.Response) => {
   try {
     const courseCategory = await pool.query("SELECT DISTINCT courses.category_course FROM courses");
-    res.json(courseCategory.rows);
+    res.status(200).json(courseCategory.rows);
   } catch (error:any) {
-    console.log(error.message);
+    res.status(500).send(error.message);
   }
 };
