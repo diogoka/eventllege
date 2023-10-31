@@ -1,8 +1,12 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Stack from '@mui/material/Stack';
-import axios from 'axios';
-import imageCompression from 'browser-image-compression';
+"use client";
+import { useState, useEffect } from "react";
+import Stack from "@mui/material/Stack";
+import axios from "axios";
+import imageCompression from "browser-image-compression";
+import { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
@@ -17,25 +21,25 @@ type Category = {
 
 export default function NewEventPage() {
   //User Input
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dateStart, setDateStart] = useState('2023-10-29T08:00:00.000Z');
-  const [dateEnd, setDateEnd] = useState('2023-10-30T08:00:00.000Z');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [dateStart, setDateStart] = useState<Dayjs | null>(null);
+  const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
   const [spots, setSpots] = useState(0);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
   const [picture, setPicture] = useState<File>();
   const [tagId, setTagId] = useState(1);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
 
   //Tag data from server
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [imageSizeWarning, setImageSizeWarning] = useState('');
+  const [imageSizeWarning, setImageSizeWarning] = useState("");
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/tags')
+      .get("http://localhost:3001/api/tags")
       .then((res) => {
         setTags(res.data);
       })
@@ -46,7 +50,7 @@ export default function NewEventPage() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/courses/category')
+      .get("http://localhost:3001/api/courses/category")
       .then((res) => {
         setCategories(res.data);
       })
@@ -59,7 +63,7 @@ export default function NewEventPage() {
     event.preventDefault();
 
     const formData = {
-      owner: 'A',
+      owner: "A",
       title,
       description,
       dateStart,
@@ -73,20 +77,20 @@ export default function NewEventPage() {
     };
 
     axios
-      .post('http://localhost:3001/api/events/new', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      .post("http://localhost:3001/api/events/new", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
-        console.log('axios', res.data);
+        console.log("axios", res.data);
       })
       .catch((err) => {
         console.error(err.response.data);
       });
     if (formData) {
-      setTitle('');
-      setDescription('');
+      setTitle("");
+      setDescription("");
       setSpots(0);
-      setLocation('');
+      setLocation("");
       setPrice(0);
     }
   };
@@ -107,7 +111,7 @@ export default function NewEventPage() {
         console.log(error);
       }
     } else {
-      setImageSizeWarning('Please upload an image that is 10MB or smaller.');
+      setImageSizeWarning("Please upload an image that is 10MB or smaller.");
     }
   };
   return (
@@ -115,51 +119,38 @@ export default function NewEventPage() {
       Create Events Page
       <form onSubmit={submitHandler}>
         <input
-          type='text'
-          name='tittle'
-          placeholder='tittle'
+          type="text"
+          name="tittle"
+          placeholder="tittle"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
         <textarea
-          name='description'
-          placeholder='description'
+          name="description"
+          placeholder="description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
-        <input type='file' accept='image/*' onChange={handleImageUpload} />
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
 
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
+          <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
+        </LocalizationProvider>
         <input
-          type='checkbox'
-          name='date'
-          id='dateStart'
-          value={'2023-11-15T08:00:00.000Z'}
-          onChange={(event) => setDateStart(event.target.value)}
-        />
-        <label htmlFor='dateStart'>start date</label>
-
-        <input
-          type='checkbox'
-          name='date'
-          id='dateEnd'
-          value={'2023-11-16T08:00:00.000Z'}
-          onChange={(event) => setDateEnd(event.target.value)}
-        />
-        <label htmlFor='dateEnd'>end date</label>
-        <input
-          type='number'
-          placeholder='Max spots'
+          type="number"
+          placeholder="Max spots"
           value={spots}
           onChange={(event) => setSpots(+event.target.value)}
         />
         <input
-          type='text'
-          placeholder='location'
+          type="text"
+          placeholder="location"
           value={location}
           onChange={(event) => setLocation(event.target.value)}
         />
-        <label htmlFor='price'>Price</label>
-        <input type='number' id='price' value={price} onChange={(event) => setPrice(+event.target.value)} />
+        <label htmlFor="price">Price</label>
+        <input type="number" id="price" value={price} onChange={(event) => setPrice(+event.target.value)} />
 
         <div>{imageSizeWarning}</div>
 
@@ -187,7 +178,7 @@ export default function NewEventPage() {
           })}
         </select>
 
-        <input type='submit' value='Submit' />
+        <input type="submit" value="Submit" />
       </form>
     </Stack>
   );

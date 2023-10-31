@@ -4,7 +4,10 @@ import Stack from "@mui/material/Stack";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import { useRouter } from "next/navigation";
-
+import { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
 type Params = {
@@ -29,8 +32,8 @@ export default function EditEventPage({ params }: Params) {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dateStart, setDateStart] = useState("2023-11-15T08:00:00.000Z");
-  const [dateEnd, setDateEnd] = useState("2023-11-16T08:00:00.000Z");
+  const [dateStart, setDateStart] = useState<Dayjs | null>(null);
+  const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
   const [spots, setSpots] = useState(0);
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
@@ -130,7 +133,7 @@ export default function EditEventPage({ params }: Params) {
         ></textarea>
         <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-        <input
+        {/* <input
           type="checkbox"
           name="date"
           id="dateStart"
@@ -146,7 +149,11 @@ export default function EditEventPage({ params }: Params) {
           value={"2023-11-16T08:00:00.000Z"}
           onChange={(event) => setDateEnd(event.target.value)}
         />
-        <label htmlFor="dateEnd">end date</label>
+        <label htmlFor="dateEnd">end date</label> */}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
+          <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
+        </LocalizationProvider>
         <input type="number" placeholder="Max spots" onChange={(event) => setSpots(+event.target.value)} />
         <input type="text" placeholder="location" onChange={(event) => setLocation(event.target.value)} />
         <label htmlFor="price">Price</label>
