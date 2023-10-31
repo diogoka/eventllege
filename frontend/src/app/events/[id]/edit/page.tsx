@@ -86,8 +86,6 @@ export default function EditEventPage({ params }: Params) {
       category,
     };
 
-    console.log("here", formData);
-
     axios
       .put(`http://localhost:3001/api/events/${params.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -133,23 +131,6 @@ export default function EditEventPage({ params }: Params) {
         ></textarea>
         <input type="file" accept="image/*" onChange={handleImageUpload} />
 
-        {/* <input
-          type="checkbox"
-          name="date"
-          id="dateStart"
-          value={"2023-11-15T08:00:00.000Z"}
-          onChange={(event) => setDateStart(event.target.value)}
-        />
-        <label htmlFor="dateStart">start date</label>
-
-        <input
-          type="checkbox"
-          name="date"
-          id="dateEnd"
-          value={"2023-11-16T08:00:00.000Z"}
-          onChange={(event) => setDateEnd(event.target.value)}
-        />
-        <label htmlFor="dateEnd">end date</label> */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
           <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
