@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { Router } from "express";
 import {
   createEvents,
   getEvents,
@@ -10,13 +10,13 @@ import {
   newAttendee,
   deleteAttendee,
   newReview,
-} from '../controllers/eventsControllers';
-import multer from 'multer';
-import path from 'path';
+} from "../controllers/eventsControllers";
+import multer from "multer";
+import path from "path";
 
 const storage = multer.diskStorage({
   destination: function (req: express.Request, file: Express.Multer.File, cb) {
-    cb(null, 'public/img/events/');
+    cb(null, "public/img/events/");
   },
 
   filename: function (req: express.Request, file: Express.Multer.File, cb) {
@@ -33,19 +33,18 @@ const eventsRouter: Router = express.Router();
 eventsRouter.get('/past', getPastEvents);
 eventsRouter.get('/user', getUserEvents);
 
-eventsRouter.get('/', getEvents);
-eventsRouter.get('/:id', getEvent);
+eventsRouter.get("/", getEvents);
+eventsRouter.get("/:id", getEvent);
 
+eventsRouter.post("/new", upload.single("picture"), createEvents);
 
-eventsRouter.post('/new', upload.single('picture'), createEvents);
+eventsRouter.post("/attendee", newAttendee);
+eventsRouter.delete("/attendee", deleteAttendee);
 
-eventsRouter.post('/attendee', newAttendee);
-eventsRouter.delete('/attendee', deleteAttendee);
+eventsRouter.put("/:id", upload.single("picture"), updateEvents);
 
-eventsRouter.put('/:id', updateEvents);
+eventsRouter.delete("/:id", deleteEvents);
 
-eventsRouter.delete('/:id', deleteEvents);
-
-eventsRouter.post('/review/new', newReview);
+eventsRouter.post("/review/new", newReview);
 
 export default eventsRouter;
