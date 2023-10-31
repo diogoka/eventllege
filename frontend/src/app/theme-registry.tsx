@@ -1,20 +1,65 @@
 'use client';
-import createCache from '@emotion/cache';
-import { useServerInsertedHTML } from 'next/navigation';
-import { CacheProvider } from '@emotion/react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { useState } from 'react';
-import { createTheme } from '@mui/material/styles';
-import { GlobalStyles } from '@mui/material';
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+import { useServerInsertedHTML } from 'next/navigation';
+import { GlobalStyles, alpha } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-const theme = createTheme({
+declare module '@mui/material/styles' {
+  interface Theme {
+    app: {
+      name: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    app?: {
+      name?: string;
+    };
+  }
+}
+
+let theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
       `,
     },
   },
+  palette: {
+    primary: {
+      light: alpha('#3875CB', .1),
+      main: '#141D4F',
+      dark: '#070F3D',
+      contrastText: '#fff',
+    },
+    error: {
+      light: '#f14c4c',
+      main: '#D00000',
+      dark: '#970303',
+      contrastText: '#fff',
+    },
+  },
+  app: {
+    name: 'Eventllege'
+  }
+});
+
+theme = createTheme(theme, {
+  // Custom colors created with augmentColor go here
+  palette: {
+    lightblue: theme.palette.augmentColor({
+      color: {
+        light: '#accbf6',
+        main: alpha('#3875CB', .1),
+        dark: '#1053b1',
+        contrastText: '#fff',
+      },
+      name: 'lightblue',
+    }),
+  }
 });
 
 export default function ThemeRegistry(props: any) {

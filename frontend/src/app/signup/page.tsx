@@ -4,6 +4,7 @@ import { Stack } from "@mui/material";
 import axios from "axios";
 import useUploadImage from "@/services/imageInput";
 import { UserContext } from "@/context/userContext";
+import { BasicButton } from "@/components/common/button";
 
 import {
   getAuth,
@@ -45,8 +46,7 @@ export default function SignUpPage() {
       })
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
@@ -96,11 +96,13 @@ export default function SignUpPage() {
         <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
         <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
         <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
-        <input type="file" accept="image/*" onChange={onFileInputChange} />
+        <input type="file" accept="image/*" onChange={handleSubmit} />
         <div>{warning}</div>
 
-        <input type="submit" value="Register" />
+        <BasicButton variant='contained' color='primary' width='100px' onClick={handleSubmit}>Register</BasicButton>
       </form>
+
+
     </Stack>
   )
 }
