@@ -31,15 +31,17 @@ export default function SignUpPage() {
   // User Input
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [courseId, setCourseId] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
 
+  // Alart Message
+  const [alartMessage, setAlartMessage] = useState('');
+
   // Course data from server
   const [courses, setCourses] = useState([]);
-
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   // Get course data from server to show course names
   useEffect(() => {
@@ -57,14 +59,18 @@ export default function SignUpPage() {
 
     event.preventDefault();
 
-    createUserWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
-      })
-      .catch((error: any) => {
-        console.error(error);
-      })
+    if (password === confirmPassword) {
+      createUserWithEmailAndPassword(getAuth(), email, password)
+        .then(() => {
+          // Do nothing
+          // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+        })
+        .catch((error: any) => {
+          console.error(error);
+        })
+    } else {
+      setAlartMessage('Password and Confirm Password doesn\'t match');
+    }
   };
 
   const handleGoogleAuth = async () => {
@@ -97,7 +103,6 @@ export default function SignUpPage() {
     formData.append('name', name);
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
-    if (image) formData.append('avatar', image);
 
     axios
       .post('http://localhost:3001/api/users', formData, {
@@ -129,6 +134,10 @@ export default function SignUpPage() {
                 <FormControl required>
                   <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
                 </FormControl>
+                <FormControl required>
+                  <TextField type='password' label='Confirm Password' onChange={(event) => setConfirmPassword(event.target.value)} required />
+                </FormControl>
+                <Typography color='error'>{alartMessage}</Typography>
               </Stack>
 
               <Button
@@ -162,7 +171,7 @@ export default function SignUpPage() {
         <form onSubmit={handleSignup}>
           <Stack rowGap={'20px'}>
             <Stack rowGap={'10px'}>
-              
+
               <FormControl required>
                 <TextField type='text' label='Name' onChange={(event) => setName(event.target.value)} required />
               </FormControl>
