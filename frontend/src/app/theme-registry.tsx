@@ -7,25 +7,47 @@ import { GlobalStyles, alpha } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-declare module '@mui/material/styles' {
-  interface Theme {
-    app: {
-      name: string;
-    };
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    app?: {
-      name?: string;
-    };
-  }
-}
-
 let theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
+      @font-face {
+        font-family: 'Roboto';
+      }
       `,
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 5,
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: '18px',
+          color: '#666666'
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          borderRadius: 5,
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '18px',
+          height: '48px',
+          padding: 0,
+          borderRadius: 5,
+          textTransform: 'none',
+        },
+      },
     },
   },
   palette: {
@@ -35,32 +57,35 @@ let theme = createTheme({
       dark: '#070F3D',
       contrastText: '#fff',
     },
+    secondary: {
+      light: '#CCCCCC',
+      main: '#333333',
+      dark: '#000000',
+      contrastText: '#fff',
+    },
+    info: {
+      light: '#accbf6',
+      main: alpha('#3875CB', .1),
+      dark: '#1053b1',
+      contrastText: '#fff',
+    },
     error: {
       light: '#f14c4c',
       main: '#D00000',
       dark: '#970303',
       contrastText: '#fff',
     },
-  },
-  app: {
-    name: 'Eventllege'
   }
 });
 
-theme = createTheme(theme, {
-  // Custom colors created with augmentColor go here
-  palette: {
-    lightblue: theme.palette.augmentColor({
-      color: {
-        light: '#accbf6',
-        main: alpha('#3875CB', .1),
-        dark: '#1053b1',
-        contrastText: '#fff',
-      },
-      name: 'lightblue',
-    }),
-  }
-});
+theme.typography.h1.fontSize = '24px';
+theme.typography.h1.fontWeight = 500;
+theme.typography.h1.color = theme.palette.primary.main;
+theme.typography.h1.marginBlock = '10px';
+theme.typography.h1.textAlign = 'center';
+theme.typography.h2.fontSize = '18px';
+theme.typography.body1.color = theme.palette.secondary.main;
+theme.typography.body2.fontSize = '14px';
 
 export default function ThemeRegistry(props: any) {
   const { options, children } = props;
