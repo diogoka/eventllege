@@ -26,7 +26,11 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 
     try {
         const user = await getUserResponse(userId);
-        res.json(user);
+        if(user) {
+            res.status(200).json(user);
+        } else {
+            res.status(500).send('Failed to get user');
+        }
     } catch (err: any) {
         console.log(err.message);
     }
@@ -69,7 +73,11 @@ export const editUser = async (req: express.Request, res: express.Response) => {
         `, [userInput.courseId, userInput.id]);
 
         const user = await getUserResponse(userInput.id);
-        res.status(200).json(user);
+        if(user) {
+            res.status(200).json(user);
+        } else {
+            res.status(500).send('Failed to edit user');
+        }
 
     } catch (err: any) {
         res.status(500).send(err.message);
@@ -158,7 +166,12 @@ async function getUserResponse(userId: string) {
             users.id_user = $1
         `, [userId]);
 
+        
         const user = userResult.rows[0];
+        if(!user) {
+            return null;
+        }
+        
         user.postalCode = user.postal_code;
         delete user.postal_code;
 
@@ -180,6 +193,7 @@ async function getUserResponse(userId: string) {
         return user;
 
     } catch (err: any) {
+        console.error(err);
         return null;
     }
 }
