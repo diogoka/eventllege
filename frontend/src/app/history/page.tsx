@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Container, Stack, Typography } from "@mui/material"
-import axios from "axios"
+import { Container, Stack, Typography } from '@mui/material'
+import axios from 'axios'
 
 export default function PastEvent() {
   
@@ -29,9 +29,9 @@ export default function PastEvent() {
   
   useEffect(() => {
     
-    axios.get("http://localhost:3001/api/events/past")
+    axios.get('http://localhost:3001/api/events/past')
     .then((res) => {
-      console.log("res:",res.data)
+      console.log('res:',res.data)
       setEvents(res.data.events)
       setTags(res.data.tags)
   })
@@ -44,7 +44,7 @@ export default function PastEvent() {
         {events.map((elm:Event, key:number)=>{
 
           return (
-            <div key={key} style={{border:"1px solid grey", margin:"5px"}}>
+            <div key={key} style={{border:'1px solid grey', margin:'5px'}}>
               <div><b>ID: </b>{elm.id_event}</div>
               <div><b>Name: </b>{elm.name_event}</div>
               <div><b>Description: </b>{elm.description_event}</div>

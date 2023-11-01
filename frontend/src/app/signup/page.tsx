@@ -122,7 +122,7 @@ export default function SignUpPage() {
               </>
             )}
 
-            <BasicButton variant='contained' color='primary' width='200px' onClick={handleEmailAuth}>Next</BasicButton>
+            <BasicButton variant='contained' color='primary' width='200px' onClick={() => handleEmailAuth}>Next</BasicButton>
           </form>
           <BasicButton variant='outlined' color='primary' width='200px' onClick={handleGoogleAuth}>Sign up with Google</BasicButton>
         </>

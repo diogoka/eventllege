@@ -10,9 +10,10 @@ import {
   newAttendee,
   deleteAttendee,
   newReview,
-} from "../controllers/eventsControllers";
-import multer from "multer";
-import path from "path";
+  getReviews,
+} from '../controllers/eventsControllers';
+import multer from 'multer';
+import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req: express.Request, file: Express.Multer.File, cb) {
@@ -45,6 +46,8 @@ eventsRouter.put("/:id", upload.single("picture"), updateEvents);
 
 eventsRouter.delete("/:id", deleteEvents);
 
-eventsRouter.post("/review/new", newReview);
+eventsRouter.post('/review/new', newReview);
+eventsRouter.get('/reviews/:id', getReviews)
+
 
 export default eventsRouter;

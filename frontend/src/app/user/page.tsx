@@ -1,10 +1,10 @@
-"use client"
-import { useState, useEffect, useContext } from "react"
-import { Stack } from "@mui/material";
-import axios from "axios";
-import useUploadImage from "@/services/imageInput";
-import { Select, MenuItem } from "@mui/material";
-import { UserContext, User } from "@/context/userContext";
+'use client'
+import { useState, useEffect, useContext } from 'react'
+import { Stack } from '@mui/material';
+import axios from 'axios';
+import useUploadImage from '@/services/imageInput';
+import { Select, MenuItem } from '@mui/material';
+import { UserContext, User } from '@/context/userContext';
 
 type Course = {
   id: number;
@@ -20,10 +20,10 @@ export default function UserPage() {
 
   // User Input
   const [courseId, setCourseId] = useState(0);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [phone, setPhone] = useState('');
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   // Course data from server
@@ -59,14 +59,14 @@ export default function UserPage() {
     }
 
     const formData = new FormData();
-    formData.append("id", user.id);
-    formData.append("type", "2");
-    formData.append("courseId", courseId.toString());
-    formData.append("email", email);
-    formData.append("name", name);
-    if (postalCode) formData.append("postalCode", postalCode);
-    if (phone) formData.append("phone", phone);
-    if (image) formData.append("avatar", image);
+    formData.append('id', user.id);
+    formData.append('type', '2');
+    formData.append('courseId', courseId.toString());
+    formData.append('email', email);
+    formData.append('name', name);
+    if (postalCode) formData.append('postalCode', postalCode);
+    if (phone) formData.append('phone', phone);
+    if (image) formData.append('avatar', image);
 
     axios
       .put('http://localhost:3001/api/users', formData, {

@@ -23,12 +23,12 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
         "inner join events_tags on events.id_event = events_tags.id_event " +
         "inner join tags on events_tags.id_tag = tags.id_tag"
     );
-    res.json({
+    res.status(200).json({
       events: events.rows,
       tags: tags.rows,
     });
-  } catch (_err) {
-    // console.log(err.message);
+  } catch (err: any) {
+    res.status(500).send(err.message); 
   }
 };
 
@@ -52,7 +52,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       [EVENT_ID]
     );
 
-    res.json({
+    res.status(200).json({
       event: {
         ...events.rows[0],
         tags: tags.rows.map((val) => {
@@ -63,8 +63,8 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
         }),
       },
     });
-  } catch (_err) {
-    // console.log(err.message);
+  } catch (err: any) {
+    res.status(500).send(err.message);
   }
 };
 
@@ -78,12 +78,12 @@ export const getPastEvents = async (req: express.Request, res: express.Response)
         "inner join events_tags on events.id_event = events_tags.id_event " +
         "inner join tags on events_tags.id_tag = tags.id_tag"
     );
-    res.json({
+    res.status(200).json({
       events: events.rows,
       tags: tags.rows,
     });
-  } catch (_err) {
-    // console.log(err.message);
+  } catch (err :any) {
+    res.status(500).send(err.message);
   }
 };
 
@@ -158,7 +158,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
     ]);
     console.log("post success");
 
-    res.status(200).json(events.rows);
+    res.status(201).json(events.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -226,7 +226,7 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
 
     await sendTicket(id_event, id_user);
 
-    res.status(200).json(events.rows);
+    res.status(201).json(events.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -273,7 +273,7 @@ export const newReview = async (req: express.Request, res: express.Response) => 
     );
     const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
 
-    res.status(200).json(newReview.rows);
+    res.status(201).json(newReview.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -289,10 +289,39 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
 
     return newEventReview.rows;
   } catch (err: any) {
-    console.log(err.message);
     return err.message;
   }
 };
+
+
+export const getReviews = async (req: express.Request, res: express.Response) => {
+  const event_id = req.params.id;
+
+  try {
+    const reviews = await pool.query(`
+    SELECT
+      u.name_user,
+      r.description_review,
+      r.rating,
+      r.date_review
+    FROM
+      events_reviews er
+    JOIN
+      reviews r ON er.id_review = r.id_review
+    JOIN
+      users u ON r.id_user = u.id_user
+    WHERE
+      er.id_event = $1;`,
+      [event_id]
+    );
+
+    res.status(200).json({
+      reviews: reviews.rows,
+    });
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+}
 
 export const sendTicket = async (eventId: any, userId: any) => {
   try {

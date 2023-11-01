@@ -1,6 +1,6 @@
-"use client"
-import { useState, useEffect } from "react"
-import axios from "axios";
+'use client'
+import { useState, useEffect } from 'react'
+import axios from 'axios';
 
 // For now, display info of the user whose ID is A
 // Use ID of the logged-in user later
@@ -33,7 +33,7 @@ export default function OrganizerEventsPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/organizer-events`, {
+      .get('http://localhost:3001/api/organizer-events', {
         params: { id_organizer : SAMPLE_USER_ID }
       })
       .then((res) => {
@@ -52,7 +52,7 @@ export default function OrganizerEventsPage() {
     {events?.map((val:Event, key:number)=>{
 
       return (
-      <div key={key} style={{border:"1px solid grey",margin: "5px"}}>
+      <div key={key} style={{border:'1px solid grey',margin: '5px'}}>
 
         <div><b>id_event:</b>{val.id_event}</div>
         <div><b>id_owner:</b>{val.id_owner}</div>
