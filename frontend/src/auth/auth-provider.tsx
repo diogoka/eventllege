@@ -96,6 +96,7 @@ export default function AuthProvider({
           .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
           .then((res: any) => {
             setUser(res.data);
+            console.log('responded true');
             setIsFirebaseResponsed(true);
 
             if (pathname === '/signup' || pathname === '/login') {
@@ -103,12 +104,15 @@ export default function AuthProvider({
             }
           })
           .catch((error: any) => {
+            console.log('responded false');
+
             setIsFirebaseResponsed(true);
             setUser(null);
           })
       }
       // When the user logged out or doesn't have an account
       else {
+        setIsFirebaseResponsed(true);
         setFirebaseAccount(null);
         setUser(null);
       }
