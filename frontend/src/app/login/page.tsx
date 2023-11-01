@@ -1,6 +1,11 @@
 'use client'
-import React, { useState } from 'react'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import React, { useState } from 'react';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
 
 export default function LoginPage() {
 
@@ -15,12 +20,22 @@ export default function LoginPage() {
       });
   };
 
+  const handleGoogleLogin = async () => {
+    signInWithPopup(getAuth(), new GoogleAuthProvider())
+    .catch((error) => {
+      console.error(error);
+    })
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input type='text' placeholder='email' onChange={(event) => setEmail(event.target.value)} />
-      <input type='text' placeholder='password' onChange={(event) => setPassword(event.target.value)} />
-      
-      <input type='submit' value='Login' />
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <input type='text' placeholder='email' onChange={(event) => setEmail(event.target.value)} />
+        <input type='text' placeholder='password' onChange={(event) => setPassword(event.target.value)} />
+
+        <input type='submit' value='Login' />
+      </form>
+      <button onClick={handleGoogleLogin}>Login with Google</button>
+    </>
   )
 }

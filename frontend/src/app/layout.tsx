@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeRegistry from './theme-registry';
-import { Container } from '@mui/material';
-import Header from '@/components/header';
 import { UserContextProvider } from '@/context/userContext';
+import AuthProvider from '@/auth/auth-provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,15 +18,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
           <UserContextProvider>
-            <Header />
-            <Container>
+            <AuthProvider>
               {children}
-            </Container>
+            </AuthProvider>
           </UserContextProvider>
         </ThemeRegistry>
       </body>
