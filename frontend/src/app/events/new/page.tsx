@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -19,10 +19,16 @@ type Category = {
   category_course: string;
 };
 
+type Dates = {
+  dateStart: Dayjs | null;
+  dateEnd: Dayjs | null;
+};
+
 export default function NewEventPage() {
   //User Input
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [dates, setDates] = useState<Array<Dates>>([]);
   const [dateStart, setDateStart] = useState<Dayjs | null>(null);
   const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
   const [spots, setSpots] = useState(0);
@@ -62,12 +68,23 @@ export default function NewEventPage() {
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const newDate = { dateStart, dateEnd };
+
+    console.log("newDate", newDate);
+
+    if (dateStart === null && dateEnd === null) {
+      console.log("Please select dates");
+    } else {
+      setDates([...dates, newDate]);
+    }
+
+    console.log("dates", dates);
+
     const formData = {
       owner: "A",
       title,
       description,
-      dateStart,
-      dateEnd,
+      dates,
       spots,
       location,
       price,
@@ -75,6 +92,7 @@ export default function NewEventPage() {
       tagId: tagId.toString(),
       category,
     };
+    console.log("fromData", formData);
 
     axios
       .post("http://localhost:3001/api/events/new", formData, {
@@ -114,6 +132,18 @@ export default function NewEventPage() {
       setImageSizeWarning("Please upload an image that is 10MB or smaller.");
     }
   };
+
+  // const schedule = dates.map((date, index) => (
+  //   <div key={index}>
+  //     <LocalizationProvider dateAdapter={AdapterDayjs}>
+  //       <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
+  //       <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
+  //     </LocalizationProvider>
+  //   </div>
+  // ));
+
+  // const addCalendarHandler = () => {};
+
   return (
     <Stack>
       Create Events Page
@@ -132,11 +162,17 @@ export default function NewEventPage() {
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
         <input type="file" accept="image/*" onChange={handleImageUpload} />
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
-          <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
-        </LocalizationProvider>
+        <div>
+          {/* <button>add</button>
+          <button>delete</button> */}
+          {/* {schedule} */}
+          <div>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker value={dateStart} onChange={(newValue) => setDateStart(newValue)} />
+              <DatePicker value={dateEnd} onChange={(newValue) => setDateEnd(newValue)} />
+            </LocalizationProvider>
+          </div>
+        </div>
         <input
           type="number"
           placeholder="Max spots"
