@@ -27,6 +27,31 @@ let theme = createTheme({
       styleOverrides: `
       `,
     },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 5,
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: '18px',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '18px',
+          height: '48px',
+          padding: 0,
+          borderRadius: 5,
+          textTransform: 'none',
+        },
+      },
+    },
   },
   palette: {
     primary: {
@@ -61,6 +86,13 @@ theme = createTheme(theme, {
     }),
   }
 });
+
+theme.typography.h1 = {
+  fontSize: '24px',
+}
+theme.typography.h2 = {
+  fontSize: '18px',
+}
 
 export default function ThemeRegistry(props: any) {
   const { options, children } = props;

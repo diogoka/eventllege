@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useContext, MouseEvent } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack } from '@mui/material';
+import { Stack, TextField, Typography, Button } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
 import { UserContext } from '@/context/userContext';
@@ -51,8 +51,7 @@ export default function SignUpPage() {
       })
   }, []);
 
-  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleEmailAuth = async () => {
 
     createUserWithEmailAndPassword(getAuth(), email, password)
       .then(() => {
@@ -108,25 +107,25 @@ export default function SignUpPage() {
   }
 
   return (
-    <Stack width={1 / 3}>
-      Sign Up Page
+    <Stack>
+      <Typography variant='h1' align='center'>Sign Up Page</Typography>
 
       {!firebaseAccount ? (
-        <>
-          <form style={{ display: 'flex', flexDirection: 'column' }}>
+        // Step1: Firebase Authentication
+        <Stack rowGap={'10px'}>
 
-            {!firebaseAccount && (
-              <>
-                <input type='text' placeholder='email' onChange={(event) => setEmail(event.target.value)} required />
-                <input type='password' placeholder='password' onChange={(event) => setPassword(event.target.value)} required />
-              </>
-            )}
+          {!firebaseAccount && (
+            <>
+              <TextField type='text' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+              <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+            </>
+          )}
 
-            <BasicButton variant='contained' color='primary' width='200px' onClick={() => handleEmailAuth}>Next</BasicButton>
-          </form>
-          <BasicButton variant='outlined' color='primary' width='200px' onClick={handleGoogleAuth}>Sign up with Google</BasicButton>
-        </>
+          <Button variant='contained' color='primary' onClick={handleEmailAuth}>Next</Button>
+          <Button variant='outlined' color='primary' onClick={handleGoogleAuth}>Sign up with Google</Button>
+        </Stack>
       ) : (
+        // Step2: Register for our app
         <form style={{ display: 'flex', flexDirection: 'column' }}>
 
           <input type='text' placeholder='name' onChange={(event) => setName(event.target.value)} required />
@@ -144,7 +143,7 @@ export default function SignUpPage() {
           <input type='file' accept='image/*' onChange={onFileInputChange} />
           <div>{warning}</div>
 
-          <BasicButton variant='contained' color='primary' width='100px' onClick={handleSignup}>Register</BasicButton>
+          <Button variant='contained' color='primary' onClick={handleSignup}>Register</Button>
         </form>
 
       )}

@@ -23,8 +23,8 @@ export function BasicButton(props: Props) {
       startIcon={props.icon}
       sx={{
         width: props.width,
-        height: '2rem',
-        borderRadius: '.1rem',
+        height: '56px',
+        borderRadius: '5px',
         textTransform: 'none',
       }}
       disableRipple
