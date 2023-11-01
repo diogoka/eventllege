@@ -82,6 +82,7 @@ theme.typography.h1.fontSize = '24px';
 theme.typography.h1.fontWeight = 500;
 theme.typography.h1.color = theme.palette.primary.main;
 theme.typography.h1.marginBlock = '10px';
+theme.typography.h1.textAlign = 'center';
 theme.typography.h2.fontSize = '18px';
 theme.typography.body1.color = theme.palette.secondary.main;
 theme.typography.body2.fontSize = '14px';

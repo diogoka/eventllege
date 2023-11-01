@@ -128,7 +128,7 @@ export default function SignUpPage() {
 
   return (
     <Stack>
-      <Typography variant='h1' align='center'>Sign Up</Typography>
+      <Typography variant='h2'>Sign Up</Typography>
 
       {!firebaseAccount ? (
         // Step1: Firebase Authentication
