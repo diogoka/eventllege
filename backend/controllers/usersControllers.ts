@@ -166,7 +166,12 @@ async function getUserResponse(userId: string) {
             users.id_user = $1
         `, [userId]);
 
+        
         const user = userResult.rows[0];
+        if(!user) {
+            return null;
+        }
+        
         user.postalCode = user.postal_code;
         delete user.postal_code;
 
