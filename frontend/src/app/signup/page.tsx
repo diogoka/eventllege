@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useContext } from 'react'
+import { useRouter } from 'next/navigation';
 import { Stack } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
@@ -19,6 +20,8 @@ type Course = {
 }
 
 export default function SignUpPage() {
+
+  const router = useRouter();
 
   const { setUser, firebaseAccount } = useContext(UserContext);
 
@@ -97,6 +100,7 @@ export default function SignUpPage() {
       })
       .then((res) => {
         setUser(res.data);
+        router.replace('/events');
       })
       .catch((error) => {
         console.error(error.response.data);

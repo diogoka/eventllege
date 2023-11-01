@@ -22,9 +22,6 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
-    .then((error) => {
-      console.log(error);
-    })
     .catch((error) => {
       console.error(error);
     })
