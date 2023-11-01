@@ -6,8 +6,21 @@ import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
 import { Container } from '@mui/material';
 import Header from '@/components/header';
-
 import { UserContext } from '@/context/userContext';
+
+const loggedOutUserPages = [
+  /^\/$/,
+  /^\/events$/,
+  /^\/events\/\d+$/,
+  /^\/signup$/,
+  /^\/login$/,
+];
+
+const studentPages = [
+  /^\/user$/,
+  /^\/tickets$/,
+  /^\/history$/,
+];
 
 export default function AuthProvider({
   children,
@@ -19,11 +32,26 @@ export default function AuthProvider({
 
   const { user, setUser, firebaseAccount, setFirebaseAccount } = useContext(UserContext);
 
+  const [isFirebaseResponsed, setIsFirebaseResponsed] = useState(false);
+  const [isAllowed, setIsAllowed] = useState(false);
+
   useEffect(() => {
 
-    // If user exists (which means this user is logged in), don't redirect
-    if (user) {
+    if (!isFirebaseResponsed) {
       return;
+    }
+
+    // If user exists (which means this user is logged in)
+    if (user) {
+
+      // If this user is a student
+      if (user.role === 'student') {
+
+        // Give permission only to allowed pages
+        if (!isStudentPage(pathname)) {
+          router.replace('/events');
+        }
+      }
     }
     // If this user is not logged in
     else {
@@ -33,21 +61,21 @@ export default function AuthProvider({
       }
       // If this user is neither logged in nor signed up
       else {
+
         // Give permission only to allowed pages
-        if (isAllowedPage(pathname)) {
-          return;
-        }
-        // Don't redirect from sign-up page
-        else if (pathname === '/signup') {
-          return;
-        }
-        // Otherwise, redirect to log-in page
-        else {
-          router.replace('/login');
+        if (!isLoggedOutUserPage(pathname)) {
+
+          // Don't redirect from sign-up page
+          if (pathname !== '/signup') {
+            router.replace('/login');
+          }
         }
       }
     }
-  }, [pathname, firebaseAccount, user])
+
+    setIsAllowed(true);
+
+  }, [pathname, firebaseAccount, user, isFirebaseResponsed])
 
   useEffect(() => {
 
@@ -68,9 +96,14 @@ export default function AuthProvider({
           .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
           .then((res: any) => {
             setUser(res.data);
-            router.replace('/events');
+            setIsFirebaseResponsed(true);
+
+            if (pathname === '/signup' || pathname === '/login') {
+              router.replace('/events');
+            }
           })
           .catch((error: any) => {
+            setIsFirebaseResponsed(true);
             setUser(null);
           })
       }
@@ -86,7 +119,7 @@ export default function AuthProvider({
   return (
     <>
       <Header />
-      {(isAllowedPage(pathname) || user) && (
+      {(isAllowed) && (
         <>
           <Container>
             {children}
@@ -97,18 +130,16 @@ export default function AuthProvider({
   )
 }
 
-const allowedPages = [
-  /^\/$/,
-  /^\/events$/,
-  /^\/events\/\d+$/,
-  /^\/signup$/,
-  /^\/login$/,
-];
 
-function isAllowedPage(pathname: string): boolean {
 
-  return allowedPages.some((allowedPage) => {
-    return allowedPage.test(pathname);
+function isLoggedOutUserPage(pathname: string): boolean {
+  return loggedOutUserPages.some((loggedOutUserPage) => {
+    return loggedOutUserPage.test(pathname);
   });
+}
 
+function isStudentPage(pathname: string): boolean {
+  return studentPages.some((studentPage) => {
+    return studentPage.test(pathname);
+  });
 }
