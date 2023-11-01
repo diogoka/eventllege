@@ -1,9 +1,11 @@
-"use client"
-import { useState, useEffect, useContext } from "react"
-import { Stack } from "@mui/material";
-import axios from "axios";
-import useUploadImage from "@/services/imageInput";
-import { UserContext } from "@/context/userContext";
+'use client'
+import { useState, useEffect, useContext, MouseEvent } from 'react'
+import { useRouter } from 'next/navigation';
+import { Stack } from '@mui/material';
+import axios from 'axios';
+import useUploadImage from '@/services/imageInput';
+import { UserContext } from '@/context/userContext';
+import { BasicButton } from "@/components/common/button";
 
 import {
   getAuth,
@@ -49,8 +51,33 @@ export default function SignUpPage() {
       })
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    createUserWithEmailAndPassword(getAuth(), email, password)
+      .then(() => {
+        // Do nothing
+        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+      })
+      .catch((error: any) => {
+        console.error(error);
+      })
+  };
+
+  const handleGoogleAuth = async () => {
+
+    signInWithPopup(getAuth(), new GoogleAuthProvider())
+      .then(() => {
+        // Do nothing
+        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  }
+
+  // Send user info to our server
+  const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
 
     if (!firebaseAccount) {
       console.error('No firebase account');
@@ -86,7 +113,7 @@ export default function SignUpPage() {
 
       {!firebaseAccount ? (
         <>
-          <form onSubmit={handleEmailAuth} style={{ display: 'flex', flexDirection: 'column' }}>
+          <form style={{ display: 'flex', flexDirection: 'column' }}>
 
             {!firebaseAccount && (
               <>
@@ -95,12 +122,12 @@ export default function SignUpPage() {
               </>
             )}
 
-            <input type='submit' value='Next' />
+            <BasicButton variant='contained' color='primary' width='200px' onClick={handleEmailAuth}>Next</BasicButton>
           </form>
-          <button onClick={handleGoogleAuth}>Sign up with Google</button>
+          <BasicButton variant='outlined' color='primary' width='200px' onClick={handleGoogleAuth}>Sign up with Google</BasicButton>
         </>
       ) : (
-        <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column' }}>
+        <form style={{ display: 'flex', flexDirection: 'column' }}>
 
           <input type='text' placeholder='name' onChange={(event) => setName(event.target.value)} required />
 
@@ -112,16 +139,15 @@ export default function SignUpPage() {
             })}
           </select>
 
-        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
-        <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
-        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
-        <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
-        <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
-        <input type="file" accept="image/*" onChange={onFileInputChange} />
-        <div>{warning}</div>
+          <input type='text' placeholder='postal code(optional)' onChange={(event) => setPostalCode(event.target.value)} />
+          <input type='text' placeholder='phone(optional)' onChange={(event) => setPhone(event.target.value)} />
+          <input type='file' accept='image/*' onChange={onFileInputChange} />
+          <div>{warning}</div>
 
-        <input type="submit" value="Register" />
-      </form>
+          <BasicButton variant='contained' color='primary' width='100px' onClick={handleSignup}>Register</BasicButton>
+        </form>
+
+      )}
     </Stack>
   )
 }
