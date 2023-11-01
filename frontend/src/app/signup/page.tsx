@@ -1,8 +1,9 @@
 'use client'
 import { useState, useEffect, useContext, MouseEvent } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack, TextField, Typography, Button } from '@mui/material';
+import { useTheme, Stack, TextField, Typography, Button, Select, MenuItem, FormControl, InputLabel, Box, FormHelperText } from '@mui/material';
 import axios from 'axios';
+import { FcGoogle } from 'react-icons/fc';
 import useUploadImage from '@/services/imageInput';
 import { UserContext } from '@/context/userContext';
 
@@ -23,13 +24,15 @@ export default function SignUpPage() {
 
   const router = useRouter();
 
+  const theme = useTheme();
+
   const { setUser, firebaseAccount } = useContext(UserContext);
 
   // User Input
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [courseId, setCourseId] = useState(1);
+  const [courseId, setCourseId] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -50,7 +53,9 @@ export default function SignUpPage() {
       })
   }, []);
 
-  const handleEmailAuth = async () => {
+  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+
+    event.preventDefault();
 
     createUserWithEmailAndPassword(getAuth(), email, password)
       .then(() => {
@@ -75,7 +80,9 @@ export default function SignUpPage() {
   }
 
   // Send user info to our server
-  const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+
+    event.preventDefault();
 
     if (!firebaseAccount) {
       console.error('No firebase account');
@@ -107,42 +114,74 @@ export default function SignUpPage() {
 
   return (
     <Stack>
-      <Typography variant='h1' align='center'>Sign Up Page</Typography>
+      <Typography variant='h1' align='center'>Sign Up</Typography>
 
       {!firebaseAccount ? (
         // Step1: Firebase Authentication
-        <Stack rowGap={'10px'}>
+        <Stack rowGap={'30px'}>
+          <form onSubmit={handleEmailAuth}>
+            <Stack rowGap={'20px'}>
 
-          {!firebaseAccount && (
-            <>
-              <TextField type='text' label='Email' onChange={(event) => setEmail(event.target.value)} required />
-              <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
-            </>
-          )}
+              <Stack rowGap={'10px'}>
+                <FormControl required>
+                  <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                </FormControl>
+                <FormControl required>
+                  <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+                </FormControl>
+              </Stack>
 
-          <Button variant='contained' color='primary' onClick={handleEmailAuth}>Next</Button>
-          <Button variant='outlined' color='primary' onClick={handleGoogleAuth}>Sign up with Google</Button>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                fullWidth
+              >
+                Next
+              </Button>
+
+            </Stack>
+          </form>
+
+          <Typography align='center'>or</Typography>
+          <Button
+            variant='outlined'
+            color='secondary'
+            startIcon={<FcGoogle />}
+            onClick={handleGoogleAuth}
+            sx={{
+              borderColor: theme.palette.secondary.light
+            }}
+          >
+            Sign up with Google
+          </Button>
+
         </Stack>
       ) : (
         // Step2: Register for our app
-        <form style={{ display: 'flex', flexDirection: 'column' }}>
+        <form onSubmit={handleSignup}>
+          <Stack rowGap={'20px'}>
+            <Stack rowGap={'10px'}>
+              
+              <FormControl required>
+                <TextField type='text' label='Name' onChange={(event) => setName(event.target.value)} required />
+              </FormControl>
 
-          <input type='text' placeholder='name' onChange={(event) => setName(event.target.value)} required />
+              <FormControl required>
+                <InputLabel id='course'>Course</InputLabel>
+                <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
+                  {courses.map((course: Course, index: number) => {
+                    return (
+                      <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
 
-          <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
-            {courses.map((course: Course, index: number) => {
-              return (
-                <option key={index} value={course.id}>{course.name}</option>
-              )
-            })}
-          </select>
+            </Stack>
+            <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
+          </Stack>
 
-          <input type='text' placeholder='postal code(optional)' onChange={(event) => setPostalCode(event.target.value)} />
-          <input type='text' placeholder='phone(optional)' onChange={(event) => setPhone(event.target.value)} />
-          <input type='file' accept='image/*' onChange={onFileInputChange} />
-          <div>{warning}</div>
-
-          <Button variant='contained' color='primary' onClick={handleSignup}>Register</Button>
         </form>
 
       )}

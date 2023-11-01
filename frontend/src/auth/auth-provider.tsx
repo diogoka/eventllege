@@ -121,7 +121,7 @@ export default function AuthProvider({
       <Header />
       {(isAllowedPage().isAllowed) && (
         <>
-          <Container>
+          <Container sx={{paddingInline: '40px'}}>
             {children}
           </Container>
         </>
