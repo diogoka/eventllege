@@ -62,11 +62,11 @@ export default function AuthProvider({
         // Get user data from server
         axios
           .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
-          .then((res) => {
+          .then((res: any) => {
             setUser(res.data);
+            router.replace('/events');
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((error: any) => {
             setUser(null);
           })
       }
