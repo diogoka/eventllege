@@ -27,6 +27,7 @@ export default function Header() {
       borderBottom: '1px solid black',
       display: 'flex',
       columnGap: '1rem',
+      flexWrap: 'wrap',
       padding: '.5rem',
     }}>
 
