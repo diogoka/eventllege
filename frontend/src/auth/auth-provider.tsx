@@ -9,13 +9,6 @@ import Header from '@/components/header';
 
 import { UserContext } from '@/context/userContext';
 
-const allowedPages = [
-  /^\/signup$/,
-  /^\/login$/,
-  /^\/events$/,
-  /^\/events\/\d+$/,
-]
-
 export default function AuthProvider({
   children,
 }: {
@@ -26,19 +19,30 @@ export default function AuthProvider({
 
   const { user, setUser, firebaseAccount, setFirebaseAccount } = useContext(UserContext);
 
-  const isAllowed = allowedPages.some((allowedPage) => {
-    return allowedPage.test(pathname);
-  });
-
   useEffect(() => {
-    if(!user) {
-      // User is in the process of sign-up
-      if(firebaseAccount) {
+
+    // If user exists (which means this user is logged in), don't redirect
+    if (user) {
+      return;
+    }
+    // If this user is not logged in
+    else {
+      // If this user is in the process of sign-up, go to sign-up page
+      if (firebaseAccount) {
         router.replace('/signup');
       }
-      // User is not logged in
+      // If this user is neither logged in nor signed up
       else {
-        if(pathname !== '/signup') {
+        // Give permission only to allowed pages
+        if (isAllowedPage(pathname)) {
+          return;
+        }
+        // Don't redirect from sign-up page
+        else if (pathname === '/signup') {
+          return;
+        }
+        // Otherwise, redirect to log-in page
+        else {
           router.replace('/login');
         }
       }
@@ -82,7 +86,7 @@ export default function AuthProvider({
   return (
     <>
       <Header />
-      {(isAllowed || user) && (
+      {(isAllowedPage(pathname) || user) && (
         <>
           <Container>
             {children}
@@ -91,4 +95,20 @@ export default function AuthProvider({
       )}
     </>
   )
+}
+
+const allowedPages = [
+  /^\/$/,
+  /^\/events$/,
+  /^\/events\/\d+$/,
+  /^\/signup$/,
+  /^\/login$/,
+];
+
+function isAllowedPage(pathname: string): boolean {
+
+  return allowedPages.some((allowedPage) => {
+    return allowedPage.test(pathname);
+  });
+
 }
