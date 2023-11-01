@@ -1,14 +1,14 @@
-"use client"
-import { useState, useEffect, useContext } from "react"
-import { Stack } from "@mui/material";
-import axios from "axios";
-import useUploadImage from "@/services/imageInput";
-import { UserContext } from "@/context/userContext";
+'use client'
+import { useState, useEffect, useContext } from 'react'
+import { Stack } from '@mui/material';
+import axios from 'axios';
+import useUploadImage from '@/services/imageInput';
+import { UserContext } from '@/context/userContext';
 
 import {
   getAuth,
   createUserWithEmailAndPassword
-} from "firebase/auth";
+} from 'firebase/auth';
 
 type Course = {
   id: number;
@@ -22,11 +22,11 @@ export default function SignUpPage() {
 
   // User Input
   const [courseId, setCourseId] = useState(1);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [phone, setPhone] = useState('');
 
   // Course data from server
   const [courses, setCourses] = useState([]);
@@ -52,14 +52,14 @@ export default function SignUpPage() {
       const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
 
       const formData = new FormData();
-      formData.append("id", userCredential.user.uid);
-      formData.append("type", "2");
-      formData.append("courseId", courseId.toString());
-      formData.append("email", email);
-      formData.append("name", name);
-      if (postalCode) formData.append("postalCode", postalCode);
-      if (phone) formData.append("phone", phone);
-      formData.append("avatar", image!);
+      formData.append('id', userCredential.user.uid);
+      formData.append('type', '2');
+      formData.append('courseId', courseId.toString());
+      formData.append('email', email);
+      formData.append('name', name);
+      if (postalCode) formData.append('postalCode', postalCode);
+      if (phone) formData.append('phone', phone);
+      formData.append('avatar', image!);
 
       axios
         .post('http://localhost:3001/api/users', formData, {

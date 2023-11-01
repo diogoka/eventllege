@@ -24,7 +24,7 @@ export default function ModalRating(props: any) {
   const [open, setOpen] = useState(false);
   const [review, setReview] = useState({
       id_user: props.userid,
-      description: "",
+      description: '',
       rating: 0,
       date_review: new Date(),
     });
@@ -90,7 +90,7 @@ export default function ModalRating(props: any) {
       >
         <Box sx={style}>
             <Stack height={1/3} >
-                <form onSubmit={handleNewReview} style={{display: 'flex', flexDirection: 'column', rowGap: "1rem"}}>
+                <form onSubmit={handleNewReview} style={{display: 'flex', flexDirection: 'column', rowGap: '1rem'}}>
                 <Rating name="half-rating" defaultValue={2.5} precision={0.5} onChange={(event, newValue) => setRating(Number(newValue))} />
                 <input type="text" placeholder='Tell us about your experience!' onChange={(event) => setDescription(event.target.value)} style={{height: '3rem'}}/>
                 <div style={{display: 'flex', justifyContent: 'center'}}>

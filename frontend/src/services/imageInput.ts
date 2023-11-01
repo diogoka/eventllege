@@ -14,7 +14,7 @@ export default function useUploadImage(
 ): UseUploadImageType {
 
   const [image, setImage] = useState<File | null>(null);
-  const [warning, setWarning] = useState<string>("");
+  const [warning, setWarning] = useState<string>('');
 
   const onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
