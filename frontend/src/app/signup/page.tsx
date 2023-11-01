@@ -1,10 +1,9 @@
-'use client'
-import { useState, useEffect, useContext } from 'react'
-import { useRouter } from 'next/navigation';
-import { Stack } from '@mui/material';
-import axios from 'axios';
-import useUploadImage from '@/services/imageInput';
-import { UserContext } from '@/context/userContext';
+"use client"
+import { useState, useEffect, useContext } from "react"
+import { Stack } from "@mui/material";
+import axios from "axios";
+import useUploadImage from "@/services/imageInput";
+import { UserContext } from "@/context/userContext";
 
 import {
   getAuth,
@@ -50,33 +49,7 @@ export default function SignUpPage() {
       })
   }, []);
 
-  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    createUserWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
-      })
-      .catch((error: any) => {
-        console.error(error);
-      })
-  };
-
-  const handleGoogleAuth = async () => {
-
-    signInWithPopup(getAuth(), new GoogleAuthProvider())
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
-  }
-
-  // Send user info to our server
-  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!firebaseAccount) {
@@ -139,15 +112,16 @@ export default function SignUpPage() {
             })}
           </select>
 
-          <input type='text' placeholder='postal code(optional)' onChange={(event) => setPostalCode(event.target.value)} />
-          <input type='text' placeholder='phone(optional)' onChange={(event) => setPhone(event.target.value)} />
-          <input type='file' accept='image/*' onChange={onFileInputChange} />
-          <div>{warning}</div>
+        <input type="text" placeholder="email" onChange={(event) => setEmail(event.target.value)} required />
+        <input type="password" placeholder="password" onChange={(event) => setPassword(event.target.value)} required />
+        <input type="text" placeholder="name" onChange={(event) => setName(event.target.value)} required />
+        <input type="text" placeholder="postal code(optional)" onChange={(event) => setPostalCode(event.target.value)} />
+        <input type="text" placeholder="phone(optional)" onChange={(event) => setPhone(event.target.value)} />
+        <input type="file" accept="image/*" onChange={onFileInputChange} />
+        <div>{warning}</div>
 
-          <input type='submit' value='Register' />
-        </form>
-
-      )}
+        <input type="submit" value="Register" />
+      </form>
     </Stack>
   )
 }
