@@ -1,10 +1,19 @@
 'use client'
-import { useState, useEffect, useContext, MouseEvent } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/navigation';
-import { useTheme, Stack, TextField, Typography, Button, Select, MenuItem, FormControl, InputLabel, Box, FormHelperText } from '@mui/material';
 import axios from 'axios';
+import {
+  useTheme,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
-import useUploadImage from '@/services/imageInput';
 import { UserContext } from '@/context/userContext';
 
 import {
@@ -186,6 +195,10 @@ export default function SignUpPage() {
                   })}
                 </Select>
               </FormControl>
+
+              <Typography variant='body2' align='center'>
+                If you are an instructor, please contact admin.
+              </Typography>
 
             </Stack>
             <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
