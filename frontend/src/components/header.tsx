@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <div style={{
       width: '100%',
-      height: '3rem',
+      height: 'auto',
       borderBottom: '1px solid black',
       display: 'flex',
       columnGap: '1rem',
