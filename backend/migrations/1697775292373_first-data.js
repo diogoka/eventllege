@@ -146,8 +146,8 @@ exports.up = async (pgm) => {
       name_event: "Demo Day",
       description_event:
         "Demo Day is a showcase of the projects that our students have been working on during their time at RED Academy. This is a great opportunity for students to show off their work to friends, family, and industry professionals. It is also a chance for prospective students to get a glimpse of what they can expect to learn at RED Academy.",
-      date_event_start: "2023-11-01 01:00:00",
-      date_event_end: "2023-11-01 03:00:00",
+      date_event_start: "2023-12-01 01:00:00",
+      date_event_end: "2023-12-01 03:00:00",
       location_event: "1490 W Broadway #200, Vancouver, BC V6H 4E8",
       capacity_event: 50,
       price_event: 0,
@@ -159,8 +159,8 @@ exports.up = async (pgm) => {
       name_event: "RED Talks",
       description_event:
         "RED Talks is a series of presentations by industry experts on a wide range of topics relevant to people in tech. RED Talks are a great opportunity to learn something new and network with other people in the industry.",
-      date_event_start: "2023-11-01 01:00:00",
-      date_event_end: "2023-11-01 03:00:00",
+      date_event_start: "2023-12-01 01:00:00",
+      date_event_end: "2023-12-01 03:00:00",
       location_event: "1490 W Broadway #200, Vancouver, BC V6H 4E8",
       capacity_event: 50,
       price_event: 0,
@@ -172,8 +172,8 @@ exports.up = async (pgm) => {
       name_event: "RED Academy Open House",
       description_event:
         "Our Open House is a great opportunity to learn more about our programs, tour our campus, and meet our team. Come and see why RED Academy is a great place to learn.",
-      date_event_start: "2023-11-01 01:00:00",
-      date_event_end: "2023-11-01 03:00:00",
+      date_event_start: "2023-12-01 01:00:00",
+      date_event_end: "2023-12-01 03:00:00",
       location_event: "1490 W Broadway #200, Vancouver, BC V6H 4E8",
       capacity_event: 50,
       price_event: 0,
