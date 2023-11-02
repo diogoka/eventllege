@@ -1,6 +1,6 @@
-import pool from "../db/db";
-import express from "express";
-import { sendEmail, EmailOption } from "../helpers/mail";
+import pool from '../db/db';
+import express from 'express';
+import { sendEmail, EmailOption } from '../helpers/mail';
 
 // type EventInput = {
 //   owner: string;
@@ -17,38 +17,38 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
   const date = new Date();
 
   try {
-    const events = await pool.query("SELECT * FROM events where events.date_event_start >= $1", [date]);
+    const events = await pool.query('SELECT * FROM events where events.date_event_start >= $1', [date]);
     const tags = await pool.query(
-      "SELECT events.id_event, tags.name_tag FROM events " +
-        "inner join events_tags on events.id_event = events_tags.id_event " +
-        "inner join tags on events_tags.id_tag = tags.id_tag"
+      'SELECT events.id_event, tags.name_tag FROM events ' +
+        'inner join events_tags on events.id_event = events_tags.id_event ' +
+        'inner join tags on events_tags.id_tag = tags.id_tag'
     );
     res.status(200).json({
       events: events.rows,
       tags: tags.rows,
     });
   } catch (err: any) {
-    res.status(500).send(err.message); 
+    res.status(500).send(err.message);
   }
 };
 
 export const getEvent = async (req: express.Request, res: express.Response) => {
-  const EVENT_ID = req.originalUrl.split("/api/events/")[1];
+  const EVENT_ID = req.originalUrl.split('/api/events/')[1];
 
   try {
-    const events = await pool.query("SELECT * FROM events where id_event=$1", [EVENT_ID]);
+    const events = await pool.query('SELECT * FROM events where id_event=$1', [EVENT_ID]);
 
     const tags = await pool.query(
-      "SELECT tags.name_tag FROM events " +
-        "inner join events_tags on events.id_event = events_tags.id_event " +
-        "inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1",
+      'SELECT tags.name_tag FROM events ' +
+        'inner join events_tags on events.id_event = events_tags.id_event ' +
+        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
-      "SELECT users.name_user FROM events " +
-        "inner join attendees on events.id_event = attendees.id_event " +
-        "inner join users on attendees.id_user = users.id_user where events.id_event=$1",
+      'SELECT users.name_user FROM events ' +
+        'inner join attendees on events.id_event = attendees.id_event ' +
+        'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
       [EVENT_ID]
     );
 
@@ -72,72 +72,82 @@ export const getPastEvents = async (req: express.Request, res: express.Response)
   const date = new Date();
 
   try {
-    const events = await pool.query("SELECT * FROM events where events.date_event_start < $1", [date]);
+    const events = await pool.query('SELECT * FROM events where events.date_event_start < $1', [date]);
     const tags = await pool.query(
-      "SELECT events.id_event, tags.name_tag FROM events " +
-        "inner join events_tags on events.id_event = events_tags.id_event " +
-        "inner join tags on events_tags.id_tag = tags.id_tag"
+      'SELECT events.id_event, tags.name_tag FROM events ' +
+        'inner join events_tags on events.id_event = events_tags.id_event ' +
+        'inner join tags on events_tags.id_tag = tags.id_tag'
     );
     res.status(200).json({
       events: events.rows,
       tags: tags.rows,
     });
-  } catch (err :any) {
+  } catch (err: any) {
     res.status(500).send(err.message);
   }
 };
 
 export const getUserEvents = async (req: express.Request, res: express.Response) => {
-  
-  const date = new Date()
+  const date = new Date();
   const SAMPLE_USER = req.query.id_user;
 
   try {
-
     const att = await pool.query(
       'SELECT * FROM attendees ' +
-      'inner join events on attendees.id_event = events.id_event ' +
-      'where attendees.id_user = $1 and events.date_event_start >= $2', [SAMPLE_USER, date]
+        'inner join events on attendees.id_event = events.id_event ' +
+        'where attendees.id_user = $1 and events.date_event_start >= $2',
+      [SAMPLE_USER, date]
     );
 
-    const ids = att.rows.map(val => { return val.id_event })
+    const ids = att.rows.map((val) => {
+      return val.id_event;
+    });
 
     const tags = await pool.query(
-      `SELECT events.id_event, tags.name_tag FROM events `+
-      `inner join events_tags on events.id_event = events_tags.id_event `+
-      `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
+      `SELECT events.id_event, tags.name_tag FROM events ` +
+        `inner join events_tags on events.id_event = events_tags.id_event ` +
+        `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
     );
 
     const attendees = await pool.query(
-      `SELECT users.name_user, attendees.id_event FROM events `+
-      `inner join attendees on events.id_event = attendees.id_event `+
-      `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
-      );
+      `SELECT users.name_user, attendees.id_event FROM events ` +
+        `inner join attendees on events.id_event = attendees.id_event ` +
+        `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
+    );
 
-    const events = att.rows.map(val => {
-      return { ...val,
-        
-        tags: tags.rows.filter(tag => {
-          return val.id_event == tag.id_event? true : false
-        }).map(t => { return t.name_tag }),
+    const events = att.rows.map((val) => {
+      return {
+        ...val,
 
-        attendees: attendees.rows.filter(att => {
-          return val.id_event == att.id_event? true : false
-        }).map(a => { return a.name_user })
-        
-      }
-    })
+        tags: tags.rows
+          .filter((tag) => {
+            return val.id_event == tag.id_event ? true : false;
+          })
+          .map((t) => {
+            return t.name_tag;
+          }),
+
+        attendees: attendees.rows
+          .filter((att) => {
+            return val.id_event == att.id_event ? true : false;
+          })
+          .map((a) => {
+            return a.name_user;
+          }),
+      };
+    });
 
     res.json({
-      events: events
+      events: events,
     });
-    
   } catch (_err) {
     // console.log(err.message);
   }
 };
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
+  console.log('create events', req.body);
+
   const { owner, title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
 
   try {
@@ -156,7 +166,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
       events.rows[0].id_event,
       tagId,
     ]);
-    console.log("post success");
+    console.log('post success');
 
     res.status(201).json(events.rows);
   } catch (err: any) {
@@ -170,8 +180,8 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
   const { title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
 
   if (!id) {
-    console.log("id does not match");
-    res.status(404).send("Update events failed");
+    console.log('id does not match');
+    res.status(404).send('Update events failed');
   } else {
     try {
       const events = await pool.query(
@@ -190,14 +200,14 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
   console.log(req.params);
 
   const id = parseInt(req.params.id);
-  console.log("here", id);
+  console.log('here', id);
 
   if (!id) {
-    console.log("id does not match");
-    res.status(404).send("Delete events failed");
+    console.log('id does not match');
+    res.status(404).send('Delete events failed');
   } else {
     try {
-      console.log("here1");
+      console.log('here1');
       const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
       res.status(200).json(events.rows);
     } catch (err: any) {
@@ -208,7 +218,7 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
 
 export const newAttendee = async (req: express.Request, res: express.Response) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -235,7 +245,7 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
 export const deleteAttendee = async (req: express.Request, res: express.Response) => {
   console.log(req.body);
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -259,10 +269,10 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
 
 export const newReview = async (req: express.Request, res: express.Response) => {
   if (!req.body.id_event || !req.body.id_user || !req.body.review) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
-  console.log("Body", req.body);
+  console.log('Body', req.body);
   const { id_event, id_user, review } = req.body;
   try {
     const newReview = await pool.query(
@@ -293,12 +303,12 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   }
 };
 
-
 export const getReviews = async (req: express.Request, res: express.Response) => {
   const event_id = req.params.id;
 
   try {
-    const reviews = await pool.query(`
+    const reviews = await pool.query(
+      `
     SELECT
       u.name_user,
       r.description_review,
@@ -321,7 +331,7 @@ export const getReviews = async (req: express.Request, res: express.Response) =>
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
 
 export const sendTicket = async (eventId: any, userId: any) => {
   try {
