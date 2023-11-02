@@ -14,7 +14,7 @@ import {
   InputLabel
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
-import { UserContext } from '@/context/userContext';
+import { LoginStatus, UserContext } from '@/context/userContext';
 import { getErrorMessage } from '@/auth/errors';
 
 import {
@@ -36,7 +36,7 @@ export default function SignUpPage() {
 
   const theme = useTheme();
 
-  const { setUser, firebaseAccount } = useContext(UserContext);
+  const { setUser, firebaseAccount, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
 
   // User Input
   const [email, setEmail] = useState('');
@@ -71,9 +71,9 @@ export default function SignUpPage() {
 
     if (password === confirmPassword) {
       createUserWithEmailAndPassword(getAuth(), email, password)
-        .then(() => {
-          // Do nothing
-          // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+        .then((result) => {
+          setFirebaseAccount(result.user);
+          setLoginStatus(LoginStatus.SigningUp);
         })
         .catch((error: any) => {
           setAlartMessage(getErrorMessage(error.code));
@@ -86,11 +86,12 @@ export default function SignUpPage() {
   const handleGoogleAuth = async () => {
 
     signInWithPopup(getAuth(), new GoogleAuthProvider())
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+      .then((result) => {
+        setFirebaseAccount(result.user);
+        setLoginStatus(LoginStatus.SigningUp);
       })
       .catch((error: any) => {
+        setFirebaseAccount(null);
         setAlartMessage(getErrorMessage(error.code));
       });
   }
@@ -120,6 +121,7 @@ export default function SignUpPage() {
       })
       .then((res) => {
         setUser(res.data);
+        setLoginStatus(LoginStatus.LoggedIn);
         router.replace('/events');
       })
       .catch((error) => {
@@ -131,7 +133,7 @@ export default function SignUpPage() {
     <Stack>
       <Typography variant='h1'>Sign Up</Typography>
 
-      {!firebaseAccount ? (
+      {loginStatus !== LoginStatus.SigningUp ? (
         // Step1: Firebase Authentication
         <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailAuth}>

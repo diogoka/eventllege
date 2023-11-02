@@ -1,6 +1,8 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import axios from 'axios';
 import {
   useTheme,
   Stack,
@@ -21,10 +23,17 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 import { getErrorMessage } from '@/auth/errors';
+import { UserContext, LoginStatus } from '@/context/userContext';
+
 
 export default function LoginPage() {
 
+  const route = useRouter();
+
   const theme = useTheme();
+
+  const { setUser, setFirebaseAccount, setLoginStatus } = useContext(UserContext);
+
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,9 +41,27 @@ export default function LoginPage() {
   // Alart Message
   const [alartMessage, setAlartMessage] = useState('');
 
+  const getUserFromServer = (uid: string) => {
+    axios
+      .get(`http://localhost:3001/api/users/${uid}`)
+      .then((res: any) => {
+        setUser(res.data);
+        setLoginStatus(LoginStatus.LoggedIn);
+        route.replace('/events');
+      })
+      .catch((error: any) => {
+        setUser(null);
+        setLoginStatus(LoginStatus.SigningUp);
+      })
+  }
+
   const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     signInWithEmailAndPassword(getAuth(), email, password)
+      .then((result) => {
+        setFirebaseAccount(result.user);
+        getUserFromServer(result.user.uid);
+      })
       .catch((error) => {
         setAlartMessage(getErrorMessage(error.code));
       });
@@ -42,15 +69,21 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
+      .then((result) => {
+        setFirebaseAccount(result.user);
+        getUserFromServer(result.user.uid);
+      })
       .catch((error) => {
         setAlartMessage(getErrorMessage(error.code));
       })
   }
 
+
+
   return (
     <Stack>
 
-      <Container sx={{width: 'auto', margin: 'auto', paddingBlock: '2rem'}}>
+      <Container sx={{ width: 'auto', margin: 'auto', paddingBlock: '2rem' }}>
         <Image
           src='/eventllege_logo.svg'
           width={170}
