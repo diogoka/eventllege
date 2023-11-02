@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
 import { UserContext } from '@/context/userContext';
+import { getErrorMessage } from '@/auth/errors';
 
 import {
   getAuth,
@@ -75,7 +76,7 @@ export default function SignUpPage() {
           // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
         })
         .catch((error: any) => {
-          console.error(error);
+          setAlartMessage(getErrorMessage(error.code));
         })
     } else {
       setAlartMessage('Password and Confirm Password doesn\'t match');
@@ -90,7 +91,7 @@ export default function SignUpPage() {
         // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
       })
       .catch((error: any) => {
-        console.error(error);
+        setAlartMessage(getErrorMessage(error.code));
       });
   }
 
@@ -132,7 +133,7 @@ export default function SignUpPage() {
 
       {!firebaseAccount ? (
         // Step1: Firebase Authentication
-        <Stack rowGap={'30px'}>
+        <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailAuth}>
             <Stack rowGap={'20px'}>
 
