@@ -1,11 +1,20 @@
 'use client'
-import { useState, useEffect, useContext, MouseEvent } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack } from '@mui/material';
 import axios from 'axios';
-import useUploadImage from '@/services/imageInput';
+import {
+  useTheme,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
+import { FcGoogle } from 'react-icons/fc';
 import { UserContext } from '@/context/userContext';
-import { BasicButton } from "@/components/common/button";
 
 import {
   getAuth,
@@ -24,20 +33,24 @@ export default function SignUpPage() {
 
   const router = useRouter();
 
+  const theme = useTheme();
+
   const { setUser, firebaseAccount } = useContext(UserContext);
 
   // User Input
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [courseId, setCourseId] = useState(1);
+  const [courseId, setCourseId] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
 
+  // Alart Message
+  const [alartMessage, setAlartMessage] = useState('');
+
   // Course data from server
   const [courses, setCourses] = useState([]);
-
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   // Get course data from server to show course names
   useEffect(() => {
@@ -52,16 +65,21 @@ export default function SignUpPage() {
   }, []);
 
   const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+
     event.preventDefault();
 
-    createUserWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
-      })
-      .catch((error: any) => {
-        console.error(error);
-      })
+    if (password === confirmPassword) {
+      createUserWithEmailAndPassword(getAuth(), email, password)
+        .then(() => {
+          // Do nothing
+          // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+        })
+        .catch((error: any) => {
+          console.error(error);
+        })
+    } else {
+      setAlartMessage('Password and Confirm Password doesn\'t match');
+    }
   };
 
   const handleGoogleAuth = async () => {
@@ -77,7 +95,9 @@ export default function SignUpPage() {
   }
 
   // Send user info to our server
-  const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+
+    event.preventDefault();
 
     if (!firebaseAccount) {
       console.error('No firebase account');
@@ -92,7 +112,6 @@ export default function SignUpPage() {
     formData.append('name', name);
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
-    if (image) formData.append('avatar', image);
 
     axios
       .post('http://localhost:3001/api/users', formData, {
@@ -108,43 +127,83 @@ export default function SignUpPage() {
   }
 
   return (
-    <Stack width={1 / 3}>
-      Sign Up Page
+    <Stack>
+      <Typography variant='h2'>Sign Up</Typography>
 
       {!firebaseAccount ? (
-        <>
-          <form style={{ display: 'flex', flexDirection: 'column' }}>
+        // Step1: Firebase Authentication
+        <Stack rowGap={'30px'}>
+          <form onSubmit={handleEmailAuth}>
+            <Stack rowGap={'20px'}>
 
-            {!firebaseAccount && (
-              <>
-                <input type='text' placeholder='email' onChange={(event) => setEmail(event.target.value)} required />
-                <input type='password' placeholder='password' onChange={(event) => setPassword(event.target.value)} required />
-              </>
-            )}
+              <Stack rowGap={'10px'}>
+                <FormControl required>
+                  <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                </FormControl>
+                <FormControl required>
+                  <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+                </FormControl>
+                <FormControl required>
+                  <TextField type='password' label='Confirm Password' onChange={(event) => setConfirmPassword(event.target.value)} required />
+                </FormControl>
+                <Typography color='error'>{alartMessage}</Typography>
+              </Stack>
 
-            <BasicButton variant='contained' color='primary' width='200px' onClick={() => handleEmailAuth}>Next</BasicButton>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                fullWidth
+              >
+                Next
+              </Button>
+
+            </Stack>
           </form>
-          <BasicButton variant='outlined' color='primary' width='200px' onClick={handleGoogleAuth}>Sign up with Google</BasicButton>
-        </>
+
+          <Typography align='center'>or</Typography>
+          <Button
+            variant='outlined'
+            color='secondary'
+            startIcon={<FcGoogle />}
+            onClick={handleGoogleAuth}
+            sx={{
+              borderColor: theme.palette.secondary.light
+            }}
+          >
+            Sign up with Google
+          </Button>
+
+        </Stack>
       ) : (
-        <form style={{ display: 'flex', flexDirection: 'column' }}>
+        // Step2: Register for our app
+        <form onSubmit={handleSignup}>
+          <Stack rowGap={'20px'}>
+            <Stack rowGap={'10px'}>
 
-          <input type='text' placeholder='name' onChange={(event) => setName(event.target.value)} required />
+              <FormControl required>
+                <TextField type='text' label='Name' onChange={(event) => setName(event.target.value)} required />
+              </FormControl>
 
-          <select onChange={(e) => { setCourseId(Number(e.target.value)) }}>
-            {courses.map((course: Course, index: number) => {
-              return (
-                <option key={index} value={course.id}>{course.name}</option>
-              )
-            })}
-          </select>
+              <FormControl required>
+                <InputLabel id='course'>Course</InputLabel>
+                <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
+                  {courses.map((course: Course, index: number) => {
+                    return (
+                      <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
 
-          <input type='text' placeholder='postal code(optional)' onChange={(event) => setPostalCode(event.target.value)} />
-          <input type='text' placeholder='phone(optional)' onChange={(event) => setPhone(event.target.value)} />
-          <input type='file' accept='image/*' onChange={onFileInputChange} />
-          <div>{warning}</div>
+              <Typography variant='body2' align='center'>
+                If you are an instructor, please contact admin.
+              </Typography>
 
-          <BasicButton variant='contained' color='primary' width='100px' onClick={handleSignup}>Register</BasicButton>
+            </Stack>
+            <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
+          </Stack>
+
         </form>
 
       )}
