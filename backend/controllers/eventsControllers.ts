@@ -13,6 +13,11 @@ import { sendEmail, EmailOption } from '../helpers/mail';
 //   tag: number;
 // };
 
+type Date = {
+  dateStart: string;
+  dateEnd: string;
+};
+
 export const getEvents = async (req: express.Request, res: express.Response) => {
   const date = new Date();
 
@@ -148,27 +153,27 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
 export const createEvents = async (req: express.Request, res: express.Response) => {
   console.log('create events', req.body);
 
-  const { owner, title, description, dateStart, dateEnd, location, spots, price, image, tagId, category } = req.body;
-
+  const { owner, title, description, dates, location, spots, price, image, tagId, category } = req.body;
   try {
-    const events = await pool.query(
-      `INSERT INTO
-          events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
-         VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-         RETURNING
-         *;
-         `,
-      [owner, title, description, dateStart, dateEnd, location, spots, price, image, category]
-    );
+    dates.forEach(async (date: Date) => {
+      const events = await pool.query(
+        `INSERT INTO
+        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
+        VALUES
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        RETURNING
+        *;
+        `,
+        [owner, title, description, date.dateStart, date.dateEnd, location, spots, price, image, category]
+      );
 
-    await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [
-      events.rows[0].id_event,
-      tagId,
-    ]);
+      await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [
+        events.rows[0].id_event,
+        tagId,
+      ]);
+      res.status(201).json(events.rows);
+    });
     console.log('post success');
-
-    res.status(201).json(events.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
