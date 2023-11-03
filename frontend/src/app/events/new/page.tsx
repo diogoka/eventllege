@@ -107,6 +107,7 @@ export default function NewEventPage() {
         console.log('axios', res.data);
         setTitle('');
         setDescription('');
+        setDates([]);
         setSpots(0);
         setLocation('');
         setPrice(0);
@@ -160,6 +161,7 @@ export default function NewEventPage() {
           value={description}
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
+
         <input type='file' accept='image/*' onChange={handleImageUpload} />
 
         {dates.map((date, index) => (

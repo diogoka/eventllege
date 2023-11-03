@@ -153,7 +153,7 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
 export const createEvents = async (req: express.Request, res: express.Response) => {
   console.log('create events', req.body);
 
-  const { owner, title, description, dates, location, spots, price, image, tagId, category } = req.body;
+  const { owner, title, description, dates, location, spots, price, picture, tagId, category } = req.body;
   try {
     dates.forEach(async (date: Date) => {
       const events = await pool.query(
@@ -164,7 +164,7 @@ export const createEvents = async (req: express.Request, res: express.Response) 
         RETURNING
         *;
         `,
-        [owner, title, description, date.dateStart, date.dateEnd, location, spots, price, image, category]
+        [owner, title, description, date.dateStart, date.dateEnd, location, spots, price, picture, category]
       );
 
       await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [
@@ -207,7 +207,6 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
   console.log(req.params);
 
   const id = parseInt(req.params.id);
-  console.log('here', id);
 
   if (!id) {
     console.log('id does not match');

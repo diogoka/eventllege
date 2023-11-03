@@ -3,18 +3,20 @@ import { useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getAuth, signOut } from 'firebase/auth';
 import axios from 'axios';
-import { UserContext, User } from '@/context/userContext';
+import { UserContext, LoginStatus } from '@/context/userContext';
 
 export default function Header() {
 
-
-
-  const { user } = useContext(UserContext);
+  const { user, setUser, setLoginStatus } = useContext(UserContext);
 
   const router = useRouter();
 
   const handleLogout = async () => {
     signOut(getAuth())
+      .then(() => {
+        setUser(null);
+        setLoginStatus(LoginStatus.LoggedOut);
+      })
       .catch((error) => {
         console.error(error);
       });

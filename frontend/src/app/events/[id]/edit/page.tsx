@@ -38,8 +38,6 @@ export default function EditEventPage({ params }: Params) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dates, setDates] = useState<Dates[]>([]);
-  // const [dateStart, setDateStart] = useState<Dayjs | null>(null);
-  // const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
   const [spots, setSpots] = useState(0);
   const [location, setLocation] = useState('');
   const [price, setPrice] = useState(0);
