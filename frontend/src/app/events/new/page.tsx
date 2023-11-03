@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
-import imageCompression from 'browser-image-compression';
+// import imageCompression from 'browser-image-compression';
+import useUploadImage from '@/services/imageInput';
 import { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
+// const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
 type Tag = {
   id_tag: number;
@@ -31,14 +32,15 @@ export default function NewEventPage() {
   const [spots, setSpots] = useState(0);
   const [location, setLocation] = useState('');
   const [price, setPrice] = useState(0);
-  const [picture, setPicture] = useState<File>();
+  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+  // const [picture, setPicture] = useState<File>();
   const [tagId, setTagId] = useState(1);
   const [category, setCategory] = useState('');
 
   //Tag data from server
   const [tags, setTags] = useState<Tag[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [imageSizeWarning, setImageSizeWarning] = useState('');
+  // const [imageSizeWarning, setImageSizeWarning] = useState('');
 
   useEffect(() => {
     axios
@@ -77,6 +79,8 @@ export default function NewEventPage() {
 
     const formData = new FormData();
 
+    console.log('image', image);
+
     formData.append('owner', 'A');
     formData.append('title', title);
     formData.append('description', description);
@@ -85,6 +89,7 @@ export default function NewEventPage() {
     formData.append('price', price.toString());
     formData.append('tagId', tagId.toString());
     formData.append('category', category);
+    if (image) formData.append('picture', image);
 
     if (dates.length > 0) {
       dates.forEach((date, index) => {
@@ -93,9 +98,9 @@ export default function NewEventPage() {
       });
     }
 
-    if (picture) {
-      formData.append('picture', picture);
-    }
+    // if (picture) {
+    //   formData.append('picture', picture);
+    // }
 
     console.log('formData', formData);
 
@@ -117,25 +122,25 @@ export default function NewEventPage() {
       });
   };
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files?.length !== 1) return;
-    const file: File = event.target.files[0];
-    if (file.size < MAX_IMAGE_SIZE) {
-      const options = {
-        maxSizeMB: 0.1,
-        maxWidthOrHeight: 480,
-        useWebWorker: true,
-      };
-      try {
-        const compressedFile = await imageCompression(file, options);
-        setPicture(compressedFile);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      setImageSizeWarning('Please upload an image that is 10MB or smaller.');
-    }
-  };
+  // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files?.length !== 1) return;
+  //   const file: File = event.target.files[0];
+  //   if (file.size < MAX_IMAGE_SIZE) {
+  //     const options = {
+  //       maxSizeMB: 0.1,
+  //       maxWidthOrHeight: 480,
+  //       useWebWorker: true,
+  //     };
+  //     try {
+  //       const compressedFile = await imageCompression(file, options);
+  //       setPicture(compressedFile);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   } else {
+  //     setImageSizeWarning('Please upload an image that is 10MB or smaller.');
+  //   }
+  // };
 
   const deleteDateHandles = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
@@ -162,7 +167,9 @@ export default function NewEventPage() {
           onChange={(event) => setDescription(event.target.value)}
         ></textarea>
 
-        <input type='file' accept='image/*' onChange={handleImageUpload} />
+        <input type='file' accept='image/*' onChange={onFileInputChange} />
+
+        <div>{warning}</div>
 
         {dates.map((date, index) => (
           <div key={index}>
@@ -217,7 +224,7 @@ export default function NewEventPage() {
         <label htmlFor='price'>Price</label>
         <input type='number' id='price' value={price} onChange={(event) => setPrice(+event.target.value)} />
 
-        <div>{imageSizeWarning}</div>
+        {/* <div>{imageSizeWarning}</div> */}
 
         <select
           onChange={(e) => {
