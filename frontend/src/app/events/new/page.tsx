@@ -97,19 +97,6 @@ export default function NewEventPage() {
       formData.append('picture', picture);
     }
 
-    // const formData = {
-    //   owner: "A",
-    //   title,
-    //   description,
-    //   dates,
-    //   spots,
-    //   location,
-    //   price,
-    //   picture,
-    //   tagId: tagId.toString(),
-    //   category,
-    // };
-
     console.log('formData', formData);
 
     axios
