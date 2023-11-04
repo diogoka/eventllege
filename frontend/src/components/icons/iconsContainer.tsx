@@ -1,7 +1,41 @@
-import React from 'react'
+'use client';
+import { Box, Button, Stack, } from "@mui/material"
+import IconItem from "@/components/icons/iconItem";
 
-export default function iconsContainer() {
+
+//FaRegSquareCheck
+//FaShareSquare
+//FaHeart
+
+
+type Props = {
+  icons: { name: string; isClickable: boolean }[];
+  onIconClick: (iconName: string) => void;
+}
+
+
+
+export default function iconsContainer({icons, onIconClick}: Props) {
+
+  const handleClick = (iconName: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    const icon = icons.find((icon) => icon.name === iconName);
+    if(icon && icon.isClickable){
+      onIconClick(iconName);
+    }
+  }
+
   return (
-    <div>iconsContainer</div>
-  )
+    <Stack direction="row" spacing={1} sx={{display: 'flex', alignItems:'center', justifyContent: 'space-evenly', marginTop: '0.5rem'}}>
+      {
+        icons.map((icon, index) => {
+          return <IconItem iconName={icon.name} key={index} onClick={(event) => handleClick(icon.name, event)} isClickable={icon.isClickable} />;
+        })
+      }
+
+    </Stack>
+
+    
+      
+  ) 
 }

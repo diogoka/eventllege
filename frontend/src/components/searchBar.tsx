@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, ChangeEvent } from "react";
 import { FaSearch } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
