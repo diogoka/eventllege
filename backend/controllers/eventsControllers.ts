@@ -18,23 +18,48 @@ type Date = {
   dateEnd: string;
 };
 
-export const getEvents = async (req: express.Request, res: express.Response) => {
-  const date = new Date();
+export const getEvents = async (req: express.Request, res:any) => {
 
   try {
-    const events = await pool.query('SELECT * FROM events where events.date_event_start >= $1', [date]);
-    const tags = await pool.query(
-      'SELECT events.id_event, tags.name_tag FROM events ' +
-        'inner join events_tags on events.id_event = events_tags.id_event ' +
-        'inner join tags on events_tags.id_tag = tags.id_tag'
-    );
+    const dateFrom = res.req.query.dateFrom? new Date(res.req.query.dateFrom) : new Date();
+    const dateTo = res.req.query.dateTo? new Date(res.req.query.dateTo) : new Date(new Date().getFullYear()+3+'-12-31');
+    const text =  res.req.query.text !== undefined? res.req.query.text.split(' ') : [''];
+    const andor = res.req.query.andor? res.req.query.andor : null;
+      
+    let query='';
+    text.forEach((val:string, key:number)=>{
+      query += key==text.length-1?
+      ` events.name_event like '%${val}%'` :
+      ` events.name_event like '%${val}%' ${andor}`;
+    });
+    
+    const events =
+    res.req.query.past?
+    await pool.query('SELECT * FROM events where events.date_event_start < $1', [dateFrom]):
+
+    req.query.id_organizer?
+    await pool.query('SELECT * FROM events where id_owner= $1 and date_event_start >= $2', [req.query.id_organizer, dateFrom]):
+    
+    await pool.query(`SELECT * FROM events where (${query}) and (events.date_event_start >= $1 and events.date_event_start < $2)`,
+      [dateFrom, dateTo]
+      );
+
+    const ids = events.rows.length!==0? events.rows.map(val => { return val.id_event }) : null;
+
+    const tags = await pool.query(`
+      SELECT events.id_event, tags.name_tag FROM events
+      inner join events_tags on events.id_event = events_tags.id_event
+      inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
+      `);
+      
     res.status(200).json({
       events: events.rows,
-      tags: tags.rows,
+      tags: tags.rows
     });
-  } catch (err: any) {
+
+  } catch (err :any) {
     res.status(500).send(err.message);
-  }
+  };
 };
 
 export const getEvent = async (req: express.Request, res: express.Response) => {
@@ -67,25 +92,6 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
           return val.name_user;
         }),
       },
-    });
-  } catch (err: any) {
-    res.status(500).send(err.message);
-  }
-};
-
-export const getPastEvents = async (req: express.Request, res: express.Response) => {
-  const date = new Date();
-
-  try {
-    const events = await pool.query('SELECT * FROM events where events.date_event_start < $1', [date]);
-    const tags = await pool.query(
-      'SELECT events.id_event, tags.name_tag FROM events ' +
-        'inner join events_tags on events.id_event = events_tags.id_event ' +
-        'inner join tags on events_tags.id_tag = tags.id_tag'
-    );
-    res.status(200).json({
-      events: events.rows,
-      tags: tags.rows,
     });
   } catch (err: any) {
     res.status(500).send(err.message);
