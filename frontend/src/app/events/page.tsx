@@ -1,11 +1,12 @@
 'use client';
 import { useEffect,useState } from 'react'
-import { Container, Stack, Typography } from '@mui/material'
+import { Container, Stack, Typography, Box } from '@mui/material'
 import axios from 'axios'
 import ModalRating from '@/components/modal'
-import EventList from '@/components/eventList'
+import EventList from '@/components/events/eventList'
 import { UserContext, FirebaseAccount } from '@/context/userContext';
 import { useContext } from 'react';
+import SearchBar from '@/components/searchBar';
 
 
 export type Event = {
@@ -32,10 +33,6 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
 
 
-  //if the user is organizer, render the organizer page
-  //if the user is student, render the student page
-
-  console.log("user", user)
 
 
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -79,14 +76,11 @@ export default function EventsPage() {
   // };
 
   return (
-    <>
-    <div>
-      <Typography variant='h1'>Upcoming events</Typography>
-      <input placeholder='search' type='text'/>
-
-    </div>
+    <Box>
+    <SearchBar />
     <EventList events={events} tags={tags}></EventList>
-    </>
+    
+    </Box>
     
   )
 
