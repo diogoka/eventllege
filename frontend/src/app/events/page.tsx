@@ -48,8 +48,7 @@ export default function EventsPage() {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/events')
-    .then((res) => {
+    axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
     });
@@ -79,12 +78,6 @@ export default function EventsPage() {
       });
   };
 
-useEffect(()=>{
-  console.log("state",keyword)
-},[keyword])
-
-
-  console.log("state",events)
   return (
     <>
       <input type='text' name='keyword' onChange={(e)=>setKeyword((val:any)=>({...val, text:e.target.value}))}/>&nbsp;
