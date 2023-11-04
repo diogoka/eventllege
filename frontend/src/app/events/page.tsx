@@ -24,8 +24,22 @@ export default function EventsPage() {
     name_tag: string;
   };
 
+  type Keyword = {
+    andor: string,
+    dateFrom: string,
+    dateTo: string,
+    text: string
+  }
+
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
+
+  const [keyword, setKeyword] = useState<Keyword>({
+    andor:'or',
+    dateFrom: '',
+    dateTo: '',
+    text: ''
+  });
 
   const [user, setUser] = useState({
     id_user: 'F',
@@ -34,7 +48,8 @@ export default function EventsPage() {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/events').then((res) => {
+    axios.get('http://localhost:3001/api/events')
+    .then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
     });
@@ -64,8 +79,30 @@ export default function EventsPage() {
       });
   };
 
+useEffect(()=>{
+  console.log("state",keyword)
+},[keyword])
+
+
+  console.log("state",events)
   return (
     <>
+      <input type='text' name='keyword' onChange={(e)=>setKeyword((val:any)=>({...val, text:e.target.value}))}/>&nbsp;
+      <input type='radio' name='andor' value='or' defaultChecked onChange={(e)=>setKeyword((val:any)=>({...val, andor:e.target.value}))}/><label>or</label>    
+      <input type='radio' name='andor' value='and' onChange={(e)=>setKeyword((val:any)=>({...val, andor:e.target.value}))}/><label>and</label>&nbsp;
+      <label>From:<input type='date' name='from' onChange={(e)=>setKeyword((val:any)=>({...val, dateFrom:e.target.value}))}/></label>&nbsp;
+      <label>To:<input type='date' name='to' onChange={(e)=>setKeyword((val:any)=>({...val, dateTo:e.target.value}))}/></label>&nbsp;
+      <input type='submit' value='search' onClick={()=>{
+              
+              axios.get('http://localhost:3001/api/events', {
+                params: keyword
+              }).then((res) => {
+                setEvents(res.data.events);
+                setTags(res.data.tags);
+              });
+
+      }}/>
+
       <Typography variant='h3'>Events Page</Typography>
       <Stack>
         {events.map((elm: Event, key: number) => {

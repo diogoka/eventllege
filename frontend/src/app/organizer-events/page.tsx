@@ -33,7 +33,7 @@ export default function OrganizerEventsPage() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/organizer-events', {
+      .get('http://localhost:3001/api/events/organizer-events', {
         params: { id_organizer : SAMPLE_USER_ID }
       })
       .then((res) => {
