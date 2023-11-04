@@ -14,7 +14,8 @@ import {
   InputLabel
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
-import { UserContext } from '@/context/userContext';
+import { LoginStatus, UserContext } from '@/context/userContext';
+import { getErrorMessage } from '@/auth/errors';
 
 import {
   getAuth,
@@ -35,7 +36,7 @@ export default function SignUpPage() {
 
   const theme = useTheme();
 
-  const { setUser, firebaseAccount } = useContext(UserContext);
+  const { setUser, firebaseAccount, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
 
   // User Input
   const [email, setEmail] = useState('');
@@ -70,12 +71,12 @@ export default function SignUpPage() {
 
     if (password === confirmPassword) {
       createUserWithEmailAndPassword(getAuth(), email, password)
-        .then(() => {
-          // Do nothing
-          // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+        .then((result) => {
+          setFirebaseAccount(result.user);
+          setLoginStatus(LoginStatus.SigningUp);
         })
         .catch((error: any) => {
-          console.error(error);
+          setAlartMessage(getErrorMessage(error.code));
         })
     } else {
       setAlartMessage('Password and Confirm Password doesn\'t match');
@@ -85,12 +86,13 @@ export default function SignUpPage() {
   const handleGoogleAuth = async () => {
 
     signInWithPopup(getAuth(), new GoogleAuthProvider())
-      .then(() => {
-        // Do nothing
-        // Firebase's user info will be stored by onAuthStateChanged in AutoProvider
+      .then((result) => {
+        setFirebaseAccount(result.user);
+        setLoginStatus(LoginStatus.SigningUp);
       })
       .catch((error: any) => {
-        console.error(error);
+        setFirebaseAccount(null);
+        setAlartMessage(getErrorMessage(error.code));
       });
   }
 
@@ -119,6 +121,7 @@ export default function SignUpPage() {
       })
       .then((res) => {
         setUser(res.data);
+        setLoginStatus(LoginStatus.LoggedIn);
         router.replace('/events');
       })
       .catch((error) => {
@@ -128,11 +131,11 @@ export default function SignUpPage() {
 
   return (
     <Stack>
-      <Typography variant='h2'>Sign Up</Typography>
+      <Typography variant='h1'>Sign Up</Typography>
 
-      {!firebaseAccount ? (
+      {loginStatus !== LoginStatus.SigningUp ? (
         // Step1: Firebase Authentication
-        <Stack rowGap={'30px'}>
+        <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailAuth}>
             <Stack rowGap={'20px'}>
 
