@@ -29,7 +29,9 @@ export default function PastEvent() {
   
   useEffect(() => {
     
-    axios.get('http://localhost:3001/api/events/past')
+    axios.get('http://localhost:3001/api/events/past', {
+      params: {past : true}
+    })
     .then((res) => {
       console.log('res:',res.data)
       setEvents(res.data.events)
