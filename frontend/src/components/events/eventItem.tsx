@@ -34,8 +34,7 @@ export default function eventItem({ event, tags }: Props) {
 
     const handleCardClick = () => {
         
-        console.log("stateID", id.toString());
-        router.push(`/events/${id.toString()}`);
+        router.push(`/events/${id}`);
     }
     
     const cardStyle = {

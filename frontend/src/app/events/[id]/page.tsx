@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 type Event = {
   id_event: number;
@@ -21,9 +21,12 @@ type Event = {
 
 export default function EventPage() {
   const [event, setEvent] = useState<Event>();
+  const params = useParams();
   const router = useRouter();
 
-  const EVENT_ID = typeof window !== "undefined" ? window.location.pathname.split("/events/")[1] : null;
+
+
+  const EVENT_ID = params.id
 
   useEffect(() => {
     axios
