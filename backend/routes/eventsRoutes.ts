@@ -16,12 +16,11 @@ import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req: express.Request, file: Express.Multer.File, cb) {
-    cb(null, 'public/img/events');
+    cb(null, 'public/img/events/temp');
   },
 
   filename: function (req: express.Request, file: Express.Multer.File, cb) {
-    const ext = path.extname(file.originalname);
-    const fileName = req.body.title + ext;
+    const fileName = Date.now() + '-' + req.body.owner;
     cb(null, fileName);
   },
 });
