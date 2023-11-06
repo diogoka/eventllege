@@ -14,6 +14,8 @@ import {
   FormControl,
   InputLabel,
   Container,
+  FormHelperText,
+  Box
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
 import {
@@ -24,7 +26,7 @@ import {
 } from 'firebase/auth';
 import { getErrorMessage } from '@/auth/errors';
 import { UserContext, LoginStatus } from '@/context/userContext';
-
+import PasswordResetModal from '@/components/login/password-reset-modal';
 
 export default function LoginPage() {
 
@@ -40,6 +42,8 @@ export default function LoginPage() {
 
   // Alart Message
   const [alartMessage, setAlartMessage] = useState('');
+
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
 
   const getUserFromServer = (uid: string) => {
     axios
@@ -101,8 +105,24 @@ export default function LoginPage() {
               </FormControl>
               <FormControl required>
                 <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+                <Typography color='error'>{alartMessage}</Typography>
+                <Typography
+                  onClick={() => {
+                    setIsPasswordReset(true);
+                  }}
+                  color={theme.palette.info.main}
+                  sx={{
+                    textAlign: 'right',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Forgot password?
+                </Typography>
+                <PasswordResetModal
+                  isPasswordReset={isPasswordReset}
+                  setIsPasswordReset={setIsPasswordReset}
+                />
               </FormControl>
-              <Typography color='error'>{alartMessage}</Typography>
             </Stack>
 
             <Button
