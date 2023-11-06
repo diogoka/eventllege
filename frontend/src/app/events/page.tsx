@@ -42,11 +42,22 @@ export default function EventsPage() {
     });
   }, []);
 
+  const searchEvents = (text: string) => {
+    axios.get('http://localhost:3001/api/events/search/?text='+text).then((res) => {
+      if(res.data.events.length == 0){
+        alert("No events found");
+      } else {
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+      }
+      
+    });
+  }
+
   return (
-    <Box>
-    <SearchBar />
-    <EventList events={events} tags={tags}></EventList>
-    
+    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+      <SearchBar searchEvents={searchEvents}/>
+      <EventList events={events} tags={tags}></EventList>
     </Box>
     
   )

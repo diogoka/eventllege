@@ -39,25 +39,26 @@ export default function eventItem({ event, tags }: Props) {
     
     const cardStyle = {
     display: 'grid',
-    gridTemplateRows: '2rem 2.3rem 2rem 2rem',
+    gridTemplateRows: '2rem 2.3rem 2rem',
     gridTemplateAreas: `
         "title picture"
         "date picture"
-        "description picture"
         "description icons"
     `,
-    columnGap: '1rem'
+    columnGap: '1rem',
+    height: '7.5rem',
+    paddingTop: '1.625rem',
+    alignContent: 'center',
+    
     };
 
 
     return (
 
         <Card onClick={handleCardClick}>
-
             <CardContent style={cardStyle}>
-           
-                    <Typography sx={{fontSize: 18 ,gridArea: 'title'}}>
-                        {event.name_event.length > 9 ? `${event.name_event.slice(0, 9)}...` : event.name_event}
+                    <Typography sx={{fontSize: '1rem' ,gridArea: 'title', fontWeight: '500'}}>
+                        {event.name_event.length > 15 ? `${event.name_event.slice(0, 11)}...` : event.name_event}
                     </Typography>
                     <Box sx={{gridArea: 'date'}}>
                         <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -72,29 +73,21 @@ export default function eventItem({ event, tags }: Props) {
                             </Typography>
                         </Box>
                     </Box>
-
                     <Typography sx={{fontSize: 10, textAlign:'justify', gridArea:'description'}}>
-                        {event.description_event.length > 80 ? `${event.description_event.slice(0, 80)}...` : event.description_event}
-                        
+                        {event.description_event.length > 50 ? `${event.description_event.slice(0, 50)}...` : event.description_event}      
                     </Typography>
-      
-
-      
-
                     <CardMedia
                         component="img"
-                        height="100rem"
-                        width='100%'
+                        
                         // image={event.image_event}
                         src="https://www.adobe.com/content/dam/www/us/en/events/overview-page/eventshub_evergreen_opengraph_1200x630_2x.jpg"
                         alt="Event Image"
-                        sx={{gridArea: 'picture'}}
-                        
+                        sx={{gridArea: 'picture', borderRadius: '5px', width: '6.25rem', height: '4.0625rem' }}                    
                     />
-                    <Box sx={{gridArea: 'icons'}}>
+                    <Box sx={{gridArea: 'icons', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <IconsContainer icons={[
-                            { name: "FaCheckCircle", isClickable: false },
-                            { name: "FaShareSquare", isClickable: true },
+                            { name: "FaCheckCircle", isClickable: false, color: '#333333' },
+                            { name: "FaShareSquare", isClickable: true, color: '#333333' },
                         ]} onIconClick={onIconClickFunction}
                         />
                     </Box>

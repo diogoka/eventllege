@@ -10,6 +10,9 @@ import {
   deleteAttendee,
   newReview,
   getReviews,
+  getEventsByOwner,
+  getEventsByUser,
+  searchEvents
 } from '../controllers/eventsControllers';
 import multer from 'multer';
 import path from 'path';
@@ -30,9 +33,11 @@ export const upload = multer({ storage: storage });
 
 const eventsRouter: Router = express.Router();
 
-eventsRouter.get('/past', getEvents);
 eventsRouter.get('/user', getUserEvents);
-eventsRouter.get('/organizer-events', getEvents);
+
+eventsRouter.get('/user/:id', getEventsByUser)
+eventsRouter.get('/owner/:id', getEventsByOwner)
+eventsRouter.get('/search/', searchEvents)
 
 eventsRouter.get('/', getEvents);
 eventsRouter.get('/:id', getEvent);

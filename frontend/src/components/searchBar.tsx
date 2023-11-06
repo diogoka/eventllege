@@ -4,13 +4,20 @@ import { FaSearch } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
+import IconsContainer from "./icons/iconsContainer";
 
-function searchBar() {
+type Props = {
+  searchEvents: (text: string) => void;
+  
+};
+
+function searchBar({ searchEvents }:Props) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event: any) => {
     event.preventDefault();
     console.log("state", searchTerm);
+    searchEvents(searchTerm);
 
     setSearchTerm("");
   };
@@ -22,16 +29,22 @@ function searchBar() {
   const gridContainerStyle = {
     marginTop: "1rem",
     marginBottom: "1rem",
+    height: '3rem',
   };
 
+  //width: 50px -->  3.125rem
+  //height: 48px --> 3rem
+  
   const textFieldStyle = {
     border: "0px solid #141D4F",
     borderRadius: "0px",
     borderTopLeftRadius: "5px",
     borderBottomLeftRadius: "5px",
+    height: '3rem',
   };
 
   const gridIconContainerStyle = {
+    height: '3rem',
     backgroundColor: "#141D4F",
     display: "flex",
     justifyContent: "center",
@@ -52,7 +65,7 @@ function searchBar() {
 
   return (
     <Grid container spacing={0} style={gridContainerStyle}>
-      <Grid item xs={9.5}>
+      <Grid item xs={9.5} sx={{height: '3rem'}}>
         <TextField
           value={searchTerm}
           onChange={handleInputChange}

@@ -28,7 +28,7 @@ function iconItem({iconName, size, color, onClick, isClickable}: Props) {
 
   return (
     <IconButton onClick={handleClick}>
-      <IconContext.Provider value={{ color: "black", size: "0.8em" }}>
+      <IconContext.Provider value={{ color: color, size: "1rem" }}>
         <SelectedIcon />
       </IconContext.Provider>
     </IconButton>
