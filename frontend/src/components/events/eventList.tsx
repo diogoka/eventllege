@@ -23,7 +23,7 @@ function EventList({ events, tags }: Props) {
   };
 
   return (
-    <Stack spacing={2} sx={{alignItems: 'center'}}>
+    <Stack spacing={2} sx={{alignItems: 'center', marginTop: '0', width: '100%'}}>
       {currentEvents.map((event, index) => {
         const eventTags = tags.filter((tag) => tag.id_event === event.id_event);
         return <EventItem event={event} key={index} tags={eventTags} />;

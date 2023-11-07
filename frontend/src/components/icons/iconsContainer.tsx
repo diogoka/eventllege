@@ -2,18 +2,10 @@
 import { Box, Button, Stack, } from "@mui/material"
 import IconItem from "@/components/icons/iconItem";
 
-
-//FaRegSquareCheck
-//FaShareSquare
-//FaHeart
-
-
 type Props = {
   icons: { name: string; isClickable: boolean, color: string }[];
   onIconClick: (iconName: string) => void;
 }
-
-
 
 export default function iconsContainer({icons, onIconClick}: Props) {
 
@@ -32,10 +24,6 @@ export default function iconsContainer({icons, onIconClick}: Props) {
           return <IconItem iconName={icon.name} key={index} onClick={(event) => handleClick(icon.name, event)} isClickable={icon.isClickable} color={icon.color}/>;
         })
       }
-
-    </Stack>
-
-    
-      
+    </Stack>    
   ) 
 }

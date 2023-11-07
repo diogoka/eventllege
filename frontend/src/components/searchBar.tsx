@@ -1,10 +1,12 @@
 'use client';
 import React, { useState, ChangeEvent } from "react";
-import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
-import IconsContainer from "./icons/iconsContainer";
+import IconItem from "./icons/iconItem";
+import { Icon } from "@mui/material";
+import Box from "@mui/material/Box";
 
 type Props = {
   searchEvents: (text: string) => void;
@@ -31,9 +33,6 @@ function searchBar({ searchEvents }:Props) {
     marginBottom: "1rem",
     height: '3rem',
   };
-
-  //width: 50px -->  3.125rem
-  //height: 48px --> 3rem
   
   const textFieldStyle = {
     border: "0px solid #141D4F",
@@ -76,9 +75,9 @@ function searchBar({ searchEvents }:Props) {
         />
       </Grid>
       <Grid item xs={2.5} style={gridIconContainerStyle}>
-        <IconButton style={iconButtonStyle} onClick={handleSearch}>
-          <FaSearch style={iconStyle} />
-        </IconButton>
+        <Box>
+          <IconItem iconName="FaSearch" onClick={handleSearch} isClickable={true} color='white' size="1.3rem" />
+        </Box>
       </Grid>
     </Grid>
   );

@@ -1,14 +1,12 @@
 'use client';
-import { Box, Button, Icon, Stack, Typography } from "@mui/material"
+import { Box, ImageListItem, Typography } from "@mui/material"
 import { Event, Tag } from "@/app/events/page"
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import IconsContainer from "../icons/iconsContainer";
 import { useRouter } from 'next/navigation';
 import { AiFillClockCircle } from 'react-icons/ai';
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 type Props = {
@@ -26,20 +24,40 @@ export default function eventItem({ event, tags }: Props) {
     const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', { month: 'short', day: 'numeric' });
     const eventId = event?.id_event;
     const [id, setId] = useState(eventId);
+    const textAreaRef = useRef(`http://localhost:3000/events/${id}`);
+    const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                setIsAlertVisible(true);
+                setTimeout(() => {
+                    setIsAlertVisible(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error('Failed to copy URL: ', err);
+            });
+    };
 
 
     const onIconClickFunction = (iconName: string) => {
-        console.log(iconName);
+        if (iconName === "FaShareSquare"){
+            copyToClipboard(textAreaRef.current);
+        }
     }
 
-    const handleCardClick = () => {
-        
+    const handleCardClick = () => {        
         router.push(`/events/${id}`);
     }
+
+    const handleAlertClose = () => {
+        setIsAlertVisible(false);
+    };
     
-    const cardStyle = {
+    const BoxStyle = {
     display: 'grid',
-    gridTemplateRows: '2rem 2.3rem 2rem',
+    gridTemplateRows: '2.5rem 2.3rem 2rem',
     gridTemplateAreas: `
         "title picture"
         "date picture"
@@ -47,55 +65,115 @@ export default function eventItem({ event, tags }: Props) {
     `,
     columnGap: '1rem',
     height: '7.5rem',
-    paddingTop: '1.625rem',
     alignContent: 'center',
-    
+    borderTop: '1px solid #E0E0E0',
+    cursor: 'pointer',
+    marginTop: '0',
+    width: '100%'
     };
 
+    const titleStyle = {
+        fontSize: '1rem',
+        gridArea: 'title',
+        fontWeight: '500',
+    }
+
+    const dateContainerStyle = {
+        gridArea : 'date',
+    }
+
+    const dayMonthStyle = {
+        display: 'flex', 
+        justifyContent: 'flex-start', 
+        alignItems: 'center'
+    }
+
+    const timeStyle = {
+        fontSize: 11, 
+        color:'#3874CB'
+    }
+
+    const descriptionStyle = {
+        fontSize: 10,
+        gridArea: 'description',
+        textAlign:'justify'
+    }
+
+    const imageContainerStyle = {
+        gridArea: 'picture',
+        borderRadius: '5px',
+        width: '6.25rem',
+        height: '4.0625rem',
+    }
+
+    const imageStyle = {
+        borderRadius: '5px',
+        width: '6.25rem',
+        height: '4.0625rem',
+    }
+
+    const iconContainerStyle = {
+        gridArea: 'icons',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    }
 
     return (
 
-        <Card onClick={handleCardClick}>
-            <CardContent style={cardStyle}>
-                    <Typography sx={{fontSize: '1rem' ,gridArea: 'title', fontWeight: '500'}}>
-                        {event.name_event.length > 15 ? `${event.name_event.slice(0, 11)}...` : event.name_event}
+        <Box onClick={handleCardClick} sx={BoxStyle}>
+            <Typography sx={titleStyle}>
+                {event.name_event.length > 15 ? `${event.name_event.slice(0, 18)}...` : event.name_event}
+                
+            </Typography>
+            <Box sx={dateContainerStyle}>  
+                <Box sx={dayMonthStyle}>
+                    <AiFillClockCircle style={{fontSize: 12}}/>
+                    <Typography sx={{fontSize: 12}}>
+                        {weekDay}, {monthAndDay}
+                        </Typography>
+                </Box>
+                <Box>
+                    <Typography sx={timeStyle}>
+                        {startTime} - {endTime}
                     </Typography>
-                    <Box sx={{gridArea: 'date'}}>
-                        <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
-                            <AiFillClockCircle style={{fontSize: 12}}/>
-                            <Typography sx={{fontSize: 12}}>
-                                {weekDay}, {monthAndDay}
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography sx={{fontSize: 11, color:'#3874CB'}}>
-                                {startTime} - {endTime}
-                            </Typography>
-                        </Box>
-                    </Box>
-                    <Typography sx={{fontSize: 10, textAlign:'justify', gridArea:'description'}}>
-                        {event.description_event.length > 50 ? `${event.description_event.slice(0, 50)}...` : event.description_event}      
-                    </Typography>
-                    <CardMedia
-                        component="img"
-                        
-                        // image={event.image_event}
-                        src="https://www.adobe.com/content/dam/www/us/en/events/overview-page/eventshub_evergreen_opengraph_1200x630_2x.jpg"
-                        alt="Event Image"
-                        sx={{gridArea: 'picture', borderRadius: '5px', width: '6.25rem', height: '4.0625rem' }}                    
+                </Box>
+            </Box>
+
+            <Typography sx={descriptionStyle}>
+                {event.description_event.length > 50 ? `${event.description_event.slice(0, 50)}...` : event.description_event}
+            </Typography>
+            
+                
+            <ImageListItem key={event.name_event} sx={imageContainerStyle} >
+                <img
+                src={'https://www.adobe.com/content/dam/www/us/en/events/overview-page/eventshub_evergreen_opengraph_1200x630_2x.jpg'}
+                alt={event.name_event}
+                loading="lazy"
+                style={imageStyle}
+            />
+            </ImageListItem>
+            <Box sx={iconContainerStyle}>
+                 <IconsContainer icons={[
+                    { name: "FaCheckCircle", isClickable: false, color: '#333333' },
+                    { name: "FaShareSquare", isClickable: true, color: '#333333' },
+                    ]} onIconClick={onIconClickFunction}
                     />
-                    <Box sx={{gridArea: 'icons', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                        <IconsContainer icons={[
-                            { name: "FaCheckCircle", isClickable: false, color: '#333333' },
-                            { name: "FaShareSquare", isClickable: true, color: '#333333' },
-                        ]} onIconClick={onIconClickFunction}
-                        />
-                    </Box>
+            </Box>
+            {isAlertVisible && (
+                <Alert
+                    severity="success"
+                    onClose={handleAlertClose}
+                    sx={{ position: 'absolute', top: '10px', right: '10px', zIndex: 9999 }}
+                >
+                    <AlertTitle>URL Copied</AlertTitle>
+                    The event URL has been copied to your clipboard.
+                </Alert>
+            )}
 
+        </Box>
 
-            </CardContent>
-
-        </Card>
 
     )
 }

@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 
 interface Props  {
   iconName: string;
-  size?: number;
+  size?: string;
   color?: string;
   onClick?: (event: React.MouseEvent) => void;
   isClickable: boolean;
@@ -28,15 +28,11 @@ function iconItem({iconName, size, color, onClick, isClickable}: Props) {
 
   return (
     <IconButton onClick={handleClick}>
-      <IconContext.Provider value={{ color: color, size: "1rem" }}>
+      <IconContext.Provider value={{ color: color, size: size || "1rem" }}>
         <SelectedIcon />
       </IconContext.Provider>
     </IconButton>
   )
-
-
-
 }
-
 
 export default iconItem;
