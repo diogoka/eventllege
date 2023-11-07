@@ -1,6 +1,7 @@
 import pool from '../db/db';
 import express from 'express';
 import { sendEmail, EmailOption } from '../helpers/mail';
+import fs from 'fs-extra';
 
 // type EventInput = {
 //   owner: string;
@@ -18,46 +19,46 @@ type Date = {
   dateEnd: string;
 };
 
-export const getEvents = async (req: express.Request, res:any) => {
+export const getEvents = async (req: express.Request, res: any) => {
 
   try {
-    const dateFrom = res.req.query.dateFrom? new Date(res.req.query.dateFrom) : new Date();
-    const dateTo = res.req.query.dateTo? new Date(res.req.query.dateTo) : new Date(new Date().getFullYear()+3+'-12-31');
-    const text =  res.req.query.text !== undefined? res.req.query.text.split(' ') : [''];
-    const andor = res.req.query.andor? res.req.query.andor : null;
-      
-    let query='';
-    text.forEach((val:string, key:number)=>{
-      query += key==text.length-1?
-      ` events.name_event like '%${val}%'` :
-      ` events.name_event like '%${val}%' ${andor}`;
+    const dateFrom = res.req.query.dateFrom ? new Date(res.req.query.dateFrom) : new Date();
+    const dateTo = res.req.query.dateTo ? new Date(res.req.query.dateTo) : new Date(new Date().getFullYear() + 3 + '-12-31');
+    const text = res.req.query.text !== undefined ? res.req.query.text.split(' ') : [''];
+    const andor = res.req.query.andor ? res.req.query.andor : null;
+
+    let query = '';
+    text.forEach((val: string, key: number) => {
+      query += key == text.length - 1 ?
+        ` events.name_event like '%${val}%'` :
+        ` events.name_event like '%${val}%' ${andor}`;
     });
-    
+
     const events =
-    res.req.query.past?
-    await pool.query('SELECT * FROM events where events.date_event_start < $1', [dateFrom]):
+      res.req.query.past ?
+        await pool.query('SELECT * FROM events where events.date_event_start < $1', [dateFrom]) :
 
-    req.query.id_organizer?
-    await pool.query('SELECT * FROM events where id_owner= $1 and date_event_start >= $2', [req.query.id_organizer, dateFrom]):
-    
-    await pool.query(`SELECT * FROM events where (${query}) and (events.date_event_start >= $1 and events.date_event_start < $2)`,
-      [dateFrom, dateTo]
-      );
+        req.query.id_organizer ?
+          await pool.query('SELECT * FROM events where id_owner= $1 and date_event_start >= $2', [req.query.id_organizer, dateFrom]) :
 
-    const ids = events.rows.length!==0? events.rows.map(val => { return val.id_event }) : null;
+          await pool.query(`SELECT * FROM events where (${query}) and (events.date_event_start >= $1 and events.date_event_start < $2)`,
+            [dateFrom, dateTo]
+          );
+
+    const ids = events.rows.length !== 0 ? events.rows.map(val => { return val.id_event }) : null;
 
     const tags = await pool.query(`
       SELECT events.id_event, tags.name_tag FROM events
       inner join events_tags on events.id_event = events_tags.id_event
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
       `);
-      
+
     res.status(200).json({
       events: events.rows,
       tags: tags.rows
     });
 
-  } catch (err :any) {
+  } catch (err: any) {
     res.status(500).send(err.message);
   };
 };
@@ -70,15 +71,15 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
 
     const tags = await pool.query(
       'SELECT tags.name_tag FROM events ' +
-        'inner join events_tags on events.id_event = events_tags.id_event ' +
-        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
+      'inner join events_tags on events.id_event = events_tags.id_event ' +
+      'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
       'SELECT users.name_user FROM events ' +
-        'inner join attendees on events.id_event = attendees.id_event ' +
-        'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
+      'inner join attendees on events.id_event = attendees.id_event ' +
+      'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
       [EVENT_ID]
     );
 
@@ -105,8 +106,8 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
   try {
     const att = await pool.query(
       'SELECT * FROM attendees ' +
-        'inner join events on attendees.id_event = events.id_event ' +
-        'where attendees.id_user = $1 and events.date_event_start >= $2',
+      'inner join events on attendees.id_event = events.id_event ' +
+      'where attendees.id_user = $1 and events.date_event_start >= $2',
       [SAMPLE_USER, date]
     );
 
@@ -116,14 +117,14 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
 
     const tags = await pool.query(
       `SELECT events.id_event, tags.name_tag FROM events ` +
-        `inner join events_tags on events.id_event = events_tags.id_event ` +
-        `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
+      `inner join events_tags on events.id_event = events_tags.id_event ` +
+      `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
     );
 
     const attendees = await pool.query(
       `SELECT users.name_user, attendees.id_event FROM events ` +
-        `inner join attendees on events.id_event = attendees.id_event ` +
-        `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
+      `inner join attendees on events.id_event = attendees.id_event ` +
+      `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
     );
 
     const events = att.rows.map((val) => {
@@ -157,7 +158,6 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
 };
 
 export const createEvents = async (req: express.Request, res: express.Response) => {
-  console.log('create events', req.body);
 
   const { owner, title, description, dates, location, spots, price, picture, tagId, category } = req.body;
   try {
@@ -177,10 +177,18 @@ export const createEvents = async (req: express.Request, res: express.Response) 
         events.rows[0].id_event,
         tagId,
       ]);
+
+      if (req.file) {
+        moveImage(req.file.filename, events.rows[0].id_event);
+      }
+
       res.status(201).json(events.rows);
     });
     console.log('post success');
   } catch (err: any) {
+    if(req.file) {
+      deleteImage(req.file.filename);
+    }
     res.status(500).send(err.message);
   }
 };
@@ -418,3 +426,14 @@ export const sendTicket = async (eventId: any, userId: any) => {
 //     message,
 //   };
 // }
+
+
+function moveImage(filename: string, eventId: number) {
+  const oldPath = `${__dirname}/../public/img/events/temp/${filename}`;
+  const newPath = `${__dirname}/../public/img/events/${eventId}`;
+  fs.moveSync(oldPath, newPath);
+}
+
+function deleteImage(filename: string) {
+  fs.remove(`${__dirname}/../public/img/events/temp/${filename}`);
+}
