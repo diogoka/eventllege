@@ -45,7 +45,7 @@ export default function EventsPage() {
   const searchEvents = (text: string) => {
     axios.get('http://localhost:3001/api/events/search/?text='+text).then((res) => {
       if(res.data.events.length == 0){
-        alert("No events found");
+        alert('No events found');
       } else {
         setEvents(res.data.events);
         setTags(res.data.tags);

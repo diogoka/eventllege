@@ -1,7 +1,7 @@
 'use client';
-import { IconContext } from "react-icons";
+import { IconContext } from 'react-icons';
 import * as IconLibrary from 'react-icons/fa';
-import IconButton from "@mui/material/IconButton";
+import IconButton from '@mui/material/IconButton';
 
 
 
@@ -28,7 +28,7 @@ function iconItem({iconName, size, color, onClick, isClickable}: Props) {
 
   return (
     <IconButton onClick={handleClick}>
-      <IconContext.Provider value={{ color: color, size: size || "1rem" }}>
+      <IconContext.Provider value={{ color: color, size: size || '1rem' }}>
         <SelectedIcon />
       </IconContext.Provider>
     </IconButton>

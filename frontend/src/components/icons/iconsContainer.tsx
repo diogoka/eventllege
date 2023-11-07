@@ -1,6 +1,6 @@
 'use client';
-import { Box, Button, Stack, } from "@mui/material"
-import IconItem from "@/components/icons/iconItem";
+import { Box, Button, Stack, } from '@mui/material'
+import IconItem from '@/components/icons/iconItem';
 
 type Props = {
   icons: { name: string; isClickable: boolean, color: string }[];

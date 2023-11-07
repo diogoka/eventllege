@@ -1,7 +1,7 @@
 'use client';
-import { Box, Button, Stack } from "@mui/material"
-import { Event, Tag } from "@/app/events/page"
-import EventItem from "@/components/events/eventItem";
+import { Box, Button, Stack } from '@mui/material'
+import { Event, Tag } from '@/app/events/page'
+import EventItem from '@/components/events/eventItem';
 import Pagination from '@mui/material/Pagination';
 import { useState } from 'react';
 

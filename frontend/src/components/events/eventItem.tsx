@@ -1,10 +1,10 @@
 'use client';
-import { Box, ImageListItem, Typography } from "@mui/material"
-import { Event, Tag } from "@/app/events/page"
-import IconsContainer from "../icons/iconsContainer";
+import { Box, ImageListItem, Typography } from '@mui/material'
+import { Event, Tag } from '@/app/events/page'
+import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
 import { AiFillClockCircle } from 'react-icons/ai';
-import { useState, useRef } from "react";
+import { useState, useRef } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -42,7 +42,7 @@ export default function eventItem({ event, tags }: Props) {
 
 
     const onIconClickFunction = (iconName: string) => {
-        if (iconName === "FaShareSquare"){
+        if (iconName === 'FaShareSquare'){
             copyToClipboard(textAreaRef.current);
         }
     }
@@ -156,8 +156,8 @@ export default function eventItem({ event, tags }: Props) {
             </ImageListItem>
             <Box sx={iconContainerStyle}>
                  <IconsContainer icons={[
-                    { name: "FaCheckCircle", isClickable: false, color: '#333333' },
-                    { name: "FaShareSquare", isClickable: true, color: '#333333' },
+                    { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
+                    { name: 'FaShareSquare', isClickable: true, color: '#333333' },
                     ]} onIconClick={onIconClickFunction}
                     />
             </Box>
