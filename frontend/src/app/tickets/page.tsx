@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Container, Stack, Typography } from "@mui/material"
-import axios from "axios"
+import { Container, Stack, Typography } from '@mui/material'
+import axios from 'axios'
 
 export default function Tickets() {
   
@@ -27,9 +27,9 @@ export default function Tickets() {
   
   useEffect(() => {
 
-    const SAMPLE_USER="A"
+    const SAMPLE_USER='A'
     
-    axios.get("http://localhost:3001/api/events/user", {
+    axios.get('http://localhost:3001/api/events/user', {
       params: { id_user : SAMPLE_USER }
     })
     .then((res) => {
@@ -45,7 +45,7 @@ export default function Tickets() {
         {events.map((elm:Event, key:number) => {
 
           return (
-            <div key = {key} style = {{border:"1px solid grey", margin:"5px"}}>
+            <div key = {key} style = {{border:'1px solid grey', margin:'5px'}}>
               <div><b>ID: </b>{elm.id_event}</div>
               <div><b>Name: </b>{elm.name_event}</div>
               <div><b>Description: </b>{elm.description_event}</div>
