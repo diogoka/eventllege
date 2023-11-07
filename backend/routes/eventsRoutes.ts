@@ -12,7 +12,6 @@ import {
   getReviews,
 } from '../controllers/eventsControllers';
 import multer from 'multer';
-import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req: express.Request, file: Express.Multer.File, cb) {

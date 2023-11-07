@@ -209,9 +209,17 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
           [title, description, date.dateStart, date.dateEnd, location, spots, price, image, category, id]
         );
         await pool.query(`UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`, [tagId, id]);
+
+        if (req.file) {
+          moveImage(req.file.filename, events.rows[0].id_event);
+        }
+
         res.status(200).json(events.rows);
       });
     } catch (err: any) {
+      if(req.file) {
+        deleteImage(req.file.filename);
+      }
       res.status(500).send(err.message);
     }
   }
@@ -431,7 +439,7 @@ export const sendTicket = async (eventId: any, userId: any) => {
 function moveImage(filename: string, eventId: number) {
   const oldPath = `${__dirname}/../public/img/events/temp/${filename}`;
   const newPath = `${__dirname}/../public/img/events/${eventId}`;
-  fs.moveSync(oldPath, newPath);
+  fs.moveSync(oldPath, newPath, { overwrite: true });
 }
 
 function deleteImage(filename: string) {
