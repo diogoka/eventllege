@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter, useParams } from 'next/navigation';
 
 type Event = {
   id_event: number;
@@ -21,9 +21,12 @@ type Event = {
 
 export default function EventPage() {
   const [event, setEvent] = useState<Event>();
+  const params = useParams();
   const router = useRouter();
 
-  const EVENT_ID = typeof window !== "undefined" ? window.location.pathname.split("/events/")[1] : null;
+
+
+  const EVENT_ID = params.id
 
   useEffect(() => {
     axios
@@ -37,7 +40,7 @@ export default function EventPage() {
   }, []);
 
   const deleteEvent = (id: number) => {
-    console.log("delete", id);
+    console.log('delete', id);
 
     axios
       .delete(`http://localhost:3001/api/events/${id}`, {
@@ -46,21 +49,21 @@ export default function EventPage() {
         },
       })
       .then((res: any) => {
-        console.log("res", res.data.json);
+        console.log('res', res.data.json);
       });
-    router.push("/events");
+    router.push('/events');
   };
 
   const editEventHandler = (id: number) => {
     if (!id) {
-      console.log("Id does not exist");
+      console.log('Id does not exist');
     } else {
       router.push(`/events/${id}/edit`);
     }
   };
   return (
     <>
-      <div style={{ border: "1px solid grey", margin: "5px" }}>
+      <div style={{ border: '1px solid grey', margin: '5px' }}>
         <h3>Event Detail:</h3>
         <div>
           <b>ID: </b>

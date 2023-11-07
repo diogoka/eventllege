@@ -121,7 +121,7 @@ export default function EditEventPage({ params }: Params) {
         console.error(err.response.data);
       });
 
-    router.push(`/events`);
+    router.push('/events');
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
