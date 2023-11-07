@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 // import imageCompression from 'browser-image-compression';
@@ -8,6 +8,7 @@ import { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { UserContext } from '@/context/userContext';
 
 // const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
@@ -25,6 +26,9 @@ type Dates = {
   dateEnd: Dayjs | null;
 };
 export default function NewEventPage() {
+
+  const { user } = useContext(UserContext);
+
   //User Input
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -81,7 +85,7 @@ export default function NewEventPage() {
 
     console.log('image', image);
 
-    formData.append('owner', 'A');
+    formData.append('owner', user!.id);
     formData.append('title', title);
     formData.append('description', description);
     formData.append('spots', spots.toString());

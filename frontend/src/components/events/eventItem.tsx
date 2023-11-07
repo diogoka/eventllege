@@ -7,6 +7,7 @@ import { AiFillClockCircle } from 'react-icons/ai';
 import { useState, useRef } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import ImageHelper from '@/components/common/image-helper';
 
 
 type Props = {
@@ -102,14 +103,6 @@ export default function eventItem({ event, tags }: Props) {
     const imageContainerStyle = {
         gridArea: 'picture',
         borderRadius: '5px',
-        width: '6.25rem',
-        height: '4.0625rem',
-    }
-
-    const imageStyle = {
-        borderRadius: '5px',
-        width: '6.25rem',
-        height: '4.0625rem',
     }
 
     const iconContainerStyle = {
@@ -144,16 +137,7 @@ export default function eventItem({ event, tags }: Props) {
             <Typography sx={descriptionStyle}>
                 {event.description_event.length > 50 ? `${event.description_event.slice(0, 50)}...` : event.description_event}
             </Typography>
-            
-                
-            <ImageListItem key={event.name_event} sx={imageContainerStyle} >
-                <img
-                src={'https://www.adobe.com/content/dam/www/us/en/events/overview-page/eventshub_evergreen_opengraph_1200x630_2x.jpg'}
-                alt={event.name_event}
-                loading="lazy"
-                style={imageStyle}
-            />
-            </ImageListItem>
+            <ImageHelper src={`http://localhost:3001/img/events/${event.id_event}`} width='6.25rem' height='4.0625rem' style={imageContainerStyle} alt={event.name_event} />
             <Box sx={iconContainerStyle}>
                  <IconsContainer icons={[
                     { name: 'FaCheckCircle', isClickable: false, color: '#333333' },

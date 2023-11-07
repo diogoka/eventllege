@@ -6,7 +6,6 @@ import EventList from '@/components/events/eventList'
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 
-
 export type Event = {
   capacity_event: number;
   category_event: string;
@@ -31,7 +30,6 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  
   
   useEffect(() => {
     axios.get('http://localhost:3001/api/events').then((res) => {
