@@ -1,8 +1,9 @@
 'use client';
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import ModalRating from '@/components/modal'
+import ImageHelper from '@/components/common/image-helper';
 
 export default function EventsPage() {
   type Event = {
@@ -35,7 +36,7 @@ export default function EventsPage() {
   const [tags, setTags] = useState<Array<Tag>>([]);
 
   const [keyword, setKeyword] = useState<Keyword>({
-    andor:'or',
+    andor: 'or',
     dateFrom: '',
     dateTo: '',
     text: ''
@@ -80,21 +81,21 @@ export default function EventsPage() {
 
   return (
     <>
-      <input type='text' name='keyword' onChange={(e)=>setKeyword((val:any)=>({...val, text:e.target.value}))}/>&nbsp;
-      <input type='radio' name='andor' value='or' defaultChecked onChange={(e)=>setKeyword((val:any)=>({...val, andor:e.target.value}))}/><label>or</label>    
-      <input type='radio' name='andor' value='and' onChange={(e)=>setKeyword((val:any)=>({...val, andor:e.target.value}))}/><label>and</label>&nbsp;
-      <label>From:<input type='date' name='from' onChange={(e)=>setKeyword((val:any)=>({...val, dateFrom:e.target.value}))}/></label>&nbsp;
-      <label>To:<input type='date' name='to' onChange={(e)=>setKeyword((val:any)=>({...val, dateTo:e.target.value}))}/></label>&nbsp;
-      <input type='submit' value='search' onClick={()=>{
-              
-              axios.get('http://localhost:3001/api/events', {
-                params: keyword
-              }).then((res) => {
-                setEvents(res.data.events);
-                setTags(res.data.tags);
-              });
+      <input type='text' name='keyword' onChange={(e) => setKeyword((val: any) => ({ ...val, text: e.target.value }))} />&nbsp;
+      <input type='radio' name='andor' value='or' defaultChecked onChange={(e) => setKeyword((val: any) => ({ ...val, andor: e.target.value }))} /><label>or</label>
+      <input type='radio' name='andor' value='and' onChange={(e) => setKeyword((val: any) => ({ ...val, andor: e.target.value }))} /><label>and</label>&nbsp;
+      <label>From:<input type='date' name='from' onChange={(e) => setKeyword((val: any) => ({ ...val, dateFrom: e.target.value }))} /></label>&nbsp;
+      <label>To:<input type='date' name='to' onChange={(e) => setKeyword((val: any) => ({ ...val, dateTo: e.target.value }))} /></label>&nbsp;
+      <input type='submit' value='search' onClick={() => {
 
-      }}/>
+        axios.get('http://localhost:3001/api/events', {
+          params: keyword
+        }).then((res) => {
+          setEvents(res.data.events);
+          setTags(res.data.tags);
+        });
+
+      }} />
 
       <Typography variant='h3'>Events Page</Typography>
       <Stack>
@@ -144,9 +145,10 @@ export default function EventsPage() {
                   return elm.id_event == tag.id_event ? <span key={key}>{tag.name_tag},&nbsp;</span> : null;
                 })}
               </div>
+              <ImageHelper src={`http://localhost:3001/img/events/${elm.id_event}`} width='200px' height='auto' />
               <button onClick={() => newAttendee(elm['id_event'])}>New Attendee</button>
               <button onClick={() => deleteAttendee(elm['id_event'])}>Delete Attendee</button>
-              <ModalRating eventid = {elm['id_event']} userid = {user.id_user}/>
+              <ModalRating eventid={elm['id_event']} userid={user.id_user} />
             </div>
           );
         })}
