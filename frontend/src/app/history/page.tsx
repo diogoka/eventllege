@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useContext } from 'react'
 import { Box } from '@mui/material'
+import Alert from '@mui/material/Alert';
 import axios from 'axios'
 import EventList from '@/components/events/eventList'
 import SearchBar from '@/components/searchBar';
@@ -30,6 +31,7 @@ export default function PastEvent() {
 
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   
   useEffect(() => {
     
@@ -41,12 +43,34 @@ export default function PastEvent() {
   },[])
 
   const searchEvents = (text: string) => {
-    console.log(text)
+    axios.get(`http://localhost:3001/api/events/search/?text=${text}&past=true`)
+    .then((res) => {
+      if(res.data.events.length === 0){
+        setAlertOpen(true);
+        setTimeout(() => {
+          setAlertOpen(false);
+        }
+        , 3000);
+      } else {
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+      }
+  })
   }
 
 
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+      {alertOpen && (
+        <Alert 
+          severity="info" 
+          variant="filled" 
+          onClose={() => setAlertOpen(false)} 
+          sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
+          >
+          No events found
+        </Alert>
+      )}
       <SearchBar searchEvents={searchEvents}/>
       <EventList events={events} tags={tags}></EventList>
     </Box>

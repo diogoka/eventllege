@@ -18,9 +18,7 @@ function SearchBar({ searchEvents }:Props) {
 
   const handleSearch = (event: any) => {
     event.preventDefault();
-    console.log('state', searchTerm);
     searchEvents(searchTerm);
-
     setSearchTerm('');
   };
 
