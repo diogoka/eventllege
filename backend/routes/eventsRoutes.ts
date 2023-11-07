@@ -39,6 +39,7 @@ eventsRouter.get('/user/:id', getEventsByUser)
 eventsRouter.get('/owner/:id', getEventsByOwner)
 eventsRouter.get('/search/', searchEvents)
 
+
 eventsRouter.get('/', getEvents);
 eventsRouter.get('/:id', getEvent);
 

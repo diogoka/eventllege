@@ -81,6 +81,9 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
       `);
 
+
+    console.log(tags.rows);
+
     res.status(200).json({
       events: events.rows,
       tags: tags.rows

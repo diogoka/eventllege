@@ -1,12 +1,10 @@
 'use client';
-import { useEffect,useState } from 'react'
-import { Container, Stack, Typography, Box } from '@mui/material'
+import { useEffect, useState, useContext } from 'react'
+import { Box } from '@mui/material'
 import axios from 'axios'
-import ModalRating from '@/components/modal'
 import EventList from '@/components/events/eventList'
-import { UserContext, FirebaseAccount } from '@/context/userContext';
-import { useContext } from 'react';
 import SearchBar from '@/components/searchBar';
+import { UserContext } from '@/context/userContext';
 
 
 export type Event = {
