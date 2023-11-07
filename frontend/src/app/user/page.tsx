@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useContext } from 'react'
-import { Stack, Typography, Button, Chip } from '@mui/material';
+import { Stack, Typography, Button, Chip, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem } from '@mui/material';
@@ -22,7 +22,7 @@ export default function UserPage() {
   const [isEditting, setIsEditing] = useState(false);
 
   // User Input
-  const [courseId, setCourseId] = useState(0);
+  const [courseId, setCourseId] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [postalCode, setPostalCode] = useState('');
@@ -36,7 +36,7 @@ export default function UserPage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setCourseId(user.courseId);
+      setCourseId(user.courseId.toString());
       setPostalCode(user.postalCode);
       setPhone(user.phone);
     }
@@ -86,23 +86,54 @@ export default function UserPage() {
   return (
     <Stack width='100%' paddingBlock='4rem'>
       {isEditting ? (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-          <select value={user?.courseId} onChange={(e) => { setCourseId(Number(e.target.value)) }}>
-            {courses.map((course: Course, index: number) => {
-              return (
-                <option key={index} value={course.id}>{course.name}</option>
-              )
-            })}
-          </select>
+        <form onSubmit={handleSubmit}>
+          <Stack alignItems='center' rowGap='1rem'>
+            <ImageHelper
+              src={`http://localhost:3001/img/users/${user?.id}`}
+              placeholderSrc={FALLBACK_IMAGE}
+              width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
+              alt='avatar'
+            />
+            <FormControl required fullWidth>
+              <TextField type='text' label='Name' value={name} onChange={(event) => setName(event.target.value)} required />
+            </FormControl>
 
-          <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
-          <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} required />
-          <input type="text" placeholder="postal code(optional)" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} />
-          <input type="text" placeholder="phone(optional)" value={phone} onChange={(event) => setPhone(event.target.value)} />
-          <input type="file" accept="image/*" onChange={onFileInputChange} />
-          <div>{warning}</div>
+            <FormControl required fullWidth>
+              <InputLabel id='course'>Course</InputLabel>
+              <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
+                {courses.map((course: Course, index: number) => {
+                  return (
+                    <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
 
-          <input type="submit" value="OK" />
+            <FormControl required fullWidth>
+              <TextField type='email' label='Email' value={email} onChange={(event) => setEmail(event.target.value)} required />
+            </FormControl>
+
+            <div>{warning}</div>
+
+            <Box width='100%' display='flex' justifyContent='space-between' columnGap='1.5rem'>
+              <Button
+                variant='outlined'
+                color='error'
+                sx={{flexGrow: 1}}
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                sx={{flexGrow: 1}}
+              >
+                Submit
+              </Button>
+            </Box>
+          </Stack>
         </form>
       ) : (
         <Stack alignItems='center' rowGap='.5rem'>
