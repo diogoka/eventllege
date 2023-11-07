@@ -16,7 +16,7 @@ type Props = {
 };
 
 
-export default function eventItem({ event, tags }: Props) {
+function EventItem({ event, tags }: Props) {
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -161,3 +161,6 @@ export default function eventItem({ event, tags }: Props) {
 
     )
 }
+
+
+export default EventItem;
