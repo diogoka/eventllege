@@ -1,10 +1,13 @@
 'use client'
 import { useState, useEffect, useContext } from 'react'
-import { Stack } from '@mui/material';
+import { Stack, Typography, Button, Chip } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem } from '@mui/material';
 import { UserContext, User } from '@/context/userContext';
+import ImageHelper from '@/components/common/image-helper';
+
+const FALLBACK_IMAGE = '/default_avatar.svg';
 
 type Course = {
   id: number;
@@ -54,7 +57,7 @@ export default function UserPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if(!user) {
+    if (!user) {
       return;
     }
 
@@ -81,16 +84,16 @@ export default function UserPage() {
   };
 
   return (
-    <Stack width={1 / 3}>
+    <Stack width='100%' paddingBlock='4rem'>
       {isEditting ? (
-        <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
-        <select value={user?.courseId} onChange={(e) => { setCourseId(Number(e.target.value)) }}>
-          {courses.map((course: Course, index: number) => {
-            return (
-              <option key={index} value={course.id}>{course.name}</option>
-            )
-          })}
-        </select>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+          <select value={user?.courseId} onChange={(e) => { setCourseId(Number(e.target.value)) }}>
+            {courses.map((course: Course, index: number) => {
+              return (
+                <option key={index} value={course.id}>{course.name}</option>
+              )
+            })}
+          </select>
 
           <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
           <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} required />
@@ -102,19 +105,37 @@ export default function UserPage() {
           <input type="submit" value="OK" />
         </form>
       ) : (
-        <>
-          <h1>User Page</h1>
-          <div>{user?.id}</div>
-          <div>{user?.name}</div>
-          <div>{user?.role}</div>
-          <div>{user?.email}</div>
-          <div>{user?.courseName}</div>
-          <div>{user?.postalCode}</div>
-          <div>{user?.phone}</div>
-          <img src={`http://localhost:3001/img/users/${user?.id}`} width={'30px'} />
+        <Stack alignItems='center' rowGap='.5rem'>
+          <ImageHelper
+            src={`http://localhost:3001/img/users/${user?.id}`}
+            placeholderSrc={FALLBACK_IMAGE}
+            width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
+            alt='avatar'
+          />
 
-          <button style={{ width: 50 }} onClick={() => setIsEditing(true)}>Edit</button>
-        </>
+          <Chip
+            label={user?.role}
+            variant='filled'
+            color='error'
+            sx={{
+              fontWeight: 'bold',
+              textTransform: 'capitalize'
+            }}
+          />
+          <Typography>{user?.name}</Typography>
+          <Typography>{user?.email}</Typography>
+          <Typography>{user?.courseName}</Typography>
+          <Typography>{user?.postalCode}</Typography>
+          <Typography>{user?.phone}</Typography>
+
+          <Button
+            variant='contained'
+            sx={{ width: '7.5rem' }}
+            onClick={() => setIsEditing(true)}
+          >
+            Edit
+          </Button>
+        </Stack>
       )}
     </Stack>
   )

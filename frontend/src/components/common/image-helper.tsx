@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import Image from 'next/image';
 
-const FALLBACK_IMAGE = '/event_placeholder.png';
-
 // This is an image component that displays fallback image if the link doesn't exist
 export default function ImageHelper(props: any) {
-  const { src, width, height, style, ...rest } = props;
+  const { src, placeholderSrc, width, height, style, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
 
   return (
@@ -15,7 +13,7 @@ export default function ImageHelper(props: any) {
         src={imgSrc}
         loader={() => imgSrc}
         onError={() => {
-          setImgSrc(FALLBACK_IMAGE);
+          setImgSrc(placeholderSrc);
         }}
         width={0}
         height={0}
