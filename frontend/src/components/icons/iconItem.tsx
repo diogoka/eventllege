@@ -14,7 +14,7 @@ interface Props  {
 }
 
 
-function iconItem({iconName, size, color, onClick, isClickable}: Props) {
+function IconItem({iconName, size, color, onClick, isClickable}: Props) {
   
   const SelectedIcon = IconLibrary[iconName];
   if(!SelectedIcon) return null;
@@ -35,4 +35,4 @@ function iconItem({iconName, size, color, onClick, isClickable}: Props) {
   )
 }
 
-export default iconItem;
+export default IconItem;

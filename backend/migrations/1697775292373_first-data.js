@@ -68,19 +68,19 @@ exports.up = async (pgm) => {
   }
 
   const courses = [
-    { name_course: "English Languages Courses 1.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 1.5", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 2.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 2.5", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 3.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 3.5", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 4.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 4.5", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 5.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 5.5", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses 6.0", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses Advance 1", category_course: "English as Second Language" },
-    { name_course: "English Languages Courses Advance 2", category_course: "English as Second Language" },
+    { name_course: "English Languages Courses 1.0", category_course: "ESL" },
+    { name_course: "English Languages Courses 1.5", category_course: "ESL" },
+    { name_course: "English Languages Courses 2.0", category_course: "ESL" },
+    { name_course: "English Languages Courses 2.5", category_course: "ESL" },
+    { name_course: "English Languages Courses 3.0", category_course: "ESL" },
+    { name_course: "English Languages Courses 3.5", category_course: "ESL" },
+    { name_course: "English Languages Courses 4.0", category_course: "ESL" },
+    { name_course: "English Languages Courses 4.5", category_course: "ESL" },
+    { name_course: "English Languages Courses 5.0", category_course: "ESL" },
+    { name_course: "English Languages Courses 5.5", category_course: "ESL" },
+    { name_course: "English Languages Courses 6.0", category_course: "ESL" },
+    { name_course: "English Languages Courses Advance 1", category_course: "ESL" },
+    { name_course: "English Languages Courses Advance 2", category_course: "ESL" },
     { name_course: "Web Application Development", category_course: "Tech" },
     { name_course: "Data Science", category_course: "Tech" },
     { name_course: "Network and System Solutions", category_course: "Tech" },
@@ -190,7 +190,7 @@ exports.up = async (pgm) => {
       capacity_event: 30,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "ESL",
     },
     {
       id_owner: "D",
@@ -202,7 +202,7 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      category_event: "Network",
+      category_event: "Tech",
     },
     {
       id_owner: "E",
@@ -214,7 +214,7 @@ exports.up = async (pgm) => {
       capacity_event: 40,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "Digital Marketing",
     },
     {
       id_owner: "F",
@@ -262,7 +262,7 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      category_event: "Others",
+      category_event: "ESL",
     },
     {
       id_owner: "D",
@@ -274,7 +274,7 @@ exports.up = async (pgm) => {
       capacity_event: 80,
       price_event: 0,
       image_event: null,
-      category_event: "Others",
+      category_event: "Design",
     },
     {
       id_owner: "E",
@@ -286,7 +286,7 @@ exports.up = async (pgm) => {
       capacity_event: 35,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "Customer Relations",
     },
     {
       id_owner: "F",
@@ -298,7 +298,7 @@ exports.up = async (pgm) => {
       capacity_event: 100,
       price_event: 10,
       image_event: null,
-      category_event: "Party",
+      category_event: "ESL",
     },
     {
       id_owner: "A",
@@ -322,7 +322,7 @@ exports.up = async (pgm) => {
       capacity_event: 50,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "Digital Marketing",
     },
     {
       id_owner: "C",
@@ -334,7 +334,7 @@ exports.up = async (pgm) => {
       capacity_event: 40,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "Design",
     },
     {
       id_owner: "D",
@@ -358,7 +358,127 @@ exports.up = async (pgm) => {
       capacity_event: 60,
       price_event: 0,
       image_event: null,
-      category_event: "Party",
+      category_event: "ESL",
+    },
+    {
+      id_owner: "C",
+      name_event: "Creative Photography Workshop",
+      description_event: "A hands-on workshop for photography enthusiasts to learn creative photography techniques and explore their artistic skills.",
+      date_event_start: "2023-11-18 14:00:00",
+      date_event_end: "2023-11-18 16:00:00",
+      location_event: "678 Shutter Street, Vancouver, BC V6H 2W2",
+      capacity_event: 25,
+      price_event: 0,
+      image_event: null,
+      category_event: "Design",
+    },
+    {
+      id_owner: "D",
+      name_event: "Charity Gala Dinner",
+      description_event: "A fundraising gala dinner to support local charities and community projects. Join us for an elegant evening of fine dining and charitable giving.",
+      date_event_start: "2024-06-30 19:00:00",
+      date_event_end: "2024-06-30 22:00:00",
+      location_event: "789 Charity Avenue, Vancouver, BC V6H 3B3",
+      capacity_event: 150,
+      price_event: 100,
+      image_event: null,
+      category_event: "Tech"
+    },
+    {
+      id_owner: "E",
+      name_event: "Outdoor Movie Night",
+      description_event: "Enjoy a night under the stars with a screening of a popular movie. Bring your blankets and snacks for a cozy outdoor cinema experience.",
+      date_event_start: "2023-12-08 18:30:00",
+      date_event_end: "2023-12-08 21:00:00",
+      location_event: "City Park, Vancouver, BC V6H 4G4",
+      capacity_event: 80,
+      price_event: 0,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "F",
+      name_event: "Entrepreneurship Conference 2024",
+      description_event: "A comprehensive conference for aspiring and experienced entrepreneurs. Gain insights from successful business leaders, attend workshops, and network with potential investors.",
+      date_event_start: "2023-01-15 09:00:00",
+      date_event_end: "2023-01-15 17:00:00",
+      location_event: "567 Business Center, Vancouver, BC V6H 5F5",
+      capacity_event: 200,
+      price_event: 50,
+      image_event: null,
+      category_event: "IBM"
+    },
+    {
+      id_owner: "A",
+      name_event: "Comedy Night Live",
+      description_event: "Laugh out loud with stand-up comedy performances by local comedians. A night of humor and entertainment for everyone.",
+      date_event_start: "2023-02-10 20:00:00",
+      date_event_end: "2023-02-10 22:00:00",
+      location_event: "789 Comedy Club, Vancouver, BC V6H 6G6",
+      capacity_event: 120,
+      price_event: 20,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "B",
+      name_event: "Contemporary Art Exhibition",
+      description_event: "Explore a diverse collection of contemporary artworks by local and international artists. Immerse yourself in the world of modern art.",
+      date_event_start: "2023-03-15 10:00:00",
+      date_event_end: "2023-03-15 18:00:00",
+      location_event: "456 Art Gallery, Vancouver, BC V6H 7G7",
+      capacity_event: 75,
+      price_event: 0,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "C",
+      name_event: "Science and Technology Lecture Series",
+      description_event: "Engage in enlightening talks by experts in the fields of science and technology. Discover cutting-edge advancements and their impact on society.",
+      date_event_start: "2023-04-05 18:30:00",
+      date_event_end: "2023-04-05 20:30:00",
+      location_event: "789 Science Hall, Vancouver, BC V6H 8H8",
+      capacity_event: 100,
+      price_event: 0,
+      image_event: null,
+      category_event: "Tech"
+    },
+    {
+      id_owner: "D",
+      name_event: "Robotics Competition 2024",
+      description_event: "Witness the creativity and innovation of student-built robots in action. Teams compete in exciting challenges, showcasing their technical skills.",
+      date_event_start: "2023-04-20 09:00:00",
+      date_event_end: "2023-04-20 16:00:00",
+      location_event: "567 Robotics Arena, Vancouver, BC V6H 9I9",
+      capacity_event: 200,
+      price_event: 0,
+      image_event: null,
+      category_event: "Tech"
+    },
+    {
+      id_owner: "E",
+      name_event: "Local Music Festival",
+      description_event: "Celebrate the vibrant music scene of Vancouver with live performances by talented local musicians. Enjoy a day filled with diverse musical genres.",
+      date_event_start: "2023-05-10 14:00:00",
+      date_event_end: "2023-05-10 22:00:00",
+      location_event: "123 Music Park, Vancouver, BC V6H 0A0",
+      capacity_event: 300,
+      price_event: 10,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "F",
+      name_event: "Culinary Competition",
+      description_event: "Top chefs compete in a culinary showdown, showcasing their creativity and culinary expertise. Experience gourmet dishes and culinary delights.",
+      date_event_start: "2023-06-03 17:00:00",
+      date_event_end: "2023-06-03 21:00:00",
+      location_event: "789 Culinary Center, Vancouver, BC V6H 1A1",
+      capacity_event: 150,
+      price_event: 25,
+      image_event: null,
+      category_event: "ESL"
     }
   ];
 
@@ -376,6 +496,10 @@ exports.up = async (pgm) => {
     { id_event: 2, id_tag: 4 },
     { id_event: 3, id_tag: 6 },
     { id_event: 3, id_tag: 7 },
+    { id_event: 28, id_tag: 4 },
+    { id_event: 28, id_tag: 7 },
+    { id_event: 27, id_tag: 15 }
+
   ];
 
   for (const event_tag of events_tags) {

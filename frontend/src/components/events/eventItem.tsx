@@ -16,7 +16,7 @@ type Props = {
 };
 
 
-export default function eventItem({ event, tags }: Props) {
+function EventItem({ event, tags }: Props) {
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -24,8 +24,7 @@ export default function eventItem({ event, tags }: Props) {
     const endTime = new Date(event.date_event_end).toLocaleString('en-us', { hour: 'numeric', minute: 'numeric', hour12: true });
     const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', { month: 'short', day: 'numeric' });
     const eventId = event?.id_event;
-    const [id, setId] = useState(eventId);
-    const textAreaRef = useRef(`http://localhost:3000/events/${id}`);
+    const textAreaRef = useRef(`http://localhost:3000/events/${eventId}`);
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
     const copyToClipboard = (text: string) => {
@@ -49,7 +48,7 @@ export default function eventItem({ event, tags }: Props) {
     }
 
     const handleCardClick = () => {        
-        router.push(`/events/${id}`);
+        router.push(`/events/${eventId}`);
     }
 
     const handleAlertClose = () => {
@@ -161,3 +160,6 @@ export default function eventItem({ event, tags }: Props) {
 
     )
 }
+
+
+export default EventItem;

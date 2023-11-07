@@ -13,14 +13,12 @@ type Props = {
   
 };
 
-function searchBar({ searchEvents }:Props) {
+function SearchBar({ searchEvents }:Props) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (event: any) => {
     event.preventDefault();
-    console.log('state', searchTerm);
     searchEvents(searchTerm);
-
     setSearchTerm('');
   };
 
@@ -83,4 +81,4 @@ function searchBar({ searchEvents }:Props) {
   );
 }
 
-export default searchBar;
+export default SearchBar;

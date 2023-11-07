@@ -1,12 +1,11 @@
 'use client';
-import { useEffect,useState } from 'react'
-import { Container, Stack, Typography, Box } from '@mui/material'
+import { useEffect, useState, useContext } from 'react'
+import { Box } from '@mui/material'
+import Alert from '@mui/material/Alert';
 import axios from 'axios'
-import ModalRating from '@/components/modal'
 import EventList from '@/components/events/eventList'
-import { UserContext, FirebaseAccount } from '@/context/userContext';
-import { useContext } from 'react';
 import SearchBar from '@/components/searchBar';
+import { UserContext } from '@/context/userContext';
 
 export type Event = {
   capacity_event: number;
@@ -32,6 +31,7 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   
   useEffect(() => {
     axios.get('http://localhost:3001/api/events').then((res) => {
@@ -42,8 +42,12 @@ export default function EventsPage() {
 
   const searchEvents = (text: string) => {
     axios.get('http://localhost:3001/api/events/search/?text='+text).then((res) => {
-      if(res.data.events.length == 0){
-        alert('No events found');
+      if(res.data.events.length === 0){
+        setAlertOpen(true);
+        setTimeout(() => {
+          setAlertOpen(false);
+        }
+        , 3000);
       } else {
         setEvents(res.data.events);
         setTags(res.data.tags);
@@ -54,6 +58,16 @@ export default function EventsPage() {
 
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+        {alertOpen && (
+        <Alert 
+          severity="info" 
+          variant="filled" 
+          onClose={() => setAlertOpen(false)} 
+          sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
+          >
+          No events found
+        </Alert>
+      )}
       <SearchBar searchEvents={searchEvents}/>
       <EventList events={events} tags={tags}></EventList>
     </Box>
