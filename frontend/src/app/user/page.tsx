@@ -24,15 +24,17 @@ export default function UserPage() {
           alt='avatar'
         />
 
-        <Chip
-          label={user?.role}
-          variant='filled'
-          color='error'
-          sx={{
-            fontWeight: 'bold',
-            textTransform: 'capitalize'
-          }}
-        />
+        {user?.role !== 'student' &&
+          <Chip
+            label={user?.role}
+            variant='filled'
+            color='error'
+            sx={{
+              fontWeight: 'bold',
+              textTransform: 'capitalize'
+            }}
+          />
+        }
         <Typography>{user?.name}</Typography>
         <Typography>{user?.email}</Typography>
         <Typography>{user?.courseName}</Typography>
