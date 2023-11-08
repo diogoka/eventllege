@@ -22,6 +22,8 @@ export default function ImageHelper(props: any) {
         width={0}
         height={0}
         style={{ ...style, width: '100%', height: '100%', overflow: 'hidden' }}
+        unoptimized
+        priority
       />
     </div>
   );
