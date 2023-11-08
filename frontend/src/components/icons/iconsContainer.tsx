@@ -7,7 +7,7 @@ type Props = {
   onIconClick: (iconName: string) => void;
 }
 
-export default function iconsContainer({icons, onIconClick}: Props) {
+function IconsContainer({icons, onIconClick}: Props) {
 
   const handleClick = (iconName: string, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -27,3 +27,5 @@ export default function iconsContainer({icons, onIconClick}: Props) {
     </Stack>    
   ) 
 }
+
+export default IconsContainer;

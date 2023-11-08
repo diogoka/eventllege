@@ -82,6 +82,7 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
       `);
 
+
     res.status(200).json({
       events: events.rows,
       tags: tags.rows
@@ -169,7 +170,13 @@ export const searchEvents = async (req: express.Request, res: express.Response) 
   try {
   
     const text = req.query.text !== undefined ? req.query.text : '';
-    const events = await pool.query('SELECT * FROM events WHERE LOWER(events.name_event) LIKE $1', [`%${text.toString().toLowerCase()}%`])
+    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const events = req.query.past 
+    ? await pool.query('SELECT * FROM events WHERE LOWER(events.name_event) LIKE $1 and events.date_event_start < $2', 
+    [`%${text.toString().toLowerCase()}%`, today])
+
+    : await pool.query('SELECT * FROM events WHERE LOWER(events.name_event) LIKE $1', 
+    [`%${text.toString().toLowerCase()}%`])
     const ids = events.rows.length!==0? events.rows.map(val => { return val.id_event }) : null;
 
     const tags = await pool.query(`
