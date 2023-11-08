@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, ChangeEvent } from 'react'
 import { Stack, Typography, Button, Chip, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
@@ -21,7 +21,7 @@ type Course = {
 
 export default function UserPage() {
 
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const [isEditting, setIsEditing] = useState(false);
 
@@ -32,6 +32,7 @@ export default function UserPage() {
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+  const [tempImageSrc, setTempImageSrc] = useState(`http://localhost:3001/img/users/${user?.id}`);
 
   // Course data from server
   const [courses, setCourses] = useState([]);
@@ -57,6 +58,12 @@ export default function UserPage() {
         console.error(error.response.data);
       })
   }, []);
+
+  useEffect(() => {
+    if (image) {
+      setTempImageSrc(URL.createObjectURL(image));
+    }
+  }, [image])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -93,6 +100,7 @@ export default function UserPage() {
         headers: { 'content-type': 'multipart/form-data' }
       })
       .then((res) => {
+        setUser(res.data);
         setIsEditing(false);
       })
       .catch((error) => {
@@ -106,11 +114,15 @@ export default function UserPage() {
         <form onSubmit={handleSubmit}>
           <Stack alignItems='center' rowGap='1rem'>
             <ImageHelper
-              src={`http://localhost:3001/img/users/${user?.id}`}
+              src={tempImageSrc}
               placeholderSrc={FALLBACK_IMAGE}
               width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
               alt='avatar'
+              key={user?.id}
             />
+
+            <input type='file' accept='image/*' onChange={onFileInputChange} />
+
             <FormControl required fullWidth>
               <TextField type='text' label='Name' value={name} onChange={(event) => setName(event.target.value)} required />
             </FormControl>
@@ -126,9 +138,9 @@ export default function UserPage() {
               </Select>
             </FormControl>
 
-            <FormControl required fullWidth>
+            {/* <FormControl required fullWidth>
               <TextField type='email' label='Email' value={email} onChange={(event) => setEmail(event.target.value)} required />
-            </FormControl>
+            </FormControl> */}
 
             <div>{warning}</div>
 
