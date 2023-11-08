@@ -23,7 +23,7 @@ export default function DetailInfoRow(props: Props) {
       }}>
         {props.title}
       </TableCell>
-      <TableCell align='right'>
+      <TableCell align='left'>
         {props.content}
       </TableCell>
     </TableRow>
