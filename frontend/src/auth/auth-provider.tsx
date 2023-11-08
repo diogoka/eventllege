@@ -142,6 +142,10 @@ const studentPages = [
   /^\/user\/my-events$/,
 ];
 
+const organizerPages = [
+  /^\/organizer-events$/,
+]
+
 function isLoggedOutUserPage(pathname: string): boolean {
   return loggedOutUserPages.some((loggedOutUserPage) => {
     return loggedOutUserPage.test(pathname);
