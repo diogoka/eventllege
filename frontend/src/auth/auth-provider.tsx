@@ -136,6 +136,7 @@ const loggedOutUserPages = [
 
 const studentPages = [
   /^\/user$/,
+  /^\/user\/edit$/,
   /^\/tickets$/,
   /^\/history$/,
 ];
