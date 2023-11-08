@@ -6,6 +6,10 @@ import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem } from '@mui/material';
 import { UserContext, User } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
+import {
+  getAuth,
+  updateEmail
+} from 'firebase/auth';
 
 const FALLBACK_IMAGE = '/default_avatar.svg';
 
@@ -59,6 +63,19 @@ export default function UserPage() {
 
     if (!user) {
       return;
+    }
+
+    // If the user wants to update his email, update the email in Firebase, too
+    if (email !== user.email) {
+      const currentUser = getAuth().currentUser;
+      if (currentUser) {
+        try {
+          await updateEmail(currentUser, "user@example.com");
+        } catch (error) {
+          console.error(error);
+          return;
+        }
+      }
     }
 
     const formData = new FormData();
