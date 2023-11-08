@@ -1,6 +1,7 @@
+'use client'
 import React from 'react'
 import { Attendee } from '@/app/events/[id]/page';
-import { Avatar, AvatarGroup, Box, Link, Typography, Modal } from '@mui/material';
+import { useTheme, Avatar, AvatarGroup, Box, Link, Typography, Modal } from '@mui/material';
 import AttendeesModal from './attendees-modal';
 
 const MAX_DISPLAY_AVATARS = 6;
@@ -10,6 +11,8 @@ type Props = {
 }
 
 export default function AttendeesRow({ attendees }: Props) {
+
+  const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -24,9 +27,10 @@ export default function AttendeesRow({ attendees }: Props) {
       >
         <Typography>{attendees.length}</Typography>
         <Link
+          color={theme.palette.info.main}
           component='button'
           sx={{
-            fontSize: '1rem'
+            fontSize: '1rem',
           }}
           onClick={handleOpen}
         >
