@@ -119,7 +119,7 @@ export default function UserPage() {
               <Button
                 variant='outlined'
                 color='error'
-                sx={{flexGrow: 1}}
+                sx={{ width: '100px', flexGrow: 1 }}
                 onClick={() => setIsEditing(false)}
               >
                 Cancel
@@ -128,9 +128,9 @@ export default function UserPage() {
                 type='submit'
                 variant='contained'
                 color='primary'
-                sx={{flexGrow: 1}}
+                sx={{ width: '100px', flexGrow: 1 }}
               >
-                Submit
+                Save
               </Button>
             </Box>
           </Stack>
