@@ -1,15 +1,16 @@
 'use client'
 import { useState, useEffect, useContext, ChangeEvent } from 'react'
+import { useRouter } from 'next/navigation';
 import { Stack, Typography, Button, Chip, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem } from '@mui/material';
 import { UserContext, User } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
-import {
-  getAuth,
-  updateEmail
-} from 'firebase/auth';
+// import {
+//   getAuth,
+//   updateEmail
+// } from 'firebase/auth';
 
 const FALLBACK_IMAGE = '/default_avatar.svg';
 
@@ -20,6 +21,8 @@ type Course = {
 }
 
 export default function UserPage() {
+
+  const router = useRouter();
 
   const { user, setUser } = useContext(UserContext);
 
@@ -73,17 +76,17 @@ export default function UserPage() {
     }
 
     // If the user wants to update his email, update the email in Firebase, too
-    if (email !== user.email) {
-      const currentUser = getAuth().currentUser;
-      if (currentUser) {
-        try {
-          await updateEmail(currentUser, "user@example.com");
-        } catch (error) {
-          console.error(error);
-          return;
-        }
-      }
-    }
+    // if (email !== user.email) {
+    //   const currentUser = getAuth().currentUser;
+    //   if (currentUser) {
+    //     try {
+    //       await updateEmail(currentUser, "user@example.com");
+    //     } catch (error) {
+    //       console.error(error);
+    //       return;
+    //     }
+    //   }
+    // }
 
     const formData = new FormData();
     formData.append('id', user.id);
@@ -102,6 +105,7 @@ export default function UserPage() {
       .then((res) => {
         setUser(res.data);
         setIsEditing(false);
+        router.push('/user');
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -113,15 +117,22 @@ export default function UserPage() {
       {isEditting ? (
         <form onSubmit={handleSubmit}>
           <Stack alignItems='center' rowGap='1rem'>
-            <ImageHelper
-              src={tempImageSrc}
-              placeholderSrc={FALLBACK_IMAGE}
-              width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
-              alt='avatar'
-              key={user?.id}
-            />
-
-            <input type='file' accept='image/*' onChange={onFileInputChange} />
+            <Box>
+              <InputLabel htmlFor='avatar'>
+                <ImageHelper
+                  src={tempImageSrc}
+                  placeholderSrc={FALLBACK_IMAGE}
+                  width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
+                  alt='avatar'
+                  key={user?.id}
+                />
+              </InputLabel>
+              <input
+                id='avatar' type='file' accept='image/*'
+                onChange={onFileInputChange}
+                style={{ display: 'none' }}
+              />
+            </Box>
 
             <FormControl required fullWidth>
               <TextField type='text' label='Name' value={name} onChange={(event) => setName(event.target.value)} required />
