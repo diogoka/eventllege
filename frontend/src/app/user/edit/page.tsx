@@ -1,12 +1,13 @@
 'use client'
 import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack, Button, FormControl, TextField, InputLabel, Box } from '@mui/material';
+import { useTheme, Stack, Button, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem } from '@mui/material';
 import { UserContext } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
+import { FaCirclePlus } from 'react-icons/fa6';
 // import {
 //   getAuth,
 //   updateEmail
@@ -22,6 +23,8 @@ type Course = {
 
 export default function UserEditPage() {
   const router = useRouter();
+
+  const theme = useTheme();
 
   const { user, setUser } = useContext(UserContext);
 
@@ -113,14 +116,40 @@ export default function UserEditPage() {
       <form onSubmit={handleSubmit}>
         <Stack alignItems='center' rowGap='1rem'>
           <Box>
-            <InputLabel htmlFor='avatar'>
+            <InputLabel
+              htmlFor='avatar'
+              style={{
+                position: 'relative',
+                // backgroundColor: 'black'
+              }}
+            >
               <ImageHelper
                 src={tempImageSrc}
                 placeholderSrc={FALLBACK_IMAGE}
-                width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
+                width='7.5rem' height='7.5rem'
+                style={{ borderRadius: '50%' }}
                 alt='avatar'
                 key={user?.id}
               />
+
+              <Box
+                bgcolor='white'
+                width='2rem'
+                height='2rem'
+                sx={{
+                  position: 'absolute',
+                  inset: '80% 0 0 80%',
+                  transform: 'translate(-50%, -50%)',
+                  borderRadius: '50%',
+                }}>
+                <FaCirclePlus
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    color: theme.palette.primary.main,
+                  }}
+                />
+              </Box>
             </InputLabel>
             <input
               id='avatar' type='file' accept='image/*'
