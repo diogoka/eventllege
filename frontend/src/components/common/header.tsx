@@ -35,7 +35,7 @@ export default function Header() {
             variant='contained'
             color='primary'
             startIcon={<LoginIcon />}
-            sx={{ width: '6.25rem' }}
+            sx={{ width: '6.25rem', borderRadius: '5px' }}
           >
             Log in
           </Button>

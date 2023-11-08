@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ListItemButton, ListItemText } from '@mui/material';
 
-export default function ListItem() {
+export default function UsersListItem() {
   const router = useRouter();
   return (
     <div>
