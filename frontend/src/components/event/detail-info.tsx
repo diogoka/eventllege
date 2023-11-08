@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import DetailInfoRow from './detail-info-row';
 import { Attendee } from '@/app/events/[id]/page';
-import AttendeesRow from './attendees-row';
+import AttendeesRow from './attendees/attendees-row';
 
 type Props = {
   price: number;
