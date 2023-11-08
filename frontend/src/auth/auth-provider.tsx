@@ -139,6 +139,7 @@ const studentPages = [
   /^\/user\/edit$/,
   /^\/tickets$/,
   /^\/history$/,
+  /^\/user\/my-events$/,
 ];
 
 function isLoggedOutUserPage(pathname: string): boolean {
