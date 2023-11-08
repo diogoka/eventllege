@@ -96,25 +96,17 @@ export default function EventPage() {
         <b>Location: </b>
         {event?.location_event}
       </div>
-      <div>
-        <b>Capacity: </b>
-        {event?.capacity_event}
-      </div>
-      <div>
-        <b>Price: </b>
-        {event?.price_event}
-      </div>
-      <div>
-        <b>Category: </b>
-        {event?.category_event}
-      </div>
 
-      <div>
-        <b>Tags: </b>
-        {event?.tags.map((tag: string, key: number) => {
-          return <span key={key}>{tag}, </span>;
-        })}
-      </div>
+      {event &&
+        <DetailInfo
+          price={event.price_event}
+          maxSpots={event.capacity_event}
+          attendees={event.attendees}
+          tags={event.tags}
+          category={event.category_event}
+        />
+      }
+
       <div>
         {event?.id_event ? (
           <button onClick={() => editEventHandler(event.id_event)}>Edit</button>
@@ -129,16 +121,6 @@ export default function EventPage() {
           <div>Id is not found</div>
         )}
       </div>
-
-      {event &&
-        <DetailInfo
-          price={event.price_event}
-          maxSpots={event.capacity_event}
-          attendees={event.attendees}
-          tags={event.tags}
-          category={event.category_event}
-        />
-      }
     </div>
   );
 }
