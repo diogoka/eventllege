@@ -1,9 +1,13 @@
 'use client'
 import { useState, useContext } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack, Typography, Button, Chip } from '@mui/material';
+import { Stack, Typography, Button, Chip, Box } from '@mui/material';
 import { UserContext } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { HiMail } from 'react-icons/hi';
+import { IoIosSchool } from 'react-icons/io';
+import UserInfoItem from '@/components/user/user-info-item';
 
 const FALLBACK_IMAGE = '/default_avatar.svg';
 
@@ -16,7 +20,7 @@ export default function UserPage() {
   return (
     <Stack width='100%' paddingBlock='4rem'>
 
-      <Stack alignItems='center' rowGap='.5rem'>
+      <Stack alignItems='center' rowGap='1rem'>
         <ImageHelper
           src={`http://localhost:3001/img/users/${user?.id}`}
           placeholderSrc={FALLBACK_IMAGE}
@@ -35,11 +39,11 @@ export default function UserPage() {
             }}
           />
         }
-        <Typography>{user?.name}</Typography>
-        <Typography>{user?.email}</Typography>
-        <Typography>{user?.courseName}</Typography>
-        <Typography>{user?.postalCode}</Typography>
-        <Typography>{user?.phone}</Typography>
+
+
+        <UserInfoItem icon={<BsFillPersonFill />} value={user!.name} />
+        <UserInfoItem icon={<HiMail />} value={user!.courseName} />
+        <UserInfoItem icon={<IoIosSchool />} value={user!.name} />
 
         <Button
           variant='contained'
