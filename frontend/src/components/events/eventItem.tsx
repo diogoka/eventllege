@@ -9,6 +9,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ImageHelper from '@/components/common/image-helper';
 
+const FALLBACK_IMAGE = '/event_placeholder.png';
 
 type Props = {
     event: Event;
@@ -42,7 +43,7 @@ function EventItem({ event, tags }: Props) {
 
 
     const onIconClickFunction = (iconName: string) => {
-        if (iconName === 'FaShareSquare'){
+        if (iconName === 'FaShareSquare') {
             copyToClipboard(textAreaRef.current);
         }
     }
@@ -54,22 +55,22 @@ function EventItem({ event, tags }: Props) {
     const handleAlertClose = () => {
         setIsAlertVisible(false);
     };
-    
+
     const BoxStyle = {
-    display: 'grid',
-    gridTemplateRows: '2.5rem 2.3rem 2rem',
-    gridTemplateAreas: `
+        display: 'grid',
+        gridTemplateRows: '2.5rem 2.3rem 2rem',
+        gridTemplateAreas: `
         "title picture"
         "date picture"
         "description icons"
     `,
-    columnGap: '1rem',
-    height: '7.5rem',
-    alignContent: 'center',
-    borderTop: '1px solid #E0E0E0',
-    cursor: 'pointer',
-    marginTop: '0',
-    width: '100%'
+        columnGap: '1rem',
+        height: '7.5rem',
+        alignContent: 'center',
+        borderTop: '1px solid #E0E0E0',
+        cursor: 'pointer',
+        marginTop: '0',
+        width: '100%'
     };
 
     const titleStyle = {
@@ -79,24 +80,24 @@ function EventItem({ event, tags }: Props) {
     }
 
     const dateContainerStyle = {
-        gridArea : 'date',
+        gridArea: 'date',
     }
 
     const dayMonthStyle = {
-        display: 'flex', 
-        justifyContent: 'flex-start', 
+        display: 'flex',
+        justifyContent: 'flex-start',
         alignItems: 'center'
     }
 
     const timeStyle = {
-        fontSize: 11, 
-        color:'#3874CB'
+        fontSize: 11,
+        color: '#3874CB'
     }
 
     const descriptionStyle = {
         fontSize: 10,
         gridArea: 'description',
-        textAlign:'justify'
+        textAlign: 'justify'
     }
 
     const imageContainerStyle = {
@@ -117,14 +118,14 @@ function EventItem({ event, tags }: Props) {
         <Box onClick={handleCardClick} sx={BoxStyle}>
             <Typography sx={titleStyle}>
                 {event.name_event.length > 15 ? `${event.name_event.slice(0, 18)}...` : event.name_event}
-                
+
             </Typography>
-            <Box sx={dateContainerStyle}>  
+            <Box sx={dateContainerStyle}>
                 <Box sx={dayMonthStyle}>
-                    <AiFillClockCircle style={{fontSize: 12}}/>
-                    <Typography sx={{fontSize: 12}}>
+                    <AiFillClockCircle style={{ fontSize: 12 }} />
+                    <Typography sx={{ fontSize: 12 }}>
                         {weekDay}, {monthAndDay}
-                        </Typography>
+                    </Typography>
                 </Box>
                 <Box>
                     <Typography sx={timeStyle}>
@@ -136,13 +137,18 @@ function EventItem({ event, tags }: Props) {
             <Typography sx={descriptionStyle}>
                 {event.description_event.length > 50 ? `${event.description_event.slice(0, 50)}...` : event.description_event}
             </Typography>
-            <ImageHelper src={`http://localhost:3001/img/events/${event.id_event}`} width='6.25rem' height='4.0625rem' style={imageContainerStyle} alt={event.name_event} />
+            <ImageHelper
+                src={`http://localhost:3001/img/events/${event.id_event}`}
+                placeholderSrc={FALLBACK_IMAGE}
+                width='6.25rem' height='4.0625rem' style={imageContainerStyle}
+                alt={event.name_event}
+            />
             <Box sx={iconContainerStyle}>
-                 <IconsContainer icons={[
+                <IconsContainer icons={[
                     { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
                     { name: 'FaShareSquare', isClickable: true, color: '#333333' },
-                    ]} onIconClick={onIconClickFunction}
-                    />
+                ]} onIconClick={onIconClickFunction}
+                />
             </Box>
             {isAlertVisible && (
                 <Alert
