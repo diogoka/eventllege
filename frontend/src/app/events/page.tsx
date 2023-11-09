@@ -43,12 +43,14 @@ export default function EventsPage() {
     role: user!.role,
   }
 
+  console.log(currentUser.id);
+
   useEffect(() => {
     axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
     });
-  }, []);
+  },[]);
 
   const searchEvents = (text: string) => {
     axios.get('http://localhost:3001/api/events/search/?text=' + text).then((res) => {
@@ -79,7 +81,7 @@ export default function EventsPage() {
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList events={events} tags={tags} user={currentUser}></EventList>
+      <EventList events={events} setEvents={setEvents} tags={tags} user={currentUser}></EventList>
     </Box>
 
   )

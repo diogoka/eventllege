@@ -8,13 +8,14 @@ import { useState } from 'react';
 type Props = {
   events: Event[];
   tags: Tag[];
+  setEvents: (events: Event[]) => void;
   user: {
     id: string;
     role: string;
   };
 };
 
-function EventList({ events, tags, user }: Props) {
+function EventList({ events, tags, user, setEvents}: Props) {
   const eventsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -26,11 +27,16 @@ function EventList({ events, tags, user }: Props) {
     setCurrentPage(page);
   };
 
+  const deleteEvent = async (id: number) => {
+    const newEvents = await events.filter((event) => event.id_event !== id);
+    setEvents(newEvents)
+  }
+
   return (
     <Stack spacing={2} sx={{alignItems: 'center', marginTop: '0', width: '100%'}}>
       {currentEvents.map((event, index) => {
         const eventTags = tags.filter((tag) => tag.id_event === event.id_event);
-        return <EventItem event={event} key={index} tags={eventTags} user={user}/>;
+        return <EventItem event={event} key={index} tags={eventTags} user={user} deleteEvent={deleteEvent}/>;
       })}
       <Pagination
         count={Math.ceil(events.length / eventsPerPage)}

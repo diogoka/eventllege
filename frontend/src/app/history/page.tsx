@@ -82,7 +82,7 @@ export default function PastEvent() {
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList events={events} tags={tags} user={currentUser}></EventList>
+      <EventList events={events} tags={tags} user={currentUser} setEvents={setEvents}></EventList>
     </Box>
   )
 }

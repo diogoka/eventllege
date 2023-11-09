@@ -8,26 +8,22 @@ import { useState, useRef } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ImageHelper from '@/components/common/image-helper';
+import ModalDelete from './modalDelete';
 
 const FALLBACK_IMAGE = '/event_placeholder.png';
 
 type Props = {
     event: Event;
     tags: Tag[];
+    deleteEvent: (id: number) => void;
     user: {
         id: string;
         role: string;
     };
 };
 
-//FaEdit
-//FaTrashCan
 
-
-function EventItem({ event, tags, user }: Props) {
-
-    console.log("eventItem", user)
-    console.log("eventItem", event)
+function EventItem({ event, tags, user, deleteEvent }: Props) {
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -36,9 +32,15 @@ function EventItem({ event, tags, user }: Props) {
     const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', { month: 'short', day: 'numeric' });
     const eventId = event?.id_event;
     const [isAlertVisible, setIsAlertVisible] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const organizer = user.role === 'organizer' ? true : false;
-    const owner = user.id === event.id_owner ? true : false;
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -61,15 +63,16 @@ function EventItem({ event, tags, user }: Props) {
     }
 
     const handleOrganizerClick = (iconName: string) => {
-        if(iconName === 'FaEdit') {
+        if (iconName === 'FaEdit') {
             router.push(`/events/${eventId}/edit`);
         } else if (iconName === 'FaTrashAlt') {
-            alert('Are you sure you want to delete this event?');
-            // router.push(`/events/${eventId}/delete`);
+            console.log('delete event');
+            openModal();
         }
     }
 
     const handleCardClick = () => {
+        console.log('card clicked');
         router.push(`/events/${eventId}`);
     }
 
@@ -136,7 +139,7 @@ function EventItem({ event, tags, user }: Props) {
 
     let iconsComponent;
 
-    if (organizer && owner) {
+    if (user.role === 'organizer' && user.id === event.id_owner) {
         iconsComponent = (
             <IconsContainer
                 icons={[
@@ -201,6 +204,7 @@ function EventItem({ event, tags, user }: Props) {
                     The event URL has been copied to your clipboard.
                 </Alert>
             )}
+            <ModalDelete eventId={eventId} isOpen={isModalOpen} onClose={closeModal} deleteEvent={deleteEvent} />
 
         </Box>
 
