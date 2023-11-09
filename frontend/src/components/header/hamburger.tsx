@@ -4,7 +4,7 @@ import { UserContext } from '@/context/userContext';
 import UsersListItem from './usersListItem';
 import LogoutBtn from './logoutBtn';
 import OrganizerListItem from './organizerListItem';
-import { Box, IconButton, List } from '@mui/material';
+import { Box, IconButton, List, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
@@ -29,16 +29,16 @@ export default function Hamburger({ toggleMenu }: Props) {
         }}
       >
         {user?.role === 'student' ? (
-          <Box>
-            <UsersListItem />
+          <Stack direction='column' justifyContent='space-between' alignItems='center'>
+            <UsersListItem toggleMenu={toggleMenu} />
             <LogoutBtn />
-          </Box>
+          </Stack>
         ) : (
-          <Box>
-            <UsersListItem />
+          <Stack direction='column' justifyContent='space-between' alignItems='center'>
+            <UsersListItem toggleMenu={toggleMenu} />
             <OrganizerListItem />
             <LogoutBtn />
-          </Box>
+          </Stack>
         )}
       </List>
     </Box>

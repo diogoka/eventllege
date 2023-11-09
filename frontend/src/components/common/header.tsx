@@ -19,6 +19,7 @@ export default function Header() {
           direction='row'
           justifyContent='space-between'
           sx={{ width: '375px', height: '50px', m: '3.125rem auto 0' }}
+          component={'header'}
         >
           <Logo />
           <AvatarIcon />
