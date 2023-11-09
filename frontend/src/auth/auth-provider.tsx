@@ -113,7 +113,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
 const loggedOutUserPages = [/^\/$/, /^\/events$/, /^\/events\/\d+$/, /^\/signup$/, /^\/login$/];
 
-const studentPages = [/^\/user$/, /^\/tickets$/, /^\/history$/];
+const studentPages = [/^\/user$/, /^\/user\/edit$/, /^\/tickets$/, /^\/history$/, /^\/user\/my-events$/];
 
 function isLoggedOutUserPage(pathname: string): boolean {
   return loggedOutUserPages.some((loggedOutUserPage) => {

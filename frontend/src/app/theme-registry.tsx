@@ -65,7 +65,7 @@ let theme = createTheme({
     },
     info: {
       light: '#accbf6',
-      main: alpha('#3875CB', .1),
+      main: '#3874CB',
       dark: '#1053b1',
       contrastText: '#fff',
     },
