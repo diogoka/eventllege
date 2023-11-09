@@ -27,6 +27,11 @@ type Tag = {
   name_tag: string
 }
 
+type CurrentUser = {
+  id: string;
+  role: string;
+}
+
 export default function OrganizerEventsPage() {
 
 
@@ -35,14 +40,17 @@ export default function OrganizerEventsPage() {
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [alertOpen, setAlertOpen] = useState(false);
 
-  const userId = user!.id;
+
+
+  const currentUser: CurrentUser = {
+    id: user!.id,
+    role: user!.role,
+  }
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/events/owner/${userId}`)
+      .get(`http://localhost:3001/api/events/owner/${currentUser.id}`)
       .then((res) => {
-        console.log('id', userId)
-        console.log("owner", res.data);
         setEvents(res.data.events);
         setTags(res.data.tags);
       })
@@ -51,9 +59,9 @@ export default function OrganizerEventsPage() {
       })
   }, []);
 
-      const searchEvents = (text: string) => {
-        console.log(text);
-    }
+  const searchEvents = (text: string) => {
+    console.log(text);
+  }
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
@@ -68,7 +76,7 @@ export default function OrganizerEventsPage() {
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList events={events} tags={tags}></EventList>
+      <EventList events={events} tags={tags} user={currentUser}></EventList>
     </Box>
   )
 

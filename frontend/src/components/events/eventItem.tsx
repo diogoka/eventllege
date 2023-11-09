@@ -14,10 +14,20 @@ const FALLBACK_IMAGE = '/event_placeholder.png';
 type Props = {
     event: Event;
     tags: Tag[];
+    user: {
+        id: string;
+        role: string;
+    };
 };
 
+//FaEdit
+//FaTrashCan
 
-function EventItem({ event, tags }: Props) {
+
+function EventItem({ event, tags, user }: Props) {
+
+    console.log("eventItem", user)
+    console.log("eventItem", event)
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -25,8 +35,10 @@ function EventItem({ event, tags }: Props) {
     const endTime = new Date(event.date_event_end).toLocaleString('en-us', { hour: 'numeric', minute: 'numeric', hour12: true });
     const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', { month: 'short', day: 'numeric' });
     const eventId = event?.id_event;
-    const textAreaRef = useRef(`http://localhost:3000/events/${eventId}`);
     const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+    const organizer = user.role === 'organizer' ? true : false;
+    const owner = user.id === event.id_owner ? true : false;
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -42,13 +54,22 @@ function EventItem({ event, tags }: Props) {
     };
 
 
-    const onIconClickFunction = (iconName: string) => {
+    const handleUserClick = (iconName: string) => {
         if (iconName === 'FaShareSquare') {
-            copyToClipboard(textAreaRef.current);
+            copyToClipboard(`http://localhost:3000/events/${eventId}`);
         }
     }
 
-    const handleCardClick = () => {        
+    const handleOrganizerClick = (iconName: string) => {
+        if(iconName === 'FaEdit') {
+            router.push(`/events/${eventId}/edit`);
+        } else if (iconName === 'FaTrashAlt') {
+            alert('Are you sure you want to delete this event?');
+            // router.push(`/events/${eventId}/delete`);
+        }
+    }
+
+    const handleCardClick = () => {
         router.push(`/events/${eventId}`);
     }
 
@@ -113,6 +134,30 @@ function EventItem({ event, tags }: Props) {
         width: '100%',
     }
 
+    let iconsComponent;
+
+    if (organizer && owner) {
+        iconsComponent = (
+            <IconsContainer
+                icons={[
+                    { name: 'FaEdit', isClickable: true, color: '#3874CB' },
+                    { name: 'FaTrashAlt', isClickable: true, color: '#D00000' },
+                ]}
+                onIconClick={handleOrganizerClick}
+            />
+        );
+    } else {
+        iconsComponent = (
+            <IconsContainer
+                icons={[
+                    { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
+                    { name: 'FaShareSquare', isClickable: true, color: '#333333' },
+                ]}
+                onIconClick={handleUserClick}
+            />
+        );
+    }
+
     return (
 
         <Box onClick={handleCardClick} sx={BoxStyle}>
@@ -144,11 +189,7 @@ function EventItem({ event, tags }: Props) {
                 alt={event.name_event}
             />
             <Box sx={iconContainerStyle}>
-                <IconsContainer icons={[
-                    { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
-                    { name: 'FaShareSquare', isClickable: true, color: '#333333' },
-                ]} onIconClick={onIconClickFunction}
-                />
+                {iconsComponent}
             </Box>
             {isAlertVisible && (
                 <Alert

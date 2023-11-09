@@ -8,9 +8,13 @@ import { useState } from 'react';
 type Props = {
   events: Event[];
   tags: Tag[];
+  user: {
+    id: string;
+    role: string;
+  };
 };
 
-function EventList({ events, tags }: Props) {
+function EventList({ events, tags, user }: Props) {
   const eventsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -26,7 +30,7 @@ function EventList({ events, tags }: Props) {
     <Stack spacing={2} sx={{alignItems: 'center', marginTop: '0', width: '100%'}}>
       {currentEvents.map((event, index) => {
         const eventTags = tags.filter((tag) => tag.id_event === event.id_event);
-        return <EventItem event={event} key={index} tags={eventTags} />;
+        return <EventItem event={event} key={index} tags={eventTags} user={user}/>;
       })}
       <Pagination
         count={Math.ceil(events.length / eventsPerPage)}
