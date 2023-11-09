@@ -4,8 +4,9 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 import { UserContext, LoginStatus } from '@/context/userContext';
 
 export default function AuthProvider({
@@ -57,11 +58,11 @@ export default function AuthProvider({
   }, []);
 
 
-  type Permisson = {
+  type Permission = {
     isAllowed: boolean;
     redirection: string;
   }
-  const isAllowedPage = (): Permisson => {
+  const isAllowedPage = (): Permission => {
 
     // Wait until the login status is confirmed
     if (loginStatus === LoginStatus.Unknown) {
@@ -108,7 +109,7 @@ export default function AuthProvider({
 
   // When the user switches the page, check the page restriction
   useEffect(() => {
-    const result: Permisson = isAllowedPage();
+    const result: Permission = isAllowedPage();
     if (!result.isAllowed && result.redirection) {
       router.replace(result.redirection);
     }
@@ -118,10 +119,11 @@ export default function AuthProvider({
     <>
       <Header />
       {(isAllowedPage().isAllowed) && (
-        <Container sx={{ paddingInline: '40px' }}>
+        <Box component='main' minHeight='100vh' paddingInline='40px'>
           {children}
-        </Container>
+        </Box>
       )}
+      <Footer />
     </>
   )
 }
