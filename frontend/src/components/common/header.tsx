@@ -18,7 +18,7 @@ export default function Header() {
         <Stack
           direction='row'
           justifyContent='space-between'
-          sx={{ width: '375px', height: '50px', bgcolor: 'gray', m: '3.125rem auto 0' }}
+          sx={{ width: '375px', height: '50px', m: '3.125rem auto 0' }}
         >
           <Logo />
           <AvatarIcon />

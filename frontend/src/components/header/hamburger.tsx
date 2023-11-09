@@ -1,8 +1,10 @@
 import React from 'react';
+import { useContext } from 'react';
+import { UserContext } from '@/context/userContext';
 import UsersListItem from './usersListItem';
 import LogoutBtn from './logoutBtn';
 import OrganizerListItem from './organizerListItem';
-import { Box, IconButton, List, Button } from '@mui/material';
+import { Box, IconButton, List } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
 };
 
 export default function Hamburger({ toggleMenu }: Props) {
+  const { user } = useContext(UserContext);
   return (
     <Box sx={{ width: '375px', position: 'relative' }}>
       <IconButton
@@ -25,9 +28,18 @@ export default function Hamburger({ toggleMenu }: Props) {
           bgcolor: 'green',
         }}
       >
-        <UsersListItem />
-        <OrganizerListItem />
-        <LogoutBtn />
+        {user?.role === 'student' ? (
+          <Box>
+            <UsersListItem />
+            <LogoutBtn />
+          </Box>
+        ) : (
+          <Box>
+            <UsersListItem />
+            <OrganizerListItem />
+            <LogoutBtn />
+          </Box>
+        )}
       </List>
     </Box>
   );
