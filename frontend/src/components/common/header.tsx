@@ -14,23 +14,16 @@ export default function Header() {
 
   return (
     <>
-      {user ? (
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          sx={{ width: '375px', height: '50px', m: '3.125rem auto 0' }}
-          component={'header'}
-        >
-          <Logo />
+      <Stack
+        direction='row'
+        justifyContent='space-between'
+        sx={{ width: '375px', height: '50px', m: '0 auto' }}
+        component={'header'}
+      >
+        <Logo />
+        {user ? (
           <AvatarIcon />
-        </Stack>
-      ) : (
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          sx={{ width: '90%', height: '3.125rem', m: '3.125rem auto 0' }}
-        >
-          <Logo />
+        ) : (
           <Button
             onClick={() => router.push('/login')}
             variant='contained'
@@ -40,8 +33,8 @@ export default function Header() {
           >
             Log in
           </Button>
-        </Stack>
-      )}
+        )}
+      </Stack>
     </>
   );
 }
