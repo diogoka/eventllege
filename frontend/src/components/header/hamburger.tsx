@@ -22,12 +22,11 @@ export default function Hamburger({ toggleMenu }: Props) {
         sx={{
           width: '80%',
           m: '3.125rem auto',
-          bgcolor: 'green',
         }}
       >
         <Stack direction='column' justifyContent='space-between' alignItems='center'>
           <UsersListItem toggleMenu={toggleMenu} />
-          {user?.role === 'organizer' ? <OrganizerListItem /> : <></>}
+          {user?.role === 'organizer' ? <OrganizerListItem toggleMenu={toggleMenu} /> : <></>}
           <LogoutBtn />
         </Stack>
       </List>

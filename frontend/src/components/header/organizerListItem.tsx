@@ -1,49 +1,39 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ListItemButton, ListItemText } from '@mui/material';
+import { Button } from '@mui/material';
 
-export default function OrganizerListItem() {
+type Props = {
+  toggleMenu: (isMenuOpen: boolean) => void;
+};
+
+const OrganizerBtns = [
+  { label: 'Created Event', path: '/organizer-events' },
+  { label: 'Create Event', path: '/events/new' },
+];
+
+export default function OrganizerListItem({ toggleMenu }: Props) {
   const router = useRouter();
+
+  const clickHandler = (path: string) => {
+    router.push(path);
+    toggleMenu(false);
+  };
   return (
-    <div>
-      <ListItemButton
-        onClick={() => router.push('/organizer-events')}
-        sx={{
-          width: '80%',
-          height: '3.125rem',
-          border: '1px solid black',
-          margin: '0 auto 1.25rem',
-          borderRadius: '5px',
-        }}
-      >
-        <ListItemText
-          primary='Created Event'
-          primaryTypographyProps={{
-            variant: 'body1',
-            fontSize: '1.125rem',
+    <>
+      {OrganizerBtns.map((button, index) => (
+        <Button
+          key={index}
+          onClick={() => clickHandler(button.path)}
+          variant='outlined'
+          color='primary'
+          sx={{
+            width: '100%',
+            m: '0 auto 1.25rem',
           }}
-          sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}
-        />
-      </ListItemButton>
-      <ListItemButton
-        onClick={() => router.push('/events/new')}
-        sx={{
-          width: '80%',
-          height: '3.125rem',
-          border: '1px solid black',
-          margin: '0 auto 1.25rem',
-          borderRadius: '5px',
-        }}
-      >
-        <ListItemText
-          primary='Create Event'
-          primaryTypographyProps={{
-            variant: 'body1',
-            fontSize: '1.125rem',
-          }}
-          sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}
-        />
-      </ListItemButton>
-    </div>
+        >
+          {button.label}
+        </Button>
+      ))}
+    </>
   );
 }

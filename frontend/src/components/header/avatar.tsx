@@ -12,10 +12,9 @@ export default function AvatarIcon() {
   const toggleMenu = (isMenuOpen: boolean) => {
     setMenuOpen(isMenuOpen);
   };
-  console.log(user?.name);
 
   return (
-    <Box sx={{ bgcolor: 'red', position: 'relative', right: '0.8125rem' }}>
+    <Box sx={{ position: 'relative', right: '0.8125rem' }}>
       <IconButton edge='start' onClick={() => toggleMenu(true)} sx={{ m: 0 }}>
         <Avatar alt={user?.name} src={`http://localhost:3001/img/users/${user?.id}`}></Avatar>
       </IconButton>

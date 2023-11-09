@@ -6,7 +6,7 @@ type Props = {
   toggleMenu: (isMenuOpen: boolean) => void;
 };
 
-const buttons = [
+const UsersBtns = [
   { label: 'Home', path: '/' },
   { label: 'My events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
@@ -23,7 +23,7 @@ export default function UsersListItem({ toggleMenu }: Props) {
 
   return (
     <>
-      {buttons.map((button, index) => (
+      {UsersBtns.map((button, index) => (
         <Button
           key={index}
           onClick={() => clickHandler(button.path)}
