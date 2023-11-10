@@ -22,7 +22,7 @@ export default function UserPage() {
       <Stack alignItems='center' rowGap='1rem'>
 
         <Avatar
-          src={`http://localhost:3001/img/users/${user?.id}`}
+          src={`http://localhost:3001/img/users/${user?.id}?${new Date().getTime()}`}
           alt={user?.name}
           sx={{
             width: '7.5rem',
