@@ -1,18 +1,20 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
-export default function TitleContainer() {
+export default function DescriptionContainer() {
   return (
     <>
       <TextField
         id='outlined-basic'
-        label='title'
+        label='description'
         variant='outlined'
-        placeholder='Please enter title'
+        placeholder='Please enter description'
         fullWidth
-        size='small'
         color='secondary'
-        type='text'
+        type='textarea'
+        multiline
+        rows={5}
+        maxRows={5}
       />
     </>
   );
