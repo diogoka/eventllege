@@ -1,9 +1,12 @@
-'use client'
-import { useState, useEffect } from 'react'
-import axios from 'axios';
+'use client';
+import { useEffect, useState, useContext } from 'react'
+import { Box } from '@mui/material'
+import Alert from '@mui/material/Alert';
+import axios from 'axios'
+import EventList from '@/components/events/eventList'
+import SearchBar from '@/components/searchBar';
+import { UserContext } from '@/context/userContext';
 
-// For now, display info of the user whose ID is A
-// Use ID of the logged-in user later
 
 type Event = {
   id_event: number,
@@ -24,18 +27,29 @@ type Tag = {
   name_tag: string
 }
 
+type CurrentUser = {
+  id: string;
+  role: string;
+}
+
 export default function OrganizerEventsPage() {
 
-  const [events, setEvents] = useState<Array<Event>>();
-  const [tags, setTags] = useState<Array<Tag>>();
 
-  const SAMPLE_USER_ID = 'A';
+  const { user } = useContext(UserContext);
+  const [events, setEvents] = useState<Array<Event>>([]);
+  const [tags, setTags] = useState<Array<Tag>>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
+
+
+
+  const currentUser: CurrentUser = {
+    id: user!.id,
+    role: user!.role,
+  }
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/events/organizer-events', {
-        params: { id_organizer : SAMPLE_USER_ID }
-      })
+      .get(`http://localhost:3001/api/events/owner/${currentUser.id}`)
       .then((res) => {
         setEvents(res.data.events);
         setTags(res.data.tags);
@@ -44,39 +58,26 @@ export default function OrganizerEventsPage() {
         console.error(error.response.data);
       })
   }, []);
-  
+
+  const searchEvents = (text: string) => {
+    console.log(text);
+  }
+
   return (
-    <>
-    <h3>Organizer-Events</h3>
-
-    {events?.map((val:Event, key:number)=>{
-
-      return (
-      <div key={key} style={{border:'1px solid grey',margin: '5px'}}>
-
-        <div><b>id_event:</b>{val.id_event}</div>
-        <div><b>id_owner:</b>{val.id_owner}</div>
-        <div><b>name_event:</b>{val.name_event}</div>
-        <div><b>description_event:</b>{val.description_event}</div>
-        <div><b>date_event_start:</b>{val.date_event_start}</div>
-        <div><b>date_event_end:</b>{val.date_event_end}</div>
-        <div><b>location_event:</b>{val.location_event}</div>
-        <div><b>capacity_event:</b>{val.capacity_event}</div>
-        <div><b>price_event:</b>{val.price_event}</div>
-        <div><b>category_event:</b>{val.category_event}</div>
-        <div><b>image_event:</b>{val.image_event}</div>
-        <div><b>tags:</b>
-        
-        {tags?.map((tag:Tag, key:number) => {
-          return tag.id_event==val.id_event? <span key={key}>{tag.name_tag},&nbsp;</span> : null
-          })}
-        
-        </div>
-
-      </div>)
-    })}
-    
-    </>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+      {alertOpen && (
+        <Alert
+          severity="info"
+          variant="filled"
+          onClose={() => setAlertOpen(false)}
+          sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
+        >
+          No events found
+        </Alert>
+      )}
+      <SearchBar searchEvents={searchEvents} />
+      <EventList events={events} tags={tags} user={currentUser} setEvents={setEvents}></EventList>
+    </Box>
   )
 
 }
