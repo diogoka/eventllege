@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useTheme, Stack, Button, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
-import { Select, MenuItem } from '@mui/material';
+import { Select, MenuItem, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
-import ImageHelper from '@/components/common/image-helper';
 import { FaCirclePlus } from 'react-icons/fa6';
 // import {
 //   getAuth,
@@ -120,16 +119,17 @@ export default function UserEditPage() {
               htmlFor='avatar'
               style={{
                 position: 'relative',
-                // backgroundColor: 'black'
               }}
             >
-              <ImageHelper
+              
+              <Avatar
                 src={tempImageSrc}
-                placeholderSrc={FALLBACK_IMAGE}
-                width='7.5rem' height='7.5rem'
-                style={{ borderRadius: '50%' }}
-                alt='avatar'
-                key={user?.id}
+                alt={user?.name}
+                sx={{
+                  width: '7.5rem',
+                  height: '7.5rem',
+                  fontSize: '3rem'
+                }}
               />
 
               <Box

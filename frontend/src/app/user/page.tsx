@@ -1,9 +1,8 @@
 'use client'
 import { useState, useContext } from 'react'
 import { useRouter } from 'next/navigation';
-import { Stack, Typography, Button, Chip, Box } from '@mui/material';
+import { Stack, Button, Chip, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
-import ImageHelper from '@/components/common/image-helper';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { HiMail } from 'react-icons/hi';
 import { IoIosSchool } from 'react-icons/io';
@@ -21,11 +20,15 @@ export default function UserPage() {
     <Stack width='100%' paddingBlock='4rem'>
 
       <Stack alignItems='center' rowGap='1rem'>
-        <ImageHelper
+
+        <Avatar
           src={`http://localhost:3001/img/users/${user?.id}`}
-          placeholderSrc={FALLBACK_IMAGE}
-          width='7.5rem' height='7.5rem' style={{ borderRadius: '50%' }}
-          alt='avatar'
+          alt={user?.name}
+          sx={{
+            width: '7.5rem',
+            height: '7.5rem',
+            fontSize: '3rem'
+          }}
         />
 
         {user?.role !== 'student' &&
