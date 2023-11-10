@@ -4,8 +4,7 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Container } from '@mui/material';
-import Header from '@/components/header';
+import { Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -54,7 +53,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     isAllowed: boolean;
     redirection: string;
   }
-  const isAllowedPage = (): Permisson => {
+  const isAllowedPage = (): Permission => {
 
     // Wait until the login status is confirmed
     if (loginStatus === LoginStatus.Unknown) {
@@ -106,11 +105,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   return (
     <>
-      <Header />
       {(isAllowedPage().isAllowed) && (
-        <Container sx={{ paddingInline: '40px' }}>
+        <Box paddingInline='40px' paddingBlock='50px' minHeight='100vh'>
           {children}
-        </Container>
+        </Box>
       )}
     </>
   );

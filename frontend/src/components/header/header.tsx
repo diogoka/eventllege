@@ -2,9 +2,9 @@
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/userContext';
-import Logo from '../header/logo';
+import Logo from './logo';
 import { Stack, Button, Box } from '@mui/material';
-import AvatarIcon from '../header/avatar';
+import AvatarIcon from './avatar';
 import LoginIcon from '@mui/icons-material/Login';
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <Box component={'header'} sx={{ width: '375px' }}>
+    <Box component={'header'} position='fixed' width='100%' bgcolor='white' zIndex={100}>
       <Stack direction='row' justifyContent='space-between' sx={{ width: '90%', height: '50px', m: '0 auto' }}>
         <Logo />
         {user ? (

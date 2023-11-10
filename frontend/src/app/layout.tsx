@@ -4,6 +4,9 @@ import './globals.css'
 import ThemeRegistry from './theme-registry';
 import { UserContextProvider } from '@/context/userContext';
 import AuthProvider from '@/auth/auth-provider';
+import Header from '@/components/header/header';
+import Footer from '@/components/footer';
+import { Box } from '@mui/material';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,15 +24,17 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body>
+      <Box component='body' position='relative'>
         <ThemeRegistry options={{ key: 'mui' }}>
           <UserContextProvider>
+            <Header />
             <AuthProvider>
               {children}
             </AuthProvider>
+            <Footer />
           </UserContextProvider>
         </ThemeRegistry>
-      </body>
+      </Box>
     </html>
   )
 }
