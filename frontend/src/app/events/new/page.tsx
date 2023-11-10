@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
-import Stack from '@mui/material/Stack';
 import axios from 'axios';
 // import imageCompression from 'browser-image-compression';
 import useUploadImage from '@/services/imageInput';
@@ -9,6 +8,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { UserContext } from '@/context/userContext';
+import { Stack } from '@mui/material';
+
+import EventsControl from '@/components/events/newEvents/eventsControl';
 
 // const MAX_IMAGE_SIZE = 1024 * 1024 * 10; // 10MB
 
@@ -26,7 +28,6 @@ type Dates = {
   dateEnd: Dayjs | null;
 };
 export default function NewEventPage() {
-
   const { user } = useContext(UserContext);
 
   //User Input
@@ -256,6 +257,7 @@ export default function NewEventPage() {
 
         <input type='submit' value='Submit' />
       </form>
+      <EventsControl />
     </Stack>
   );
 }
