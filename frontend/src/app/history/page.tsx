@@ -37,19 +37,34 @@ export default function PastEvent() {
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>([]);
 
   const currentUser: CurrentUser = {
     id: user!.id,
     role: user!.role,
   }
 
-  useEffect(() => {
-
-    axios.get('http://localhost:3001/api/events/?past=true')
+  const getEvents = async () => {
+    await axios.get('http://localhost:3001/api/events/?past=true')
       .then((res) => {
         setEvents(res.data.events)
         setTags(res.data.tags)
       })
+    const attendingEvents: [number, boolean][] = [];
+    await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`).then((res) => {
+      res.data.events.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
+      })
+
+
+    });
+    setEventsOfUser(attendingEvents);
+
+  }
+
+  useEffect(() => {
+    getEvents();
   }, [])
 
   const searchEvents = (text: string) => {
@@ -82,7 +97,7 @@ export default function PastEvent() {
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList events={events} tags={tags} user={currentUser} setEvents={setEvents}></EventList>
+      <EventList events={events} tags={tags} user={currentUser} setEvents={setEvents} attendance={eventsOfUser}></EventList>
     </Box>
   )
 }

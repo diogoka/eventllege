@@ -17,13 +17,14 @@ type Props = {
     tags: Tag[];
     deleteEvent: (id: number) => void;
     user: {
-        id: string;
-        role: string;
+        id: string | undefined;
+        role: string | undefined;
     };
+    attending: boolean;
 };
 
 
-function EventItem({ event, tags, user, deleteEvent }: Props) {
+function EventItem({ event, tags, user, deleteEvent, attending }: Props) {
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -153,7 +154,7 @@ function EventItem({ event, tags, user, deleteEvent }: Props) {
         iconsComponent = (
             <IconsContainer
                 icons={[
-                    { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
+                    { name: 'FaCheckCircle', isClickable: false, color: attending ? 'green' : '#333333' },
                     { name: 'FaShareSquare', isClickable: true, color: '#333333' },
                 ]}
                 onIconClick={handleUserClick}
