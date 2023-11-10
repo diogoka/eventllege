@@ -14,13 +14,13 @@ export default function AvatarIcon() {
   };
 
   return (
-    <Box sx={{ position: 'relative', right: '0.8125rem' }}>
-      <IconButton edge='start' onClick={() => toggleMenu(true)} sx={{ m: 0 }}>
+    <>
+      <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
         <Avatar alt={user?.name} src={`http://localhost:3001/img/users/${user?.id}`}></Avatar>
       </IconButton>
       <Drawer anchor='right' open={isMenuOpen} onClose={() => toggleMenu(false)}>
         <Hamburger toggleMenu={toggleMenu} />
       </Drawer>
-    </Box>
+    </>
   );
 }
