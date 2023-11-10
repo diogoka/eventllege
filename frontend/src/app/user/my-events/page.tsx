@@ -28,23 +28,46 @@ type Tag = {
 };
 
 
+type CurrentUser = {
+    id: string;
+    role: string;
+}
+
+
+
 function UserEvents() {
     const { user } = useContext(UserContext);
     const [events, setEvents] = useState<Array<Event>>([]);
     const [tags, setTags] = useState<Array<Tag>>([]);
     const [alertOpen, setAlertOpen] = useState(false);
+    const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>([]);
 
-    const userId = user!.id;
+    const currentUser: CurrentUser = {
+        id: user!.id,
+        role: user!.role,
+    }
 
-    useEffect(() => {
-        axios.get(`http://localhost:3001/api/events/user/${userId}`).then((res) => {
+
+    const getEvents = async () => {
+        const attendingEvents : [number, boolean][] = [];
+        await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`).then((res) => {
             setEvents(res.data.events);
             setTags(res.data.tags);
+            res.data.events.map((event: Event) => {
+                let attendingEvent: [number, boolean] = [event.id_event, true];
+                attendingEvents.push(attendingEvent);
+            });
         });
+        setEventsOfUser(attendingEvents);
+
+    }
+
+    useEffect(() => {
+        getEvents();
     }, []);
 
     const searchEvents = (text: string) => {
-        axios.get(`http://localhost:3001/api/events/user/${userId}/?search=${text}`).then((res) => {
+        axios.get(`http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}`).then((res) => {
             setEvents(res.data.events);
             setTags(res.data.tags);
             if (res.data.events.length === 0) {
@@ -53,7 +76,7 @@ function UserEvents() {
         });
     }
 
-            
+
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
@@ -68,7 +91,7 @@ function UserEvents() {
                 </Alert>
             )}
             <SearchBar searchEvents={searchEvents} />
-            <EventList events={events} tags={tags}></EventList>
+            <EventList events={events} tags={tags} user={currentUser} setEvents={setEvents} attendance={eventsOfUser}></EventList>
         </Box>
     )
 }

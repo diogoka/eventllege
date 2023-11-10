@@ -8,16 +8,23 @@ import { useState, useRef } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ImageHelper from '@/components/common/image-helper';
+import ModalDelete from './modalDelete';
 
 const FALLBACK_IMAGE = '/event_placeholder.png';
 
 type Props = {
     event: Event;
     tags: Tag[];
+    deleteEvent: (id: number) => void;
+    user: {
+        id: string | undefined;
+        role: string | undefined;
+    };
+    attending: boolean;
 };
 
 
-function EventItem({ event, tags }: Props) {
+function EventItem({ event, tags, user, deleteEvent, attending }: Props) {
 
     const router = useRouter();
     const weekDay = new Date(event.date_event_start).toLocaleString('en-us', { weekday: 'long' });
@@ -25,8 +32,16 @@ function EventItem({ event, tags }: Props) {
     const endTime = new Date(event.date_event_end).toLocaleString('en-us', { hour: 'numeric', minute: 'numeric', hour12: true });
     const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', { month: 'short', day: 'numeric' });
     const eventId = event?.id_event;
-    const textAreaRef = useRef(`http://localhost:3000/events/${eventId}`);
     const [isAlertVisible, setIsAlertVisible] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -42,13 +57,23 @@ function EventItem({ event, tags }: Props) {
     };
 
 
-    const onIconClickFunction = (iconName: string) => {
+    const handleUserClick = (iconName: string) => {
         if (iconName === 'FaShareSquare') {
-            copyToClipboard(textAreaRef.current);
+            copyToClipboard(`http://localhost:3000/events/${eventId}`);
         }
     }
 
-    const handleCardClick = () => {        
+    const handleOrganizerClick = (iconName: string) => {
+        if (iconName === 'FaEdit') {
+            router.push(`/events/${eventId}/edit`);
+        } else if (iconName === 'FaTrashAlt') {
+            console.log('delete event');
+            openModal();
+        }
+    }
+
+    const handleCardClick = () => {
+        console.log('card clicked');
         router.push(`/events/${eventId}`);
     }
 
@@ -113,6 +138,30 @@ function EventItem({ event, tags }: Props) {
         width: '100%',
     }
 
+    let iconsComponent;
+
+    if (user.role === 'organizer' && user.id === event.id_owner) {
+        iconsComponent = (
+            <IconsContainer
+                icons={[
+                    { name: 'FaEdit', isClickable: true, color: '#3874CB' },
+                    { name: 'FaTrashAlt', isClickable: true, color: '#D00000' },
+                ]}
+                onIconClick={handleOrganizerClick}
+            />
+        );
+    } else {
+        iconsComponent = (
+            <IconsContainer
+                icons={[
+                    { name: 'FaCheckCircle', isClickable: false, color: attending ? 'green' : '#333333' },
+                    { name: 'FaShareSquare', isClickable: true, color: '#333333' },
+                ]}
+                onIconClick={handleUserClick}
+            />
+        );
+    }
+
     return (
 
         <Box onClick={handleCardClick} sx={BoxStyle}>
@@ -144,11 +193,7 @@ function EventItem({ event, tags }: Props) {
                 alt={event.name_event}
             />
             <Box sx={iconContainerStyle}>
-                <IconsContainer icons={[
-                    { name: 'FaCheckCircle', isClickable: false, color: '#333333' },
-                    { name: 'FaShareSquare', isClickable: true, color: '#333333' },
-                ]} onIconClick={onIconClickFunction}
-                />
+                {iconsComponent}
             </Box>
             {isAlertVisible && (
                 <Alert
@@ -160,6 +205,7 @@ function EventItem({ event, tags }: Props) {
                     The event URL has been copied to your clipboard.
                 </Alert>
             )}
+            <ModalDelete eventId={eventId} isOpen={isModalOpen} onClose={closeModal} deleteEvent={deleteEvent} />
 
         </Box>
 

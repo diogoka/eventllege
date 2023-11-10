@@ -44,8 +44,6 @@ export default function EventPage() {
   }, []);
 
   const deleteEvent = (id: number) => {
-    console.log('delete', id);
-
     axios
       .delete(`http://localhost:3001/api/events/${id}`, {
         data: {

@@ -8,12 +8,18 @@ import { useState } from 'react';
 type Props = {
   events: Event[];
   tags: Tag[];
+  setEvents: (events: Event[]) => void;
+  user: {
+    id: string | undefined;
+    role: string | undefined;
+  };
+  attendance: [number, boolean][];
 };
 
-function EventList({ events, tags }: Props) {
+function EventList({ events, tags, user, setEvents, attendance}: Props) {
+
   const eventsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
   const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
@@ -22,11 +28,25 @@ function EventList({ events, tags }: Props) {
     setCurrentPage(page);
   };
 
+  const deleteEvent = async (id: number) => {
+    const newEvents = await events.filter((event) => event.id_event !== id);
+    setEvents(newEvents)
+  }
+  const checkAttendance = (id: number) => {
+    for (let i = 0; i < attendance.length; i++) {
+      if (attendance[i][0] === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   return (
     <Stack spacing={2} sx={{alignItems: 'center', marginTop: '0', width: '100%'}}>
       {currentEvents.map((event, index) => {
         const eventTags = tags.filter((tag) => tag.id_event === event.id_event);
-        return <EventItem event={event} key={index} tags={eventTags} />;
+        const attending = checkAttendance(event.id_event);
+        return <EventItem event={event} key={index} tags={eventTags} user={user} deleteEvent={deleteEvent} attending={attending}/>;
       })}
       <Pagination
         count={Math.ceil(events.length / eventsPerPage)}
