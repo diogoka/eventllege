@@ -137,7 +137,6 @@ export default function LoginPage() {
           </Stack>
         </form>
 
-        <Typography align='center'>or</Typography>
         <Button
           variant='outlined'
           color='secondary'
@@ -148,6 +147,17 @@ export default function LoginPage() {
           }}
         >
           Log in with Google
+        </Button>
+
+        <Typography align='center'>or</Typography>
+
+        <Button
+          onClick={() => route.push('/signup')}
+          variant='contained'
+          color='primary'
+          fullWidth
+        >
+          Sign Up
         </Button>
 
       </Stack>

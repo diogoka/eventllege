@@ -1,30 +1,23 @@
-'use client'
-import React, { use, useContext, useEffect, useState } from 'react'
+'use client';
+import React, { use, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 import Header from '@/components/header';
-import Footer from '@/components/footer';
 import { UserContext, LoginStatus } from '@/context/userContext';
 
-export default function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
   const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
 
   useEffect(() => {
-
     initializeFirebase();
 
     getAuth().onAuthStateChanged(async (firebaseAccount) => {
-
       // Use this handler only when user accesses to our page
       if (loginStatus !== LoginStatus.Unknown) {
         return;
@@ -32,7 +25,7 @@ export default function AuthProvider({
 
       if (firebaseAccount) {
         setFirebaseAccount(firebaseAccount);
-        
+
         // Get user data from server
         axios
           .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
@@ -44,7 +37,7 @@ export default function AuthProvider({
             setUser(null);
             setLoginStatus(LoginStatus.SigningUp);
             router.replace('/signup');
-          })
+          });
       }
       // When the user logged out or doesn't have an account
       else {
@@ -57,12 +50,11 @@ export default function AuthProvider({
     });
   }, []);
 
-
   type Permission = {
     isAllowed: boolean;
     redirection: string;
   }
-  const isAllowedPage = (): Permission => {
+  const isAllowedPage = (): Permisson => {
 
     // Wait until the login status is confirmed
     if (loginStatus === LoginStatus.Unknown) {
@@ -70,7 +62,6 @@ export default function AuthProvider({
     }
     // If user is logged in
     else if (loginStatus === LoginStatus.LoggedIn) {
-
       // If this user is a student
       if (user) {
         if (user.role === 'student') {
@@ -79,9 +70,8 @@ export default function AuthProvider({
             return { isAllowed: false, redirection: '/events' };
           }
         }
-      }
-      else {
-        console.error('User is logged in but the data doesn\'t exist');
+      } else {
+        console.error("User is logged in but the data doesn't exist");
         return { isAllowed: false, redirection: '/events' };
       }
     }
@@ -104,8 +94,7 @@ export default function AuthProvider({
     }
 
     return { isAllowed: true, redirection: '' };
-  }
-
+  };
 
   // When the user switches the page, check the page restriction
   useEffect(() => {
@@ -113,36 +102,27 @@ export default function AuthProvider({
     if (!result.isAllowed && result.redirection) {
       router.replace(result.redirection);
     }
-  }, [pathname])
+  }, [pathname]);
 
   return (
     <>
       <Header />
       {(isAllowedPage().isAllowed) && (
-        <Box component='main' minHeight='100vh' paddingInline='40px'>
+        <Container sx={{ paddingInline: '40px' }}>
           {children}
-        </Box>
+        </Container>
       )}
-      <Footer />
     </>
-  )
+  );
 }
 
-const loggedOutUserPages = [
-  /^\/$/,
-  /^\/events$/,
-  /^\/events\/\d+$/,
-  /^\/signup$/,
-  /^\/login$/,
-];
+const loggedOutUserPages = [/^\/$/, /^\/events$/, /^\/events\/\d+$/, /^\/signup$/, /^\/login$/];
 
-const studentPages = [
-  /^\/user$/,
-  /^\/user\/edit$/,
-  /^\/tickets$/,
-  /^\/history$/,
-  /^\/user\/my-events$/,
-];
+const studentPages = [/^\/user$/, /^\/user\/edit$/, /^\/tickets$/, /^\/history$/, /^\/user\/my-events$/];
+
+const organizerPages = [
+  /^\/organizer-events$/,
+]
 
 function isLoggedOutUserPage(pathname: string): boolean {
   return loggedOutUserPages.some((loggedOutUserPage) => {
