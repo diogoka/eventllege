@@ -69,7 +69,7 @@ export default function EventPage() {
 
     <Stack>
       
-      <DetailContainer event={event}/>
+      <DetailContainer event={event!}/>
 
       {event &&
         <DetailInfo

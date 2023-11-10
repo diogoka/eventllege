@@ -6,11 +6,16 @@ import { BsFillCheckSquareFill } from 'react-icons/bs';
 import { BsHeart } from 'react-icons/bs';
 import { GrShare } from 'react-icons/gr';
 import { getDayName, getMonthName, getTimeString } from '../../common/functions';
+import { Event } from '../../app/events/[id]/page'
 
-const DetailContainer =( props:any )=> {
+type Props ={
+    event: Event
+}
 
-    const startDate = new Date(props.event?.date_event_start)
-    const endDate = new Date(props.event?.date_event_end)
+const DetailContainer =( {event}:Props )=> {
+
+    const startDate = new Date(event?.date_event_start)
+    const endDate = new Date(event?.date_event_end)
 
     const startDateDetail = `
     ${getDayName(startDate.getDay())}, 
@@ -32,13 +37,13 @@ const DetailContainer =( props:any )=> {
     return (
         <>
         
-        <Typography variant='h1'>{props.event?.name_event}</Typography>
+        <Typography variant='h1'>{event?.name_event}</Typography>
 
         <Box style={{ marginInline:'auto' }}>
             <ImageHelper
-            src={`http://localhost:3001/img/events/${props.event?.id_event}`}
+            src={`http://localhost:3001/img/events/${event?.id_event}`}
             width='100%'
-            alt={props.event?.name_event}
+            alt={event?.name_event}
             style={{ borderRadius:'10px', boxShadow:'0 0 4px 4px #77777777' }}
             />
         </Box>
@@ -62,14 +67,14 @@ const DetailContainer =( props:any )=> {
                 
             <Box display='flex'>
                 <FaLocationArrow style={{ color:'blue',fontSize: 12, marginTop:"5px" }}/>&nbsp;
-                <Typography>{props.event?.location_event}</Typography>
+                <Typography>{event?.location_event}</Typography>
             </Box>
 
         </Box>
 
         <Box>
             <Box style={{ fontWeight:'bold' }}>About this event:</Box>
-            {props.event?.description_event}
+            {event?.description_event}
         </Box>
 
         </>
