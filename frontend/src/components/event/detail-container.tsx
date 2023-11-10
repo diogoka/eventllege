@@ -53,17 +53,21 @@ const DetailContainer =( props:any )=> {
             </Box>
         </Box>
 
-        <Box display='flex'>
-            <AiFillClockCircle style={{ fontSize: 12, marginTop:"5px" }}/>&nbsp;
-            <Typography>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
+        <Box style={{ margin:'10px auto' }}>
+
+            <Box display='flex'>
+                <AiFillClockCircle style={{ fontSize: 12, marginTop:"5px" }}/>&nbsp;
+                <Typography>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
+            </Box>
+                
+            <Box display='flex'>
+                <FaLocationArrow style={{ color:'blue',fontSize: 12, marginTop:"5px" }}/>&nbsp;
+                <Typography>{props.event?.location_event}</Typography>
+            </Box>
+
         </Box>
-            
-        <Box display='flex'>
-            <FaLocationArrow style={{ color:'blue',fontSize: 12, marginTop:"5px" }}/>&nbsp;
-            <Typography>{props.event?.location_event}</Typography>
-        </Box>
-        
-        <Box style={{ marginTop:'10px' }}>
+
+        <Box>
             <Box style={{ fontWeight:'bold' }}>About this event:</Box>
             {props.event?.description_event}
         </Box>
