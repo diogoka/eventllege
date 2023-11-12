@@ -14,7 +14,6 @@ export default function DescriptionContainer() {
         type='textarea'
         multiline
         rows={5}
-        maxRows={5}
       />
     </>
   );
