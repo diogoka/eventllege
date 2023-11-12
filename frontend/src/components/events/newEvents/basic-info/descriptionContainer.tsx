@@ -2,6 +2,8 @@ import React from 'react';
 import { TextField } from '@mui/material';
 
 export default function DescriptionContainer() {
+  const [description, setDescription] = React.useState('');
+
   return (
     <>
       <TextField
@@ -14,6 +16,8 @@ export default function DescriptionContainer() {
         type='textarea'
         multiline
         rows={5}
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
       />
     </>
   );
