@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
+import Review from '@/components/event/review/review';
 
 export type Attendee = {
   id: string;
@@ -31,6 +32,8 @@ export default function EventPage() {
   const router = useRouter();
 
   const EVENT_ID = params.id
+
+  console.log('EVENT_ID', event);
 
   useEffect(() => {
     axios
@@ -104,6 +107,7 @@ export default function EventPage() {
           category={event.category_event}
         />
       }
+      <Review />
 
       <div>
         {event?.id_event ? (
