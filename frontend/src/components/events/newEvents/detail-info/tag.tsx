@@ -63,7 +63,10 @@ export default function Tag() {
           value={tagId}
           onChange={handleChange}
           input={<OutlinedInput label='Tag' />}
-          renderValue={(selected) => selected.join(' ,')}
+          renderValue={(selected) => {
+            const selectedNames = tags.filter((tag) => selected.includes(tag.id_tag)).map((tag) => tag.name_tag);
+            return selectedNames.join(',');
+          }}
           MenuProps={MenuProps}
         >
           {tags.map((tag) => (
