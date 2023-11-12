@@ -1,15 +1,31 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FormControl, InputLabel, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+type Category = {
+  category_course: string;
+};
+
 //corse select
 export default function Category() {
-  const [age, setAge] = useState('');
+  //user Input
+  const [category, setCategory] = useState('');
+  //categories are from server
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/api/courses/category')
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+      });
+  }, []);
+
   return (
     <>
       <FormControl fullWidth>
@@ -17,13 +33,15 @@ export default function Category() {
         <Select
           labelId='demo-simple-select-label'
           id='demo-simple-select'
-          value={age}
+          value={category}
           label='Age'
-          onChange={handleChange}
+          onChange={(event: SelectChangeEvent) => setCategory(event.target.value as string)}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {categories.map((category: Category, index: number) => (
+            <MenuItem key={index} value={category.category_course}>
+              {category.category_course}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </>
