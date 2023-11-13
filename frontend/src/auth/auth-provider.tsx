@@ -35,16 +35,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           .catch((error: any) => {
             setUser(null);
             setLoginStatus(LoginStatus.SigningUp);
-            router.replace('/signup');
           });
       }
       // When the user logged out or doesn't have an account
       else {
         setUser(null);
         setLoginStatus(LoginStatus.LoggedOut);
-        if (!isLoggedOutUserPage(pathname)) {
-          router.replace('/login');
-        }
       }
     });
   }, []);
@@ -55,8 +51,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }
   const isAllowedPage = (): Permission => {
 
+    if(is404(pathname)) {
+      return { isAllowed: true, redirection: '' };
+    } 
     // Wait until the login status is confirmed
-    if (loginStatus === LoginStatus.Unknown) {
+    else if (loginStatus === LoginStatus.Unknown) {
       return { isAllowed: false, redirection: '' };
     }
     // If user is logged in
@@ -101,7 +100,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     if (!result.isAllowed && result.redirection) {
       router.replace(result.redirection);
     }
-  }, [pathname]);
+  }, [pathname, loginStatus]);
 
   return (
     <>
@@ -114,11 +113,24 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   );
 }
 
-const loggedOutUserPages = [/^\/$/, /^\/events$/, /^\/events\/\d+$/, /^\/signup$/, /^\/login$/];
+const loggedOutUserPages = [
+  /^\/$/,
+  /^\/events$/,
+  /^\/events\/\d+$/,
+  /^\/signup$/,
+  /^\/login$/
+];
 
-const studentPages = [/^\/user$/, /^\/user\/edit$/, /^\/tickets$/, /^\/history$/, /^\/user\/my-events$/];
+const studentPages = [
+  /^\/user$/,
+  /^\/user\/edit$/,
+  /^\/tickets$/,
+  /^\/history$/,
+  /^\/user\/my-events$/
+];
 
 const organizerPages = [
+  /^\/events\/\d+\/edit$/,
   /^\/organizer-events$/,
 ]
 
@@ -131,5 +143,11 @@ function isLoggedOutUserPage(pathname: string): boolean {
 function isStudentPage(pathname: string): boolean {
   return studentPages.concat(loggedOutUserPages).some((studentPage) => {
     return studentPage.test(pathname);
+  });
+}
+
+function is404(pathname: string): boolean {
+  return !organizerPages.concat(studentPages.concat(loggedOutUserPages)).some((page) => {
+    return page.test(pathname);
   });
 }
