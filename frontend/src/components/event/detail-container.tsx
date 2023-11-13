@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import { Box, Typography, AlertTitle, Alert } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
-import { FaLocationArrow } from 'react-icons/fa6';
-import { AiFillClockCircle } from 'react-icons/ai';
-import { BsFillCheckSquareFill } from 'react-icons/bs';
-import { BsHeart } from 'react-icons/bs';
-import { GrShare } from 'react-icons/gr';
 import { getDayName, getMonthName, getTimeString } from '../../common/functions';
 import { Event } from '../../app/events/[id]/page'
+import IconsContainer from '../icons/iconsContainer';
 
 type Props = {
     event: Event,
@@ -39,19 +35,36 @@ const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
     ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
     ${endDate.getFullYear()}, ${getTimeString(endDate)}`
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(`http://localhost:3000/events/${event?.id_event}`)
-            .then(() => {
-                setIsAlertVisible(true);
-                setTimeout(() => {
-                    setIsAlertVisible(false);
-                }, 3000);
-            })
-            .catch((err) => {
-                console.error('Failed to copy URL: ', err);
-            });
+    const handleUserClick = (iconName:string) => {
+        if(iconName=='FaShareSquare'){
+
+            navigator.clipboard.writeText(`http://localhost:3000/events/${event?.id_event}`)
+                .then(() => {
+                    setIsAlertVisible(true);
+                    setTimeout(() => {
+                        setIsAlertVisible(false);
+                    }, 3000);
+                })
+                .catch((err) => {
+                    console.error('Failed to copy URL: ', err);
+                });
+
+        }else if(iconName=='FaHeart'){
+            console.log("Fav button")
+        }
+
     };
-    
+
+    const MarginTop = { marginTop: '0.5rem' }
+
+    const iconsRight = organizerEvent?
+    [{ name: 'FaShareSquare', isClickable: true, color: '#333333' }]
+    :
+    [
+        { name: 'FaHeart', isClickable: true, color: 'deeppink' },
+        { name: 'FaShareSquare', isClickable: true, color: '#333333' }
+    ]
+
     return (
         <>
         
@@ -67,28 +80,43 @@ const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
         </Box>
 
         <Box display='flex' justifyContent='space-between'>
-            <Box visibility= { applied && !organizerEvent? 'visible':'hidden' }>
-                <BsFillCheckSquareFill style={{ color:'green', fontSize: 12 }}/>&nbsp;Applied
+            <Box visibility= { applied && !organizerEvent? 'visible':'hidden' } display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaCheckSquare', isClickable: false, color: 'green' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Box sx={{ display: 'inline', marginTop: '0.5rem' }}>Applied</Box>
             </Box>
             <Box>
-                <BsHeart style={{ color:'purple', fontSize: 12 }}/>&nbsp;
-                <GrShare
-                    style={{ fontSize: 12 }}
-                    onClick={copyToClipboard}
+                <IconsContainer
+                    icons={ iconsRight }
+                    onIconClick={ handleUserClick }
                 />
             </Box>
         </Box>
 
         <Box style={{ margin:'10px auto' }}>
 
-            <Box display='flex'>
-                <AiFillClockCircle style={{ fontSize: 12, marginTop:"5px" }}/>&nbsp;
-                <Typography>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
+            <Box display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaClock', isClickable: false, color: '#333333' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Typography sx={ MarginTop }>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
             </Box>
                 
-            <Box display='flex'>
-                <FaLocationArrow style={{ color:'blue',fontSize: 12, marginTop:"5px" }}/>&nbsp;
-                <Typography>{event?.location_event}</Typography>
+            <Box display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaLocationArrow', isClickable: false, color: 'navy' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Typography sx={ MarginTop }>{event?.location_event}</Typography>
             </Box>
 
         </Box>
