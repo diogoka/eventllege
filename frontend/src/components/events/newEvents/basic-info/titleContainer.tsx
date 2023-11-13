@@ -2,6 +2,8 @@ import React from 'react';
 import { TextField } from '@mui/material';
 
 export default function TitleContainer() {
+  const [title, setTitle] = React.useState('');
+
   return (
     <>
       <TextField
@@ -13,6 +15,8 @@ export default function TitleContainer() {
         size='small'
         color='secondary'
         type='text'
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
       />
     </>
   );

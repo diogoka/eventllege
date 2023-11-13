@@ -4,6 +4,7 @@ import BasicInfo from './basic-info/basicInfo';
 import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
+import ImageContainer from '../newEvents/basic-info/imageContainer';
 
 export default function EventsControl() {
   return (
@@ -12,6 +13,7 @@ export default function EventsControl() {
       <DateList />
       <Location />
       <DetailList />
+      <ImageContainer />
     </Box>
   );
 }
