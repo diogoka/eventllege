@@ -4,11 +4,11 @@ import { Typography } from '@mui/material';
 
 const currentPages = [
   { label: 'Home', path: '/events' },
-  { label: 'Sign up', path: '/signup' },
-  { label: 'My events', path: '/user/my-events' },
+  { label: 'Sign Up', path: '/signup' },
+  { label: 'My Events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
-  { label: 'My profile', path: '/user' },
-  { label: 'Created Event', path: '/organizer-events' },
+  { label: 'My Profile', path: '/user' },
+  { label: 'Created Events', path: '/organizer-events' },
   { label: 'Create Event', path: '/events/new' },
 ];
 
