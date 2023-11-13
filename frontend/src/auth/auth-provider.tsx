@@ -4,8 +4,7 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Container } from '@mui/material';
-import Header from '@/components/common/header';
+import { Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -50,11 +49,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     });
   }, []);
 
-  type Permisson = {
+  type Permission = {
     isAllowed: boolean;
     redirection: string;
-  };
-  const isAllowedPage = (): Permisson => {
+  }
+  const isAllowedPage = (): Permission => {
+
     // Wait until the login status is confirmed
     if (loginStatus === LoginStatus.Unknown) {
       return { isAllowed: false, redirection: '' };
@@ -97,7 +97,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   // When the user switches the page, check the page restriction
   useEffect(() => {
-    const result: Permisson = isAllowedPage();
+    const result: Permission = isAllowedPage();
     if (!result.isAllowed && result.redirection) {
       router.replace(result.redirection);
     }
@@ -105,8 +105,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   return (
     <>
-      <Header />
-      {isAllowedPage().isAllowed && <Container sx={{ paddingInline: '40px' }}>{children}</Container>}
+      {(isAllowedPage().isAllowed) && (
+        <Box paddingInline='40px' paddingBlock='50px' minHeight='100vh'>
+          {children}
+        </Box>
+      )}
     </>
   );
 }
