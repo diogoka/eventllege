@@ -27,7 +27,7 @@ let theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: '18px',
-          color: '#666666'
+          color: '#666666',
         },
       },
     },
@@ -46,13 +46,14 @@ let theme = createTheme({
           padding: 0,
           borderRadius: 5,
           textTransform: 'none',
+          disableRipple: true,
         },
       },
     },
   },
   palette: {
     primary: {
-      light: alpha('#3875CB', .1),
+      light: alpha('#3875CB', 0.1),
       main: '#141D4F',
       dark: '#070F3D',
       contrastText: '#fff',
@@ -75,7 +76,7 @@ let theme = createTheme({
       dark: '#970303',
       contrastText: '#fff',
     },
-  }
+  },
 });
 
 theme.typography.h1.fontSize = '24px';
@@ -134,7 +135,7 @@ export default function ThemeRegistry(props: any) {
     <CacheProvider value={cache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <GlobalStyles styles={{ 'input': { padding: 0 } }} />
+        <GlobalStyles styles={{ input: { padding: 0 } }} />
         {children}
       </ThemeProvider>
     </CacheProvider>

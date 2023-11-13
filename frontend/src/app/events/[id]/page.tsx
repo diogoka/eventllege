@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
+import { Box, Stack, Typography } from '@mui/material';
+import DetailContainer from '@/components/event/detail-container';
 
 export type Attendee = {
   id: string;
@@ -64,36 +66,10 @@ export default function EventPage() {
     }
   };
   return (
-    <div style={{ border: '1px solid grey', margin: '5px' }}>
-      <h3>Event Detail:</h3>
-      <div>
-        <b>ID: </b>
-        {event?.id_event}
-      </div>
-      <div>
-        <b>Owner: </b>
-        {event?.id_owner}
-      </div>
-      <div>
-        <b>Name: </b>
-        {event?.name_event}
-      </div>
-      <div>
-        <b>Description: </b>
-        {event?.description_event}
-      </div>
-      <div>
-        <b>Start: </b>
-        {event?.date_event_start}
-      </div>
-      <div>
-        <b>End: </b>
-        {event?.date_event_end}
-      </div>
-      <div>
-        <b>Location: </b>
-        {event?.location_event}
-      </div>
+
+    <Stack>
+      
+      <DetailContainer event={event!}/>
 
       {event &&
         <DetailInfo
@@ -119,6 +95,7 @@ export default function EventPage() {
           <div>Id is not found</div>
         )}
       </div>
-    </div>
+
+    </Stack>
   );
 }
