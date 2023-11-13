@@ -7,7 +7,7 @@ const currentPages = [
   { label: 'Sign up', path: '/signup' },
   { label: 'History', path: '/history' },
   { label: 'My profile', path: '/user' },
-  { label: 'Created Event', path: '/organizer-events' },
+  { label: 'created Event', path: '/organizer-events' },
   { label: 'create Event', path: '/events/new' },
 ];
 
