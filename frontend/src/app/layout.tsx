@@ -23,7 +23,12 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en">
+    <html lang='en'>
+      <head>
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' />
+        <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap' rel='stylesheet' />
+      </head>
       <Box component='body' position='relative'>
         <ThemeRegistry options={{ key: 'mui' }}>
           <UserContextProvider>
