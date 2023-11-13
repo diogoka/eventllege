@@ -4,6 +4,9 @@ import './globals.css'
 import ThemeRegistry from './theme-registry';
 import { UserContextProvider } from '@/context/userContext';
 import AuthProvider from '@/auth/auth-provider';
+import Header from '@/components/header/header';
+import Footer from '@/components/footer';
+import { Box } from '@mui/material';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,16 +23,23 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en">
-      <body>
+    <html lang='en'>
+      <head>
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' />
+        <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap' rel='stylesheet' />
+      </head>
+      <Box component='body' position='relative'>
         <ThemeRegistry options={{ key: 'mui' }}>
           <UserContextProvider>
+            <Header />
             <AuthProvider>
               {children}
             </AuthProvider>
+            <Footer />
           </UserContextProvider>
         </ThemeRegistry>
-      </body>
+      </Box>
     </html>
   )
 }

@@ -4,8 +4,7 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Container } from '@mui/material';
-import Header from '@/components/common/header';
+import { Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -36,27 +35,27 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           .catch((error: any) => {
             setUser(null);
             setLoginStatus(LoginStatus.SigningUp);
-            router.replace('/signup');
           });
       }
       // When the user logged out or doesn't have an account
       else {
         setUser(null);
         setLoginStatus(LoginStatus.LoggedOut);
-        if (!isLoggedOutUserPage(pathname)) {
-          router.replace('/login');
-        }
       }
     });
   }, []);
 
-  type Permisson = {
+  type Permission = {
     isAllowed: boolean;
     redirection: string;
-  };
-  const isAllowedPage = (): Permisson => {
+  }
+  const isAllowedPage = (): Permission => {
+
+    if(is404(pathname)) {
+      return { isAllowed: true, redirection: '' };
+    } 
     // Wait until the login status is confirmed
-    if (loginStatus === LoginStatus.Unknown) {
+    else if (loginStatus === LoginStatus.Unknown) {
       return { isAllowed: false, redirection: '' };
     }
     // If user is logged in
@@ -97,25 +96,41 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   // When the user switches the page, check the page restriction
   useEffect(() => {
-    const result: Permisson = isAllowedPage();
+    const result: Permission = isAllowedPage();
     if (!result.isAllowed && result.redirection) {
       router.replace(result.redirection);
     }
-  }, [pathname]);
+  }, [pathname, loginStatus]);
 
   return (
     <>
-      <Header />
-      {isAllowedPage().isAllowed && <Container sx={{ paddingInline: '40px' }}>{children}</Container>}
+      {(isAllowedPage().isAllowed) && (
+        <Box paddingInline='40px' paddingBlock='50px' minHeight='100vh'>
+          {children}
+        </Box>
+      )}
     </>
   );
 }
 
-const loggedOutUserPages = [/^\/$/, /^\/events$/, /^\/events\/\d+$/, /^\/signup$/, /^\/login$/];
+const loggedOutUserPages = [
+  /^\/$/,
+  /^\/events$/,
+  /^\/events\/\d+$/,
+  /^\/signup$/,
+  /^\/login$/
+];
 
-const studentPages = [/^\/user$/, /^\/user\/edit$/, /^\/tickets$/, /^\/history$/, /^\/user\/my-events$/];
+const studentPages = [
+  /^\/user$/,
+  /^\/user\/edit$/,
+  /^\/tickets$/,
+  /^\/history$/,
+  /^\/user\/my-events$/
+];
 
 const organizerPages = [
+  /^\/events\/\d+\/edit$/,
   /^\/organizer-events$/,
 ]
 
@@ -128,5 +143,11 @@ function isLoggedOutUserPage(pathname: string): boolean {
 function isStudentPage(pathname: string): boolean {
   return studentPages.concat(loggedOutUserPages).some((studentPage) => {
     return studentPage.test(pathname);
+  });
+}
+
+function is404(pathname: string): boolean {
+  return !organizerPages.concat(studentPages.concat(loggedOutUserPages)).some((page) => {
+    return page.test(pathname);
   });
 }
