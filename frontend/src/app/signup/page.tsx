@@ -16,6 +16,7 @@ import {
 import { FcGoogle } from 'react-icons/fc';
 import { LoginStatus, UserContext } from '@/context/userContext';
 import { getErrorMessage } from '@/auth/errors';
+import PasswordInput from '@/components/common/password-input';
 
 import {
   getAuth,
@@ -144,10 +145,10 @@ export default function SignUpPage() {
                   <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
                 </FormControl>
                 <FormControl required>
-                  <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+                  <PasswordInput label='Password' setter={setPassword} />
                 </FormControl>
                 <FormControl required>
-                  <TextField type='password' label='Confirm Password' onChange={(event) => setConfirmPassword(event.target.value)} required />
+                  <PasswordInput label='Confirm Password' setter={setConfirmPassword} />
                 </FormControl>
                 <Typography color='error'>{alartMessage}</Typography>
               </Stack>
