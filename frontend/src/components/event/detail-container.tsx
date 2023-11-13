@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography, AlertTitle, Alert } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
 import { FaLocationArrow } from 'react-icons/fa6';
 import { AiFillClockCircle } from 'react-icons/ai';
@@ -8,11 +9,15 @@ import { GrShare } from 'react-icons/gr';
 import { getDayName, getMonthName, getTimeString } from '../../common/functions';
 import { Event } from '../../app/events/[id]/page'
 
-type Props ={
-    event: Event
+type Props = {
+    event: Event,
+    applied: boolean,
+    organizerEvent: boolean
 }
 
-const DetailContainer =( {event}:Props )=> {
+const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
+
+    const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
 
     const startDate = new Date(event?.date_event_start)
     const endDate = new Date(event?.date_event_end)
@@ -34,6 +39,19 @@ const DetailContainer =( {event}:Props )=> {
     ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
     ${endDate.getFullYear()}, ${getTimeString(endDate)}`
 
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(`http://localhost:3000/events/${event?.id_event}`)
+            .then(() => {
+                setIsAlertVisible(true);
+                setTimeout(() => {
+                    setIsAlertVisible(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error('Failed to copy URL: ', err);
+            });
+    };
+    
     return (
         <>
         
@@ -49,12 +67,15 @@ const DetailContainer =( {event}:Props )=> {
         </Box>
 
         <Box display='flex' justifyContent='space-between'>
-            <Box>
+            <Box visibility= { applied && !organizerEvent? 'visible':'hidden' }>
                 <BsFillCheckSquareFill style={{ color:'green', fontSize: 12 }}/>&nbsp;Applied
             </Box>
             <Box>
                 <BsHeart style={{ color:'purple', fontSize: 12 }}/>&nbsp;
-                <GrShare style={{ fontSize: 12 }}/>
+                <GrShare
+                    style={{ fontSize: 12 }}
+                    onClick={copyToClipboard}
+                />
             </Box>
         </Box>
 
@@ -76,6 +97,17 @@ const DetailContainer =( {event}:Props )=> {
             <Box style={{ fontWeight:'bold' }}>About this event:</Box>
             {event?.description_event}
         </Box>
+
+        {isAlertVisible && (
+            <Alert
+                severity="success"
+                onClose={()=>{ setIsAlertVisible(false) }}
+                sx={{ position: 'absolute', top: '10px', right: '10px', zIndex: 9999 }}
+            >
+                <AlertTitle>URL Copied</AlertTitle>
+                The event URL has been copied to your clipboard.
+            </Alert>
+        )}
 
         </>
     )
