@@ -30,7 +30,7 @@ export type Event = {
 
 export default function EventPage() {
 
-  const { user } = useContext(UserContext);
+  const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
   const [applied, setApplied] = useState<boolean>(false);
   const [attendees, setAttendees] = useState<Array<Attendee>>();
@@ -57,7 +57,7 @@ export default function EventPage() {
 
       })
       .catch((error) => {
-        console.error(error.response.data);
+        console.error(error.response);
       });
   }, []);
 
@@ -122,7 +122,11 @@ export default function EventPage() {
         />
       }
 
-      <Box justifyContent='space-between' sx={{ marginBlock: '25px' }} display={ organizerEvent? 'flex':'none'}>
+      <Box
+        justifyContent='space-between'
+        display={ organizerEvent && loginStatus=='Logged In'? 'flex':'none'}
+        sx={{ marginBlock: '25px' }}
+      >
 
         <Box style={{ width: '47%' }}>
           {event?.id_event ? (
@@ -153,7 +157,7 @@ export default function EventPage() {
       </Box>
 
       <Button
-        style={{ display: organizerEvent? 'none':'block' }}
+        style={{ display: !organizerEvent && loginStatus=='Logged In'? 'block':'none' }}
         type='submit'
         variant={ applied? 'outlined':'contained'}
         color={ applied? 'error':'primary'}

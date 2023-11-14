@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Box, Typography, AlertTitle, Alert } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
 import { getDayName, getMonthName, getTimeString } from '../../common/functions';
 import { Event } from '../../app/events/[id]/page'
 import IconsContainer from '../icons/iconsContainer';
+import { UserContext } from '@/context/userContext';
 
 type Props = {
     event: Event,
@@ -12,6 +13,8 @@ type Props = {
 }
 
 const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
+
+    const { loginStatus } = useContext(UserContext);
 
     const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
 
@@ -79,7 +82,7 @@ const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
             />
         </Box>
 
-        <Box display='flex' justifyContent='space-between'>
+        <Box display= { loginStatus=='Logged In'? 'flex':'none' } justifyContent='space-between'>
             <Box visibility= { applied && !organizerEvent? 'visible':'hidden' } display='flex' alignItems='center'>
                 <IconsContainer
                     icons={[
