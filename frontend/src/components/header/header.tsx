@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/userContext';
 import Logo from './logo';
+import PageTitle from './pageTitle';
 import { Stack, Button, Box } from '@mui/material';
 import AvatarIcon from './avatar';
 import LoginIcon from '@mui/icons-material/Login';
@@ -14,10 +15,18 @@ export default function Header() {
 
   return (
     <Box component={'header'} position='fixed' width='100%' bgcolor='white' zIndex={100}>
-      <Stack direction='row' justifyContent='space-between' sx={{ width: '90%', height: '50px', m: '0 auto' }}>
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ width: '90%', height: '50px', m: '0 auto' }}
+      >
         <Logo />
         {user ? (
-          <AvatarIcon />
+          <>
+            <PageTitle />
+            <AvatarIcon />
+          </>
         ) : (
           <Button
             onClick={() => router.push('/login')}
