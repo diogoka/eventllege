@@ -1,7 +1,7 @@
-import pool from '../db/db';
-import express from 'express';
-import { sendEmail, EmailOption } from '../helpers/mail';
-import fs from 'fs-extra';
+import pool from "../db/db";
+import express from "express";
+import { sendEmail, EmailOption } from "../helpers/mail";
+import fs from "fs-extra";
 
 // type EventInput = {
 //   owner: string;
@@ -62,19 +62,36 @@ type Date = {
 //     res.status(500).send(err.message);
 //   };
 // };
-export const getEvents = async (req: express.Request, res: express.Response) => {
-
+export const getEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const numOfDays = Number(req.query.numOfDays ? req.query.numOfDays : 60);
-    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const dayFromNow = new Date(new Date().getTime() + numOfDays * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const dayFromNow = new Date(
+      new Date().getTime() + numOfDays * 24 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
 
     const events = req.query.past
-      ? await pool.query(`SELECT * FROM events where events.date_event_start <= $1 `, [today])
-      : await pool.query(`SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`, [today, dayFromNow]);
+      ? await pool.query(
+          `SELECT * FROM events where events.date_event_start <= $1 `,
+          [today]
+        )
+      : await pool.query(
+          `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`,
+          [today, dayFromNow]
+        );
 
-
-    const ids = events.rows.length !== 0 ? events.rows.map(val => { return val.id_event }) : null;
+    const ids =
+      events.rows.length !== 0
+        ? events.rows.map((val) => {
+            return val.id_event;
+          })
+        : null;
 
     const tags = await pool.query(`
       SELECT events.id_event, tags.name_tag FROM events
@@ -82,27 +99,40 @@ export const getEvents = async (req: express.Request, res: express.Response) => 
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
       `);
 
-
     res.status(200).json({
       events: events.rows,
-      tags: tags.rows
+      tags: tags.rows,
     });
-
   } catch (err: any) {
     res.status(500).send(err.message);
-  };
+  }
 };
 
-export const getPastEvents = async (req: express.Request, res: express.Response) => {
-
+export const getPastEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const numOfDays = Number(req.query.numOfDays ? req.query.numOfDays : 180);
-    const dateLimit = new Date(new Date().getTime() - numOfDays * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const dateLimit = new Date(
+      new Date().getTime() - numOfDays * 24 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-    const events = await pool.query(`SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`, [dateLimit, today]);
+    const events = await pool.query(
+      `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`,
+      [dateLimit, today]
+    );
 
-    const ids = events.rows.length !== 0 ? events.rows.map(val => { return val.id_event }) : null;
+    const ids =
+      events.rows.length !== 0
+        ? events.rows.map((val) => {
+            return val.id_event;
+          })
+        : null;
 
     const tags = await pool.query(`
       SELECT events.id_event, tags.name_tag FROM events
@@ -112,20 +142,22 @@ export const getPastEvents = async (req: express.Request, res: express.Response)
 
     res.status(200).json({
       events: events.rows,
-      tags: tags.rows
+      tags: tags.rows,
     });
-  }
-  catch (err: any) {
+  } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
 
-export const getEventsByUser = async (req: express.Request, res: express.Response) => {
-
+export const getEventsByUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const user = req.params.id;
 
-    const events = await pool.query(`
+    const events = await pool.query(
+      `
     SELECT 
     *
     FROM 
@@ -134,11 +166,13 @@ export const getEventsByUser = async (req: express.Request, res: express.Respons
     events ON attendees.id_event = events.id_event
     WHERE 
     attendees.id_user = $1;
-    `, [user]);
+    `,
+      [user]
+    );
 
     let tags: any = [];
     if (events.rows.length !== 0) {
-      const ids = events.rows.map(val => val.id_event);
+      const ids = events.rows.map((val) => val.id_event);
       tags = await pool.query(`
         SELECT 
           events.id_event, 
@@ -150,15 +184,13 @@ export const getEventsByUser = async (req: express.Request, res: express.Respons
         INNER JOIN 
           tags ON events_tags.id_tag = tags.id_tag 
         WHERE 
-          events.id_event IN (${ids.join(',')});
+          events.id_event IN (${ids.join(",")});
       `);
     }
 
     if (req.query.search) {
-      const text = req.query.search !== undefined ? req.query.search : '';
-      const searchWords = text.toString().toLowerCase().split(' ');
-
-
+      const text = req.query.search !== undefined ? req.query.search : "";
+      const searchWords = text.toString().toLowerCase().split(" ");
 
       const filteredEvents = events.rows.filter((event: any) => {
         return searchWords.some((word) => {
@@ -169,11 +201,13 @@ export const getEventsByUser = async (req: express.Request, res: express.Respons
       if (filteredEvents.length === 0) {
         res.status(200).json({
           events: [],
-          tags: []
+          tags: [],
         });
         return;
       } else {
-        const ids = filteredEvents.map((val: any) => { return val.id_event });
+        const ids = filteredEvents.map((val: any) => {
+          return val.id_event;
+        });
         tags = await pool.query(`
           SELECT 
             events.id_event, 
@@ -185,49 +219,54 @@ export const getEventsByUser = async (req: express.Request, res: express.Respons
           INNER JOIN 
             tags ON events_tags.id_tag = tags.id_tag 
           WHERE 
-            events.id_event IN (${ids.join(',')});
+            events.id_event IN (${ids.join(",")});
         `);
         res.status(200).json({
           events: filteredEvents,
-          tags: tags.rows
+          tags: tags.rows,
         });
       }
     } else {
       res.status(200).json({
         events: events.rows,
-        tags: tags.rows
+        tags: tags.rows,
       });
     }
-
   } catch (err: any) {
     res.status(500).send(err.message);
-  };
-}
+  }
+};
 
-export const searchEvents = async (req: express.Request, res: express.Response) => {
+export const searchEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
+    const text = req.query.text !== undefined ? req.query.text : "";
+    const searchWords = text.toString().toLowerCase().split(" ");
+    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-    const text = req.query.text !== undefined ? req.query.text : '';
-    const searchWords = text.toString().toLowerCase().split(' ');
-    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    let query = 'SELECT * FROM events WHERE ';
+    let query = "SELECT * FROM events WHERE ";
 
     if (searchWords.length === 1) {
       query += `LOWER(events.name_event) LIKE '%${searchWords[0]}%'`;
     } else {
       searchWords.forEach((word: string, key: number) => {
-        query += key === searchWords.length - 1 ?
-          ` LOWER(events.name_event) LIKE '%${word}%'` :
-          ` LOWER(events.name_event) LIKE '%${word}%' AND`;
+        query +=
+          key === searchWords.length - 1
+            ? ` LOWER(events.name_event) LIKE '%${word}%'`
+            : ` LOWER(events.name_event) LIKE '%${word}%' AND`;
       });
     }
     const events = req.query.past
-      ? await pool.query(`${query} and events.date_event_start < $2`,
-        [today])
-
-      : await pool.query(query)
-    const ids = events.rows.length !== 0 ? events.rows.map(val => { return val.id_event }) : null;
+      ? await pool.query(`${query} and events.date_event_start < $2`, [today])
+      : await pool.query(query);
+    const ids =
+      events.rows.length !== 0
+        ? events.rows.map((val) => {
+            return val.id_event;
+          })
+        : null;
 
     const tags = await pool.query(`
       SELECT events.id_event, tags.name_tag FROM events
@@ -237,35 +276,35 @@ export const searchEvents = async (req: express.Request, res: express.Response) 
 
     res.status(200).json({
       events: events.rows,
-      tags: tags.rows
+      tags: tags.rows,
     });
-
-
   } catch (err: any) {
     res.status(500).send(err.message);
-  };
+  }
+};
 
-}
-
-export const getEventsByOwner = async (req: express.Request, res: express.Response) => {
-
+export const getEventsByOwner = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const owner_id = req.params.id;
 
-
-
-    const events = await pool.query(`
+    const events = await pool.query(
+      `
     SELECT 
       *
     FROM 
       events
     WHERE 
       events.id_owner = $1;
-    `, [owner_id]);
+    `,
+      [owner_id]
+    );
 
     let tags: any = [];
     if (events.rows.length !== 0) {
-      const ids = events.rows.map(val => val.id_event);
+      const ids = events.rows.map((val) => val.id_event);
       tags = await pool.query(`
         SELECT 
           events.id_event, 
@@ -277,36 +316,38 @@ export const getEventsByOwner = async (req: express.Request, res: express.Respon
         INNER JOIN 
           tags ON events_tags.id_tag = tags.id_tag 
         WHERE 
-          events.id_event IN (${ids.join(',')});
+          events.id_event IN (${ids.join(",")});
       `);
     }
 
     res.status(200).json({
       events: events.rows,
-      tags: tags.rows
+      tags: tags.rows,
     });
   } catch (err: any) {
     res.status(500).send(err.message);
   }
-}
+};
 
 export const getEvent = async (req: express.Request, res: express.Response) => {
-  const EVENT_ID = req.originalUrl.split('/api/events/')[1];
+  const EVENT_ID = req.originalUrl.split("/api/events/")[1];
 
   try {
-    const events = await pool.query('SELECT * FROM events where id_event=$1', [EVENT_ID]);
+    const events = await pool.query("SELECT * FROM events where id_event=$1", [
+      EVENT_ID,
+    ]);
 
     const tags = await pool.query(
-      'SELECT tags.name_tag FROM events ' +
-      'inner join events_tags on events.id_event = events_tags.id_event ' +
-      'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
+      "SELECT tags.name_tag FROM events " +
+        "inner join events_tags on events.id_event = events_tags.id_event " +
+        "inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1",
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
-      'SELECT users.id_user, users.name_user FROM events ' +
-      'inner join attendees on events.id_event = attendees.id_event ' +
-      'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
+      "SELECT users.id_user, users.name_user FROM events " +
+        "inner join attendees on events.id_event = attendees.id_event " +
+        "inner join users on attendees.id_user = users.id_user where events.id_event=$1",
       [EVENT_ID]
     );
 
@@ -319,7 +360,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
         attendees: attendees.rows.map((val) => {
           return {
             id: val.id_user,
-            name: val.name_user
+            name: val.name_user,
           };
         }),
       },
@@ -329,15 +370,18 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const getUserEvents = async (req: express.Request, res: express.Response) => {
+export const getUserEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const date = new Date();
   const SAMPLE_USER = req.query.id_user;
 
   try {
     const att = await pool.query(
-      'SELECT * FROM attendees ' +
-      'inner join events on attendees.id_event = events.id_event ' +
-      'where attendees.id_user = $1 and events.date_event_start >= $2',
+      "SELECT * FROM attendees " +
+        "inner join events on attendees.id_event = events.id_event " +
+        "where attendees.id_user = $1 and events.date_event_start >= $2",
       [SAMPLE_USER, date]
     );
 
@@ -347,14 +391,14 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
 
     const tags = await pool.query(
       `SELECT events.id_event, tags.name_tag FROM events ` +
-      `inner join events_tags on events.id_event = events_tags.id_event ` +
-      `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
+        `inner join events_tags on events.id_event = events_tags.id_event ` +
+        `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
     );
 
     const attendees = await pool.query(
       `SELECT users.name_user, attendees.id_event FROM events ` +
-      `inner join attendees on events.id_event = attendees.id_event ` +
-      `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
+        `inner join attendees on events.id_event = attendees.id_event ` +
+        `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
     );
 
     const events = att.rows.map((val) => {
@@ -387,9 +431,22 @@ export const getUserEvents = async (req: express.Request, res: express.Response)
   }
 };
 
-export const createEvents = async (req: express.Request, res: express.Response) => {
-
-  const { owner, title, description, dates, location, spots, price, picture, tagId, category } = req.body;
+export const createEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const {
+    owner,
+    title,
+    description,
+    dates,
+    location,
+    spots,
+    price,
+    picture,
+    tagId,
+    category,
+  } = req.body;
   try {
     dates.forEach(async (date: Date) => {
       const events = await pool.query(
@@ -400,13 +457,24 @@ export const createEvents = async (req: express.Request, res: express.Response) 
         RETURNING
         *;
         `,
-        [owner, title, description, date.dateStart, date.dateEnd, location, spots, price, picture, category]
+        [
+          owner,
+          title,
+          description,
+          date.dateStart,
+          date.dateEnd,
+          location,
+          spots,
+          price,
+          picture,
+          category,
+        ]
       );
 
-      await pool.query(`INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`, [
-        events.rows[0].id_event,
-        tagId,
-      ]);
+      await pool.query(
+        `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
+        [events.rows[0].id_event, tagId]
+      );
 
       if (req.file) {
         moveImage(req.file.filename, events.rows[0].id_event);
@@ -414,7 +482,6 @@ export const createEvents = async (req: express.Request, res: express.Response) 
 
       res.status(201).json(events.rows);
     });
-
   } catch (err: any) {
     if (req.file) {
       deleteImage(req.file.filename);
@@ -423,22 +490,48 @@ export const createEvents = async (req: express.Request, res: express.Response) 
   }
 };
 
-export const updateEvents = async (req: express.Request, res: express.Response) => {
+export const updateEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const id = parseInt(req.params.id);
 
-  const { title, description, dates, location, spots, price, image, tagId, category } = req.body;
+  const {
+    title,
+    description,
+    dates,
+    location,
+    spots,
+    price,
+    image,
+    tagId,
+    category,
+  } = req.body;
 
   if (!id) {
-
-    res.status(404).send('Update events failed');
+    res.status(404).send("Update events failed");
   } else {
     try {
       dates.forEach(async (date: Date) => {
         const events = await pool.query(
           `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, image_event = $8, category_event = $9 WHERE id_event = $10 RETURNING *`,
-          [title, description, date.dateStart, date.dateEnd, location, spots, price, image, category, id]
+          [
+            title,
+            description,
+            date.dateStart,
+            date.dateEnd,
+            location,
+            spots,
+            price,
+            image,
+            category,
+            id,
+          ]
         );
-        await pool.query(`UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`, [tagId, id]);
+        await pool.query(
+          `UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`,
+          [tagId, id]
+        );
 
         if (req.file) {
           moveImage(req.file.filename, events.rows[0].id_event);
@@ -455,18 +548,20 @@ export const updateEvents = async (req: express.Request, res: express.Response) 
   }
 };
 
-export const deleteEvents = async (req: express.Request, res: express.Response) => {
-
-
+export const deleteEvents = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const id = parseInt(req.params.id);
 
   if (!id) {
-
-    res.status(404).send('Delete events failed');
+    res.status(404).send("Delete events failed");
   } else {
     try {
-
-      const events = await pool.query(`DELETE FROM events WHERE id_event = $1 RETURNING *;`, [id]);
+      const events = await pool.query(
+        `DELETE FROM events WHERE id_event = $1 RETURNING *;`,
+        [id]
+      );
       res.status(200).json(events.rows);
     } catch (err: any) {
       res.status(500).send(err.message);
@@ -474,9 +569,12 @@ export const deleteEvents = async (req: express.Request, res: express.Response) 
   }
 };
 
-export const newAttendee = async (req: express.Request, res: express.Response) => {
+export const newAttendee = async (
+  req: express.Request,
+  res: express.Response
+) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send('Missing parameters');
+    res.status(400).send("Missing parameters");
     return;
   }
   const { id_event, id_user } = req.body;
@@ -500,10 +598,12 @@ export const newAttendee = async (req: express.Request, res: express.Response) =
   }
 };
 
-export const deleteAttendee = async (req: express.Request, res: express.Response) => {
-
+export const deleteAttendee = async (
+  req: express.Request,
+  res: express.Response
+) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send('Missing parameters');
+    res.status(400).send("Missing parameters");
     return;
   }
   const { id_event, id_user } = req.body;
@@ -525,9 +625,12 @@ export const deleteAttendee = async (req: express.Request, res: express.Response
   }
 };
 
-export const newReview = async (req: express.Request, res: express.Response) => {
+export const newReview = async (
+  req: express.Request,
+  res: express.Response
+) => {
   if (!req.body.id_event || !req.body.id_user || !req.body.review) {
-    res.status(400).send('Missing parameters');
+    res.status(400).send("Missing parameters");
     return;
   }
 
@@ -561,9 +664,11 @@ const newEventReview = async (id_event: Number, id_review: Number) => {
   }
 };
 
-export const getReviews = async (req: express.Request, res: express.Response) => {
+export const getReviews = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const event_id = req.params.id;
-
   try {
     const reviews = await pool.query(
       `
@@ -664,7 +769,6 @@ export const sendTicket = async (eventId: any, userId: any) => {
 //     message,
 //   };
 // }
-
 
 function moveImage(filename: string, eventId: number) {
   const oldPath = `${__dirname}/../public/img/events/temp/${filename}`;

@@ -36,13 +36,17 @@ export default function EventPage() {
   const [applied, setApplied] = useState<boolean>(false);
   const [attendees, setAttendees] = useState<Array<Attendee>>();
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
+  const [oldEvent, setOldEvent] = useState<boolean>(false);
+
+  
 
   const params = useParams();
   const router = useRouter();
 
   const EVENT_ID = params.id
 
-  console.log('EVENT_ID', event);
+  
+
 
   useEffect(() => {
     axios
@@ -52,12 +56,16 @@ export default function EventPage() {
         setEvent(res.data.event);
         setAttendees([...res.data.event.attendees])
 
-        res.data.event.attendees.map(( val:Attendee )=>{
-          val.id==user!.id && setApplied(true);
+        res.data.event.attendees.map((val: Attendee) => {
+          val.id == user!.id && setApplied(true);
         })
 
         user?.role == 'organizer' && user?.id == res.data.event.id_owner && setOrganizerEvent(true);
-
+        let today = new Date();
+        let eventDate = new Date(res.data.event.date_event_start);
+        eventDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        eventDate < today && setOldEvent(true);
       })
       .catch((error) => {
         console.error(error.response);
@@ -85,35 +93,37 @@ export default function EventPage() {
     }
   };
 
-  const addAttendee=()=>{
+  const addAttendee = () => {
     axios
-    .post(`http://localhost:3001/api/events/attendee`, {
-        id_event:event?.id_event,
-        id_user:user?.id
-    })
-    .then((res: any) => {
-      setApplied(true)
-      setAttendees((prevData:Array<Attendee> | undefined) => [...prevData!, { id:user?.id, name:user?.name}])
-    });
+      .post(`http://localhost:3001/api/events/attendee`, {
+        id_event: event?.id_event,
+        id_user: user?.id
+      })
+      .then((res: any) => {
+        setApplied(true)
+        setAttendees((prevData: Array<Attendee> | undefined) => [...prevData!, { id: user?.id, name: user?.name }])
+      });
   }
 
-  const cancelEvent=()=>{
+  const cancelEvent = () => {
     axios
-    .delete(`http://localhost:3001/api/events/attendee`, {
-        data:{id_event:event?.id_event,
-        id_user:user?.id}
-    })
-    .then((res: any) => {
-      setApplied(false)
-      setAttendees((prevData:Array<Attendee> | undefined) => {return prevData!.filter((val:any)=>val.id!==user?.id)})
-    });
+      .delete(`http://localhost:3001/api/events/attendee`, {
+        data: {
+          id_event: event?.id_event,
+          id_user: user?.id
+        }
+      })
+      .then((res: any) => {
+        setApplied(false)
+        setAttendees((prevData: Array<Attendee> | undefined) => { return prevData!.filter((val: any) => val.id !== user?.id) })
+      });
   }
 
   return (
-    
+
     <Stack>
-      
-      <DetailContainer event={event!} applied={applied} organizerEvent={organizerEvent}/>
+
+      <DetailContainer event={event!} applied={applied} organizerEvent={organizerEvent} />
 
       {event &&
         <DetailInfo
@@ -124,54 +134,64 @@ export default function EventPage() {
           category={event.category_event}
         />
       }
-      <Review />
+      {oldEvent &&
+        <Review id_event={event!.id_event}/>
+      }
 
-      <Box
-        justifyContent='space-between'
-        display={ organizerEvent && loginStatus=='Logged In'? 'flex':'none'}
-        sx={{ marginBlock: '25px' }}
-      >
 
-        <Box style={{ width: '47%' }}>
-          {event?.id_event ? (
-            <Button
-              type='submit'
-              variant='outlined'
-              color='primary'
-              fullWidth
-              onClick={() => editEventHandler(event.id_event)}>Edit</Button>
-          ) : (
-            <Box>Id is not found</Box>
-          )}
-        </Box>
+      {!oldEvent &&
+        <>
+          <Box
+            justifyContent='space-between'
+            display={organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'}
+            sx={{ marginBlock: '25px' }}
+          >
 
-        <Box style={{ width: '47%' }}>
-          {event?.id_event ? (
-            <Button
-              type='submit'
-              variant='outlined'
-              color='error'
-              fullWidth
-              onClick={() => deleteEvent(event.id_event)}>Delete Event</Button>
-          ) : (
-            <Box>Id is not found</Box>
-          )}
-        </Box>
+            <Box style={{ width: '47%' }}>
+              {event?.id_event ? (
+                <Button
+                  type='submit'
+                  variant='outlined'
+                  color='primary'
+                  fullWidth
+                  onClick={() => editEventHandler(event.id_event)}>Edit</Button>
+              ) : (
+                <Box>Id is not found</Box>
+              )}
+            </Box>
 
-      </Box>
+            <Box style={{ width: '47%' }}>
+              {event?.id_event ? (
+                <Button
+                  type='submit'
+                  variant='outlined'
+                  color='error'
+                  fullWidth
+                  onClick={() => deleteEvent(event.id_event)}>Delete Event</Button>
+              ) : (
+                <Box>Id is not found</Box>
+              )}
+            </Box>
 
-      <Button
-        style={{ display: !organizerEvent && loginStatus=='Logged In'? 'block':'none' }}
-        type='submit'
-        variant={ applied? 'outlined':'contained'}
-        color={ applied? 'error':'primary'}
-        fullWidth
-        sx={{ margin:'25px auto' }}
-        onClick={()=>{ applied? cancelEvent() : addAttendee() }}
-      >
-        { applied? 'Cancel':'Apply'}
-      </Button>
+          </Box>
+
+          <Button
+            style={{ display: !organizerEvent && loginStatus == 'Logged In' ? 'block' : 'none' }}
+            type='submit'
+            variant={applied ? 'outlined' : 'contained'}
+            color={applied ? 'error' : 'primary'}
+            fullWidth
+            sx={{ margin: '25px auto' }}
+            onClick={() => { applied ? cancelEvent() : addAttendee() }}
+          >
+            {applied ? 'Cancel' : 'Apply'}
+          </Button>
+        </>
+
+      }
+
 
     </Stack>
+
   );
 }
