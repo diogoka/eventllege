@@ -62,7 +62,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     else if (loginStatus === LoginStatus.LoggedIn) {
       // If this user is a student
       if (user) {
-        if (user.role === 'student') {
+        if (user.roleName === 'student') {
           // Give permission only to allowed pages
           if (!isStudentPage(pathname)) {
             return { isAllowed: false, redirection: '/events' };

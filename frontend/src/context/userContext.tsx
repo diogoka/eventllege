@@ -10,7 +10,8 @@ export enum LoginStatus {
 
 export type User = {
   id: string;
-  role: string;
+  roleId: number;
+  roleName: string;
   courseId: number;
   courseName: string;
   name: string;

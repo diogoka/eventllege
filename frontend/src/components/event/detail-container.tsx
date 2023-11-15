@@ -1,18 +1,22 @@
-import { Box, Typography } from '@mui/material';
+import { useState, useContext } from 'react';
+import { Box, Typography, AlertTitle, Alert } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
-import { FaLocationArrow } from 'react-icons/fa6';
-import { AiFillClockCircle } from 'react-icons/ai';
-import { BsFillCheckSquareFill } from 'react-icons/bs';
-import { BsHeart } from 'react-icons/bs';
-import { GrShare } from 'react-icons/gr';
 import { getDayName, getMonthName, getTimeString } from '../../common/functions';
 import { Event } from '../../app/events/[id]/page'
+import IconsContainer from '../icons/iconsContainer';
+import { UserContext } from '@/context/userContext';
 
-type Props ={
-    event: Event
+type Props = {
+    event: Event,
+    applied: boolean,
+    organizerEvent: boolean
 }
 
-const DetailContainer =( {event}:Props )=> {
+const DetailContainer =( { event, applied, organizerEvent }:Props )=> {
+
+    const { loginStatus } = useContext(UserContext);
+
+    const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
 
     const startDate = new Date(event?.date_event_start)
     const endDate = new Date(event?.date_event_end)
@@ -34,6 +38,36 @@ const DetailContainer =( {event}:Props )=> {
     ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
     ${endDate.getFullYear()}, ${getTimeString(endDate)}`
 
+    const handleUserClick = (iconName:string) => {
+        if(iconName=='FaShareSquare'){
+
+            navigator.clipboard.writeText(`http://localhost:3000/events/${event?.id_event}`)
+                .then(() => {
+                    setIsAlertVisible(true);
+                    setTimeout(() => {
+                        setIsAlertVisible(false);
+                    }, 3000);
+                })
+                .catch((err) => {
+                    console.error('Failed to copy URL: ', err);
+                });
+
+        }else if(iconName=='FaHeart'){
+            console.log("Fav button")
+        }
+
+    };
+
+    const MarginTop = { marginTop: '0.5rem' }
+
+    const iconsRight = organizerEvent?
+    [{ name: 'FaShareSquare', isClickable: true, color: '#333333' }]
+    :
+    [
+        { name: 'FaHeart', isClickable: true, color: 'deeppink' },
+        { name: 'FaShareSquare', isClickable: true, color: '#333333' }
+    ]
+
     return (
         <>
         
@@ -48,26 +82,44 @@ const DetailContainer =( {event}:Props )=> {
             />
         </Box>
 
-        <Box display='flex' justifyContent='space-between'>
-            <Box>
-                <BsFillCheckSquareFill style={{ color:'green', fontSize: 12 }}/>&nbsp;Applied
+        <Box display= { loginStatus=='Logged In'? 'flex':'none' } justifyContent='space-between'>
+            <Box visibility= { applied && !organizerEvent? 'visible':'hidden' } display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaCheckSquare', isClickable: false, color: 'green' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Box sx={{ display: 'inline', marginTop: '0.5rem' }}>Applied</Box>
             </Box>
             <Box>
-                <BsHeart style={{ color:'purple', fontSize: 12 }}/>&nbsp;
-                <GrShare style={{ fontSize: 12 }}/>
+                <IconsContainer
+                    icons={ iconsRight }
+                    onIconClick={ handleUserClick }
+                />
             </Box>
         </Box>
 
         <Box style={{ margin:'10px auto' }}>
 
-            <Box display='flex'>
-                <AiFillClockCircle style={{ fontSize: 12, marginTop:"5px" }}/>&nbsp;
-                <Typography>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
+            <Box display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaClock', isClickable: false, color: '#333333' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Typography sx={ MarginTop }>{startDateDetail}&nbsp;-&nbsp;{endDateDetail}</Typography>
             </Box>
                 
-            <Box display='flex'>
-                <FaLocationArrow style={{ color:'blue',fontSize: 12, marginTop:"5px" }}/>&nbsp;
-                <Typography>{event?.location_event}</Typography>
+            <Box display='flex' alignItems='center'>
+                <IconsContainer
+                    icons={[
+                        { name: 'FaLocationArrow', isClickable: false, color: 'navy' }
+                    ]}
+                    onIconClick={()=>{ return }}
+                />
+                <Typography sx={ MarginTop }>{event?.location_event}</Typography>
             </Box>
 
         </Box>
@@ -76,6 +128,17 @@ const DetailContainer =( {event}:Props )=> {
             <Box style={{ fontWeight:'bold' }}>About this event:</Box>
             {event?.description_event}
         </Box>
+
+        {isAlertVisible && (
+            <Alert
+                severity="success"
+                onClose={()=>{ setIsAlertVisible(false) }}
+                sx={{ position: 'absolute', top: '10px', right: '10px', zIndex: 9999 }}
+            >
+                <AlertTitle>URL Copied</AlertTitle>
+                The event URL has been copied to your clipboard.
+            </Alert>
+        )}
 
         </>
     )
