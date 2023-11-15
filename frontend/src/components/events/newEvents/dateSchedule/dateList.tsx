@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
-import { Box, Stack, IconButton, Typography } from '@mui/material';
+import { Box, Stack, Button, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
@@ -35,10 +35,21 @@ export default function DateList() {
 
   return (
     <>
-      <Typography variant='h2'>Date</Typography>
+      <Stack direction='row' justifyContent='space-between' alignItems='center' spacing={1}>
+        <Typography variant='h2'>Date</Typography>
+        <Button
+          onClick={addDateHandler}
+          startIcon={<AddCircleOutlineIcon />}
+          size='medium'
+          variant='text'
+          sx={{ fontSize: '1rem' }}
+        >
+          Add Date
+        </Button>
+      </Stack>
       {dates.map((date, index) => (
         <Stack direction='row' justifyContent='space-between' alignItems='center' spacing={1} key={index}>
-          <Box>
+          <Box border={'1px solid rgba(51, 3, 0, 0.1)'}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label={`Start Date ${index + 1}`}
@@ -57,14 +68,9 @@ export default function DateList() {
                 }}
               />
             </LocalizationProvider>
-          </Box>
-          <Box>
-            <IconButton onClick={addDateHandler}>
-              <AddCircleOutlineIcon />
-            </IconButton>
-            <IconButton onClick={() => deleteDateHandler(index)}>
+            <Button onClick={() => deleteDateHandler(index)}>
               <RemoveCircleOutlineIcon />
-            </IconButton>
+            </Button>
           </Box>
         </Stack>
       ))}
