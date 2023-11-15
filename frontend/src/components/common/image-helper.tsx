@@ -7,21 +7,23 @@ const FALLBACK_IMAGE = '/event_placeholder.png';
 // This is an image component that displays fallback image if the link doesn't exist
 export default function ImageHelper(props: any) {
   const { src, alt, width, height, style, ...rest } = props;
-  const [imgSrc, setImgSrc] = useState(src);
 
-  useEffect(() => {
-    setImgSrc(src);
-  }, [src])
+  const [isImageFound, setIsImageFound] = useState(true);
 
   return (
-    <Box style={{width, height}}>
+    <Box
+      width={width}
+      height={height}
+      border={isImageFound ? 'none' : '1px solid #EEEEEE'}
+      borderRadius={style?.borderRadius ?? 0}
+    >
       <Image
         {...rest}
-        src={imgSrc}
+        src={isImageFound ? src : FALLBACK_IMAGE}
         alt={alt}
-        loader={() => imgSrc}
+        loader={() => isImageFound ? src : FALLBACK_IMAGE}
         onError={() => {
-          setImgSrc(FALLBACK_IMAGE);
+          setIsImageFound(false);
         }}
         width={0}
         height={0}
