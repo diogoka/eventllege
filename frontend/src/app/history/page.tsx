@@ -41,7 +41,7 @@ export default function PastEvent() {
 
   const currentUser: CurrentUser = {
     id: user!.id,
-    role: user!.role,
+    role: user!.roleName,
   }
 
   const getEvents = async () => {

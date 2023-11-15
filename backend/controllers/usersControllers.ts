@@ -153,7 +153,8 @@ async function getUserResponse(userId: string) {
         const userResult = await pool.query(`
         SELECT
             users.id_user AS id,
-            users_type.role_user AS role,
+            users.id_user_type AS role_id,
+            users_type.role_user AS role_name,
             users.name_user AS name,
             users.email_user AS email,
             users.postal_code_user AS postal_code,
@@ -172,6 +173,12 @@ async function getUserResponse(userId: string) {
             return null;
         }
         
+        user.roleId = user.role_id;
+        delete user.role_id;
+
+        user.roleName = user.role_name;
+        delete user.role_name;
+
         user.postalCode = user.postal_code;
         delete user.postal_code;
 

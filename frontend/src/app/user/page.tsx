@@ -31,9 +31,9 @@ export default function UserPage() {
           }}
         />
 
-        {user?.role !== 'student' &&
+        {user?.roleName !== 'student' &&
           <Chip
-            label={user?.role}
+            label={user?.roleName}
             variant='filled'
             color='error'
             sx={{

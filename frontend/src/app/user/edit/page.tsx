@@ -89,7 +89,7 @@ export default function UserEditPage() {
 
     const formData = new FormData();
     formData.append('id', user.id);
-    formData.append('type', '2');
+    formData.append('type', user.roleId.toString());
     formData.append('courseId', courseId.toString());
     formData.append('email', email);
     formData.append('name', name);
