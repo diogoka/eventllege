@@ -136,8 +136,8 @@ export default function SignUpPage() {
     <Stack>
       <Typography variant='h1'>Sign Up</Typography>
 
-      {loginStatus !== LoginStatus.SigningUp ? (
-        // Step1: Firebase Authentication
+      {/* Step1: Firebase Authentication */}
+      {loginStatus === LoginStatus.LoggedOut && (
         <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailAuth}>
             <Stack rowGap={'20px'}>
@@ -181,8 +181,10 @@ export default function SignUpPage() {
           </Button>
 
         </Stack>
-      ) : (
-        // Step2: Register for our app
+      )}
+
+      {/* Step2: Register for our app */}
+      {loginStatus === LoginStatus.SigningUp && (
         <form onSubmit={handleSignup}>
           <Stack rowGap={'20px'}>
             <Stack rowGap={'10px'}>
@@ -197,9 +199,7 @@ export default function SignUpPage() {
             </Stack>
             <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
           </Stack>
-
         </form>
-
       )}
     </Stack>
   )
