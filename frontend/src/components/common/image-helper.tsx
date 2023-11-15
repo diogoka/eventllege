@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
+import { Box } from '@mui/material';
+
+const FALLBACK_IMAGE = '/event_placeholder.png';
 
 // This is an image component that displays fallback image if the link doesn't exist
 export default function ImageHelper(props: any) {
-  const { src, placeholderSrc, width, height, style, ...rest } = props;
+  const { src, alt, width, height, style, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
 
   useEffect(() => {
@@ -11,13 +14,14 @@ export default function ImageHelper(props: any) {
   }, [src])
 
   return (
-    <div style={{width, height}}>
+    <Box style={{width, height}}>
       <Image
         {...rest}
         src={imgSrc}
+        alt={alt}
         loader={() => imgSrc}
         onError={() => {
-          setImgSrc(placeholderSrc);
+          setImgSrc(FALLBACK_IMAGE);
         }}
         width={0}
         height={0}
@@ -25,6 +29,6 @@ export default function ImageHelper(props: any) {
         unoptimized
         priority
       />
-    </div>
+    </Box>
   );
 }
