@@ -17,6 +17,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { LoginStatus, UserContext } from '@/context/userContext';
 import { getErrorMessage } from '@/auth/errors';
 import PasswordInput from '@/components/common/password-input';
+import NameInput from '@/components/user/form/name-input';
+import CourseInput from '@/components/user/form/course-input';
 
 import {
   getAuth,
@@ -185,20 +187,8 @@ export default function SignUpPage() {
           <Stack rowGap={'20px'}>
             <Stack rowGap={'10px'}>
 
-              <FormControl required>
-                <TextField type='text' label='Name' onChange={(event) => setName(event.target.value)} required />
-              </FormControl>
-
-              <FormControl required>
-                <InputLabel id='course'>Course</InputLabel>
-                <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
-                  {courses.map((course: Course, index: number) => {
-                    return (
-                      <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
-                    )
-                  })}
-                </Select>
-              </FormControl>
+              <NameInput name={name} setName={setName} />
+              <CourseInput courseId={courseId} setCourseId={setCourseId} />
 
               <Typography variant='body2' align='center'>
                 If you are an instructor, please contact admin.
