@@ -9,15 +9,11 @@ import {
   TextField,
   Typography,
   Button,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
   Container,
-  FormHelperText,
-  Box
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
+import PasswordInput from '@/components/common/password-input';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -104,25 +100,25 @@ export default function LoginPage() {
                 <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
               </FormControl>
               <FormControl required>
-                <TextField type='password' label='Password' onChange={(event) => setPassword(event.target.value)} required />
+                <PasswordInput label='Password' setter={setPassword} />
                 <Typography color='error'>{alartMessage}</Typography>
-                <Typography
-                  onClick={() => {
-                    setIsPasswordReset(true);
-                  }}
-                  color={theme.palette.info.main}
-                  sx={{
-                    textAlign: 'right',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Forgot password?
-                </Typography>
-                <PasswordResetModal
-                  isPasswordReset={isPasswordReset}
-                  setIsPasswordReset={setIsPasswordReset}
-                />
               </FormControl>
+              <Typography
+                onClick={() => {
+                  setIsPasswordReset(true);
+                }}
+                color={theme.palette.info.main}
+                sx={{
+                  textAlign: 'right',
+                  cursor: 'pointer'
+                }}
+              >
+                Forgot password?
+              </Typography>
+              <PasswordResetModal
+                isPasswordReset={isPasswordReset}
+                setIsPasswordReset={setIsPasswordReset}
+              />
             </Stack>
 
             <Button

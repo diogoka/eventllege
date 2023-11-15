@@ -44,7 +44,7 @@ export default function OrganizerEventsPage() {
 
   const currentUser: CurrentUser = {
     id: user!.id,
-    role: user!.role,
+    role: user!.roleName,
   }
 
   useEffect(() => {
