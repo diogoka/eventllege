@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 import { UserContext } from '@/context/userContext';
-import { Box } from '@mui/system';
 import { Avatar, IconButton, Drawer } from '@mui/material';
-
 import Hamburger from './hamburger';
 
 export default function AvatarIcon() {
