@@ -36,6 +36,10 @@ function ReviewsSummary({ reviews }: Props) {
     return sum / reviews.length;
   };
 
+  const percentage = (num: number) => {
+    return (num / total) * 100;
+  };
+
   useEffect(() => {
     setNumReviews(reviews.length);
     setAvgRating(averageRatingFn(reviews));
@@ -58,7 +62,7 @@ function ReviewsSummary({ reviews }: Props) {
     borderRadius: 5,
     [`&.${linearProgressClasses.colorPrimary}`]: {
       backgroundColor:
-        theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        theme.palette.grey[theme.palette.mode === 'light' ? 300 : 300],
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 5,
@@ -81,31 +85,46 @@ function ReviewsSummary({ reviews }: Props) {
           <Typography sx={{ fontSize: '1rem' }}>5</Typography>
         </Box>
         <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress
+            variant="determinate"
+            value={percentage(numOfRatings[4])}
+          />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '1rem' }}>4</Typography>
         </Box>
         <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress
+            variant="determinate"
+            value={percentage(numOfRatings[3])}
+          />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '1rem' }}>3</Typography>
         </Box>
         <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress
+            variant="determinate"
+            value={percentage(numOfRatings[2])}
+          />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '1rem' }}>2</Typography>
         </Box>
         <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress
+            variant="determinate"
+            value={percentage(numOfRatings[1])}
+          />
         </Box>
         <Box>
           <Typography sx={{ fontSize: '1rem' }}>1</Typography>
         </Box>
         <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress variant="determinate" value={50} />
+          <BorderLinearProgress
+            variant="determinate"
+            value={percentage(numOfRatings[0])}
+          />
         </Box>
       </Box>
       <Box

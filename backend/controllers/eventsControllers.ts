@@ -674,9 +674,11 @@ export const getReviews = async (
       `
     SELECT
       u.name_user,
+      u.id_user,
       r.description_review,
       r.rating,
-      r.date_review
+      r.date_review,
+      r.id_review
     FROM
       events_reviews er
     JOIN
