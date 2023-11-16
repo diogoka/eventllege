@@ -7,13 +7,15 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 type Category = {
   category_course: string;
 };
-
-export default function Category() {
-  //user Input
-  const [category, setCategory] = useState('');
-
+type Props = {
+  category: string;
+  setCategory: (value: string) => void;
+  categories: Category[];
+  setCategories: (categories: Category[]) => void;
+};
+export default function Category({ category, setCategory, categories, setCategories }: Props) {
   //categories are from server
-  const [categories, setCategories] = useState<Category[]>([]);
+  // const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     axios

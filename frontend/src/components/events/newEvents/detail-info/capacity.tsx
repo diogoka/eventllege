@@ -1,8 +1,11 @@
 import React from 'react';
 import { TextField, InputAdornment } from '@mui/material';
 
-export default function Capacity() {
-  const [spots, setSpots] = React.useState('0');
+type Props = {
+  spots: number;
+  setSpots: (value: number) => void;
+};
+export default function Capacity({ spots, setSpots }: Props) {
   return (
     <>
       <TextField
@@ -11,9 +14,9 @@ export default function Capacity() {
         type='number'
         fullWidth
         value={spots}
-        onChange={(event) => setSpots(event.target.value)}
+        onChange={(event) => setSpots(+event.target.value)}
         InputProps={{
-          endAdornment: <InputAdornment position='end'>{spots >= '2' ? 'people' : 'person'}</InputAdornment>,
+          endAdornment: <InputAdornment position='end'>{spots >= 2 ? 'people' : 'person'}</InputAdornment>,
         }}
       />
     </>

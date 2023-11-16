@@ -11,11 +11,14 @@ interface DateRange {
   dateEnd: dayjs.Dayjs;
 }
 
+type Props = {
+  dates: DateRange[];
+  setDates: (dates: DateRange[]) => void;
+};
+
 const today = dayjs();
 
-export default function DateList() {
-  const [dates, setDates] = React.useState<DateRange[]>([{ dateStart: today, dateEnd: today }]);
-
+export default function DateList({ dates, setDates }: Props) {
   const deleteDateHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;

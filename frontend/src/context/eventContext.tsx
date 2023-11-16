@@ -11,7 +11,7 @@ export type EventData = {
   image: string;
   tagId: number;
   category: string;
-  tags: Array<number>;
+  tags: Array<string>;
   categories: Array<string>;
 };
 

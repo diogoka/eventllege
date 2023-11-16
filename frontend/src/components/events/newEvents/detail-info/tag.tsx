@@ -28,12 +28,15 @@ type Tag = {
   name_tag: string;
 };
 
-export default function Tag() {
-  // user Input
-  const [tagId, setTagId] = useState<number[]>([]);
-  // Tag data from server
-  const [tags, setTags] = useState<Tag[]>([]);
+type Props = {
+  tagId: number[];
+  setTagId: (value: number[]) => void;
+  tags: Tag[];
+  setTags: (tags: Tag[]) => void;
+};
 
+export default function Tag({ tagId, setTagId, tags, setTags }: Props) {
+  // Tag data from server
   useEffect(() => {
     axios
       .get('http://localhost:3001/api/tags')
