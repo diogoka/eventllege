@@ -37,8 +37,6 @@ export default function EventPage() {
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
   const [oldEvent, setOldEvent] = useState<boolean>(false);
 
-  console.log('applied', applied);
-
   const params = useParams();
   const router = useRouter();
 
@@ -92,7 +90,7 @@ export default function EventPage() {
 
   const addAttendee = () => {
     axios
-      .post(`http://localhost:3001/api/events/attendee`, {
+      .post('http://localhost:3001/api/events/attendee', {
         id_event: event?.id_event,
         id_user: user?.id,
       })
@@ -107,7 +105,7 @@ export default function EventPage() {
 
   const cancelEvent = () => {
     axios
-      .delete(`http://localhost:3001/api/events/attendee`, {
+      .delete('http://localhost:3001/api/events/attendee', {
         data: {
           id_event: event?.id_event,
           id_user: user?.id,

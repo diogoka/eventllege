@@ -1,16 +1,18 @@
-'use client';
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  Modal,
+  Stack,
+  Typography,
+  TextField,
+} from '@mui/material';
 import axios from 'axios';
 import Rating from '@mui/material/Rating';
-import { useEffect } from 'react';
-import { set } from 'firebase/database';
 import { IoMdClose } from 'react-icons/io';
-import TextField from '@mui/material/TextField';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Review } from './review';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -26,9 +28,11 @@ const style = {
 
 type Props = {
   user_id: string;
+  user_name: string;
   event_id: number;
   openModal: boolean;
   handleClose: () => void;
+  updateReviews: (review: Review) => void;
 };
 
 export default function ModalRating({
@@ -36,17 +40,40 @@ export default function ModalRating({
   event_id,
   openModal,
   handleClose,
+  updateReviews,
+  user_name,
 }: Props) {
   const [review, setReview] = useState({
     id_user: user_id,
     description: '',
-    rating: 0,
+    rating: 2.5,
     date_review: new Date(),
   });
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertProps['severity']>('success');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleNewReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = { event_id, user_id, review };
+
+    if (review.rating === 0) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('The minimum rating is 1 star');
+      setSnackbarOpen(true);
+      return;
+    } else if (review.description === '') {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Please write a comment');
+      setSnackbarOpen(true);
+      return;
+    }
 
     const postReview = await axios
       .post('http://localhost:3001/api/events/review/new', {
@@ -60,8 +87,11 @@ export default function ModalRating({
         },
       })
       .then((res) => {
-        console.log(res.data);
-        handleClose();
+        res.data[0].name_user = user_name;
+        updateReviews(res.data[0]);
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Review posted successfully!');
+        setSnackbarOpen(true);
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -77,80 +107,98 @@ export default function ModalRating({
   };
 
   return (
-    <Modal
-      open={openModal}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      {...{ user_id, event_id }}
-    >
-      <Box sx={style}>
-        <Stack
-          rowGap="1rem"
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            height: 500,
-            width: '85%',
-            bgcolor: 'white',
-            boxShadow: 24,
-            paddingInline: '1rem',
-            paddingBlock: '2rem',
-            borderRadius: '1rem',
-          }}
-        >
-          <IoMdClose
-            onClick={handleClose}
-            style={{
-              fontSize: '2rem',
+    <>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        {...{ user_id, event_id }}
+      >
+        <Box sx={style}>
+          <Stack
+            rowGap="1rem"
+            sx={{
               position: 'absolute',
-              inset: '0 0 auto auto',
-              transform: 'translate(-50%, 50%)',
-            }}
-          />
-          <Typography variant="h2" fontWeight="bold">
-            Review
-          </Typography>
-          <form
-            onSubmit={handleNewReview}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              rowGap: '1rem',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              height: 500,
+              width: '85%',
+              bgcolor: 'white',
+              boxShadow: 24,
+              paddingInline: '1rem',
+              paddingBlock: '2rem',
+              borderRadius: '1rem',
             }}
           >
-            <Rating
-              name="half-rating"
-              defaultValue={2.5}
-              precision={0.5}
-              onChange={(event, newValue) => setRating(Number(newValue))}
+            <IoMdClose
+              onClick={handleClose}
+              style={{
+                fontSize: '2rem',
+                position: 'absolute',
+                inset: '0 0 auto auto',
+                transform: 'translate(-50%, 50%)',
+              }}
             />
+            <Typography variant="h2" fontWeight="bold">
+              Review
+            </Typography>
+            <form
+              onSubmit={handleNewReview}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                rowGap: '1rem',
+              }}
+            >
+              <Rating
+                name="half-rating"
+                defaultValue={2.5}
+                precision={0.5}
+                onChange={(event, newValue) => setRating(Number(newValue))}
+              />
 
-            <TextField
-              id="outlined-multiline-static"
-              label="Comments"
-              multiline
-              rows={9}
-              placeholder="Tell us about your experience!"
-              variant="outlined"
-              onChange={(event) => setDescription(event.target.value)}
-            />
-            <Box style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginTop: '1rem', width: '50%' }}
-                type="submit"
-                value="New Review"
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        </Stack>
-      </Box>
-    </Modal>
+              <TextField
+                id="outlined-multiline-static"
+                label="Comments"
+                multiline
+                rows={9}
+                placeholder="Tell us about your experience!"
+                variant="outlined"
+                onChange={(event) => setDescription(event.target.value)}
+              />
+              <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: '1rem', width: '50%' }}
+                  type="submit"
+                  value="New Review"
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
+          </Stack>
+        </Box>
+      </Modal>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+        sx={{ width: '98%' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity as AlertProps['severity']}
+          sx={{ width: '98%' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 }

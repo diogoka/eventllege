@@ -49,8 +49,6 @@ function Review({ id_event, applied }: Props) {
 
   const { user } = useContext(UserContext);
 
-  console.log('aplied', applied);
-
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
@@ -65,22 +63,29 @@ function Review({ id_event, applied }: Props) {
       });
   }, []);
 
+  const updateReviews = (newReview: Review) => {
+    setReviews((prevReviews) => [...prevReviews, newReview]);
+    setHasReview(true);
+    handleClose();
+  };
+
   return (
     <>
       <Box sx={{ marginTop: '1rem' }}>
         <Typography variant="h2" fontWeight="bold">
           Reviews
         </Typography>
-
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ marginTop: '1rem' }}
-          fullWidth
-          onClick={handleOpen}
-        >
-          Add Review
-        </Button>
+        {applied && (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ marginTop: '1rem' }}
+            fullWidth
+            onClick={handleOpen}
+          >
+            Add Review
+          </Button>
+        )}
 
         {hasReview ? (
           <>
@@ -98,8 +103,10 @@ function Review({ id_event, applied }: Props) {
       <ModalRating
         user_id={user!.id}
         event_id={id_event}
+        user_name={user!.name}
         openModal={openModal}
         handleClose={handleClose}
+        updateReviews={updateReviews}
       />
     </>
   );

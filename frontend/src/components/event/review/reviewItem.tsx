@@ -65,7 +65,7 @@ function ReviewItem({ review }: Props) {
       <Box sx={{ display: 'flex', columnGap: '0.8rem' }}>
         <Rating
           name="read-only"
-          value={review.rating}
+          value={Number(review.rating)}
           readOnly
           size="small"
           precision={0.5}
