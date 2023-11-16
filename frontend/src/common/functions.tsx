@@ -55,15 +55,15 @@ export const getTimeString = ( DateObj:any ):any => {
 
   return (
     DateObj.getHours() == 0?
-    `12:${DateObj.getMinutes().toString().padStart(2, "0")} AM`:
+    `12:${DateObj.getMinutes().toString().padStart(2, '0')} AM`:
 
     0 < DateObj.getHours() && DateObj.getHours() <= 11?
-    `${DateObj.getHours()}:${DateObj.getMinutes().toString().padStart(2, "0")} AM`:
+    `${DateObj.getHours()}:${DateObj.getMinutes().toString().padStart(2, '0')} AM`:
 
     DateObj.getHours() == 12?
-    `12:${DateObj.getMinutes().toString().padStart(2, "0")} PM`:
+    `12:${DateObj.getMinutes().toString().padStart(2, '0')} PM`:
 
     12 < DateObj.getHours() && DateObj.getHours() <= 23?
-    `${DateObj.getHours()-12}:${DateObj.getMinutes().toString().padStart(2, "0")} PM`: null
+    `${DateObj.getHours()-12}:${DateObj.getMinutes().toString().padStart(2, '0')} PM`: null
   )
 }

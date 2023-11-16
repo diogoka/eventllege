@@ -1,7 +1,7 @@
-import pool from "../db/db";
-import express from "express";
-import { sendEmail, EmailOption } from "../helpers/mail";
-import fs from "fs-extra";
+import pool from '../db/db';
+import express from 'express';
+import { sendEmail, EmailOption } from '../helpers/mail';
+import fs from 'fs-extra';
 
 // type EventInput = {
 //   owner: string;
@@ -68,13 +68,13 @@ export const getEvents = async (
 ) => {
   try {
     const numOfDays = Number(req.query.numOfDays ? req.query.numOfDays : 60);
-    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const dayFromNow = new Date(
       new Date().getTime() + numOfDays * 24 * 60 * 60 * 1000
     )
       .toISOString()
       .slice(0, 19)
-      .replace("T", " ");
+      .replace('T', ' ');
 
     const events = req.query.past
       ? await pool.query(
@@ -119,8 +119,8 @@ export const getPastEvents = async (
     )
       .toISOString()
       .slice(0, 19)
-      .replace("T", " ");
-    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
+      .replace('T', ' ');
+    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     const events = await pool.query(
       `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`,
@@ -184,13 +184,13 @@ export const getEventsByUser = async (
         INNER JOIN 
           tags ON events_tags.id_tag = tags.id_tag 
         WHERE 
-          events.id_event IN (${ids.join(",")});
+          events.id_event IN (${ids.join(',')});
       `);
     }
 
     if (req.query.search) {
-      const text = req.query.search !== undefined ? req.query.search : "";
-      const searchWords = text.toString().toLowerCase().split(" ");
+      const text = req.query.search !== undefined ? req.query.search : '';
+      const searchWords = text.toString().toLowerCase().split(' ');
 
       const filteredEvents = events.rows.filter((event: any) => {
         return searchWords.some((word) => {
@@ -219,7 +219,7 @@ export const getEventsByUser = async (
           INNER JOIN 
             tags ON events_tags.id_tag = tags.id_tag 
           WHERE 
-            events.id_event IN (${ids.join(",")});
+            events.id_event IN (${ids.join(',')});
         `);
         res.status(200).json({
           events: filteredEvents,
@@ -242,11 +242,11 @@ export const searchEvents = async (
   res: express.Response
 ) => {
   try {
-    const text = req.query.text !== undefined ? req.query.text : "";
-    const searchWords = text.toString().toLowerCase().split(" ");
-    const today = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const text = req.query.text !== undefined ? req.query.text : '';
+    const searchWords = text.toString().toLowerCase().split(' ');
+    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    let query = "SELECT * FROM events WHERE ";
+    let query = 'SELECT * FROM events WHERE ';
 
     if (searchWords.length === 1) {
       query += `LOWER(events.name_event) LIKE '%${searchWords[0]}%'`;
@@ -316,7 +316,7 @@ export const getEventsByOwner = async (
         INNER JOIN 
           tags ON events_tags.id_tag = tags.id_tag 
         WHERE 
-          events.id_event IN (${ids.join(",")});
+          events.id_event IN (${ids.join(',')});
       `);
     }
 
@@ -330,24 +330,24 @@ export const getEventsByOwner = async (
 };
 
 export const getEvent = async (req: express.Request, res: express.Response) => {
-  const EVENT_ID = req.originalUrl.split("/api/events/")[1];
+  const EVENT_ID = req.originalUrl.split('/api/events/')[1];
 
   try {
-    const events = await pool.query("SELECT * FROM events where id_event=$1", [
+    const events = await pool.query('SELECT * FROM events where id_event=$1', [
       EVENT_ID,
     ]);
 
     const tags = await pool.query(
-      "SELECT tags.name_tag FROM events " +
-        "inner join events_tags on events.id_event = events_tags.id_event " +
-        "inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1",
+      'SELECT tags.name_tag FROM events ' +
+        'inner join events_tags on events.id_event = events_tags.id_event ' +
+        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
-      "SELECT users.id_user, users.name_user FROM events " +
-        "inner join attendees on events.id_event = attendees.id_event " +
-        "inner join users on attendees.id_user = users.id_user where events.id_event=$1",
+      'SELECT users.id_user, users.name_user FROM events ' +
+        'inner join attendees on events.id_event = attendees.id_event ' +
+        'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
       [EVENT_ID]
     );
 
@@ -379,9 +379,9 @@ export const getUserEvents = async (
 
   try {
     const att = await pool.query(
-      "SELECT * FROM attendees " +
-        "inner join events on attendees.id_event = events.id_event " +
-        "where attendees.id_user = $1 and events.date_event_start >= $2",
+      'SELECT * FROM attendees ' +
+        'inner join events on attendees.id_event = events.id_event ' +
+        'where attendees.id_user = $1 and events.date_event_start >= $2',
       [SAMPLE_USER, date]
     );
 
@@ -509,7 +509,7 @@ export const updateEvents = async (
   } = req.body;
 
   if (!id) {
-    res.status(404).send("Update events failed");
+    res.status(404).send('Update events failed');
   } else {
     try {
       dates.forEach(async (date: Date) => {
@@ -555,7 +555,7 @@ export const deleteEvents = async (
   const id = parseInt(req.params.id);
 
   if (!id) {
-    res.status(404).send("Delete events failed");
+    res.status(404).send('Delete events failed');
   } else {
     try {
       const events = await pool.query(
@@ -574,7 +574,7 @@ export const newAttendee = async (
   res: express.Response
 ) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -603,7 +603,7 @@ export const deleteAttendee = async (
   res: express.Response
 ) => {
   if (!req.body.id_event || !req.body.id_user) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
   const { id_event, id_user } = req.body;
@@ -630,7 +630,7 @@ export const newReview = async (
   res: express.Response
 ) => {
   if (!req.body.id_event || !req.body.id_user || !req.body.review) {
-    res.status(400).send("Missing parameters");
+    res.status(400).send('Missing parameters');
     return;
   }
 
