@@ -69,7 +69,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           }
         }
       } else {
-        console.error("User is logged in but the data doesn't exist");
+        console.error('User is logged in but the data doesn\'t exist');
         return { isAllowed: false, redirection: '/events' };
       }
     }

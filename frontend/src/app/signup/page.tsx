@@ -17,6 +17,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { LoginStatus, UserContext } from '@/context/userContext';
 import { getErrorMessage } from '@/auth/errors';
 import PasswordInput from '@/components/common/password-input';
+import NameInput from '@/components/user/form/name-input';
+import CourseInput from '@/components/user/form/course-input';
 
 import {
   getAuth,
@@ -134,8 +136,8 @@ export default function SignUpPage() {
     <Stack>
       <Typography variant='h1'>Sign Up</Typography>
 
-      {loginStatus !== LoginStatus.SigningUp ? (
-        // Step1: Firebase Authentication
+      {/* Step1: Firebase Authentication */}
+      {loginStatus === LoginStatus.LoggedOut && (
         <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailAuth}>
             <Stack rowGap={'20px'}>
@@ -179,26 +181,16 @@ export default function SignUpPage() {
           </Button>
 
         </Stack>
-      ) : (
-        // Step2: Register for our app
+      )}
+
+      {/* Step2: Register for our app */}
+      {loginStatus === LoginStatus.SigningUp && (
         <form onSubmit={handleSignup}>
           <Stack rowGap={'20px'}>
             <Stack rowGap={'10px'}>
 
-              <FormControl required>
-                <TextField type='text' label='Name' onChange={(event) => setName(event.target.value)} required />
-              </FormControl>
-
-              <FormControl required>
-                <InputLabel id='course'>Course</InputLabel>
-                <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
-                  {courses.map((course: Course, index: number) => {
-                    return (
-                      <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
-                    )
-                  })}
-                </Select>
-              </FormControl>
+              <NameInput name={name} setName={setName} />
+              <CourseInput courseId={courseId} setCourseId={setCourseId} />
 
               <Typography variant='body2' align='center'>
                 If you are an instructor, please contact admin.
@@ -207,9 +199,7 @@ export default function SignUpPage() {
             </Stack>
             <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
           </Stack>
-
         </form>
-
       )}
     </Stack>
   )

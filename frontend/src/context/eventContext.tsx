@@ -22,7 +22,9 @@ type EventContextProps = {
   // updateProperty: (property: keyof EventData, value: string) => void;
 };
 
-export const EventContext = createContext<EventContextProps>({} as EventContextProps);
+export const EventContext = createContext<EventContextProps>(
+  {} as EventContextProps
+);
 
 export function EventContextProvider({ children }: { children: ReactNode }) {
   const [eventData, setEventData] = useState<EventData | null>(null);
@@ -31,5 +33,9 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
   //   setEventData((prev) => (prev ? { ...prev, [property]: value } : null));
   // };
 
-  return <EventContext.Provider value={{ eventData, setEventData }}>{children}</EventContext.Provider>;
+  return (
+    <EventContext.Provider value={{ eventData, setEventData }}>
+      {children}
+    </EventContext.Provider>
+  );
 }

@@ -68,11 +68,14 @@ export default function EventsControl() {
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
-  const [event, dispatch]: [EventState, Dispatch<EventAction>] = useReducer(eventReducer, initialState);
+  const [event, dispatch]: [EventState, Dispatch<EventAction>] = useReducer(
+    eventReducer,
+    initialState
+  );
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setEventData((prev) => ({ ...Prev, eventData, event }));
+    // setEventData((prev) => ({ ...Prev, eventData, event }));
     router.push('http://localhost:3000/events/new/preview');
   };
   return (
@@ -81,9 +84,14 @@ export default function EventsControl() {
         title={event.title}
         setTitle={(title) => dispatch({ type: 'UPDATE_TITLE', payload: title })}
         description={event.description}
-        setDescription={(description) => dispatch({ type: 'UPDATE_DESCRIPTION', payload: description })}
+        setDescription={(description) =>
+          dispatch({ type: 'UPDATE_DESCRIPTION', payload: description })
+        }
       />
-      <DateList dates={event.dates} setDates={(dates) => dispatch({ type: 'UPDATE_DATES', payload: dates })} />
+      <DateList
+        dates={event.dates}
+        setDates={(dates) => dispatch({ type: 'UPDATE_DATES', payload: dates })}
+      />
       <Location />
       <DetailList
         price={event.price}
@@ -91,12 +99,16 @@ export default function EventsControl() {
         spots={event.spots}
         setSpots={(spots) => dispatch({ type: 'UPDATE_SPOTS', payload: spots })}
         category={event.category}
-        setCategory={(category) => dispatch({ type: 'UPDATE_CATEGORY', payload: category })}
+        setCategory={(category) =>
+          dispatch({ type: 'UPDATE_CATEGORY', payload: category })
+        }
         selectedTags={event.selectedTags}
-        setSelectedTags={(selectedTags) => dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })}
+        setSelectedTags={(selectedTags) =>
+          dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
+        }
       />
       <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
-      <Button type='submit'>Go to preview</Button>
+      <Button type="submit">Go to preview</Button>
     </Box>
   );
 }

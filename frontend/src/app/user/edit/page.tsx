@@ -7,18 +7,12 @@ import useUploadImage from '@/services/imageInput';
 import { Select, MenuItem, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
 import { FaCirclePlus } from 'react-icons/fa6';
+import NameInput from '@/components/user/form/name-input';
+import CourseInput from '@/components/user/form/course-input';
 // import {
 //   getAuth,
 //   updateEmail
 // } from 'firebase/auth';
-
-const FALLBACK_IMAGE = '/default_avatar.svg';
-
-type Course = {
-  id: number;
-  name: string;
-  category: string;
-}
 
 export default function UserEditPage() {
   const router = useRouter();
@@ -36,9 +30,6 @@ export default function UserEditPage() {
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
   const [tempImageSrc, setTempImageSrc] = useState(`http://localhost:3001/img/users/${user?.id}`);
 
-  // Course data from server
-  const [courses, setCourses] = useState([]);
-
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -48,18 +39,6 @@ export default function UserEditPage() {
       setPhone(user.phone);
     }
   }, [user]);
-
-  // Get course data from server to show course names
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/courses')
-      .then((res) => {
-        setCourses(res.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      })
-  }, []);
 
   useEffect(() => {
     if (image) {
@@ -121,7 +100,7 @@ export default function UserEditPage() {
                 position: 'relative',
               }}
             >
-              
+
               <Avatar
                 src={tempImageSrc}
                 alt={user?.name}
@@ -158,20 +137,9 @@ export default function UserEditPage() {
             />
           </Box>
 
-          <FormControl required fullWidth>
-            <TextField type='text' label='Name' value={name} onChange={(event) => setName(event.target.value)} required />
-          </FormControl>
+          <NameInput name={name} setName={setName} />
 
-          <FormControl required fullWidth>
-            <InputLabel id='course'>Course</InputLabel>
-            <Select id='course' label='Course' value={courseId} onChange={(e) => setCourseId(e.target.value)}>
-              {courses.map((course: Course, index: number) => {
-                return (
-                  <MenuItem key={index} value={course.id}>{course.name}</MenuItem>
-                )
-              })}
-            </Select>
-          </FormControl>
+          <CourseInput courseId={courseId} setCourseId={setCourseId} />
 
           {/* <FormControl required fullWidth>
               <TextField type='email' label='Email' value={email} onChange={(event) => setEmail(event.target.value)} required />
