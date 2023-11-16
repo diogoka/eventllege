@@ -10,10 +10,9 @@ import Box from '@mui/material/Box';
 
 type Props = {
   searchEvents: (text: string) => void;
-  
 };
 
-function SearchBar({ searchEvents }:Props) {
+function SearchBar({ searchEvents }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (event: any) => {
@@ -31,7 +30,7 @@ function SearchBar({ searchEvents }:Props) {
     marginBottom: '1rem',
     height: '3rem',
   };
-  
+
   const textFieldStyle = {
     border: '0px solid #141D4F',
     borderRadius: '0px',
@@ -62,7 +61,7 @@ function SearchBar({ searchEvents }:Props) {
 
   return (
     <Grid container spacing={0} style={gridContainerStyle}>
-      <Grid item xs={9.5} sx={{height: '3rem'}}>
+      <Grid item xs={9.5} sx={{ height: '3rem' }}>
         <TextField
           value={searchTerm}
           onChange={handleInputChange}
@@ -74,7 +73,13 @@ function SearchBar({ searchEvents }:Props) {
       </Grid>
       <Grid item xs={2.5} style={gridIconContainerStyle}>
         <Box>
-          <IconItem iconName="FaSearch" onClick={handleSearch} isClickable={true} color='white' size="1.3rem" />
+          <IconItem
+            iconName="FaSearch"
+            onClick={handleSearch}
+            isClickable={true}
+            color="white"
+            size="1.3rem"
+          />
         </Box>
       </Grid>
     </Grid>
