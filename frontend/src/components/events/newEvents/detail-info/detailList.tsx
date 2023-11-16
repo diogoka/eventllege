@@ -21,12 +21,8 @@ type Props = {
   setSpots: (value: number) => void;
   category: string;
   setCategory: (value: string) => void;
-  tagId: number[];
-  setTagId: (value: number[]) => void;
-  categories: Category[];
-  setCategories: (categories: Category[]) => void;
-  tags: Tag[];
-  setTags: (tags: Tag[]) => void;
+  selectedTags: number[];
+  setSelectedTags: (value: number[]) => void;
 };
 
 export default function DetailList(props: Props) {
@@ -39,15 +35,10 @@ export default function DetailList(props: Props) {
         <Capacity spots={props.spots} setSpots={props.setSpots} />
       </Grid>
       <Grid item xs={12}>
-        <Category
-          category={props.category}
-          setCategory={props.setCategory}
-          categories={props.categories}
-          setCategories={props.setCategories}
-        />
+        <Category category={props.category} setCategory={props.setCategory} />
       </Grid>
       <Grid item xs={12}>
-        <Tag tagId={props.tagId} setTagId={props.setTagId} tags={props.tags} setTags={props.setTags} />
+        <Tag selectedTags={props.selectedTags} setSelectedTags={props.setSelectedTags} />
       </Grid>
     </Grid>
   );

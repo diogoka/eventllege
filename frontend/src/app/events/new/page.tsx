@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
-import useUploadImage from '@/services/imageInput';
 import { UserContext } from '@/context/userContext';
 import { EventContext } from '@/context/eventContext';
 import { Stack } from '@mui/material';
@@ -13,10 +12,6 @@ export default function NewEventPage() {
 
   const { user } = useContext(UserContext);
   const { eventData, setEventData } = useContext(EventContext);
-
-  //User Input
-
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,11 +70,7 @@ export default function NewEventPage() {
 
   return (
     <Stack>
-      <form onSubmit={submitHandler}>
-        <EventsControl />
-
-        <input type='submit' value='Submit' />
-      </form>
+      <EventsControl />
     </Stack>
   );
 }

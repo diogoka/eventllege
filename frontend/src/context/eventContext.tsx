@@ -9,10 +9,10 @@ export type EventData = {
   location: string;
   price: string;
   image: string;
-  tagId: number;
+  selectedTags: number[];
   category: string;
-  tags: Array<string>;
-  categories: Array<string>;
+  // tags: Array<string>;
+  // categories: Array<string>;
 };
 
 type EventContextProps = {
@@ -27,9 +27,9 @@ export const EventContext = createContext<EventContextProps>({} as EventContextP
 export function EventContextProvider({ children }: { children: ReactNode }) {
   const [eventData, setEventData] = useState<EventData | null>(null);
 
-  const updateProperty = (property: keyof EventData, value: string) => {
-    setEventData((prev) => (prev ? { ...prev, [property]: value } : null));
-  };
+  // const updateProperty = (property: keyof EventData, value: string) => {
+  //   setEventData((prev) => (prev ? { ...prev, [property]: value } : null));
+  // };
 
   return <EventContext.Provider value={{ eventData, setEventData }}>{children}</EventContext.Provider>;
 }

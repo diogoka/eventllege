@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import { FormControl, InputLabel, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -10,12 +10,12 @@ type Category = {
 type Props = {
   category: string;
   setCategory: (value: string) => void;
-  categories: Category[];
-  setCategories: (categories: Category[]) => void;
+  // categories: Category[];
+  // setCategories: (categories: Category[]) => void;
 };
-export default function Category({ category, setCategory, categories, setCategories }: Props) {
+export default function Category({ category, setCategory }: Props) {
   //categories are from server
-  // const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = React.useState<Category[]>([]);
 
   useEffect(() => {
     axios
@@ -34,9 +34,9 @@ export default function Category({ category, setCategory, categories, setCategor
         <InputLabel id='Category'>Category</InputLabel>
         <Select
           labelId='Category'
-          value={category}
-          label='Age'
-          onChange={(event: SelectChangeEvent) => setCategory(event.target.value as string)}
+          value={categories.length > 0 ? category : ''}
+          label='category'
+          onChange={(event: SelectChangeEvent) => setCategory(event.target.value)}
         >
           {categories.map((category: Category, index: number) => (
             <MenuItem key={index} value={category.category_course}>
