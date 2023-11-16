@@ -54,6 +54,7 @@ export default function AttendeesRow({ attendees }: Props) {
           if (index < MAX_DISPLAY_AVATARS) {
             return (
               <Avatar
+                key={index}
                 alt={attendee.name}
                 src={`http://localhost:3001/img/users/${attendee.id}`}
               />

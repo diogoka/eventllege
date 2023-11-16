@@ -10,8 +10,6 @@ import AlertTitle from '@mui/material/AlertTitle';
 import ImageHelper from '@/components/common/image-helper';
 import ModalDelete from './modalDelete';
 
-const FALLBACK_IMAGE = '/event_placeholder.png';
-
 type Props = {
     event: Event;
     tags: Tag[];
@@ -188,7 +186,6 @@ function EventItem({ event, tags, user, deleteEvent, attending }: Props) {
             </Typography>
             <ImageHelper
                 src={`http://localhost:3001/img/events/${event.id_event}`}
-                placeholderSrc={FALLBACK_IMAGE}
                 width='6.25rem' height='4.0625rem' style={imageContainerStyle}
                 alt={event.name_event}
             />

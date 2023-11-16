@@ -73,8 +73,8 @@ const DetailContainer = ({ event, applied, organizerEvent }: Props) => {
         <ImageHelper
           src={`http://localhost:3001/img/events/${event?.id_event}`}
           width="100%"
-          alt={event?.name_event}
-          style={{ borderRadius: '10px', boxShadow: '0 0 4px 4px #77777777' }}
+          height="auto"
+          alt={event?.name_event ?? 'Event'}
         />
       </Box>
 
