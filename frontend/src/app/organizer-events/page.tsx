@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
@@ -31,6 +31,11 @@ type CurrentUser = {
   role: string;
 };
 
+interface HasEvents {
+  eventFound: boolean;
+  message: string;
+}
+
 export default function OrganizerEventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -39,6 +44,7 @@ export default function OrganizerEventsPage() {
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
+  const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
 
   const currentUser: CurrentUser = {
     id: user!.id,
@@ -49,6 +55,15 @@ export default function OrganizerEventsPage() {
     axios
       .get(`http://localhost:3001/api/events/owner/${currentUser.id}`)
       .then((res) => {
+        console.log(res.data);
+        if (res.data.events.length === 0) {
+          setHasEvents({
+            eventFound: false,
+            message: 'You have not created events yet',
+          });
+        } else {
+          setHasEvents({ eventFound: true, message: '' });
+        }
         setEvents(res.data.events);
         setTags(res.data.tags);
       })
@@ -80,24 +95,20 @@ export default function OrganizerEventsPage() {
         flexDirection: 'column',
       }}
     >
-      {alertOpen && (
-        <Alert
-          severity="info"
-          variant="filled"
-          onClose={() => setAlertOpen(false)}
-          sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
-        >
-          No events found
-        </Alert>
-      )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList
-        events={events}
-        tags={tags}
-        user={currentUser}
-        setEvents={setEvents}
-        attendance={eventsOfUser}
-      ></EventList>
+      {hasEvents.eventFound ? (
+        <EventList
+          events={events}
+          tags={tags}
+          user={currentUser}
+          setEvents={setEvents}
+          attendance={eventsOfUser}
+        ></EventList>
+      ) : (
+        <Typography sx={{ position: 'relative', top: '16.3125rem' }}>
+          {hasEvents.message}
+        </Typography>
+      )}
     </Box>
   );
 }

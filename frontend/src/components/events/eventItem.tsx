@@ -114,7 +114,8 @@ function EventItem({
     router.push(`/events/${eventId}`);
   };
 
-  const handleAlertClose = () => {
+  const handleAlertClose = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
     setIsAlertVisible(false);
   };
 
@@ -270,6 +271,7 @@ function EventItem({
       )}
       <ModalDelete
         eventId={eventId}
+        eventName={event.name_event}
         isOpen={isModalOpen}
         onClose={closeModal}
         deleteEvent={deleteEvent}

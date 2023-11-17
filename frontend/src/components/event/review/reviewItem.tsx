@@ -23,12 +23,18 @@ const boxReviewStyle = {
 
 function ReviewItem({ review }: Props) {
   const today = new Date(review.date_review);
+  // const daysAgo = Math.floor(
+  //   (new Date().getTime() - today.getTime()) / (1000 * 3600 * 24)
+  // );
   const daysAgo = Math.floor(
-    (new Date().getTime() - today.getTime()) / (1000 * 3600 * 24)
+    (new Date().setHours(0, 0, 0, 0) -
+      new Date(review.date_review).setHours(0, 0, 0, 0)) /
+      (1000 * 3600 * 24)
   );
 
   const daysAgoString = (days: number) => {
     if (days <= 0) return 'Today';
+    if (days === 1) return 'Yesterday';
     if (days > 7) {
       return (days / 7).toFixed(0) + ' weeks ago';
     } else {
