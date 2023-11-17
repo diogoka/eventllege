@@ -1,18 +1,18 @@
 'use client';
 import React, { createContext, ReactNode, useState } from 'react';
-
-type EventData = {
+import { DateRange } from '@/components/events/newEvents/eventsControl';
+export type EventData = {
   title: string;
   description: string;
-  dates: Array<Date>;
-  spots: string;
+  dates: DateRange[];
+  spots: number;
   location: string;
-  price: string;
+  price: number;
   image: string;
-  tagId: number;
+  selectedTags: number[];
   category: string;
-  tags: Array<number>;
-  categories: Array<string>;
+  // tags: Array<string>;
+  // categories: Array<string>;
 };
 
 type EventContextProps = {

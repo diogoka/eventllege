@@ -1,19 +1,29 @@
 import React from 'react';
 import { TextField, InputAdornment } from '@mui/material';
 
-export default function Price() {
-  const [price, setPrice] = React.useState('0');
+type Props = {
+  price: number;
+  setPrice: (value: number) => void;
+};
+
+export default function Price({ price, setPrice }: Props) {
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = +event.target.value;
+    if (!isNaN(inputValue)) {
+      setPrice(inputValue);
+    }
+  };
   return (
     <>
       <TextField
-        label='Price'
-        variant='outlined'
-        type='number'
+        label="Price"
+        variant="outlined"
+        type="number"
         fullWidth
         value={price}
-        onChange={(event) => setPrice(event.target.value)}
+        onChange={handlePriceChange}
         InputProps={{
-          startAdornment: <InputAdornment position='start'>$</InputAdornment>,
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
       />
     </>

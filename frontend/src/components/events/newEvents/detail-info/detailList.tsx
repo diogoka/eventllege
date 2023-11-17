@@ -5,20 +5,50 @@ import Category from './category';
 import Tag from './tag';
 import { Grid } from '@mui/material';
 
-export default function DetailList() {
+type Category = {
+  category_course: string;
+};
+
+type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
+
+type Props = {
+  price: number;
+  setPrice: (value: number) => void;
+  spots: number;
+  setSpots: (value: number) => void;
+  category: string;
+  setCategory: (value: string) => void;
+  selectedTags: number[];
+  setSelectedTags: (value: number[]) => void;
+};
+
+export default function DetailList(props: Props) {
   return (
-    <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      rowSpacing={2}
+      sx={{ width: '100%' }}
+    >
       <Grid item xs={12}>
-        <Price />
+        <Price price={props.price} setPrice={props.setPrice} />
       </Grid>
       <Grid item xs={12}>
-        <Capacity />
+        <Capacity spots={props.spots} setSpots={props.setSpots} />
       </Grid>
       <Grid item xs={12}>
-        <Category />
+        <Category category={props.category} setCategory={props.setCategory} />
       </Grid>
       <Grid item xs={12}>
-        <Tag />
+        <Tag
+          selectedTags={props.selectedTags}
+          setSelectedTags={props.setSelectedTags}
+        />
       </Grid>
     </Grid>
   );

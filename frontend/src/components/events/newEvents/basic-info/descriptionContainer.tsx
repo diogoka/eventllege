@@ -1,9 +1,11 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
-export default function DescriptionContainer() {
-  const [description, setDescription] = React.useState('');
-
+type Props = {
+  description: string;
+  setDescription: (value: string) => void;
+};
+export default function DescriptionContainer({ description, setDescription }: Props) {
   return (
     <>
       <TextField

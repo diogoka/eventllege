@@ -28,12 +28,16 @@ type Tag = {
   name_tag: string;
 };
 
-export default function Tag() {
-  // user Input
-  const [tagId, setTagId] = useState<number[]>([]);
-  // Tag data from server
-  const [tags, setTags] = useState<Tag[]>([]);
+type Props = {
+  selectedTags: number[];
+  setSelectedTags: (value: number[]) => void;
+  // tags: Tag[];
+  // setTags: (tags: Tag[]) => void;
+};
 
+export default function Tag({ selectedTags, setSelectedTags }: Props) {
+  const [tags, setTags] = useState<Tag[]>([]);
+  // Tag data from server
   useEffect(() => {
     axios
       .get('http://localhost:3001/api/tags')
@@ -45,11 +49,11 @@ export default function Tag() {
       });
   }, []);
 
-  const handleChange = (event: SelectChangeEvent<typeof tagId>) => {
+  const handleChange = (event: SelectChangeEvent<typeof selectedTags>) => {
     const {
       target: { value },
     } = event;
-    setTagId(typeof value === 'string' ? value.split(',').map(Number) : value);
+    setSelectedTags(typeof value === 'string' ? value.split(',').map(Number) : value);
   };
 
   return (
@@ -60,7 +64,7 @@ export default function Tag() {
           labelId='demo-multiple-checkbox-label'
           id='demo-multiple-checkbox'
           multiple
-          value={tagId}
+          value={selectedTags}
           onChange={handleChange}
           input={<OutlinedInput label='Tag' />}
           renderValue={(selected) => {
@@ -71,7 +75,7 @@ export default function Tag() {
         >
           {tags.map((tag) => (
             <MenuItem key={tag.id_tag} value={tag.id_tag}>
-              <Checkbox checked={tagId.indexOf(tag.id_tag) > -1} />
+              <Checkbox checked={selectedTags.indexOf(tag.id_tag) > -1} />
               <ListItemText primary={tag.name_tag} />
             </MenuItem>
           ))}

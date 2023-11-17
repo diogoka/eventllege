@@ -1,3 +1,6 @@
+'use client'
+import { useContext } from 'react';
+import { UserContext, LoginStatus } from '@/context/userContext';
 import {
   Table,
   TableBody,
@@ -16,6 +19,8 @@ type Props = {
 }
 
 export default function DetailInfo(props: Props) {
+
+  const { loginStatus } = useContext(UserContext);
 
   return (
     <TableContainer>
@@ -37,10 +42,12 @@ export default function DetailInfo(props: Props) {
             title='Max spots'
             content={props.maxSpots.toString()}
           />
-          <DetailInfoRow
-            title='Attendees'
-            content={<AttendeesRow attendees={props.attendees} />}
-          />
+          {loginStatus === LoginStatus.LoggedIn &&
+            <DetailInfoRow
+              title='Attendees'
+              content={<AttendeesRow attendees={props.attendees} />}
+            />
+          }
           <DetailInfoRow
             title='Tags'
             content={props.tags.join(', ')}
