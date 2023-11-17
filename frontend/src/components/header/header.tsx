@@ -14,7 +14,14 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <Box component={'header'} position='fixed' width='100%' bgcolor='white' zIndex={100}>
+    <Box
+      component={'header'}
+      position='fixed'
+      width='100%'
+      bgcolor='white'
+      zIndex={100}
+      borderBottom={'1px solid rgba(51, 3, 0, 0.1)'}
+    >
       <Stack
         direction='row'
         alignItems='center'

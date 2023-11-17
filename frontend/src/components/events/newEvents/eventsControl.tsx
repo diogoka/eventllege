@@ -1,19 +1,119 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { Dispatch } from 'react';
+import dayjs from 'dayjs';
+import { useContext, useReducer } from 'react';
+import { useRouter } from 'next/navigation';
+import { EventContext } from '@/context/eventContext';
+import { Box, Button } from '@mui/material';
+import useUploadImage from '@/services/imageInput';
 import BasicInfo from './basic-info/basicInfo';
 import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
 
+export interface DateRange {
+  dateStart: dayjs.Dayjs;
+  dateEnd: dayjs.Dayjs;
+}
+const today = dayjs();
+
+interface EventData {
+  title: string;
+  description: string;
+  dates: DateRange[];
+  spots: number;
+  location: string;
+  price: number;
+  image: string;
+  selectedTags: number[];
+  category: string;
+}
+
+type EventAction = {
+  type: string;
+  payload: any;
+};
+
+const initialState = {
+  title: '',
+  description: '',
+  dates: [{ dateStart: today, dateEnd: today }],
+  spots: 0,
+  location: 'location',
+  price: 0,
+  image: 'images',
+  selectedTags: [],
+  category: '',
+};
+const eventReducer = (state: EventData, action: EventAction) => {
+  switch (action.type) {
+    case 'UPDATE_TITLE':
+      return { ...state, title: action.payload };
+    case 'UPDATE_DESCRIPTION':
+      return { ...state, description: action.payload };
+    case 'UPDATE_DATES':
+      return { ...state, dates: action.payload };
+    case 'UPDATE_PRICE':
+      return { ...state, price: action.payload };
+    case 'UPDATE_SPOTS':
+      return { ...state, spots: action.payload };
+    case 'UPDATE_CATEGORY':
+      return { ...state, category: action.payload };
+    case 'UPDATE_SELECTED_TAGS':
+      return { ...state, selectedTags: action.payload };
+    default:
+      return state;
+  }
+};
+
 export default function EventsControl() {
+  const router = useRouter();
+  const { eventData, setEventData } = useContext(EventContext);
+
+  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+
+  const [newEvent, dispatch]: [EventData, Dispatch<EventAction>] = useReducer(
+    eventReducer,
+    initialState
+  );
+
+  const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // setEventData((prev) => ({ ...Prev, eventData, event }));
+    setEventData(newEvent);
+    router.push('http://localhost:3000/events/new/preview');
+  };
   return (
-    <Box component={'form'}>
-      <BasicInfo />
-      <DateList />
+    <Box component={'form'} onSubmit={clickHandler}>
+      <BasicInfo
+        title={newEvent.title}
+        setTitle={(title) => dispatch({ type: 'UPDATE_TITLE', payload: title })}
+        description={newEvent.description}
+        setDescription={(description) =>
+          dispatch({ type: 'UPDATE_DESCRIPTION', payload: description })
+        }
+      />
+      <DateList
+        dates={newEvent.dates}
+        setDates={(dates) => dispatch({ type: 'UPDATE_DATES', payload: dates })}
+      />
       <Location />
-      <DetailList />
-      <ImageContainer />
+      <DetailList
+        price={newEvent.price}
+        setPrice={(price) => dispatch({ type: 'UPDATE_PRICE', payload: price })}
+        spots={newEvent.spots}
+        setSpots={(spots) => dispatch({ type: 'UPDATE_SPOTS', payload: spots })}
+        category={newEvent.category}
+        setCategory={(category) =>
+          dispatch({ type: 'UPDATE_CATEGORY', payload: category })
+        }
+        selectedTags={newEvent.selectedTags}
+        setSelectedTags={(selectedTags) =>
+          dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
+        }
+      />
+      <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
+      <Button type="submit">Go to preview</Button>
     </Box>
   );
 }
