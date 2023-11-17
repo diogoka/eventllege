@@ -13,25 +13,32 @@ export type Attendee = {
   name: string | undefined;
 };
 
-export type Event = {
-  id_event: number;
-  id_owner: string;
-  name_event: string;
-  description_event: string;
+export type EventDate = {
   date_event_start: string;
   date_event_end: string;
+};
+
+export type Event = {
+  name_event: string;
+  description_event: string;
+  dates_event: Array<EventDate>;
   location_event: string;
   capacity_event: number;
   price_event: number;
   image_event: string;
   category_event: string;
   tags: Array<string>;
-  attendees: Array<Attendee>;
+};
+
+export type OtherInfo = {
+  id_event: number;
+  id_owner: string;
 };
 
 export default function EventPage() {
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
+  const [otherInfo, setOtherInfo] = useState<OtherInfo>();
   const [applied, setApplied] = useState<boolean>(false);
   const [attendees, setAttendees] = useState<Array<Attendee>>();
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
@@ -46,14 +53,27 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-        setEvent(res.data.event);
+
+        setEvent({
+          ...res.data.event,
+          dates_event: [{
+            date_event_start: res.data.event.date_event_start,
+            date_event_end: res.data.event.date_event_end
+          }]
+        });
+
         setAttendees([...res.data.event.attendees]);
+
+        setOtherInfo({
+          id_event: res.data.event.id_event,
+          id_owner: res.data.event.id_owner
+        });
 
         res.data.event.attendees.map((val: Attendee) => {
           val.id == user!.id && setApplied(true);
         });
 
-        user?.role == 'organizer' &&
+        user?.roleName == 'organizer' &&
           user?.id == res.data.event.id_owner &&
           setOrganizerEvent(true);
         let today = new Date();
@@ -91,7 +111,7 @@ export default function EventPage() {
   const addAttendee = () => {
     axios
       .post('http://localhost:3001/api/events/attendee', {
-        id_event: event?.id_event,
+        id_event: otherInfo?.id_event,
         id_user: user?.id,
       })
       .then((res: any) => {
@@ -107,7 +127,7 @@ export default function EventPage() {
     axios
       .delete('http://localhost:3001/api/events/attendee', {
         data: {
-          id_event: event?.id_event,
+          id_event: otherInfo?.id_event,
           id_user: user?.id,
         },
       })
@@ -123,6 +143,7 @@ export default function EventPage() {
     <Stack>
       <DetailContainer
         event={event!}
+        otherInfo={otherInfo!}
         applied={applied}
         organizerEvent={organizerEvent}
       />
@@ -136,7 +157,7 @@ export default function EventPage() {
           category={event.category_event}
         />
       )}
-      {oldEvent && <Review id_event={event!.id_event} applied={applied} />}
+      {oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
 
       {!oldEvent && (
         <>
@@ -148,13 +169,13 @@ export default function EventPage() {
             sx={{ marginBlock: '25px' }}
           >
             <Box style={{ width: '47%' }}>
-              {event?.id_event ? (
+              {otherInfo?.id_event ? (
                 <Button
                   type="submit"
                   variant="outlined"
                   color="primary"
                   fullWidth
-                  onClick={() => editEventHandler(event.id_event)}
+                  onClick={() => editEventHandler(otherInfo.id_event)}
                 >
                   Edit
                 </Button>
@@ -164,13 +185,13 @@ export default function EventPage() {
             </Box>
 
             <Box style={{ width: '47%' }}>
-              {event?.id_event ? (
+              {otherInfo?.id_event ? (
                 <Button
                   type="submit"
                   variant="outlined"
                   color="error"
                   fullWidth
-                  onClick={() => deleteEvent(event.id_event)}
+                  onClick={() => deleteEvent(otherInfo.id_event)}
                 >
                   Delete Event
                 </Button>
