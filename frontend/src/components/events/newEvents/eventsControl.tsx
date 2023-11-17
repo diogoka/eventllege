@@ -11,20 +11,22 @@ import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
 
-interface DateRange {
+export interface DateRange {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
 }
 const today = dayjs();
 
-interface EventState {
+interface EventData {
   title: string;
   description: string;
   dates: DateRange[];
-  price: number;
   spots: number;
-  category: string;
+  location: string;
+  price: number;
+  image: string;
   selectedTags: number[];
+  category: string;
 }
 
 type EventAction = {
@@ -36,12 +38,14 @@ const initialState = {
   title: '',
   description: '',
   dates: [{ dateStart: today, dateEnd: today }],
-  price: 0,
   spots: 0,
-  category: '',
+  location: 'location',
+  price: 0,
+  image: 'images',
   selectedTags: [],
+  category: '',
 };
-const eventReducer = (state: EventState, action: EventAction) => {
+const eventReducer = (state: EventData, action: EventAction) => {
   switch (action.type) {
     case 'UPDATE_TITLE':
       return { ...state, title: action.payload };
@@ -68,7 +72,7 @@ export default function EventsControl() {
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
-  const [event, dispatch]: [EventState, Dispatch<EventAction>] = useReducer(
+  const [newEvent, dispatch]: [EventData, Dispatch<EventAction>] = useReducer(
     eventReducer,
     initialState
   );
@@ -76,33 +80,34 @@ export default function EventsControl() {
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // setEventData((prev) => ({ ...Prev, eventData, event }));
+    setEventData(newEvent);
     router.push('http://localhost:3000/events/new/preview');
   };
   return (
     <Box component={'form'} onSubmit={clickHandler}>
       <BasicInfo
-        title={event.title}
+        title={newEvent.title}
         setTitle={(title) => dispatch({ type: 'UPDATE_TITLE', payload: title })}
-        description={event.description}
+        description={newEvent.description}
         setDescription={(description) =>
           dispatch({ type: 'UPDATE_DESCRIPTION', payload: description })
         }
       />
       <DateList
-        dates={event.dates}
+        dates={newEvent.dates}
         setDates={(dates) => dispatch({ type: 'UPDATE_DATES', payload: dates })}
       />
       <Location />
       <DetailList
-        price={event.price}
+        price={newEvent.price}
         setPrice={(price) => dispatch({ type: 'UPDATE_PRICE', payload: price })}
-        spots={event.spots}
+        spots={newEvent.spots}
         setSpots={(spots) => dispatch({ type: 'UPDATE_SPOTS', payload: spots })}
-        category={event.category}
+        category={newEvent.category}
         setCategory={(category) =>
           dispatch({ type: 'UPDATE_CATEGORY', payload: category })
         }
-        selectedTags={event.selectedTags}
+        selectedTags={newEvent.selectedTags}
         setSelectedTags={(selectedTags) =>
           dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
         }
