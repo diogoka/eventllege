@@ -6,7 +6,7 @@ import {
   getMonthName,
   getTimeString,
 } from '../../common/functions';
-import { Event } from '../../app/events/[id]/page';
+import { Event, OtherInfo, EventDate } from '../../app/events/[id]/page';
 import IconsContainer from '../icons/iconsContainer';
 import { UserContext } from '@/context/userContext';
 
@@ -14,34 +14,52 @@ type Props = {
   event: Event;
   applied: boolean;
   organizerEvent: boolean;
+  otherInfo: OtherInfo;
 };
 
-const DetailContainer = ({ event, applied, organizerEvent }: Props) => {
+const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) => {
+
   const { loginStatus } = useContext(UserContext);
 
   const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
 
-  const startDate = new Date(event?.date_event_start);
-  const endDate = new Date(event?.date_event_end);
+  const deepCopy = event?.dates_event.map((dt:EventDate)=>
+  ({
+    date_event_start: dt.date_event_start,
+    date_event_end: dt.date_event_end
+    }));
 
-  const startDateDetail = `
-    ${getDayName(startDate.getDay())}, 
-    ${getMonthName(startDate.getMonth())} ${startDate.getDate()}, 
-    ${startDate.getFullYear()}, ${getTimeString(startDate)}`;
+  const setDate =(start:string, end:string)=> {
 
-  const endDateDetail =
-    startDate.getMonth() == endDate.getMonth() &&
-    startDate.getDate() == endDate.getDate() &&
-    startDate.getFullYear() == endDate.getFullYear()
-      ? `${getTimeString(endDate)}`
-      : `${getDayName(endDate.getDay())}, 
-    ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
-    ${endDate.getFullYear()}, ${getTimeString(endDate)}`;
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    
+    return {
+        date_event_start:`
+        ${getDayName(startDate.getDay())}, 
+        ${getMonthName(startDate.getMonth())} ${startDate.getDate()}, 
+        ${startDate.getFullYear()}, ${getTimeString(startDate)}`,
+        
+        date_event_end:
+        startDate.getMonth() == endDate.getMonth() &&
+        startDate.getDate() == endDate.getDate() &&
+        startDate.getFullYear() == endDate.getFullYear()
+        ? 
+        `${getTimeString(endDate)}`:
+        `${getDayName(endDate.getDay())}, 
+        ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
+        ${endDate.getFullYear()}, ${getTimeString(endDate)}`
+        };
+  };
+
+  const eventDates = deepCopy?.map((dt:EventDate)=>
+    (setDate(dt.date_event_start, dt.date_event_end))
+  );
 
   const handleUserClick = (iconName: string) => {
     if (iconName == 'FaShareSquare') {
       navigator.clipboard
-        .writeText(`http://localhost:3000/events/${event?.id_event}`)
+        .writeText(`http://localhost:3000/events/${otherInfo?.id_event}`)
         .then(() => {
           setIsAlertVisible(true);
           setTimeout(() => {
@@ -71,7 +89,7 @@ const DetailContainer = ({ event, applied, organizerEvent }: Props) => {
 
       <Box style={{ marginInline: 'auto' }}>
         <ImageHelper
-          src={`http://localhost:3001/img/events/${event?.id_event}`}
+          src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
           width="100%"
           height="auto"
           alt={event?.name_event ?? 'Event'}
@@ -103,17 +121,24 @@ const DetailContainer = ({ event, applied, organizerEvent }: Props) => {
       </Box>
 
       <Box style={{ margin: '10px auto' }}>
-        <Box display="flex" alignItems="center">
-          <IconsContainer
-            icons={[{ name: 'FaClock', isClickable: false, color: '#333333' }]}
-            onIconClick={() => {
-              return;
-            }}
-          />
-          <Typography sx={MarginTop}>
-            {startDateDetail}&nbsp;-&nbsp;{endDateDetail}
-          </Typography>
-        </Box>
+
+        {eventDates?.map((dt:EventDate)=>{
+            return (
+                <>
+                    <Box display="flex" alignItems="center">
+                        <IconsContainer
+                            icons={[{ name: 'FaClock', isClickable: false, color: '#333333' }]}
+                            onIconClick={() => {
+                                return;
+                            }}
+                        />
+                        <Typography sx={MarginTop}>
+                            {dt.date_event_start}&nbsp;-&nbsp;{dt.date_event_end}
+                        </Typography>
+                    </Box>
+                </>
+            )
+        })}
 
         <Box display="flex" alignItems="center">
           <IconsContainer
