@@ -6,6 +6,8 @@ import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
 import { Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
+import Header from '@/components/header/header';
+import Footer from '@/components/footer';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -51,9 +53,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }
   const isAllowedPage = (): Permission => {
 
-    if(is404(pathname)) {
+    if (is404(pathname)) {
       return { isAllowed: true, redirection: '' };
-    } 
+    }
     // Wait until the login status is confirmed
     else if (loginStatus === LoginStatus.Unknown) {
       return { isAllowed: false, redirection: '' };
@@ -104,11 +106,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   return (
     <>
+      { pathname !== '/login' && <Header /> }
       {(isAllowedPage().isAllowed) && (
         <Box paddingInline='40px' paddingBlock='50px' minHeight='100vh'>
           {children}
         </Box>
       )}
+      <Footer />
     </>
   );
 }
