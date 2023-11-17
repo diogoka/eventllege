@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch, useState } from 'react';
 import dayjs from 'dayjs';
 import { useContext, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,7 @@ import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
+import EditEventPage from '@/app/events/[id]/edit/page';
 
 export interface DateRange {
   dateStart: dayjs.Dayjs;
@@ -34,17 +35,30 @@ type EventAction = {
   payload: any;
 };
 
-const initialState = {
-  title: '',
-  description: '',
-  dates: [{ dateStart: today, dateEnd: today }],
-  spots: 0,
-  location: 'location',
-  price: 0,
-  image: 'images',
-  selectedTags: [],
-  category: '',
+type SelectedEvent = {
+  id_event: number;
+  id_owner: string;
+  name_event: string;
+  description_event: string;
+  date_event_start: string;
+  date_event_end: string;
+  image_event: string;
+  location_event: string;
+  capacity_event: number;
+  price_event: number;
+  category_event: string;
 };
+
+type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
+
+type Props = {
+  editEvent?: SelectedEvent;
+  selectedTags?: number[];
+};
+
 const eventReducer = (state: EventData, action: EventAction) => {
   switch (action.type) {
     case 'UPDATE_TITLE':
@@ -66,16 +80,47 @@ const eventReducer = (state: EventData, action: EventAction) => {
   }
 };
 
-export default function EventsControl() {
+export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
   const { eventData, setEventData } = useContext(EventContext);
+  console.log('editEvent', editEvent);
+  console.log('tags', selectedTags);
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+
+  const initialState = {
+    title: '',
+    description: editEvent ? editEvent.description_event : '',
+    dates: editEvent
+      ? [
+          {
+            dateStart: dayjs(editEvent.date_event_start),
+            dateEnd: dayjs(editEvent.date_event_end),
+          },
+        ]
+      : [{ dateStart: today, dateEnd: today }],
+    spots: editEvent ? editEvent.capacity_event : 0,
+    location: editEvent ? editEvent.location_event : 'location',
+    price: editEvent ? editEvent.price_event : 0,
+    image: editEvent ? editEvent.image_event : 'images',
+    selectedTags: selectedTags ? selectedTags : [],
+    category: editEvent ? editEvent.category_event : '',
+
+    // dates: [{ dateStart: today, dateEnd: today }],
+    // spots: 0,
+    // location: 'location',
+    // price: 0,
+    // image: 'images',
+    // selectedTags: [],
+    // category: '',
+  };
 
   const [newEvent, dispatch]: [EventData, Dispatch<EventAction>] = useReducer(
     eventReducer,
     initialState
   );
+
+  console.log('new', newEvent);
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

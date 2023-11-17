@@ -26,8 +26,15 @@ type Props = {
 };
 
 export default function DetailList(props: Props) {
+  console.log('tags inside detail', props.selectedTags);
   return (
-    <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+    >
       <Grid item xs={12}>
         <Price price={props.price} setPrice={props.setPrice} />
       </Grid>
@@ -38,7 +45,10 @@ export default function DetailList(props: Props) {
         <Category category={props.category} setCategory={props.setCategory} />
       </Grid>
       <Grid item xs={12}>
-        <Tag selectedTags={props.selectedTags} setSelectedTags={props.setSelectedTags} />
+        <Tag
+          selectedTags={props.selectedTags}
+          setSelectedTags={props.setSelectedTags}
+        />
       </Grid>
     </Grid>
   );
