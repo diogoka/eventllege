@@ -1,5 +1,7 @@
 import React from 'react';
 import useUploadImage from '@/services/imageInput';
+import { useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import { Button, Input, Typography } from '@mui/material';
 import CollectionsIcon from '@mui/icons-material/Collections';
 
@@ -11,10 +13,17 @@ type Props = {
 export default function ImageContainer({ warning, onFileInputChange }: Props) {
   return (
     <>
-      <Button component='label' variant='outlined' startIcon={<CollectionsIcon />} color='info' fullWidth disableRipple>
+      <Button
+        component="label"
+        variant="outlined"
+        startIcon={<CollectionsIcon />}
+        color="info"
+        fullWidth
+        disableRipple
+      >
         Add Image
         <Input
-          type='file'
+          type="file"
           onChange={onFileInputChange}
           sx={{
             clip: 'rect(0 0 0 0)',

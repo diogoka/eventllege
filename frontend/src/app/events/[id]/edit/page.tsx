@@ -24,16 +24,14 @@ type SelectedEvent = {
   category_event: string;
 };
 
-// type Tag = {
-//   id_tag: number;
-//   name_tag: string;
-// };
+type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
 
 export default function EditEventPage({ params }: Params) {
-  console.log('edit', params.id);
-
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     axios
@@ -41,7 +39,6 @@ export default function EditEventPage({ params }: Params) {
       .then((res) => {
         setEditEvent(res.data.event);
         setSelectedTags(res.data.event.tags);
-        console.log('res.data', res.data);
       })
       .catch((error) => {
         console.error(error.response.data);

@@ -10,7 +10,6 @@ import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
-import EditEventPage from '@/app/events/[id]/edit/page';
 
 export interface DateRange {
   dateStart: dayjs.Dayjs;
@@ -26,7 +25,7 @@ interface EventData {
   location: string;
   price: number;
   image: string;
-  selectedTags: number[];
+  selectedTags: Tag[];
   category: string;
 }
 
@@ -56,7 +55,7 @@ type Tag = {
 
 type Props = {
   editEvent?: SelectedEvent;
-  selectedTags?: number[];
+  selectedTags?: Tag[];
 };
 
 const eventReducer = (state: EventData, action: EventAction) => {
@@ -84,12 +83,11 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
   const { eventData, setEventData } = useContext(EventContext);
   console.log('editEvent', editEvent);
-  console.log('tags', selectedTags);
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
   const initialState = {
-    title: '',
+    title: editEvent ? editEvent.name_event : '',
     description: editEvent ? editEvent.description_event : '',
     dates: editEvent
       ? [

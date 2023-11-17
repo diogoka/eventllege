@@ -1,6 +1,11 @@
 'use client';
 import React, { createContext, ReactNode, useState } from 'react';
 import { DateRange } from '@/components/events/newEvents/eventsControl';
+
+type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
 export type EventData = {
   title: string;
   description: string;
@@ -9,7 +14,7 @@ export type EventData = {
   location: string;
   price: number;
   image: string;
-  selectedTags: number[];
+  selectedTags: Tag[];
   category: string;
   // tags: Array<string>;
   // categories: Array<string>;
