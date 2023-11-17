@@ -33,7 +33,8 @@ export default function DetailList(props: Props) {
       direction="row"
       justifyContent="center"
       alignItems="center"
-      spacing={2}
+      rowSpacing={2}
+      sx={{ width: '100%' }}
     >
       <Grid item xs={12}>
         <Price price={props.price} setPrice={props.setPrice} />

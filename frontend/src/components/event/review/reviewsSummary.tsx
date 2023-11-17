@@ -8,6 +8,7 @@ import LinearProgress, {
 } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 import StarIcon from '@mui/icons-material/Star';
+import { averageRatingFn } from '../../../common/functions';
 
 type Props = {
   reviews: Review[];
@@ -27,13 +28,6 @@ function ReviewsSummary({ reviews }: Props) {
       numOfRatings[index - 1] += 1;
     });
     return numOfRatings;
-  };
-
-  const averageRatingFn = (reviews: Review[]) => {
-    const sum = reviews.reduce((acc, review) => {
-      return acc + Number(review.rating);
-    }, 0);
-    return sum / reviews.length;
   };
 
   const percentage = (num: number) => {

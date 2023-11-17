@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useContext, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
-import { Box, Button } from '@mui/material';
+import { Box, Stack, Button } from '@mui/material';
 import useUploadImage from '@/services/imageInput';
 import BasicInfo from './basic-info/basicInfo';
 import DateList from './dateSchedule/dateList';
@@ -124,12 +124,18 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setEventData((prev) => ({ ...Prev, eventData, event }));
     setEventData(newEvent);
     router.push('http://localhost:3000/events/new/preview');
   };
   return (
-    <Box component={'form'} onSubmit={clickHandler}>
+    <Stack
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      spacing={1}
+      component={'form'}
+      onSubmit={clickHandler}
+    >
       <BasicInfo
         title={newEvent.title}
         setTitle={(title) => dispatch({ type: 'UPDATE_TITLE', payload: title })}
@@ -158,7 +164,9 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
         }
       />
       <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
-      <Button type="submit">Go to preview</Button>
-    </Box>
+      <Button type="submit" variant="outlined" color="primary" fullWidth>
+        Go to preview
+      </Button>
+    </Stack>
   );
 }
