@@ -1,9 +1,12 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-
-export default function TitleContainer() {
-  const [title, setTitle] = React.useState('');
-
+type Props = {
+  title: string;
+  setTitle: (value: string) => void;
+  // eventData: EventData | null;
+  // setEventData: (EventData: EventData | null) => void;
+};
+export default function TitleContainer({ title, setTitle }: Props) {
   return (
     <>
       <TextField
