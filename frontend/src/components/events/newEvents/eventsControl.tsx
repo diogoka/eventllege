@@ -80,7 +80,6 @@ const eventReducer = (state: EventData, action: EventAction) => {
 export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
   const { setAddImage, setEventData } = useContext(EventContext);
-  console.log('editEvent', editEvent);
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
 
@@ -115,8 +114,6 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
     eventReducer,
     initialState
   );
-
-  console.log('new', newEvent);
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
