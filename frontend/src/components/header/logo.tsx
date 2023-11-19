@@ -22,12 +22,12 @@ export default function Logo() {
       pc={
         <Button
           onClick={() => router.push('/')}
-          sx={{ width: '3.125rem', height: '3.125rem' }}
+          sx={{ width: '9.5rem', height: '1.875rem' }}
         >
           <img
-            src={'/eventllege_logo.svg'}
+            src={'/eventllege_logoIcon.svg'}
             alt="eventllege logo"
-            style={{ width: '2.5rem', height: '2.5rem' }}
+            style={{ width: '100%', height: '100%' }}
           />
         </Button>
       }
