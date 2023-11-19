@@ -21,8 +21,8 @@ type Props = {
   setSpots: (value: number) => void;
   category: string;
   setCategory: (value: string) => void;
-  selectedTags: number[];
-  setSelectedTags: (value: number[]) => void;
+  selectedTags: Tag[];
+  setSelectedTags: (value: Tag[]) => void;
 };
 
 export default function DetailList(props: Props) {
