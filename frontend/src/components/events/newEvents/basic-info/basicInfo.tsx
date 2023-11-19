@@ -17,8 +17,6 @@ export default function BasicInfo({
   setDescription,
 }: Props) {
   return (
-    // <Box>
-    // </Box>
     <Stack
       direction="column"
       justifyContent="center"
