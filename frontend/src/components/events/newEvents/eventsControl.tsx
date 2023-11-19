@@ -10,7 +10,6 @@ import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
-
 export interface DateRange {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
@@ -24,7 +23,6 @@ interface EventData {
   spots: number;
   location: string;
   price: number;
-  image: string;
   selectedTags: Tag[];
   category: string;
 }
@@ -81,7 +79,7 @@ const eventReducer = (state: EventData, action: EventAction) => {
 
 export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
-  const { eventData, setEventData } = useContext(EventContext);
+  const { setAddImage, setEventData } = useContext(EventContext);
   console.log('editEvent', editEvent);
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
@@ -123,6 +121,7 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEventData(newEvent);
+    // setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
   return (
@@ -161,6 +160,7 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
           dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
         }
       />
+      {/* <div>{image}</div> */}
       <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
       <Button type="submit" variant="outlined" color="primary" fullWidth>
         Go to preview

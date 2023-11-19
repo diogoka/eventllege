@@ -13,16 +13,22 @@ export type EventData = {
   spots: number;
   location: string;
   price: number;
-  image: string;
+  // image: string;
   selectedTags: Tag[];
   category: string;
   // tags: Array<string>;
   // categories: Array<string>;
 };
 
+export type Image = {
+  image: File | null;
+};
+
 type EventContextProps = {
   eventData: EventData | null;
   setEventData: (EventData: EventData | null) => void;
+  addImage: Image | undefined;
+  setAddImage: (addImage: Image) => void;
 };
 
 export const EventContext = createContext<EventContextProps>(
@@ -31,9 +37,13 @@ export const EventContext = createContext<EventContextProps>(
 
 export function EventContextProvider({ children }: { children: ReactNode }) {
   const [eventData, setEventData] = useState<EventData | null>(null);
+  const [addImage, setAddImage] = useState<Image>({ image: null });
+  console.log('eventContext', eventData);
 
   return (
-    <EventContext.Provider value={{ eventData, setEventData }}>
+    <EventContext.Provider
+      value={{ eventData, setEventData, addImage, setAddImage }}
+    >
       {children}
     </EventContext.Provider>
   );
