@@ -1,14 +1,16 @@
 import React from 'react';
 import Logo from './logo';
-import AvatarIcon from './avatar';
-import Navigation from './navigation';
+import MenuList from './menuList';
+import { Toolbar } from '@mui/material';
 
 export default function HeaderPC() {
   return (
-    <div>
+    <Toolbar
+      disableGutters
+      sx={{ justifyContent: 'space-between', width: '90%', margin: '0 auto' }}
+    >
       <Logo />
-      <Navigation />
-      <AvatarIcon />
-    </div>
+      <MenuList />
+    </Toolbar>
   );
 }

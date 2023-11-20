@@ -24,8 +24,8 @@ export default function OrganizerListItem({ toggleMenu }: Props) {
         <Button
           key={index}
           onClick={() => clickHandler(button.path)}
-          variant='outlined'
-          color='primary'
+          variant="outlined"
+          color="primary"
           sx={{
             width: '100%',
             m: '0 auto 1.25rem',

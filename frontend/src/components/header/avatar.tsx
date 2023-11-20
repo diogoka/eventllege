@@ -14,9 +14,18 @@ export default function AvatarIcon() {
   return (
     <>
       <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
-        <Avatar alt={user?.name} src={`http://localhost:3001/img/users/${user?.id}?${new Date().getTime()}`}></Avatar>
+        <Avatar
+          alt={user?.name}
+          src={`http://localhost:3001/img/users/${
+            user?.id
+          }?${new Date().getTime()}`}
+        ></Avatar>
       </IconButton>
-      <Drawer anchor='right' open={isMenuOpen} onClose={() => toggleMenu(false)}>
+      <Drawer
+        anchor="right"
+        open={isMenuOpen}
+        onClose={() => toggleMenu(false)}
+      >
         <Hamburger toggleMenu={toggleMenu} />
       </Drawer>
     </>

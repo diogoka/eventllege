@@ -2,36 +2,28 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 
-type Props = {
-  toggleMenu: (isMenuOpen: boolean) => void;
-};
-
-const UsersBtns = [
-  { label: 'Home', path: '/' },
-  { label: 'My events', path: '/user/my-events' },
-  { label: 'History', path: '/history' },
-  { label: 'My profile', path: '/user' },
+const OrganizerBtns = [
+  { label: 'Created Event', path: '/organizer-events' },
+  { label: 'Create Event', path: '/events/new' },
 ];
 
-export default function UsersListItem({ toggleMenu }: Props) {
+export default function OrganizerListItemPC() {
   const router = useRouter();
 
   const clickHandler = (path: string) => {
     router.push(path);
-    toggleMenu(false);
   };
-
   return (
     <>
-      {UsersBtns.map((button, index) => (
+      {OrganizerBtns.map((button, index) => (
         <Button
           key={index}
           onClick={() => clickHandler(button.path)}
-          variant="outlined"
+          variant="text"
           color="primary"
           sx={{
             width: '100%',
-            m: '0 auto 1.25rem',
+            m: '0 auto',
           }}
         >
           {button.label}
