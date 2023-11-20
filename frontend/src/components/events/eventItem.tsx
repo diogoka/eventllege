@@ -48,7 +48,7 @@ function EventItem({
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
-  const laptopQuery = useMediaQuery('(min-width:1366px)');
+  const laptopQuery = useMediaQuery('(min-width:768px)');
 
   useEffect(() => {
     getAverageRating();
@@ -174,7 +174,7 @@ function EventItem({
   const iconContainerStyle = {
     gridArea: 'icons',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: laptopQuery ? 'flex-start' : 'center',
     alignItems: 'center',
     width: '100%',
   };
@@ -216,7 +216,7 @@ function EventItem({
         >
           <CardMedia>
             <ImageHelper
-              src={`http://localhost:3001/img/events/${event.id_event}`}
+              src={`http://localhost:3001/img/events/${eventId}`}
               width="23.75rem"
               height="13.75rem"
               alt={event.name_event}
@@ -260,7 +260,13 @@ function EventItem({
             </Typography>
 
             {oldEvent ? (
-              <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <CardActions
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginTop: '1rem',
+                }}
+              >
                 <Box sx={iconContainerStyle}>
                   <Rating
                     name="read-only"

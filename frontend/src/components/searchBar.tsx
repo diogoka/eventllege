@@ -15,7 +15,7 @@ type Props = {
 
 function SearchBar({ searchEvents }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
-  const laptopQuery = useMediaQuery('(min-width:1366px)');
+  const laptopQuery = useMediaQuery('(min-width:768px)');
 
   const handleSearch = (event: any) => {
     event.preventDefault();
@@ -28,7 +28,7 @@ function SearchBar({ searchEvents }: Props) {
   };
 
   const gridContainerStyle = {
-    marginTop: '1rem',
+    marginTop: '2rem',
     marginBottom: '1rem',
     height: '3rem',
     width: laptopQuery ? '36.25rem' : '100%',
