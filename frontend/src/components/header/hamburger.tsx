@@ -15,7 +15,10 @@ export default function Hamburger({ toggleMenu }: Props) {
   const { user } = useContext(UserContext);
   return (
     <Box sx={{ width: '100vw', position: 'relative' }}>
-      <IconButton onClick={() => toggleMenu(false)} sx={{ position: 'absolute', top: '0.375rem', right: '1.3125rem' }}>
+      <IconButton
+        onClick={() => toggleMenu(false)}
+        sx={{ position: 'absolute', top: '0.375rem', right: '1.3125rem' }}
+      >
         <CloseIcon />
       </IconButton>
       <List
@@ -24,9 +27,17 @@ export default function Hamburger({ toggleMenu }: Props) {
           m: '3.125rem auto',
         }}
       >
-        <Stack direction='column' justifyContent='space-between' alignItems='center'>
+        <Stack
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <UsersListItem toggleMenu={toggleMenu} />
-          {user?.roleName === 'organizer' ? <OrganizerListItem toggleMenu={toggleMenu} /> : <></>}
+          {user?.roleName === 'organizer' ? (
+            <OrganizerListItem toggleMenu={toggleMenu} />
+          ) : (
+            <></>
+          )}
           <LogoutBtn />
         </Stack>
       </List>
