@@ -1,10 +1,10 @@
 'use client';
-import { Box, ImageListItem, Typography } from '@mui/material';
+import { Box, CardActions, CardMedia, Typography } from '@mui/material';
 import { Event, Tag } from '@/app/events/page';
 import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
 import { AiFillClockCircle } from 'react-icons/ai';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ImageHelper from '@/components/common/image-helper';
@@ -14,6 +14,10 @@ import axios from 'axios';
 import { averageRatingFn } from '@/common/functions';
 import StarIcon from '@mui/icons-material/Star';
 import Rating from '@mui/material/Rating';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { weekDayFn, TimeFn, monthDayFn } from '@/common/functions';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   event: Event;
@@ -36,27 +40,15 @@ function EventItem({
   oldEvent,
 }: Props) {
   const router = useRouter();
-  const weekDay = new Date(event.date_event_start).toLocaleString('en-us', {
-    weekday: 'long',
-  });
-  const startTime = new Date(event.date_event_start).toLocaleString('en-us', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  });
-  const endTime = new Date(event.date_event_end).toLocaleString('en-us', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  });
-  const monthAndDay = new Date(event.date_event_start).toLocaleString('en-us', {
-    month: 'short',
-    day: 'numeric',
-  });
+  const weekDay = weekDayFn(event.date_event_start);
+  const startTime = TimeFn(event.date_event_start);
+  const endTime = TimeFn(event.date_event_end);
+  const monthAndDay = monthDayFn(event.date_event_start);
   const eventId = event?.id_event;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
+  const laptopQuery = useMediaQuery('(min-width:1366px)');
 
   useEffect(() => {
     getAverageRating();
@@ -72,13 +64,9 @@ function EventItem({
     }
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  const openModal = () => setIsModalOpen(true);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard
@@ -109,14 +97,29 @@ function EventItem({
     }
   };
 
-  const handleCardClick = () => {
-    console.log('card clicked');
-    router.push(`/events/${eventId}`);
-  };
+  const handleCardClick = () => router.push(`/events/${eventId}`);
 
   const handleAlertClose = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setIsAlertVisible(false);
+  };
+
+  const alertCopyURLFn = () => {
+    return (
+      <Alert
+        severity="success"
+        onClose={handleAlertClose}
+        sx={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          zIndex: 9999,
+        }}
+      >
+        <AlertTitle>URL Copied</AlertTitle>
+        The event URL has been copied to your clipboard.
+      </Alert>
+    );
   };
 
   const BoxStyle = {
@@ -176,7 +179,7 @@ function EventItem({
     width: '100%',
   };
 
-  let iconsComponent;
+  let iconsComponent: any;
 
   if (user.role === 'organizer' && user.id === event.id_owner) {
     iconsComponent = (
@@ -204,80 +207,156 @@ function EventItem({
     );
   }
 
-  return (
-    <Box onClick={handleCardClick} sx={BoxStyle}>
-      <Typography sx={titleStyle}>
-        {event.name_event.length > 15
-          ? `${event.name_event.slice(0, 18)}...`
-          : event.name_event}
-      </Typography>
-      <Box sx={dateContainerStyle}>
-        <Box sx={dayMonthStyle}>
-          <AiFillClockCircle style={{ fontSize: 12 }} />
-          <Typography sx={{ fontSize: 12 }}>
-            {weekDay}, {monthAndDay}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography sx={timeStyle}>
-            {startTime} - {endTime}
-          </Typography>
-        </Box>
-      </Box>
+  const renderEventItem = () => {
+    if (laptopQuery) {
+      return (
+        <Card
+          onClick={handleCardClick}
+          sx={{ width: '23.75rem', height: '24.0625rem', borderRadius: '5px' }}
+        >
+          <CardMedia>
+            <ImageHelper
+              src={`http://localhost:3001/img/events/${event.id_event}`}
+              width="23.75rem"
+              height="13.75rem"
+              alt={event.name_event}
+            />
+          </CardMedia>
+          <CardContent
+            sx={{
+              backgroundColor: 'rgba(51, 51, 51, 0.02)',
+              paddingBottom: '0',
+            }}
+          >
+            <Typography sx={{ ...titleStyle, fontSize: '1.25rem' }}>
+              {event.name_event.length > 32
+                ? `${event.name_event.slice(0, 32)}...`
+                : event.name_event}
+            </Typography>
+            <Box
+              sx={{
+                ...dateContainerStyle,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <AiFillClockCircle
+                style={{ color: '#3874CB', fontSize: '0.6rem' }}
+              />
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Typography variant="body2" sx={{ color: '#3874CB' }}>
+                  {weekDay}, {monthAndDay}
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#3874CB' }}>
+                  {startTime} - {endTime}
+                </Typography>
+              </Box>
+            </Box>
 
-      <Typography sx={descriptionStyle}>
-        {event.description_event.length > 50
-          ? `${event.description_event.slice(0, 50)}...`
-          : event.description_event}
-      </Typography>
-      <ImageHelper
-        src={`http://localhost:3001/img/events/${event.id_event}`}
-        width="6.25rem"
-        height="4.0625rem"
-        style={imageContainerStyle}
-        alt={event.name_event}
-      />
+            <Typography sx={{ ...descriptionStyle, fontSize: '0.75rem' }}>
+              {event.description_event.length > 100
+                ? `${event.description_event.slice(0, 100)}...`
+                : event.description_event}
+            </Typography>
 
-      {oldEvent ? (
-        <Box sx={iconContainerStyle}>
-          <Rating
-            name="read-only"
-            value={avgRating}
-            readOnly
-            precision={0.5}
-            size="small"
-            emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-            icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+            {oldEvent ? (
+              <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={iconContainerStyle}>
+                  <Rating
+                    name="read-only"
+                    value={avgRating}
+                    readOnly
+                    precision={0.5}
+                    size="small"
+                    emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                    icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                  />
+                </Box>
+              </CardActions>
+            ) : (
+              <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={{ ...iconContainerStyle, justifyContent: 'end' }}>
+                  {iconsComponent}
+                </Box>
+              </CardActions>
+            )}
+
+            {isAlertVisible && alertCopyURLFn()}
+            <ModalDelete
+              eventId={eventId}
+              eventName={event.name_event}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              deleteEvent={deleteEvent}
+            />
+          </CardContent>
+        </Card>
+      );
+    } else {
+      return (
+        <Box onClick={handleCardClick} sx={BoxStyle}>
+          <Typography sx={titleStyle}>
+            {event.name_event.length > 15
+              ? `${event.name_event.slice(0, 18)}...`
+              : event.name_event}
+          </Typography>
+          <Box sx={dateContainerStyle}>
+            <Box sx={dayMonthStyle}>
+              <AiFillClockCircle style={{ fontSize: 12 }} />
+              <Typography sx={{ fontSize: 12 }}>
+                {weekDay}, {monthAndDay}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography sx={timeStyle}>
+                {startTime} - {endTime}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Typography sx={descriptionStyle}>
+            {event.description_event.length > 50
+              ? `${event.description_event.slice(0, 50)}...`
+              : event.description_event}
+          </Typography>
+          <ImageHelper
+            src={`http://localhost:3001/img/events/${event.id_event}`}
+            width="6.25rem"
+            height="4.0625rem"
+            style={imageContainerStyle}
+            alt={event.name_event}
+          />
+
+          {oldEvent ? (
+            <Box sx={iconContainerStyle}>
+              <Rating
+                name="read-only"
+                value={avgRating}
+                readOnly
+                precision={0.5}
+                size="small"
+                emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+              />
+            </Box>
+          ) : (
+            <Box sx={iconContainerStyle}>{iconsComponent}</Box>
+          )}
+
+          {isAlertVisible && alertCopyURLFn()}
+          <ModalDelete
+            eventId={eventId}
+            eventName={event.name_event}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            deleteEvent={deleteEvent}
           />
         </Box>
-      ) : (
-        <Box sx={iconContainerStyle}>{iconsComponent}</Box>
-      )}
+      );
+    }
+  };
 
-      {isAlertVisible && (
-        <Alert
-          severity="success"
-          onClose={handleAlertClose}
-          sx={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            zIndex: 9999,
-          }}
-        >
-          <AlertTitle>URL Copied</AlertTitle>
-          The event URL has been copied to your clipboard.
-        </Alert>
-      )}
-      <ModalDelete
-        eventId={eventId}
-        eventName={event.name_event}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        deleteEvent={deleteEvent}
-      />
-    </Box>
-  );
+  return renderEventItem();
 }
 
 export default EventItem;

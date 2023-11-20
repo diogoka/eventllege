@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import IconItem from './icons/iconItem';
 import { Icon } from '@mui/material';
 import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   searchEvents: (text: string) => void;
@@ -14,6 +15,7 @@ type Props = {
 
 function SearchBar({ searchEvents }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
+  const laptopQuery = useMediaQuery('(min-width:1366px)');
 
   const handleSearch = (event: any) => {
     event.preventDefault();
@@ -29,6 +31,7 @@ function SearchBar({ searchEvents }: Props) {
     marginTop: '1rem',
     marginBottom: '1rem',
     height: '3rem',
+    width: laptopQuery ? '36.25rem' : '100%',
   };
 
   const textFieldStyle = {

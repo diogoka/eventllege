@@ -14,7 +14,7 @@ exports.up = async (pgm) => {
       id_user: "A",
       id_user_type: 1,
       name_user: "Diogo Krub de Almeida",
-      email_user: "diogokalmeida@gmail.com",
+      email_user: "diogokalmeida@test.com",
       postal_code_user: "V5K2X1",
       phone_user: "123-456-7890",
     },
@@ -238,7 +238,7 @@ exports.up = async (pgm) => {
       capacity_event: 40,
       price_event: 0,
       image_event: null,
-      category_event: "Workshop",
+      category_event: "Tech",
     },
     {
       id_owner: "B",
@@ -479,7 +479,57 @@ exports.up = async (pgm) => {
       price_event: 25,
       image_event: null,
       category_event: "ESL"
+    },
+    {
+      id_owner: "F",
+      name_event: "Wine Wonderland",
+      description_event: "Savor the rich flavors of handpicked wines from renowned vineyards. Explore the world of wine with experts guiding you through a delightful tasting journey.",
+      date_event_start: "2023-01-24 18:30:00",
+      date_event_end: "2023-01-24 22:00:00",
+      location_event: "Vineyard Haven, Napa Valley, CA 94558",
+      capacity_event: 100,
+      price_event: 35,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "F",
+      name_event: "Harmony Fest",
+      description_event: "Immerse yourself in a day of musical bliss. Live performances by top artists across genres. Enjoy good music, good company, and good vibes.",
+      date_event_start: "2023-01-24 12:00:00",
+      date_event_end: "2023-01-24 23:59:00",
+      location_event: "Meadow Park, Chicago, IL 60601",
+      capacity_event: 500,
+      price_event: 40,
+      image_event: null,
+      category_event: "ESL"
+    },
+    {
+      id_owner: "A",
+      name_event: "Innovation Expo",
+      description_event: "Witness the latest in technology and innovation. From cutting-edge gadgets to futuristic concepts, explore the tech landscape and meet industry pioneers.",
+      date_event_start: "2023-01-24 10:00:00",
+      date_event_end: "2023-01-24 18:00:00",
+      location_event: "Tech Hub Convention Center, San Francisco, CA 94105",
+      capacity_event: 300,
+      price_event: 30,
+      image_event: null,
+      category_event: "Tech"
+    },
+    {
+      id_owner: "A",
+      name_event: "Chic Couture Showcase",
+      description_event: "Experience the glamour of haute couture. Top designers present their latest collections in a dazzling runway show. A night of style and sophistication.",
+      date_event_start: "2023-01-24 19:00:00",
+      date_event_end: "2023-01-24 22:30:00",
+      location_event: "Fashion Center, New York, NY 10001",
+      capacity_event: 200,
+      price_event: 50,
+      image_event: null,
+      category_event: "ESL"
     }
+
+
   ];
 
   for (const event of events) {
