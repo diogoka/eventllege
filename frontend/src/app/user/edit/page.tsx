@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useTheme, Stack, Button, FormControl, TextField, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
-import { Select, MenuItem, Avatar } from '@mui/material';
+import { useMediaQuery, Select, MenuItem, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
 import { FaCirclePlus } from 'react-icons/fa6';
 import NameInput from '@/components/user/form/name-input';
@@ -16,6 +16,8 @@ import CourseInput from '@/components/user/form/course-input';
 
 export default function UserEditPage() {
   const router = useRouter();
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const theme = useTheme();
 
@@ -90,7 +92,12 @@ export default function UserEditPage() {
   };
 
   return (
-    <Stack width='100%' paddingBlock='4rem'>
+    <Stack
+      width='100%'
+      marginInline='auto'
+      paddingBlock='4rem'
+      maxWidth={'375px'}
+    >
       <form onSubmit={handleSubmit}>
         <Stack alignItems='center' rowGap='1rem'>
           <Box>
@@ -105,9 +112,9 @@ export default function UserEditPage() {
                 src={tempImageSrc}
                 alt={user?.name}
                 sx={{
-                  width: '7.5rem',
-                  height: '7.5rem',
-                  fontSize: '3rem'
+                  width: isMobile ? '7.5rem' : '10rem',
+                  height: isMobile ? '7.5rem' : '10rem',
+                  fontSize: isMobile ? '3rem' : '4rem',
                 }}
               />
 
