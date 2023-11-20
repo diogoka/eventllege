@@ -2,36 +2,28 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 
-type Props = {
-  toggleMenu: (isMenuOpen: boolean) => void;
-};
-
 const UsersBtns = [
-  { label: 'Home', path: '/' },
+  { label: 'Events', path: '/' },
   { label: 'My events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
-  { label: 'My profile', path: '/user' },
 ];
 
-export default function UsersListItem({ toggleMenu }: Props) {
+export default function UsersListItemPC() {
   const router = useRouter();
-
   const clickHandler = (path: string) => {
     router.push(path);
-    toggleMenu(false);
   };
-
   return (
     <>
       {UsersBtns.map((button, index) => (
         <Button
           key={index}
           onClick={() => clickHandler(button.path)}
-          variant="outlined"
+          variant="text"
           color="primary"
           sx={{
-            width: '100%',
-            m: '0 auto 1.25rem',
+            width: 'auto',
+            margin: '0 .5rem',
           }}
         >
           {button.label}
