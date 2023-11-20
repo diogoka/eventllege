@@ -87,3 +87,19 @@ export const averageRatingFn = (reviews: Review[]) => {
   }, 0);
   return sum / reviews.length;
 };
+
+export const weekDayFn = (date: string) =>
+  new Date(date).toLocaleString('en-us', { weekday: 'long' });
+
+export const TimeFn = (date: string) =>
+  new Date(date).toLocaleString('en-us', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+
+export const monthDayFn = (date: string) =>
+  new Date(date).toLocaleString('en-us', {
+    month: 'short',
+    day: 'numeric',
+  });
