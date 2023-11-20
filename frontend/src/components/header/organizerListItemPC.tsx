@@ -22,8 +22,8 @@ export default function OrganizerListItemPC() {
           variant="text"
           color="primary"
           sx={{
-            width: '100%',
-            m: '0 auto',
+            width: 'auto',
+            margin: '0 .5rem',
           }}
         >
           {button.label}

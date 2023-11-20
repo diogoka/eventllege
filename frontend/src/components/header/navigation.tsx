@@ -8,7 +8,7 @@ import OrganizerListItemPC from './organizerListItemPC';
 export default function Navigation() {
   const { user } = useContext(UserContext);
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack direction="row" alignItems="center" width="100%">
       <UsersListItemPC />
       {user?.roleName === 'organizer' ? <OrganizerListItemPC /> : <></>}
     </Stack>

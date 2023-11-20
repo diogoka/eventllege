@@ -10,6 +10,7 @@ export default function MenuList() {
       justifyContent="center"
       alignItems="center"
       spacing={1}
+      width="52%"
     >
       <Navigation />
       <AvatarIcon />

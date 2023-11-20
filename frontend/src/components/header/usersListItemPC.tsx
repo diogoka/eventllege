@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 
 const UsersBtns = [
-  { label: 'Home', path: '/' },
+  { label: 'Events', path: '/' },
   { label: 'My events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
 ];
@@ -22,8 +22,8 @@ export default function UsersListItemPC() {
           variant="text"
           color="primary"
           sx={{
-            width: '100%',
-            m: '0 auto',
+            width: 'auto',
+            margin: '0 .5rem',
           }}
         >
           {button.label}
