@@ -7,10 +7,12 @@ import { BsFillPersonFill } from 'react-icons/bs';
 import { HiMail } from 'react-icons/hi';
 import { IoIosSchool } from 'react-icons/io';
 import UserInfoItem from '@/components/user/user-info-item';
+import { useMediaQuery } from '@mui/material';
 
-const FALLBACK_IMAGE = '/default_avatar.svg';
 
 export default function UserPage() {
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const router = useRouter();
 
@@ -25,9 +27,9 @@ export default function UserPage() {
           src={`http://localhost:3001/img/users/${user?.id}?${new Date().getTime()}`}
           alt={user?.name}
           sx={{
-            width: '7.5rem',
-            height: '7.5rem',
-            fontSize: '3rem'
+            width: isMobile ? '7.5rem' : '10rem',
+            height: isMobile ? '7.5rem' : '10rem',
+            fontSize: isMobile ? '3rem' : '4rem',
           }}
         />
 
