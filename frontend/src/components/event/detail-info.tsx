@@ -7,20 +7,26 @@ import {
   TableContainer,
 } from '@mui/material';
 import DetailInfoRow from './detail-info-row';
-import { Attendee } from '@/app/events/[id]/page';
+import { Attendee, Tag } from '@/app/events/[id]/page';
 import AttendeesRow from './attendees/attendees-row';
 
 type Props = {
   price: number;
   maxSpots: number;
   attendees: Attendee[];
-  tags: string[];
+  tags: Tag[];
   category: string;
 }
 
 export default function DetailInfo(props: Props) {
 
   const { loginStatus } = useContext(UserContext);
+
+  let tagsString="";
+
+  props.tags.map((val:Tag, key:number)=>{
+    tagsString+= key==0? `${val.name_tag}` : `, ${val.name_tag}`;
+  })
 
   return (
     <TableContainer>
@@ -50,7 +56,7 @@ export default function DetailInfo(props: Props) {
           }
           <DetailInfoRow
             title='Tags'
-            content={props.tags.join(', ')}
+            content={ tagsString }
           />
           <DetailInfoRow
             title='Category'

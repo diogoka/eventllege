@@ -108,7 +108,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     <>
       { pathname !== '/login' && <Header /> }
       {(isAllowedPage().isAllowed) && (
-        <Box paddingInline='40px' paddingBlock='50px' minHeight='100vh'>
+        <Box component='main' marginInline='auto' paddingInline='40px' paddingBlock='50px' maxWidth='1280px' minHeight='100vh'>
           {children}
         </Box>
       )}
