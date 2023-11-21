@@ -13,12 +13,8 @@ export type EventData = {
   spots: number;
   location: string;
   price: number;
-  // image: string;
   selectedTags: Tag[];
-  // selectedTags: number[];
   category: string;
-  // tags: Array<string>;
-  // categories: Array<string>;
 };
 
 export type Image = File | null;
