@@ -30,9 +30,8 @@ type Tag = {
 
 type Props = {
   selectedTags: Tag[];
+
   setSelectedTags: (value: Tag[]) => void;
-  // tags: Tag[];
-  // setTags: (tags: Tag[]) => void;
 };
 
 export default function Tag({ selectedTags, setSelectedTags }: Props) {
@@ -49,22 +48,25 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       });
   }, []);
 
-  const handleChange = (event: SelectChangeEvent<typeof selectedTags>) => {
+  const selectedId = selectedTags.map((selectedTag) => selectedTag.id_tag);
+
+  const handleChange = (event: SelectChangeEvent<typeof selectedId>) => {
     const {
       target: { value },
     } = event;
-    // setSelectedTags(typeof value === 'string' ? value.split(',') : value);
-    setSelectedTags(
-      typeof value === 'string'
-        ? value.split(',').map((tagId) => ({
-            id_tag: parseInt(tagId),
-            name_tag: 'SomeName',
-          }))
-        : (value as Tag[])
-    );
-  };
+    console.log('selected tags: ', event);
 
-  console.log('selectedTags', selectedTags);
+    const selectedValue =
+      typeof value === 'string' ? value.split(',').map(Number) : value;
+
+    const selectedTagsName: Tag[] = tags.filter(
+      (tag: Tag) => tag && selectedValue.includes(tag.id_tag)
+    );
+
+    if (selectedTagsName.length > 0) {
+      setSelectedTags(selectedTagsName);
+    }
+  };
 
   return (
     <>
@@ -74,12 +76,12 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={selectedTags}
+          value={selectedId}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => {
-            const selectedNames = tags
-              .filter((tag) => selected.includes(tag))
+          renderValue={(selectedIds) => {
+            const selectedNames = selectedTags
+              .filter((tag) => selectedIds.includes(tag.id_tag))
               .map((tag) => tag.name_tag);
             return selectedNames.join(',');
           }}
@@ -87,7 +89,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
         >
           {tags.map((tag) => (
             <MenuItem key={tag.id_tag} value={tag.id_tag}>
-              <Checkbox checked={selectedTags.indexOf(tag) > -1} />
+              <Checkbox checked={selectedId.indexOf(tag.id_tag) > -1} />
               <ListItemText primary={tag.name_tag} />
             </MenuItem>
           ))}
