@@ -27,7 +27,7 @@ function EventList({
   oldEvent,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  const laptopQuery = useMediaQuery('(min-width:1366px)');
+  const laptopQuery = useMediaQuery('(min-width:768px)');
   const eventsPerPage = laptopQuery ? 6 : 5;
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
@@ -66,7 +66,7 @@ function EventList({
         }}
         direction={laptopQuery ? 'row' : 'column'}
         useFlexGap
-        flexWrap={laptopQuery ? 'wrap' : 'nowrap'}
+        flexWrap='wrap'
       >
         {currentEvents.map((event, index) => {
           const eventTags = tags.filter(
@@ -86,14 +86,16 @@ function EventList({
           );
         })}
       </Stack>
-      <Pagination
-        count={Math.ceil(events.length / eventsPerPage)}
-        page={currentPage}
-        onChange={handlePageChange}
-        variant="outlined"
-        shape="rounded"
-        sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
-      />
+      {events.length > 6 && (
+        <Pagination
+          count={Math.ceil(events.length / eventsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          variant='outlined'
+          shape='rounded'
+          sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
+        />
+      )}
     </>
   );
 }

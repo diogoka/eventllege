@@ -132,9 +132,9 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
   };
   return (
     <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
+      direction='column'
+      justifyContent='center'
+      alignItems='center'
       spacing={1}
       component={'form'}
       onSubmit={clickHandler}
@@ -166,9 +166,9 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
           dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
         }
       />
-      <img src={tempImage} alt="" />
+      <img src={tempImage} alt='' />
       <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
-      <Button type="submit" variant="outlined" color="primary" fullWidth>
+      <Button type='submit' variant='outlined' color='primary' fullWidth>
         Go to preview
       </Button>
     </Stack>

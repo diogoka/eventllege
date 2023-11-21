@@ -28,9 +28,9 @@ export default function Hamburger({ toggleMenu }: Props) {
         }}
       >
         <Stack
-          direction="column"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='column'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <UsersListItem toggleMenu={toggleMenu} />
           {user?.roleName === 'organizer' ? (

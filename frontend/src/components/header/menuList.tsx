@@ -6,11 +6,11 @@ import { Stack } from '@mui/material';
 export default function MenuList() {
   return (
     <Stack
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
+      direction='row'
+      justifyContent='center'
+      alignItems='center'
       spacing={1}
-      width="52%"
+      width='52%'
     >
       <Navigation />
       <AvatarIcon />

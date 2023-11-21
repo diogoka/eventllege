@@ -58,21 +58,22 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-
         setEvent({
           ...res.data.event,
-          dates_event: [{
-            date_event_start: res.data.event.date_event_start,
-            date_event_end: res.data.event.date_event_end
-          }]
+          dates_event: [
+            {
+              date_event_start: res.data.event.date_event_start,
+              date_event_end: res.data.event.date_event_end,
+            },
+          ],
         });
 
         setAttendees([...res.data.event.attendees]);
 
         setOtherInfo({
-          image_event: "",
+          image_event: '',
           id_event: res.data.event.id_event,
-          id_owner: res.data.event.id_owner
+          id_owner: res.data.event.id_owner,
         });
 
         res.data.event.attendees.map((val: Attendee) => {
@@ -168,7 +169,7 @@ export default function EventPage() {
       {!oldEvent && (
         <>
           <Box
-            justifyContent="space-between"
+            justifyContent='space-between'
             display={
               organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'
             }
@@ -177,9 +178,9 @@ export default function EventPage() {
             <Box style={{ width: '47%' }}>
               {otherInfo?.id_event ? (
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="primary"
+                  type='submit'
+                  variant='outlined'
+                  color='primary'
                   fullWidth
                   onClick={() => editEventHandler(otherInfo.id_event)}
                 >
@@ -193,9 +194,9 @@ export default function EventPage() {
             <Box style={{ width: '47%' }}>
               {otherInfo?.id_event ? (
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="error"
+                  type='submit'
+                  variant='outlined'
+                  color='error'
                   fullWidth
                   onClick={() => deleteEvent(otherInfo.id_event)}
                 >
@@ -214,7 +215,7 @@ export default function EventPage() {
                   ? 'block'
                   : 'none',
             }}
-            type="submit"
+            type='submit'
             variant={applied ? 'outlined' : 'contained'}
             color={applied ? 'error' : 'primary'}
             fullWidth

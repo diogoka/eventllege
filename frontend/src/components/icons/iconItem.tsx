@@ -3,36 +3,53 @@ import { IconContext } from 'react-icons';
 import * as IconLibrary from 'react-icons/fa';
 import IconButton from '@mui/material/IconButton';
 
-
-
-interface Props  {
+interface Props {
   iconName: string;
   size?: string;
   color?: string;
   onClick?: (event: React.MouseEvent) => void;
   isClickable: boolean;
+  iconHoverColor?: string;
 }
 
+function IconItem({ iconName, size, color, onClick, isClickable }: Props) {
+  const IconStyle = {
+    cursor: 'pointer  ',
+    backgroundColor: 'inherit',
+    '&:hover': {
+      backgroundColor: 'none',
+    },
+    display: 'flex',
+    alignItems: 'baseline',
+  };
 
-function IconItem({iconName, size, color, onClick, isClickable}: Props) {
-  
   const SelectedIcon = IconLibrary[iconName];
-  if(!SelectedIcon) return null;
+  if (!SelectedIcon) return null;
 
-    const handleClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); 
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
     if (isClickable && onClick) {
       onClick(event);
     }
   };
 
   return (
-    <IconButton onClick={handleClick}>
+    <IconButton
+      onClick={handleClick}
+      sx={IconStyle}
+      disabled={!isClickable}
+      style={{
+        background: 'none',
+        display: 'flex',
+        alignItems: 'baseline',
+        padding: '0',
+      }}
+    >
       <IconContext.Provider value={{ color: color, size: size || '1rem' }}>
         <SelectedIcon />
       </IconContext.Provider>
     </IconButton>
-  )
+  );
 }
 
 export default IconItem;
