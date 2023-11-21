@@ -4,14 +4,13 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import {
   useTheme,
+  useMediaQuery,
   Stack,
   TextField,
   Typography,
   Button,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel
+  Box
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
 import { LoginStatus, UserContext } from '@/context/userContext';
@@ -27,13 +26,9 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 
-type Course = {
-  id: number;
-  name: string;
-  category: string;
-}
-
 export default function SignUpPage() {
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const router = useRouter();
 
@@ -50,23 +45,8 @@ export default function SignUpPage() {
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
 
-  // Alart Message
-  const [alartMessage, setAlartMessage] = useState('');
-
-  // Course data from server
-  const [courses, setCourses] = useState([]);
-
-  // Get course data from server to show course names
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/courses')
-      .then((res) => {
-        setCourses(res.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      })
-  }, []);
+  // Alert Message
+  const [alertMessage, setAlertMessage] = useState('');
 
   const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
 
@@ -79,10 +59,10 @@ export default function SignUpPage() {
           setLoginStatus(LoginStatus.SigningUp);
         })
         .catch((error: any) => {
-          setAlartMessage(getErrorMessage(error.code));
+          setAlertMessage(getErrorMessage(error.code));
         })
     } else {
-      setAlartMessage('Password and Confirm Password doesn\'t match');
+      setAlertMessage('Password and Confirm Password doesn\'t match');
     }
   };
 
@@ -95,7 +75,7 @@ export default function SignUpPage() {
       })
       .catch((error: any) => {
         setFirebaseAccount(null);
-        setAlartMessage(getErrorMessage(error.code));
+        setAlertMessage(getErrorMessage(error.code));
       });
   }
 
@@ -133,74 +113,116 @@ export default function SignUpPage() {
   }
 
   return (
-    <Stack>
-      <Typography variant='h1'>Sign Up</Typography>
+    <>
+      {!isMobile && (
+        <Box
+          width='100%'
+          height='calc(100vh - 4rem)'
+          position='absolute'
+          sx={{
+            inset: '4rem auto auto 0',
+            backgroundImage: 'url("/auth-bg.png")',
+            backgroundSize: 'cover',
+            backgroundPositionX: '50%'
+          }}>
+        </Box>
+      )}
 
-      {/* Step1: Firebase Authentication */}
-      {loginStatus === LoginStatus.LoggedOut && (
-        <Stack rowGap={'20px'}>
-          <form onSubmit={handleEmailAuth}>
+      <Box
+        bgcolor='white'
+        width={isMobile ? 'auto' : '50%'}
+        height={isMobile ? 'auto' : '100vh'}
+        minWidth={isMobile ? 'auto' : '560px'}
+        maxWidth={isMobile ? '345px' : '960px'}
+        marginInline='auto'
+        sx={{
+          position: isMobile ? 'static' : 'fixed',
+          inset: '4rem 0 auto auto',
+        }}
+      >
+        <Stack
+          maxWidth={isMobile ? 'auto' : '600px'}
+          marginTop={isMobile ? '2rem' : 0}
+          marginInline='auto'
+          padding={isMobile ? 'none' : '0 6rem 2rem 6rem'}
+        >
+          {!isMobile &&
+            <Typography
+              marginBlock={isMobile ? 'none' : '2rem'}
+              variant='h1'
+              fontWeight='bold'
+            >
+              Sign Up
+            </Typography>
+          }
+
+          {/* Step1: Firebase Authentication */}
+          {loginStatus === LoginStatus.LoggedOut && (
             <Stack rowGap={'20px'}>
+              <form onSubmit={handleEmailAuth}>
+                <Stack rowGap={'20px'}>
 
-              <Stack rowGap={'10px'}>
-                <FormControl required>
-                  <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
-                </FormControl>
-                <FormControl required>
-                  <PasswordInput label='Password' setter={setPassword} />
-                </FormControl>
-                <FormControl required>
-                  <PasswordInput label='Confirm Password' setter={setConfirmPassword} />
-                </FormControl>
-                <Typography color='error'>{alartMessage}</Typography>
-              </Stack>
+                  <Stack rowGap={'10px'}>
+                    <FormControl required>
+                      <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                    </FormControl>
+                    <FormControl required>
+                      <PasswordInput label='Password' setter={setPassword} />
+                    </FormControl>
+                    <FormControl required>
+                      <PasswordInput label='Confirm Password' setter={setConfirmPassword} />
+                    </FormControl>
+                    <Typography color='error'>{alertMessage}</Typography>
+                  </Stack>
 
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    color='primary'
+                    fullWidth
+                  >
+                    Next
+                  </Button>
+
+                </Stack>
+              </form>
+
+              <Typography align='center'>or</Typography>
               <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                fullWidth
+                variant='outlined'
+                color='secondary'
+                startIcon={<FcGoogle />}
+                onClick={handleGoogleAuth}
+                sx={{
+                  borderColor: theme.palette.secondary.light
+                }}
               >
-                Next
+                Sign up with Google
               </Button>
 
             </Stack>
-          </form>
+          )}
 
-          <Typography align='center'>or</Typography>
-          <Button
-            variant='outlined'
-            color='secondary'
-            startIcon={<FcGoogle />}
-            onClick={handleGoogleAuth}
-            sx={{
-              borderColor: theme.palette.secondary.light
-            }}
-          >
-            Sign up with Google
-          </Button>
+          {/* Step2: Register for our app */}
+          {loginStatus === LoginStatus.SigningUp && (
+            <form onSubmit={handleSignup}>
+              <Stack rowGap={'20px'}>
+                <Stack rowGap={'10px'}>
 
+                  <NameInput name={name} setName={setName} />
+                  <CourseInput courseId={courseId} setCourseId={setCourseId} />
+
+                  <Typography variant='body2' align='center'>
+                    If you are an instructor, please contact admin.
+                  </Typography>
+
+                </Stack>
+                <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
+              </Stack>
+            </form>
+          )}
         </Stack>
-      )}
-
-      {/* Step2: Register for our app */}
-      {loginStatus === LoginStatus.SigningUp && (
-        <form onSubmit={handleSignup}>
-          <Stack rowGap={'20px'}>
-            <Stack rowGap={'10px'}>
-
-              <NameInput name={name} setName={setName} />
-              <CourseInput courseId={courseId} setCourseId={setCourseId} />
-
-              <Typography variant='body2' align='center'>
-                If you are an instructor, please contact admin.
-              </Typography>
-
-            </Stack>
-            <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
-          </Stack>
-        </form>
-      )}
-    </Stack>
+      </Box>
+    </>
   )
 }
