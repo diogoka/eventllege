@@ -14,9 +14,9 @@ export default function HeaderMB() {
   const router = useRouter();
   return (
     <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="space-between"
+      direction='row'
+      alignItems='center'
+      justifyContent='space-between'
       sx={{ width: '90%', height: '50px', m: '0 auto' }}
     >
       <Logo />
@@ -28,8 +28,8 @@ export default function HeaderMB() {
       ) : (
         <Button
           onClick={() => router.push('/login')}
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           startIcon={<LoginIcon />}
           sx={{ width: '6.25rem', borderRadius: '5px' }}
         >

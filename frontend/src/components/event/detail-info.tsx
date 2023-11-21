@@ -22,7 +22,7 @@ export default function DetailInfo(props: Props) {
 
   const { loginStatus } = useContext(UserContext);
 
-  let tagsString="";
+  let tagsString='';
 
   props.tags.map((val:Tag, key:number)=>{
     tagsString+= key==0? `${val.name_tag}` : `, ${val.name_tag}`;

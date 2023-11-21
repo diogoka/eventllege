@@ -121,7 +121,16 @@ function UserEvents() {
     >
       <SearchBar searchEvents={searchEvents} />
       {!hasEvents.eventFound ? (
-        <Typography sx={{ position: 'relative', top: '16.3125rem' }}>
+        <Typography
+          sx={{
+            position: 'relative',
+            top: '16.3125rem',
+            color: 'white',
+            backgroundColor: '#2b3467',
+            padding: '1rem',
+            borderRadius: '5px',
+          }}
+        >
           {hasEvents.message}
         </Typography>
       ) : (

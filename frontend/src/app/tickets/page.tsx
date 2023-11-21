@@ -39,7 +39,7 @@ export default function Tickets() {
 
   return (
     <>
-    <Typography variant="h3">Tickets:</Typography>
+    <Typography variant='h3'>Tickets:</Typography>
     <Stack>
 
         {events.map((elm:Event, key:number) => {

@@ -19,8 +19,8 @@ export default function UsersListItemPC() {
         <Button
           key={index}
           onClick={() => clickHandler(button.path)}
-          variant="text"
-          color="primary"
+          variant='text'
+          color='primary'
           sx={{
             width: 'auto',
             margin: '0 .5rem',

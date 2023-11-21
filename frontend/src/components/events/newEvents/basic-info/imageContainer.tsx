@@ -14,16 +14,16 @@ export default function ImageContainer({ warning, onFileInputChange }: Props) {
   return (
     <>
       <Button
-        component="label"
-        variant="outlined"
+        component='label'
+        variant='outlined'
         startIcon={<CollectionsIcon />}
-        color="info"
+        color='info'
         fullWidth
         disableRipple
       >
         Add Image
         <Input
-          type="file"
+          type='file'
           onChange={onFileInputChange}
           sx={{
             clip: 'rect(0 0 0 0)',

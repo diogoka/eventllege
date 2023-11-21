@@ -70,10 +70,10 @@ function ReviewItem({ review }: Props) {
       </Box>
       <Box sx={{ display: 'flex', columnGap: '0.8rem' }}>
         <Rating
-          name="read-only"
+          name='read-only'
           value={Number(review.rating)}
           readOnly
-          size="small"
+          size='small'
           precision={0.5}
           emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
           icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
@@ -85,7 +85,7 @@ function ReviewItem({ review }: Props) {
         </Typography>
       </Box>
       <Box>
-        <Typography variant="body2">{review.description_review}</Typography>
+        <Typography variant='body2'>{review.description_review}</Typography>
       </Box>
     </Box>
   );

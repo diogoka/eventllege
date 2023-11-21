@@ -97,8 +97,8 @@ export default function PastEvent() {
     >
       {alertOpen && (
         <Alert
-          severity="info"
-          variant="filled"
+          severity='info'
+          variant='filled'
           onClose={() => setAlertOpen(false)}
           sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
         >

@@ -14,7 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 export default function Header() {
   return (
     <AppBar
-      position="fixed"
+      position='fixed'
       sx={{
         bgcolor: 'white',
         boxShadow: 'none',

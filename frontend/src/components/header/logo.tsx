@@ -14,7 +14,7 @@ export default function Logo() {
         >
           <img
             src={'/eventllege_Icon.svg'}
-            alt="eventllege logo"
+            alt='eventllege logo'
             style={{ width: '2.5rem', height: '2.5rem' }}
           />
         </Button>
@@ -26,7 +26,7 @@ export default function Logo() {
         >
           <img
             src={'/eventllege_logoIcon.svg'}
-            alt="eventllege logo"
+            alt='eventllege logo'
             style={{ width: '100%', height: '100%' }}
           />
         </Button>
