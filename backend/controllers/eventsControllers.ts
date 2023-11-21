@@ -338,7 +338,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
     ]);
 
     const tags = await pool.query(
-      'SELECT tags.name_tag FROM events ' +
+      'SELECT tags.id_tag, tags.name_tag FROM events ' +
         'inner join events_tags on events.id_event = events_tags.id_event ' +
         'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
       [EVENT_ID]
@@ -355,7 +355,10 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       event: {
         ...events.rows[0],
         tags: tags.rows.map((val) => {
-          return val.name_tag;
+          return {
+            id_tag: val.id_tag,
+            name_tag: val.name_tag
+          };
         }),
         attendees: attendees.rows.map((val) => {
           return {

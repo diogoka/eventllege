@@ -18,6 +18,11 @@ export type EventDate = {
   date_event_end: string;
 };
 
+export type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
+
 export type Event = {
   name_event: string;
   description_event: string;
@@ -25,12 +30,12 @@ export type Event = {
   location_event: string;
   capacity_event: number;
   price_event: number;
-  image_event: string;
   category_event: string;
-  tags: Array<string>;
+  tags: Array<Tag>;
 };
 
 export type OtherInfo = {
+  image_event: string;
   id_event: number;
   id_owner: string;
 };
@@ -65,6 +70,7 @@ export default function EventPage() {
         setAttendees([...res.data.event.attendees]);
 
         setOtherInfo({
+          image_event: "",
           id_event: res.data.event.id_event,
           id_owner: res.data.event.id_owner
         });
