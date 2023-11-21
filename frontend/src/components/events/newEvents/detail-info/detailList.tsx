@@ -22,7 +22,9 @@ type Props = {
   category: string;
   setCategory: (value: string) => void;
   selectedTags: Tag[];
+  // selectedTags: number[];
   setSelectedTags: (value: Tag[]) => void;
+  // setSelectedTags: (value: number[]) => void;
 };
 
 export default function DetailList(props: Props) {

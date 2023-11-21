@@ -24,6 +24,7 @@ interface EventData {
   location: string;
   price: number;
   selectedTags: Tag[];
+  // selectedTags: number[];
   category: string;
 }
 
@@ -54,6 +55,7 @@ type Tag = {
 type Props = {
   editEvent?: SelectedEvent;
   selectedTags?: Tag[];
+  // selectedTags?: number[];
 };
 
 const eventReducer = (state: EventData, action: EventAction) => {

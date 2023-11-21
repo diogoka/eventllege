@@ -15,6 +15,7 @@ export type EventData = {
   price: number;
   // image: string;
   selectedTags: Tag[];
+  // selectedTags: number[];
   category: string;
   // tags: Array<string>;
   // categories: Array<string>;
