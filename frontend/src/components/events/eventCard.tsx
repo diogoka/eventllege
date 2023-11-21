@@ -49,8 +49,8 @@ function EventCard({
       <CardMedia>
         <ImageHelper
           src={`http://localhost:3001/img/events/${eventId}`}
-          width="23.75rem"
-          height="13.75rem"
+          width='23.75rem'
+          height='13.75rem'
           alt={event.name_event}
         />
       </CardMedia>
@@ -80,10 +80,10 @@ function EventCard({
         >
           <AiFillClockCircle style={{ color: '#3874CB', fontSize: '0.6rem' }} />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Typography variant="body2" sx={{ color: '#3874CB' }}>
+            <Typography variant='body2' sx={{ color: '#3874CB' }}>
               {weekDay}, {monthAndDay}
             </Typography>
-            <Typography variant="body2" sx={{ color: '#3874CB' }}>
+            <Typography variant='body2' sx={{ color: '#3874CB' }}>
               {startTime} - {endTime}
             </Typography>
           </Box>
@@ -119,11 +119,11 @@ function EventCard({
               }}
             >
               <Rating
-                name="read-only"
+                name='read-only'
                 value={avgRating}
                 readOnly
                 precision={0.5}
-                size="small"
+                size='small'
                 emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
                 icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
               />

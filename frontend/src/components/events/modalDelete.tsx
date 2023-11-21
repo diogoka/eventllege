@@ -97,25 +97,25 @@ export default function ModalDelete({
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography variant="h2" sx={{ textAlign: 'justify' }}>
+          <Typography variant='h2' sx={{ textAlign: 'justify' }}>
             Are you sure you want to delete the event {eventName}?
           </Typography>
           <Box sx={iconContainer}>
             <Button
               sx={buttonStyle}
-              variant="contained"
+              variant='contained'
               onClick={(event) => handleCancel(event)}
             >
               Cancel
             </Button>
             <Button
               sx={deleteButtonStyle}
-              value="delete"
-              variant="contained"
+              value='delete'
+              variant='contained'
               onClick={(event) => handleDelete(event)}
             >
               Delete

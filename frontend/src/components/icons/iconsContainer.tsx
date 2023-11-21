@@ -25,7 +25,7 @@ function IconsContainer({ icons, onIconClick }: Props) {
 
   return (
     <Stack
-      direction="row"
+      direction='row'
       spacing={1}
       sx={{
         display: 'flex',
@@ -59,7 +59,7 @@ function IconsContainer({ icons, onIconClick }: Props) {
               onClick={(event) => handleClick(icon.name, event)}
             />
             {icon.title && (
-              <Typography variant="caption">{icon.title}</Typography>
+              <Typography variant='caption'>{icon.title}</Typography>
             )}
           </Box>
         );

@@ -102,7 +102,7 @@ function EventItem({
   const alertCopyURLFn = () => {
     return (
       <Alert
-        severity="success"
+        severity='success'
         onClose={handleAlertClose}
         sx={{
           position: 'absolute',
@@ -164,7 +164,7 @@ function EventItem({
             },
           }}
         >
-          <Typography color="white" fontSize={'0.8125rem'}>
+          <Typography color='white' fontSize={'0.8125rem'}>
             {attending ? 'Applied' : 'Join Now'}
           </Typography>
         </Box>

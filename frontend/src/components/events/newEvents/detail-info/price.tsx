@@ -16,14 +16,14 @@ export default function Price({ price, setPrice }: Props) {
   return (
     <>
       <TextField
-        label="Price"
-        variant="outlined"
-        type="number"
+        label='Price'
+        variant='outlined'
+        type='number'
         fullWidth
         value={price}
         onChange={handlePriceChange}
         InputProps={{
-          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          startAdornment: <InputAdornment position='start'>$</InputAdornment>,
         }}
       />
     </>

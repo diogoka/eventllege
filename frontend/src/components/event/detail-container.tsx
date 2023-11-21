@@ -34,7 +34,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) =
     const startDate = new Date(start);
     const endDate = new Date(end);
  
-    console.log("If remove this console.log, detail page might not show image any more:", otherInfo?.id_event)
+    console.log('If remove this console.log, detail page might not show image any more:', otherInfo?.id_event)
     
     return {
         date_event_start:`
@@ -87,25 +87,25 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) =
 
   return (
     <>
-      <Typography variant="h1">{event?.name_event}</Typography>
+      <Typography variant='h1'>{event?.name_event}</Typography>
 
       <Box style={{ marginInline: 'auto' }}>
         <ImageHelper
           src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
-          width="100%"
-          height="auto"
+          width='100%'
+          height='auto'
           alt={event?.name_event ?? 'Event'}
         />
       </Box>
 
       <Box
         display={loginStatus == 'Logged In' ? 'flex' : 'none'}
-        justifyContent="space-between"
+        justifyContent='space-between'
       >
         <Box
           visibility={applied && !organizerEvent ? 'visible' : 'hidden'}
-          display="flex"
-          alignItems="center"
+          display='flex'
+          alignItems='center'
         >
           <IconsContainer
             icons={[
@@ -127,7 +127,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) =
         {eventDates?.map((dt:EventDate)=>{
             return (
                 <>
-                    <Box display="flex" alignItems="center">
+                    <Box display='flex' alignItems='center'>
                         <IconsContainer
                             icons={[{ name: 'FaClock', isClickable: false, color: '#333333' }]}
                             onIconClick={() => {
@@ -142,7 +142,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) =
             )
         })}
 
-        <Box display="flex" alignItems="center">
+        <Box display='flex' alignItems='center'>
           <IconsContainer
             icons={[
               { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
@@ -162,7 +162,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent }: Props) =
 
       {isAlertVisible && (
         <Alert
-          severity="success"
+          severity='success'
           onClose={() => {
             setIsAlertVisible(false);
           }}

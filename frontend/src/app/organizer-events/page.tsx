@@ -105,8 +105,8 @@ export default function OrganizerEventsPage() {
       {laptopQuery && (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '98%' }}>
           <Button
-            type="submit"
-            variant="outlined"
+            type='submit'
+            variant='outlined'
             onClick={handleCreateEvent}
             sx={{
               marginBottom: '1rem',

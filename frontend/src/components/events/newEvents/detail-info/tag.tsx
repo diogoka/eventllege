@@ -71,14 +71,14 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+        <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
         <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
+          labelId='demo-multiple-checkbox-label'
+          id='demo-multiple-checkbox'
           multiple
           value={selectedId}
           onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
+          input={<OutlinedInput label='Tag' />}
           renderValue={(selectedIds) => {
             const selectedNames = selectedTags
               .filter((tag) => selectedIds.includes(tag.id_tag))

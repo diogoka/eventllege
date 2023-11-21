@@ -169,7 +169,7 @@ export default function EventPage() {
       {!oldEvent && (
         <>
           <Box
-            justifyContent="space-between"
+            justifyContent='space-between'
             display={
               organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'
             }
@@ -178,9 +178,9 @@ export default function EventPage() {
             <Box style={{ width: '47%' }}>
               {otherInfo?.id_event ? (
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="primary"
+                  type='submit'
+                  variant='outlined'
+                  color='primary'
                   fullWidth
                   onClick={() => editEventHandler(otherInfo.id_event)}
                 >
@@ -194,9 +194,9 @@ export default function EventPage() {
             <Box style={{ width: '47%' }}>
               {otherInfo?.id_event ? (
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="error"
+                  type='submit'
+                  variant='outlined'
+                  color='error'
                   fullWidth
                   onClick={() => deleteEvent(otherInfo.id_event)}
                 >
@@ -215,7 +215,7 @@ export default function EventPage() {
                   ? 'block'
                   : 'none',
             }}
-            type="submit"
+            type='submit'
             variant={applied ? 'outlined' : 'contained'}
             color={applied ? 'error' : 'primary'}
             fullWidth

@@ -77,11 +77,11 @@ function SearchBar({ searchEvents }: Props) {
       <Grid item xs={2.5} style={gridIconContainerStyle}>
         <Box>
           <IconItem
-            iconName="FaSearch"
+            iconName='FaSearch'
             onClick={handleSearch}
             isClickable={true}
-            color="white"
-            size="1.3rem"
+            color='white'
+            size='1.3rem'
           />
         </Box>
       </Grid>

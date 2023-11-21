@@ -29,9 +29,9 @@ export default function DetailList(props: Props) {
   return (
     <Grid
       container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
+      direction='row'
+      justifyContent='center'
+      alignItems='center'
       rowSpacing={2}
       sx={{ width: '100%' }}
     >

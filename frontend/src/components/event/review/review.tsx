@@ -72,13 +72,13 @@ function Review({ id_event, applied }: Props) {
   return (
     <>
       <Box sx={{ marginTop: '1rem' }}>
-        <Typography variant="h2" fontWeight="bold">
+        <Typography variant='h2' fontWeight='bold'>
           Reviews
         </Typography>
         {applied && (
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             sx={{ marginTop: '1rem' }}
             fullWidth
             onClick={handleOpen}
@@ -96,7 +96,7 @@ function Review({ id_event, applied }: Props) {
           </>
         ) : (
           <Box sx={boxNoReviewStyle}>
-            <Typography variant="h2">No Reviews</Typography>
+            <Typography variant='h2'>No Reviews</Typography>
           </Box>
         )}
       </Box>

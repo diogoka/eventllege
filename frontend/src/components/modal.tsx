@@ -85,17 +85,17 @@ export default function ModalRating(props: any) {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
         {...props}
       >
         <Box sx={style}>
             <Stack height={1/3} >
                 <form onSubmit={handleNewReview} style={{display: 'flex', flexDirection: 'column', rowGap: '1rem'}}>
-                <Rating name="half-rating" defaultValue={2.5} precision={0.5} onChange={(event, newValue) => setRating(Number(newValue))} />
-                <input type="text" placeholder='Tell us about your experience!' onChange={(event) => setDescription(event.target.value)} style={{height: '3rem'}}/>
+                <Rating name='half-rating' defaultValue={2.5} precision={0.5} onChange={(event, newValue) => setRating(Number(newValue))} />
+                <input type='text' placeholder='Tell us about your experience!' onChange={(event) => setDescription(event.target.value)} style={{height: '3rem'}}/>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                  <input type="submit" value="New Review" style={{width: '50%'}}/>
+                  <input type='submit' value='New Review' style={{width: '50%'}}/>
                 </div>
                 </form>
             </Stack>

@@ -117,8 +117,8 @@ function EventLine({
       </Typography>
       <ImageHelper
         src={`http://localhost:3001/img/events/${event.id_event}`}
-        width="6.25rem"
-        height="4.0625rem"
+        width='6.25rem'
+        height='4.0625rem'
         style={imageContainerStyle}
         alt={event.name_event}
       />
@@ -126,11 +126,11 @@ function EventLine({
       {oldEvent ? (
         <Box sx={iconContainerStyle}>
           <Rating
-            name="read-only"
+            name='read-only'
             value={avgRating}
             readOnly
             precision={0.5}
-            size="small"
+            size='small'
             emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
             icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
           />

@@ -66,7 +66,7 @@ function EventList({
         }}
         direction={laptopQuery ? 'row' : 'column'}
         useFlexGap
-        flexWrap="wrap"
+        flexWrap='wrap'
       >
         {currentEvents.map((event, index) => {
           const eventTags = tags.filter(
@@ -91,8 +91,8 @@ function EventList({
           count={Math.ceil(events.length / eventsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
-          variant="outlined"
-          shape="rounded"
+          variant='outlined'
+          shape='rounded'
           sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
         />
       )}
