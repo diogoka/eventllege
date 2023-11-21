@@ -58,7 +58,8 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
   //   }
   // }, [tags, selectedTags, setSelectedTags]);
 
-  const selectedId = selectedTags.map((tag) => tag.id_tag);
+  const selectedId = selectedTags.map((selectedTag) => selectedTag.id_tag);
+  console.log('selectedId', selectedId);
   // const handleChange = (event: SelectChangeEvent<typeof selectedTags>) => {
   const handleChange = async (event: SelectChangeEvent<typeof selectedId>) => {
     const {
@@ -104,7 +105,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={selectedTags.map((tag) => tag.id_tag)}
+          value={selectedId}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selectedIds) => {
