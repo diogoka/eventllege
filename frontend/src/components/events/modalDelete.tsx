@@ -6,21 +6,7 @@ import Modal from '@mui/material/Modal';
 import { useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Typography } from '@mui/material';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  bgcolor: 'white',
-  border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: '5px',
-};
 
 const iconContainer = {
   display: 'flex',
@@ -53,6 +39,7 @@ type Props = {
   onClose: () => void;
   deleteEvent: (id: number) => void;
   eventName?: string;
+  laptopQuery: boolean;
 };
 
 export default function ModalDelete({
@@ -61,9 +48,23 @@ export default function ModalDelete({
   onClose,
   deleteEvent,
   eventName,
+  laptopQuery,
 }: Props) {
   const [open, setOpen] = useState(isOpen);
-  const router = useRouter();
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: laptopQuery ? '30%' : '90%',
+    bgcolor: 'white',
+    border: '1px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '5px',
+  };
+
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);

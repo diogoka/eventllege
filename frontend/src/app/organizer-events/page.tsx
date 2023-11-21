@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box, Typography } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import { Box, Button, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
+import { useRouter } from 'next/navigation';
 
 type Event = {
   id_event: number;
@@ -45,11 +45,13 @@ export default function OrganizerEventsPage() {
     []
   );
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
+  const router = useRouter();
 
   const currentUser: CurrentUser = {
     id: user!.id,
     role: user!.roleName,
   };
+  const laptopQuery = useMediaQuery('(min-width:768px)');
 
   useEffect(() => {
     axios
@@ -86,6 +88,10 @@ export default function OrganizerEventsPage() {
     console.log(text);
   };
 
+  const handleCreateEvent = () => {
+    router.push('/events/new');
+  };
+
   return (
     <Box
       sx={{
@@ -96,6 +102,23 @@ export default function OrganizerEventsPage() {
       }}
     >
       <SearchBar searchEvents={searchEvents} />
+      {laptopQuery && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '98%' }}>
+          <Button
+            type="submit"
+            variant="outlined"
+            onClick={handleCreateEvent}
+            sx={{
+              marginBottom: '1rem',
+              color: 'rgba(56, 116, 203, 1)',
+              paddingLeft: '1rem',
+              paddingRight: '1rem',
+            }}
+          >
+            Create an event
+          </Button>
+        </Box>
+      )}
       {hasEvents.eventFound ? (
         <EventList
           events={events}

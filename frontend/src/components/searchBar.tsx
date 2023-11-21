@@ -28,8 +28,8 @@ function SearchBar({ searchEvents }: Props) {
   };
 
   const gridContainerStyle = {
-    marginTop: '2rem',
-    marginBottom: '1rem',
+    marginTop: laptopQuery ? '4rem' : '2rem',
+    marginBottom: laptopQuery ? '3rem' : '1rem',
     height: '3rem',
     width: laptopQuery ? '36.25rem' : '100%',
   };

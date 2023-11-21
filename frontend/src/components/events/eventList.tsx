@@ -86,14 +86,16 @@ function EventList({
           );
         })}
       </Stack>
-      <Pagination
-        count={Math.ceil(events.length / eventsPerPage)}
-        page={currentPage}
-        onChange={handlePageChange}
-        variant="outlined"
-        shape="rounded"
-        sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
-      />
+      {events.length > 6 && (
+        <Pagination
+          count={Math.ceil(events.length / eventsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          variant="outlined"
+          shape="rounded"
+          sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}
+        />
+      )}
     </>
   );
 }

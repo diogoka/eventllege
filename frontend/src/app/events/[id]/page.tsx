@@ -58,21 +58,22 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-
         setEvent({
           ...res.data.event,
-          dates_event: [{
-            date_event_start: res.data.event.date_event_start,
-            date_event_end: res.data.event.date_event_end
-          }]
+          dates_event: [
+            {
+              date_event_start: res.data.event.date_event_start,
+              date_event_end: res.data.event.date_event_end,
+            },
+          ],
         });
 
         setAttendees([...res.data.event.attendees]);
 
         setOtherInfo({
-          image_event: "",
+          image_event: '',
           id_event: res.data.event.id_event,
-          id_owner: res.data.event.id_owner
+          id_owner: res.data.event.id_owner,
         });
 
         res.data.event.attendees.map((val: Attendee) => {
