@@ -27,6 +27,7 @@ export default function AttendeesModal(props: Props) {
           transform: 'translate(-50%, -50%)',
           height: 500,
           width: '90%',
+          maxWidth: '680px',
           bgcolor: 'white',
           boxShadow: 24,
           paddingInline: '1rem',
