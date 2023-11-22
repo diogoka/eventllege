@@ -52,16 +52,6 @@ function SearchBar({ searchEvents }: Props) {
     borderBottomRightRadius: '5px',
   };
 
-  const iconButtonStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-
-  const iconStyle = {
-    color: 'white',
-  };
-
   return (
     <Grid container spacing={0} style={gridContainerStyle}>
       <Grid item xs={9.5} sx={{ height: '3rem' }}>

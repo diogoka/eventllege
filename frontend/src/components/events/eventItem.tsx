@@ -3,14 +3,22 @@ import { Event, Tag } from '@/app/events/page';
 import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Alert from '@mui/material/Alert';
-import { AlertTitle, Box, Typography } from '@mui/material';
+import {
+  AlertTitle,
+  Box,
+  Typography,
+  Alert,
+  useMediaQuery,
+} from '@mui/material';
 import ModalDelete from './modalDelete';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { averageRatingFn } from '@/common/functions';
-import { weekDayFn, TimeFn, monthDayFn } from '@/common/functions';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  weekDayFn,
+  TimeFn,
+  monthDayFn,
+  averageRatingFn,
+} from '@/common/functions';
 import EventCard from './eventCard';
 import EventLine from './eventLine';
 

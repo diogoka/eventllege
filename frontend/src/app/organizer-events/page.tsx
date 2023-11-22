@@ -40,7 +40,6 @@ export default function OrganizerEventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
@@ -113,6 +112,10 @@ export default function OrganizerEventsPage() {
               color: 'rgba(56, 116, 203, 1)',
               paddingLeft: '1rem',
               paddingRight: '1rem',
+              '&:hover': {
+                backgroundColor: 'rgba(20,29,79)',
+                color: 'white',
+              },
             }}
           >
             Create an event
