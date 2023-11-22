@@ -11,6 +11,7 @@ export default function MenuList() {
       alignItems='center'
       spacing={1}
       width='52%'
+      maxWidth='37rem'
     >
       <Navigation />
       <AvatarIcon />
