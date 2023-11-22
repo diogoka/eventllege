@@ -8,7 +8,7 @@ type Props = {
 
 export default function AttendeesItem({ attendee }: Props) {
   return (
-    <Box display='flex' alignItems='center' columnGap='1rem'>
+    <Box display='flex' alignItems='center' columnGap='1rem'  minWidth='240px' width='48%'>
       <Avatar alt={attendee.name} src={`http://localhost:3001/img/users/${attendee.id}`} />
       <Typography fontSize='1.125rem'>{attendee.name}</Typography>
     </Box>

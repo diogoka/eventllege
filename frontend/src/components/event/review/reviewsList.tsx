@@ -19,8 +19,8 @@ function ReviewsList({ reviews }: Props) {
       ))}
       {totalReviews > 3 && (
         <Button
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           sx={{ marginTop: '1rem' }}
           fullWidth
           onClick={() => setShowAllReviews(!showAllReviews)}

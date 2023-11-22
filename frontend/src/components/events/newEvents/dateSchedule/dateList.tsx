@@ -43,18 +43,18 @@ export default function DateList({ dates, setDates }: Props) {
   return (
     <>
       <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
         spacing={1}
         sx={{ width: '100%' }}
       >
-        <Typography variant="h2">Date</Typography>
+        <Typography variant='h2'>Date</Typography>
         <Button
           onClick={addDateHandler}
           startIcon={<AddCircleOutlineIcon />}
-          size="medium"
-          variant="text"
+          size='medium'
+          variant='text'
           sx={{ fontSize: '1rem' }}
         >
           Add Date
@@ -63,8 +63,8 @@ export default function DateList({ dates, setDates }: Props) {
       {dates.map((date, index) => (
         <Grid
           container
-          justifyContent="center"
-          alignItems="center"
+          justifyContent='center'
+          alignItems='center'
           rowSpacing={2}
           border={'1px solid rgba(51, 3, 0, 0.1)'}
           key={index}
@@ -101,7 +101,7 @@ export default function DateList({ dates, setDates }: Props) {
           <Grid item xs={6} sx={{ bgcolor: 'green' }}>
             <Button
               onClick={() => deleteDateHandler(index)}
-              variant="text"
+              variant='text'
               startIcon={<RemoveCircleOutlineIcon />}
             >
               Delete

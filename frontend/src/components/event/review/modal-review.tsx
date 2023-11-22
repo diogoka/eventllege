@@ -111,13 +111,13 @@ export default function ModalRating({
       <Modal
         open={openModal}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
         {...{ user_id, event_id }}
       >
         <Box sx={style}>
           <Stack
-            rowGap="1rem"
+            rowGap='1rem'
             sx={{
               position: 'absolute',
               top: '50%',
@@ -141,7 +141,7 @@ export default function ModalRating({
                 transform: 'translate(-50%, 50%)',
               }}
             />
-            <Typography variant="h2" fontWeight="bold">
+            <Typography variant='h2' fontWeight='bold'>
               Review
             </Typography>
             <form
@@ -153,28 +153,28 @@ export default function ModalRating({
               }}
             >
               <Rating
-                name="half-rating"
+                name='half-rating'
                 defaultValue={2.5}
                 precision={0.5}
                 onChange={(event, newValue) => setRating(Number(newValue))}
               />
 
               <TextField
-                id="outlined-multiline-static"
-                label="Comments"
+                id='outlined-multiline-static'
+                label='Comments'
                 multiline
                 rows={9}
-                placeholder="Tell us about your experience!"
-                variant="outlined"
+                placeholder='Tell us about your experience!'
+                variant='outlined'
                 onChange={(event) => setDescription(event.target.value)}
               />
               <Box style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   sx={{ marginTop: '1rem', width: '50%' }}
-                  type="submit"
-                  value="New Review"
+                  type='submit'
+                  value='New Review'
                 >
                   Submit
                 </Button>
@@ -191,7 +191,7 @@ export default function ModalRating({
       >
         <MuiAlert
           elevation={6}
-          variant="filled"
+          variant='filled'
           onClose={handleSnackbarClose}
           severity={snackbarSeverity as AlertProps['severity']}
           sx={{ width: '98%' }}

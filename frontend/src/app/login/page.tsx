@@ -23,8 +23,12 @@ import {
 import { getErrorMessage } from '@/auth/errors';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import PasswordResetModal from '@/components/login/password-reset-modal';
+import { useMediaQuery } from '@mui/material';
+import { Box } from '@mui/system';
 
 export default function LoginPage() {
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const route = useRouter();
 
@@ -36,8 +40,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Alart Message
-  const [alartMessage, setAlartMessage] = useState('');
+  // Alert Message
+  const [alertMessage, setAlertMessage] = useState('');
 
   const [isPasswordReset, setIsPasswordReset] = useState(false);
 
@@ -63,7 +67,7 @@ export default function LoginPage() {
         getUserFromServer(result.user.uid);
       })
       .catch((error) => {
-        setAlartMessage(getErrorMessage(error.code));
+        setAlertMessage(getErrorMessage(error.code));
       });
   };
 
@@ -74,89 +78,117 @@ export default function LoginPage() {
         getUserFromServer(result.user.uid);
       })
       .catch((error) => {
-        setAlartMessage(getErrorMessage(error.code));
+        setAlertMessage(getErrorMessage(error.code));
       })
   }
 
 
 
   return (
-    <Stack>
-
-      <Container sx={{ width: 'auto', margin: 'auto', paddingBlock: '2rem' }}>
-        <Image
-          src='/eventllege_logo.svg'
-          width={170}
-          height={108}
-          alt='logo'
-        />
-      </Container>
-      <Stack rowGap={'20px'}>
-        <form onSubmit={handleEmailLogin}>
-          <Stack rowGap={'20px'}>
-
-            <Stack rowGap={'10px'}>
-              <FormControl required>
-                <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
-              </FormControl>
-              <FormControl required>
-                <PasswordInput label='Password' setter={setPassword} />
-                <Typography color='error'>{alartMessage}</Typography>
-              </FormControl>
-              <Typography
-                onClick={() => {
-                  setIsPasswordReset(true);
-                }}
-                color={theme.palette.info.main}
-                sx={{
-                  textAlign: 'right',
-                  cursor: 'pointer'
-                }}
-              >
-                Forgot password?
-              </Typography>
-              <PasswordResetModal
-                isPasswordReset={isPasswordReset}
-                setIsPasswordReset={setIsPasswordReset}
-              />
-            </Stack>
-
-            <Button
-              type='submit'
-              variant='contained'
-              color='primary'
-              fullWidth
-            >
-              Log In
-            </Button>
-
-          </Stack>
-        </form>
-
-        <Button
-          variant='outlined'
-          color='secondary'
-          startIcon={<FcGoogle />}
-          onClick={handleGoogleLogin}
+    <>
+      {!isMobile && (
+        <Box
+          width='100vw'
+          height='100vh'
+          position='absolute'
           sx={{
-            borderColor: theme.palette.secondary.light
-          }}
-        >
-          Log in with Google
-        </Button>
+            inset: '0 auto auto 0',
+            backgroundImage: 'url("/auth-bg.png")',
+            backgroundSize: 'cover',
+            
+          }}>
+        </Box>
+      )}
+      <Stack
+        width={isMobile ? 'auto' : '600px'}
+        maxWidth={isMobile ? '345px' : 'auto'}
+        marginInline='auto'
+        padding={isMobile ? 'none' : '0 6rem 2rem 6rem'}
+        borderRadius='0.75rem'
+        bgcolor='white'
+        zIndex={100}
+        sx={{
+          position: isMobile ? 'static' : 'absolute',
+          inset: isMobile ? '0' : '50% auto auto 50%',
+          transform: isMobile ? '' : 'translate(-50%, -50%)'
+        }}
+      >
 
-        <Typography align='center'>or</Typography>
+        <Container sx={{ width: 'auto', margin: 'auto', paddingBlock: '2rem' }}>
+          <Image
+            src='/eventllege_logo.svg'
+            width={170}
+            height={108}
+            alt='logo'
+          />
+        </Container>
+        <Stack rowGap={'20px'}>
+          <form onSubmit={handleEmailLogin}>
+            <Stack rowGap={'20px'}>
 
-        <Button
-          onClick={() => route.push('/signup')}
-          variant='contained'
-          color='primary'
-          fullWidth
-        >
-          Sign Up
-        </Button>
+              <Stack rowGap={'10px'}>
+                <FormControl required>
+                  <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                </FormControl>
+                <FormControl required>
+                  <PasswordInput label='Password' setter={setPassword} />
+                  <Typography color='error'>{alertMessage}</Typography>
+                </FormControl>
+                <Typography
+                  onClick={() => {
+                    setIsPasswordReset(true);
+                  }}
+                  color={theme.palette.info.main}
+                  sx={{
+                    textAlign: 'right',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Forgot password?
+                </Typography>
+                <PasswordResetModal
+                  isPasswordReset={isPasswordReset}
+                  setIsPasswordReset={setIsPasswordReset}
+                />
+              </Stack>
 
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                fullWidth
+              >
+                Log In
+              </Button>
+
+            </Stack>
+          </form>
+
+          <Button
+            variant='outlined'
+            color='secondary'
+            startIcon={<FcGoogle />}
+            onClick={handleGoogleLogin}
+            sx={{
+              borderColor: theme.palette.secondary.light
+            }}
+          >
+            Log in with Google
+          </Button>
+
+          <Typography align='center'>or</Typography>
+
+          <Button
+            onClick={() => route.push('/signup')}
+            variant='contained'
+            color='primary'
+            fullWidth
+          >
+            Sign Up
+          </Button>
+
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   )
 }

@@ -80,7 +80,7 @@ function ReviewsSummary({ reviews }: Props) {
         </Box>
         <Box sx={{ width: '100%' }}>
           <BorderLinearProgress
-            variant="determinate"
+            variant='determinate'
             value={percentage(numOfRatings[4])}
           />
         </Box>
@@ -89,7 +89,7 @@ function ReviewsSummary({ reviews }: Props) {
         </Box>
         <Box sx={{ width: '100%' }}>
           <BorderLinearProgress
-            variant="determinate"
+            variant='determinate'
             value={percentage(numOfRatings[3])}
           />
         </Box>
@@ -98,7 +98,7 @@ function ReviewsSummary({ reviews }: Props) {
         </Box>
         <Box sx={{ width: '100%' }}>
           <BorderLinearProgress
-            variant="determinate"
+            variant='determinate'
             value={percentage(numOfRatings[2])}
           />
         </Box>
@@ -107,7 +107,7 @@ function ReviewsSummary({ reviews }: Props) {
         </Box>
         <Box sx={{ width: '100%' }}>
           <BorderLinearProgress
-            variant="determinate"
+            variant='determinate'
             value={percentage(numOfRatings[1])}
           />
         </Box>
@@ -116,7 +116,7 @@ function ReviewsSummary({ reviews }: Props) {
         </Box>
         <Box sx={{ width: '100%' }}>
           <BorderLinearProgress
-            variant="determinate"
+            variant='determinate'
             value={percentage(numOfRatings[0])}
           />
         </Box>
@@ -130,12 +130,12 @@ function ReviewsSummary({ reviews }: Props) {
           rowGap: '0.40rem',
         }}
       >
-        <Typography variant="h2">{formattedAvgRating}</Typography>
+        <Typography variant='h2'>{formattedAvgRating}</Typography>
         <Rating
-          name="read-only"
+          name='read-only'
           value={avgRating}
           readOnly
-          size="small"
+          size='small'
           emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
           icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
         />

@@ -22,7 +22,7 @@ export default function AvatarIcon() {
         ></Avatar>
       </IconButton>
       <Drawer
-        anchor="right"
+        anchor='right'
         open={isMenuOpen}
         onClose={() => toggleMenu(false)}
       >

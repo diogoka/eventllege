@@ -1,7 +1,7 @@
 import React from 'react'
 import { Attendee } from '@/app/events/[id]/page'
 import AttendeesItem from './attendees-item'
-import { Stack } from '@mui/material'
+import { Box } from '@mui/material'
 
 type Props = {
   attendees: Attendee[];
@@ -9,10 +9,16 @@ type Props = {
 
 export default function AttendeesList({ attendees }: Props) {
   return (
-    <Stack rowGap='1rem' overflow='scroll'>
+    <Box
+      display='flex'
+      rowGap='1rem'
+      overflow='scroll'
+      flexWrap='wrap'
+      justifyContent='space-between'
+    >
       {attendees.map((attendee: Attendee) => {
         return <AttendeesItem attendee={attendee} />
       })}
-    </Stack>
+    </Box>
   )
 }

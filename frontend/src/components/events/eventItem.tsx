@@ -1,23 +1,18 @@
 'use client';
-import { Box, CardActions, CardMedia, Typography } from '@mui/material';
 import { Event, Tag } from '@/app/events/page';
 import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
-import { AiFillClockCircle } from 'react-icons/ai';
 import { useState } from 'react';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import ImageHelper from '@/components/common/image-helper';
+import { AlertTitle, Box, Typography } from '@mui/material';
 import ModalDelete from './modalDelete';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { averageRatingFn } from '@/common/functions';
-import StarIcon from '@mui/icons-material/Star';
-import Rating from '@mui/material/Rating';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { weekDayFn, TimeFn, monthDayFn } from '@/common/functions';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import EventCard from './eventCard';
+import EventLine from './eventLine';
 
 type Props = {
   event: Event;
@@ -48,7 +43,7 @@ function EventItem({
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
-  const laptopQuery = useMediaQuery('(min-width:1366px)');
+  const laptopQuery = useMediaQuery('(min-width:768px)');
 
   useEffect(() => {
     getAverageRating();
@@ -65,7 +60,6 @@ function EventItem({
   };
 
   const openModal = () => setIsModalOpen(true);
-
   const closeModal = () => setIsModalOpen(false);
 
   const copyToClipboard = (text: string) => {
@@ -83,6 +77,7 @@ function EventItem({
   };
 
   const handleUserClick = (iconName: string) => {
+    console.log('iconName', iconName);
     if (iconName === 'FaShareSquare') {
       copyToClipboard(`http://localhost:3000/events/${eventId}`);
     }
@@ -107,7 +102,7 @@ function EventItem({
   const alertCopyURLFn = () => {
     return (
       <Alert
-        severity="success"
+        severity='success'
         onClose={handleAlertClose}
         sx={{
           position: 'absolute',
@@ -122,227 +117,91 @@ function EventItem({
     );
   };
 
-  const BoxStyle = {
-    display: 'grid',
-    gridTemplateRows: '2.5rem 2.3rem 2rem',
-    gridTemplateAreas: `
-        "title picture"
-        "date picture"
-        "description icons"
-    `,
-    columnGap: '1rem',
-    height: '7.5rem',
-    alignContent: 'center',
-    borderTop: '1px solid #E0E0E0',
-    cursor: 'pointer',
-    marginTop: '0',
-    width: '100%',
-  };
-
-  const titleStyle = {
-    fontSize: '1rem',
-    gridArea: 'title',
-    fontWeight: '500',
-  };
-
-  const dateContainerStyle = {
-    gridArea: 'date',
-  };
-
-  const dayMonthStyle = {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  };
-
-  const timeStyle = {
-    fontSize: 11,
-    color: '#3874CB',
-  };
-
-  const descriptionStyle = {
-    fontSize: 10,
-    gridArea: 'description',
-    textAlign: 'justify',
-  };
-
-  const imageContainerStyle = {
-    gridArea: 'picture',
-    borderRadius: '5px',
-  };
-
-  const iconContainerStyle = {
-    gridArea: 'icons',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  };
-
   let iconsComponent: any;
 
   if (user.role === 'organizer' && user.id === event.id_owner) {
     iconsComponent = (
       <IconsContainer
         icons={[
-          { name: 'FaEdit', isClickable: true, color: '#3874CB' },
-          { name: 'FaTrashAlt', isClickable: true, color: '#D00000' },
+          {
+            name: 'FaEdit',
+            isClickable: true,
+            color: '#3874CB',
+            title: laptopQuery ? 'Edit' : '',
+            hoverColor: '#d7e3f4',
+          },
+          {
+            name: 'FaTrashAlt',
+            isClickable: true,
+            color: '#D00000',
+            title: laptopQuery ? 'Delete' : '',
+            hoverColor: '#ffd0d0',
+          },
         ]}
         onIconClick={handleOrganizerClick}
       />
     );
   } else {
     iconsComponent = (
-      <IconsContainer
-        icons={[
-          {
-            name: 'FaCheckCircle',
-            isClickable: false,
-            color: attending ? 'green' : '#333333',
-          },
-          { name: 'FaShareSquare', isClickable: true, color: '#333333' },
-        ]}
-        onIconClick={handleUserClick}
-      />
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Box
+          sx={{
+            backgroundColor: attending ? '#4CAF50' : 'rgb(20, 29, 79)',
+            borderRadius: '5px',
+            paddingTop: '0.1rem',
+            paddingBottom: '0.1rem',
+            paddingLeft: '0.3rem',
+            paddingRight: '0.3rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: '0.5rem',
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: attending ? '#4CAF50' : 'rgb(20, 29, 79, 0.8)',
+            },
+          }}
+        >
+          <Typography color='white' fontSize={'0.8125rem'}>
+            {attending ? 'Applied' : 'Join Now'}
+          </Typography>
+        </Box>
+        <IconsContainer
+          icons={[
+            {
+              name: 'FaShareSquare',
+              isClickable: true,
+              color: '#333333',
+              hoverColor: '#e4e4e4',
+              size: '1.24rem',
+            },
+          ]}
+          onIconClick={handleUserClick}
+        />
+      </Box>
     );
   }
 
   const renderEventItem = () => {
     if (laptopQuery) {
       return (
-        <Card
-          onClick={handleCardClick}
-          sx={{ width: '23.75rem', height: '24.0625rem', borderRadius: '5px' }}
-        >
-          <CardMedia>
-            <ImageHelper
-              src={`http://localhost:3001/img/events/${event.id_event}`}
-              width="23.75rem"
-              height="13.75rem"
-              alt={event.name_event}
-            />
-          </CardMedia>
-          <CardContent
-            sx={{
-              backgroundColor: 'rgba(51, 51, 51, 0.02)',
-              paddingBottom: '0',
-            }}
-          >
-            <Typography sx={{ ...titleStyle, fontSize: '1.25rem' }}>
-              {event.name_event.length > 32
-                ? `${event.name_event.slice(0, 32)}...`
-                : event.name_event}
-            </Typography>
-            <Box
-              sx={{
-                ...dateContainerStyle,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <AiFillClockCircle
-                style={{ color: '#3874CB', fontSize: '0.6rem' }}
-              />
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <Typography variant="body2" sx={{ color: '#3874CB' }}>
-                  {weekDay}, {monthAndDay}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#3874CB' }}>
-                  {startTime} - {endTime}
-                </Typography>
-              </Box>
-            </Box>
-
-            <Typography sx={{ ...descriptionStyle, fontSize: '0.75rem' }}>
-              {event.description_event.length > 100
-                ? `${event.description_event.slice(0, 100)}...`
-                : event.description_event}
-            </Typography>
-
-            {oldEvent ? (
-              <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Box sx={iconContainerStyle}>
-                  <Rating
-                    name="read-only"
-                    value={avgRating}
-                    readOnly
-                    precision={0.5}
-                    size="small"
-                    emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                    icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                  />
-                </Box>
-              </CardActions>
-            ) : (
-              <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Box sx={{ ...iconContainerStyle, justifyContent: 'end' }}>
-                  {iconsComponent}
-                </Box>
-              </CardActions>
-            )}
-
-            {isAlertVisible && alertCopyURLFn()}
-            <ModalDelete
-              eventId={eventId}
-              eventName={event.name_event}
-              isOpen={isModalOpen}
-              onClose={closeModal}
-              deleteEvent={deleteEvent}
-            />
-          </CardContent>
-        </Card>
-      );
-    } else {
-      return (
-        <Box onClick={handleCardClick} sx={BoxStyle}>
-          <Typography sx={titleStyle}>
-            {event.name_event.length > 15
-              ? `${event.name_event.slice(0, 18)}...`
-              : event.name_event}
-          </Typography>
-          <Box sx={dateContainerStyle}>
-            <Box sx={dayMonthStyle}>
-              <AiFillClockCircle style={{ fontSize: 12 }} />
-              <Typography sx={{ fontSize: 12 }}>
-                {weekDay}, {monthAndDay}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography sx={timeStyle}>
-                {startTime} - {endTime}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Typography sx={descriptionStyle}>
-            {event.description_event.length > 50
-              ? `${event.description_event.slice(0, 50)}...`
-              : event.description_event}
-          </Typography>
-          <ImageHelper
-            src={`http://localhost:3001/img/events/${event.id_event}`}
-            width="6.25rem"
-            height="4.0625rem"
-            style={imageContainerStyle}
-            alt={event.name_event}
+        <>
+          <EventCard
+            event={event}
+            tags={tags}
+            oldEvent={oldEvent}
+            avgRating={avgRating}
+            iconsComponent={iconsComponent}
+            handleCardClick={handleCardClick}
+            alertCopyURLFn={alertCopyURLFn}
+            weekDay={weekDay}
+            monthAndDay={monthAndDay}
+            startTime={startTime}
+            endTime={endTime}
+            laptopQuery={laptopQuery}
           />
-
-          {oldEvent ? (
-            <Box sx={iconContainerStyle}>
-              <Rating
-                name="read-only"
-                value={avgRating}
-                readOnly
-                precision={0.5}
-                size="small"
-                emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-              />
-            </Box>
-          ) : (
-            <Box sx={iconContainerStyle}>{iconsComponent}</Box>
-          )}
-
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete
             eventId={eventId}
@@ -350,8 +209,37 @@ function EventItem({
             isOpen={isModalOpen}
             onClose={closeModal}
             deleteEvent={deleteEvent}
+            laptopQuery={laptopQuery}
           />
-        </Box>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <EventLine
+            event={event}
+            tags={tags}
+            oldEvent={oldEvent}
+            avgRating={avgRating}
+            iconsComponent={iconsComponent}
+            handleCardClick={handleCardClick}
+            alertCopyURLFn={alertCopyURLFn}
+            weekDay={weekDay}
+            monthAndDay={monthAndDay}
+            startTime={startTime}
+            endTime={endTime}
+            laptopQuery={laptopQuery}
+          />
+          {isAlertVisible && alertCopyURLFn()}
+          <ModalDelete
+            eventId={eventId}
+            eventName={event.name_event}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            deleteEvent={deleteEvent}
+            laptopQuery={laptopQuery}
+          />
+        </>
       );
     }
   };
