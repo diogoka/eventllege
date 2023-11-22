@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Attendee } from '@/app/events/[id]/page';
-import { useTheme, Avatar, AvatarGroup, Box, Link, Typography, Modal } from '@mui/material';
+import { useTheme, useMediaQuery, Avatar, AvatarGroup, Box, Link, Typography, Modal } from '@mui/material';
 import AttendeesModal from './attendees-modal';
 
 const MAX_DISPLAY_AVATARS = 6;
@@ -13,6 +13,8 @@ type Props = {
 export default function AttendeesRow({ attendees }: Props) {
 
   const theme = useTheme();
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -44,10 +46,12 @@ export default function AttendeesRow({ attendees }: Props) {
       </Box>
       <AvatarGroup
         total={attendees.length}
+        max={isMobile ? 4 : 7}  // Setting more than 7 doesn't make change
         sx={{
           '.MuiAvatarGroup-avatar': {
             width: '2rem',
-            height: '2rem'
+            height: '2rem',
+            fontSize: '1rem'
           }
         }} >
         {attendees.map((attendee: Attendee, index: number) => {
