@@ -7,7 +7,6 @@ import React, {
   Dispatch,
 } from 'react';
 import dayjs from 'dayjs';
-// import { DateRange } from '@/components/events/newEvents/eventsControl';
 
 export interface DateRange {
   dateStart: dayjs.Dayjs;
@@ -32,8 +31,6 @@ export type EventData = {
 export type Image = File | null;
 
 type EventContextProps = {
-  // eventData: EventData | null;
-  // setEventData: (EventData: EventData | null) => void;
   addImage: Image | undefined;
   setAddImage: (addImage: Image) => void;
   createdEvent: EventData;
@@ -54,23 +51,6 @@ const initialState: EventData = {
   price_event: 0,
   selectedTags: [],
   category_event: '',
-
-  // title: editEvent ? editEvent.name_event : '',
-  // description: editEvent ? editEvent.description_event : '',
-  // dates: editEvent
-  //   ? [
-  //       {
-  //         dateStart: dayjs(editEvent.date_event_start),
-  //         dateEnd: dayjs(editEvent.date_event_end),
-  //       },
-  //     ]
-  //   : [{ dateStart: today, dateEnd: today }],
-  // spots: editEvent ? editEvent.capacity_event : 0,
-  // location: editEvent ? editEvent.location_event : 'location',
-  // price: editEvent ? editEvent.price_event : 0,
-  // image: editEvent ? editEvent.image_event : 'images',
-  // selectedTags: selectedTags ? selectedTags : [],
-  // category: editEvent ? editEvent.category_event : '',
 };
 
 export const eventReducer = (state: EventData, action: EventAction) => {
@@ -89,6 +69,8 @@ export const eventReducer = (state: EventData, action: EventAction) => {
       return { ...state, category_event: action.payload.category_event };
     case 'UPDATE_SELECTED_TAGS':
       return { ...state, selectedTags: action.payload.selectedTags };
+    case 'GET_WHOLE_DATA':
+      return action.payload;
     default:
       return state;
   }
@@ -98,11 +80,9 @@ export const EventContext = createContext<EventContextProps>(
 );
 
 export function EventContextProvider({ children }: { children: ReactNode }) {
-  // const [eventData, setEventData] = useState<EventData | null>(null);
   const [addImage, setAddImage] = useState<Image>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
-  console.log('created event', createdEvent);
 
   return (
     <EventContext.Provider

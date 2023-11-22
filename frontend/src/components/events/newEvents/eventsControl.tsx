@@ -37,8 +37,8 @@ type SelectedEvent = {
   id_owner: string;
   name_event: string;
   description_event: string;
-  date_event_start: string;
-  date_event_end: string;
+  date_event_start: dayjs.Dayjs;
+  date_event_end: dayjs.Dayjs;
   image_event: string;
   location_event: string;
   capacity_event: number;
@@ -56,67 +56,12 @@ type Props = {
   selectedTags?: Tag[];
 };
 
-// const eventReducer = (state: EventData, action: EventAction) => {
-//   switch (action.type) {
-//     case 'UPDATE_TITLE':
-//       return { ...state, title: action.payload };
-//     case 'UPDATE_DESCRIPTION':
-//       return { ...state, description: action.payload };
-//     case 'UPDATE_DATES':
-//       return { ...state, dates: action.payload };
-//     case 'UPDATE_PRICE':
-//       return { ...state, price: action.payload };
-//     case 'UPDATE_SPOTS':
-//       return { ...state, spots: action.payload };
-//     case 'UPDATE_CATEGORY':
-//       return { ...state, category: action.payload };
-//     case 'UPDATE_SELECTED_TAGS':
-//       return { ...state, selectedTags: action.payload };
-//     default:
-//       return state;
-//   }
-// };
-
 export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
   const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
-  // console.log('editEvent', editEvent);
-
-  // const initialState = {
-  //   title: editEvent ? editEvent.name_event : '',
-  //   description: editEvent ? editEvent.description_event : '',
-  //   dates: editEvent
-  //     ? [
-  //         {
-  //           dateStart: dayjs(editEvent.date_event_start),
-  //           dateEnd: dayjs(editEvent.date_event_end),
-  //         },
-  //       ]
-  //     : [{ dateStart: today, dateEnd: today }],
-  //   spots: editEvent ? editEvent.capacity_event : 0,
-  //   location: editEvent ? editEvent.location_event : 'location',
-  //   price: editEvent ? editEvent.price_event : 0,
-  //   image: editEvent ? editEvent.image_event : 'images',
-  //   selectedTags: selectedTags ? selectedTags : [],
-  //   category: editEvent ? editEvent.category_event : '',
-
-  // dates: [{ dateStart: today, dateEnd: today }],
-  // spots: 0,
-  // location: 'location',
-  // price: 0,
-  // image: 'images',
-  // selectedTags: [],
-  // category: '',
-  // };
-
-  // const [newEvent, dispatch]: [EventData, Dispatch<EventAction>] = useReducer(
-  //   eventReducer,
-  //   initialState
-  // );
-  // console.log('new event', newEvent);
 
   useEffect(() => {
     if (image) {
@@ -126,7 +71,7 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setEventData(newEvent);
+    dispatch;
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
