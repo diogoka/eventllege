@@ -61,13 +61,6 @@ export default function DateList({ dates, setDates }: Props) {
         </Button>
       </Stack>
       {dates.map((date, index) => (
-        // <Stack
-        //   direction="row"
-        //   justifyContent="space-between"
-        //   alignItems="center"
-        //   spacing={1}
-        //   key={index}
-        // >
         <Grid
           container
           justifyContent='center'
@@ -115,7 +108,6 @@ export default function DateList({ dates, setDates }: Props) {
             </Button>
           </Grid>
         </Grid>
-        // </Stack>
       ))}
     </>
   );
