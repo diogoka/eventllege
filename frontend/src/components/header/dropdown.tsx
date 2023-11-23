@@ -36,12 +36,8 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       open={open}
       onClose={handleClose}
       onClick={handleClose}
-      // PaperProps={{
-      //   elevation: 0,
-      // }}
       sx={{
         overflow: 'visible',
-        // filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
         mt: 1.5,
         '& .MuiAvatar-root': {
           width: 40,
@@ -65,7 +61,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem onClick={clickHandler}>
+      <MenuItem onClick={clickHandler} sx={{ padding: '0 2rem' }}>
         <Avatar
           alt={user?.name}
           src={`http://localhost:3001/img/users/${
@@ -75,11 +71,11 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
         MY Profile
       </MenuItem>
       <Divider />
-      <MenuItem onClick={handleLogout}>
+      <MenuItem onClick={handleLogout} sx={{ padding: '.5rem 2rem' }}>
         <ListItemIcon>
-          <Logout fontSize='small' />
+          <Logout />
         </ListItemIcon>
-        Logout
+        Log out
       </MenuItem>
     </Menu>
   );
