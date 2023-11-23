@@ -10,53 +10,8 @@ import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
-export interface DateRange {
-  dateStart: dayjs.Dayjs;
-  dateEnd: dayjs.Dayjs;
-}
-const today = dayjs();
 
-// interface EventData {
-//   name_event: string;
-//   description_event: string;
-//   dates: DateRange[];
-//   capacity_event: number;
-//   location_event: string;
-//   price_event: number;
-//   selectedTags: Tag[];
-//   category_event: string;
-// }
-
-// type EventAction = {
-//   type: string;
-//   payload: any;
-// };
-
-type SelectedEvent = {
-  id_event: number;
-  id_owner: string;
-  name_event: string;
-  description_event: string;
-  date_event_start: dayjs.Dayjs;
-  date_event_end: dayjs.Dayjs;
-  image_event: string;
-  location_event: string;
-  capacity_event: number;
-  price_event: number;
-  category_event: string;
-};
-
-type Tag = {
-  id_tag: number;
-  name_tag: string;
-};
-
-type Props = {
-  editEvent?: SelectedEvent;
-  selectedTags?: Tag[];
-};
-
-export default function EventsControl({ editEvent, selectedTags }: Props) {
+export default function EventsControl() {
   const router = useRouter();
   const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
