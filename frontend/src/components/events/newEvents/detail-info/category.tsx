@@ -36,7 +36,9 @@ export default function Category({ category, setCategory }: Props) {
           labelId='Category'
           value={categories.length > 0 ? category : ''}
           label='category'
-          onChange={(event: SelectChangeEvent) => setCategory(event.target.value)}
+          onChange={(event: SelectChangeEvent) =>
+            setCategory(event.target.value)
+          }
         >
           {categories.map((category: Category, index: number) => (
             <MenuItem key={index} value={category.category_course}>

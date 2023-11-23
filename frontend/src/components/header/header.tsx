@@ -16,7 +16,7 @@ export default function Header() {
     <AppBar
       position='fixed'
       sx={{
-        bgcolor: 'white',
+        bgcolor: '#F5F8FC',
         boxShadow: 'none',
         borderBottom: '1px solid rgba(51, 3, 0, 0.1)',
       }}

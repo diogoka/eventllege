@@ -13,10 +13,13 @@ export default function Capacity({ spots, setSpots }: Props) {
         variant='outlined'
         type='number'
         fullWidth
-        value={spots}
         onChange={(event) => setSpots(+event.target.value)}
         InputProps={{
-          endAdornment: <InputAdornment position='end'>{spots >= 2 ? 'people' : 'person'}</InputAdornment>,
+          endAdornment: (
+            <InputAdornment position='end'>
+              {spots >= 2 ? 'people' : 'person'}
+            </InputAdornment>
+          ),
         }}
       />
     </>

@@ -71,7 +71,6 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch;
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
@@ -111,7 +110,6 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
       />
       <Location />
       <DetailList
-        price={createdEvent.price_event}
         setPrice={(price) =>
           dispatch({
             type: 'UPDATE_PRICE',

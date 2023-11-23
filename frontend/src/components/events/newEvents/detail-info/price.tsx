@@ -2,11 +2,10 @@ import React from 'react';
 import { TextField, InputAdornment } from '@mui/material';
 
 type Props = {
-  price: number;
   setPrice: (value: number) => void;
 };
 
-export default function Price({ price, setPrice }: Props) {
+export default function Price({ setPrice }: Props) {
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = +event.target.value;
     if (!isNaN(inputValue)) {
@@ -20,7 +19,6 @@ export default function Price({ price, setPrice }: Props) {
         variant='outlined'
         type='number'
         fullWidth
-        value={price}
         onChange={handlePriceChange}
         InputProps={{
           startAdornment: <InputAdornment position='start'>$</InputAdornment>,
