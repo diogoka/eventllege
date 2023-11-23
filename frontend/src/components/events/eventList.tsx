@@ -1,5 +1,5 @@
 'use client';
-import { Stack, Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Event, Tag } from '@/app/events/page';
 import EventItem from '@/components/events/eventItem';
 import Pagination from '@mui/material/Pagination';

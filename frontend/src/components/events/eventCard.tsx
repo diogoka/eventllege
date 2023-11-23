@@ -44,7 +44,15 @@ function EventCard({
   return (
     <Card
       onClick={handleCardClick}
-      sx={{ width: '23.75rem', height: '24.0625rem', borderRadius: '5px' }}
+      sx={{
+        width: '23.75rem',
+        height: '24.0625rem',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        '&:hover': {
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        },
+      }}
     >
       <CardMedia>
         <ImageHelper

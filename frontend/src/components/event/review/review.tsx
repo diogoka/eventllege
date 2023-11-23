@@ -39,17 +39,6 @@ function Review({ id_event, applied }: Props) {
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
-  const boxReviewStyle = {
-    backgroundColor: '#3333330D',
-    width: laptopQuery ? '23.75rem' : '18.4375rem',
-    height: '7.625rem',
-    borderRadius: '0.9375rem',
-    marginBottom: '0.5rem',
-    display: 'flex',
-    flexDirection: laptopQuery ? 'row' : 'column',
-    justifyContent: 'center',
-  };
-
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/events/reviews/${id_event}`)
@@ -92,9 +81,6 @@ function Review({ id_event, applied }: Props) {
             spacing={laptopQuery ? 2 : 0}
             sx={{ marginTop: '1rem' }}
           >
-            <Box sx={boxReviewStyle}>
-              <ReviewsSummary reviews={reviews} />
-            </Box>
             <ReviewsList reviews={reviews} laptopQuery={laptopQuery} />
           </Stack>
         ) : (

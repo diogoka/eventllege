@@ -1,13 +1,7 @@
 'use client';
 import React, { useState, ChangeEvent } from 'react';
-// import { FaSearch } from "react-icons/fa";
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
+import { TextField, Box, useMediaQuery, Grid } from '@mui/material';
 import IconItem from './icons/iconItem';
-import { Icon } from '@mui/material';
-import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   searchEvents: (text: string) => void;

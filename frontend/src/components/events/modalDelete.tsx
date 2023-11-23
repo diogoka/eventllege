@@ -1,12 +1,7 @@
 'use client';
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { useState } from 'react';
+import { Button, Modal, Box, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { Typography } from '@mui/material';
 
 const iconContainer = {
   display: 'flex',
@@ -74,7 +69,6 @@ export default function ModalDelete({
     const response = await axios
       .delete(`http://localhost:3001/api/events/${eventId}`)
       .then((res) => {
-        console.log(res.data);
         setOpen(false);
         deleteEvent(eventId);
       })
