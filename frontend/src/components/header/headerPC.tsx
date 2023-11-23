@@ -13,7 +13,11 @@ export default function HeaderPC() {
   return (
     <Toolbar
       disableGutters
-      sx={{ justifyContent: 'space-between', width: '90%', margin: '0 auto' }}
+      sx={{
+        justifyContent: 'space-between',
+        width: '90%',
+        margin: '0 auto',
+      }}
     >
       <Logo />
       {user ? (
