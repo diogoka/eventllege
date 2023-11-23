@@ -16,29 +16,29 @@ export interface DateRange {
 }
 const today = dayjs();
 
-interface EventData {
-  title: string;
-  description: string;
-  dates: DateRange[];
-  spots: number;
-  location: string;
-  price: number;
-  selectedTags: Tag[];
-  category: string;
-}
+// interface EventData {
+//   name_event: string;
+//   description_event: string;
+//   dates: DateRange[];
+//   capacity_event: number;
+//   location_event: string;
+//   price_event: number;
+//   selectedTags: Tag[];
+//   category_event: string;
+// }
 
-type EventAction = {
-  type: string;
-  payload: any;
-};
+// type EventAction = {
+//   type: string;
+//   payload: any;
+// };
 
 type SelectedEvent = {
   id_event: number;
   id_owner: string;
   name_event: string;
   description_event: string;
-  date_event_start: string;
-  date_event_end: string;
+  date_event_start: dayjs.Dayjs;
+  date_event_end: dayjs.Dayjs;
   image_event: string;
   location_event: string;
   capacity_event: number;
@@ -56,67 +56,12 @@ type Props = {
   selectedTags?: Tag[];
 };
 
-const eventReducer = (state: EventData, action: EventAction) => {
-  switch (action.type) {
-    case 'UPDATE_TITLE':
-      return { ...state, title: action.payload };
-    case 'UPDATE_DESCRIPTION':
-      return { ...state, description: action.payload };
-    case 'UPDATE_DATES':
-      return { ...state, dates: action.payload };
-    case 'UPDATE_PRICE':
-      return { ...state, price: action.payload };
-    case 'UPDATE_SPOTS':
-      return { ...state, spots: action.payload };
-    case 'UPDATE_CATEGORY':
-      return { ...state, category: action.payload };
-    case 'UPDATE_SELECTED_TAGS':
-      return { ...state, selectedTags: action.payload };
-    default:
-      return state;
-  }
-};
-
 export default function EventsControl({ editEvent, selectedTags }: Props) {
   const router = useRouter();
-  const { setAddImage, setEventData } = useContext(EventContext);
+  const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
 
   const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
-  console.log('editEvent', editEvent);
-
-  const initialState = {
-    title: editEvent ? editEvent.name_event : '',
-    description: editEvent ? editEvent.description_event : '',
-    dates: editEvent
-      ? [
-          {
-            dateStart: dayjs(editEvent.date_event_start),
-            dateEnd: dayjs(editEvent.date_event_end),
-          },
-        ]
-      : [{ dateStart: today, dateEnd: today }],
-    spots: editEvent ? editEvent.capacity_event : 0,
-    location: editEvent ? editEvent.location_event : 'location',
-    price: editEvent ? editEvent.price_event : 0,
-    image: editEvent ? editEvent.image_event : 'images',
-    selectedTags: selectedTags ? selectedTags : [],
-    category: editEvent ? editEvent.category_event : '',
-
-    // dates: [{ dateStart: today, dateEnd: today }],
-    // spots: 0,
-    // location: 'location',
-    // price: 0,
-    // image: 'images',
-    // selectedTags: [],
-    // category: '',
-  };
-
-  const [newEvent, dispatch]: [EventData, Dispatch<EventAction>] = useReducer(
-    eventReducer,
-    initialState
-  );
-  console.log('new event', newEvent);
 
   useEffect(() => {
     if (image) {
@@ -126,7 +71,7 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setEventData(newEvent);
+    dispatch;
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
@@ -140,30 +85,59 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
       onSubmit={clickHandler}
     >
       <BasicInfo
-        title={newEvent.title}
-        setTitle={(title) => dispatch({ type: 'UPDATE_TITLE', payload: title })}
-        description={newEvent.description}
+        title={createdEvent.name_event}
+        setTitle={(title) =>
+          dispatch({
+            type: 'UPDATE_TITLE',
+            payload: { ...createdEvent, name_event: title },
+          })
+        }
+        description={createdEvent.description_event}
         setDescription={(description) =>
-          dispatch({ type: 'UPDATE_DESCRIPTION', payload: description })
+          dispatch({
+            type: 'UPDATE_DESCRIPTION',
+            payload: { ...createdEvent, description_event: description },
+          })
         }
       />
       <DateList
-        dates={newEvent.dates}
-        setDates={(dates) => dispatch({ type: 'UPDATE_DATES', payload: dates })}
+        dates={createdEvent.dates}
+        setDates={(dates) =>
+          dispatch({
+            type: 'UPDATE_DATES',
+            payload: { ...createdEvent, dates },
+          })
+        }
       />
       <Location />
       <DetailList
-        price={newEvent.price}
-        setPrice={(price) => dispatch({ type: 'UPDATE_PRICE', payload: price })}
-        spots={newEvent.spots}
-        setSpots={(spots) => dispatch({ type: 'UPDATE_SPOTS', payload: spots })}
-        category={newEvent.category}
-        setCategory={(category) =>
-          dispatch({ type: 'UPDATE_CATEGORY', payload: category })
+        price={createdEvent.price_event}
+        setPrice={(price) =>
+          dispatch({
+            type: 'UPDATE_PRICE',
+            payload: { ...createdEvent, price_event: price },
+          })
         }
-        selectedTags={newEvent.selectedTags}
+        spots={createdEvent.capacity_event}
+        setSpots={(spots) =>
+          dispatch({
+            type: 'UPDATE_SPOTS',
+            payload: { ...createdEvent, capacity_event: spots },
+          })
+        }
+        category={createdEvent.category_event}
+        setCategory={(category) =>
+          dispatch({
+            type: 'UPDATE_CATEGORY',
+            payload: { ...createdEvent, category_event: category },
+          })
+        }
+        selectedTags={createdEvent.selectedTags}
         setSelectedTags={(selectedTags) =>
-          dispatch({ type: 'UPDATE_SELECTED_TAGS', payload: selectedTags })
+          dispatch({
+            type: 'UPDATE_SELECTED_TAGS',
+            payload: { ...createdEvent, selectedTags },
+          })
         }
       />
       <img src={tempImage} alt='' />
