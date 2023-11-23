@@ -4,7 +4,7 @@ import { Stack, Typography, Button } from '@mui/material'
 
 export default function NotFoundPage() {
   return (
-    <Stack alignItems='center' rowGap='2rem' paddingTop='2rem'>
+    <Stack alignItems='center' rowGap='2rem' paddingTop='6rem'>
       <Typography
         component='h1'
         lineHeight='4rem'
