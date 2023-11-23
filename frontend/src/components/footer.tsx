@@ -6,14 +6,15 @@ export default function Footer() {
 
   const isMobile = useMediaQuery('(max-width: 768px)');
   const pathname = usePathname();
-  const isFooterRight = pathname === '/signup' && isMobile;
+  const isFooterRight = pathname === '/signup' && !isMobile;
+  const isFooterWhite = pathname === '/login' && !isMobile;
 
   return (
     <Box
       component='footer'
-      width={isFooterRight ? '100vw' : '50%'}
-      minWidth={isFooterRight ? 'auto' : '560px'}
-      maxWidth={isFooterRight ? 'auto' : '960px'}
+      width={isFooterRight ? '50%' : '100vw'}
+      minWidth={isFooterRight ? '560px' : 'auto'}
+      maxWidth={isFooterRight ? '960px' : 'auto'}
       position='absolute'
       right={0}
       zIndex={200}
@@ -21,7 +22,11 @@ export default function Footer() {
       sx={{
         transform: 'translateY(-100%)'
       }}>
-      <Typography color='#666666' fontSize='.75rem' align='center'>
+      <Typography
+        color={isFooterWhite ? 'white' : '#666666'}
+        fontSize='.75rem'
+        align='center'
+      >
         ©️ 2023 Eventllege All Rights Reserved.
       </Typography>
     </Box>
