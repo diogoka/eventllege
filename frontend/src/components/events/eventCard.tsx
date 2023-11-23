@@ -118,15 +118,21 @@ function EventCard({
                 width: '100%',
               }}
             >
-              <Rating
-                name='read-only'
-                value={avgRating}
-                readOnly
-                precision={0.5}
-                size='small'
-                emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-              />
+              {!avgRating ? (
+                <Typography sx={{ fontSize: '0.8rem' }}>
+                  No reviews yet
+                </Typography>
+              ) : (
+                <Rating
+                  name='read-only'
+                  value={avgRating}
+                  readOnly
+                  precision={0.5}
+                  size='small'
+                  emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                  icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                />
+              )}
             </Box>
           </CardActions>
         ) : (
