@@ -15,5 +15,15 @@ const currentPages = [
 export default function PageTitle() {
   const pathname = usePathname();
   const currentPage = currentPages.find((p) => p.path === pathname);
-  return <>{currentPage ? <Typography variant='h2'>{currentPage.label}</Typography> : <></>}</>;
+  return (
+    <>
+      {currentPage ? (
+        <Typography variant='h2' sx={{ color: '#070F3D' }}>
+          {currentPage.label}
+        </Typography>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 }
