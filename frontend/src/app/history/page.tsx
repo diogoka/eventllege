@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import { Box, Alert } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
@@ -39,7 +38,6 @@ export default function PastEvent() {
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
-
   const oldEvent = true;
 
   const currentUser: CurrentUser = {

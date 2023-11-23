@@ -1,12 +1,10 @@
 'use client';
-import Box from '@mui/material/Box';
 import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '@/context/userContext';
-import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
 type Event = {
   capacity_event: number;
@@ -46,8 +44,6 @@ function UserEvents() {
     []
   );
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
-
-  console.log('hasEvents', hasEvents);
 
   const currentUser: CurrentUser = {
     id: user!.id,

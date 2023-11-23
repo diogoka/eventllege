@@ -44,7 +44,15 @@ function EventCard({
   return (
     <Card
       onClick={handleCardClick}
-      sx={{ width: '23.75rem', height: '24.0625rem', borderRadius: '5px' }}
+      sx={{
+        width: '23.75rem',
+        height: '24.0625rem',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        '&:hover': {
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        },
+      }}
     >
       <CardMedia>
         <ImageHelper
@@ -118,15 +126,21 @@ function EventCard({
                 width: '100%',
               }}
             >
-              <Rating
-                name='read-only'
-                value={avgRating}
-                readOnly
-                precision={0.5}
-                size='small'
-                emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-              />
+              {!avgRating ? (
+                <Typography sx={{ fontSize: '0.8rem' }}>
+                  No reviews yet
+                </Typography>
+              ) : (
+                <Rating
+                  name='read-only'
+                  value={avgRating}
+                  readOnly
+                  precision={0.5}
+                  size='small'
+                  emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                  icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                />
+              )}
             </Box>
           </CardActions>
         ) : (

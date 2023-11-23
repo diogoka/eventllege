@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery, Stack } from '@mui/material';
 import axios from 'axios';
 import ReviewsSummary from './reviewsSummary';
 import ReviewsList from './reviewsList';
@@ -8,24 +8,12 @@ import { UserContext } from '@/context/userContext';
 
 const boxNoReviewStyle = {
   backgroundColor: '#3333330D',
-  width: '18.4375rem',
   height: '7.625rem',
   borderRadius: '0.9375rem',
   marginTop: '1rem',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-};
-
-const boxReviewStyle = {
-  backgroundColor: '#3333330D',
-  width: '18.4375rem',
-  height: '7.625rem',
-  borderRadius: '0.9375rem',
-  marginTop: '1rem',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
 };
 
 type Props = {
@@ -46,9 +34,8 @@ function Review({ id_event, applied }: Props) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [hasReview, setHasReview] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
   const { user } = useContext(UserContext);
-
+  const laptopQuery = useMediaQuery('(min-width:768px)');
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
@@ -76,24 +63,26 @@ function Review({ id_event, applied }: Props) {
           Reviews
         </Typography>
         {applied && (
-          <Button
-            variant='contained'
-            color='primary'
-            sx={{ marginTop: '1rem' }}
-            fullWidth
-            onClick={handleOpen}
-          >
-            Add Review
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant='contained'
+              color='primary'
+              sx={{ marginTop: '1rem', width: '18.4375rem' }}
+              onClick={handleOpen}
+            >
+              Add Review
+            </Button>
+          </Box>
         )}
 
         {hasReview ? (
-          <>
-            <Box sx={boxReviewStyle}>
-              <ReviewsSummary reviews={reviews} />
-            </Box>
-            <ReviewsList reviews={reviews} />
-          </>
+          <Stack
+            direction={laptopQuery ? 'row' : 'column'}
+            spacing={laptopQuery ? 2 : 0}
+            sx={{ marginTop: '1rem' }}
+          >
+            <ReviewsList reviews={reviews} laptopQuery={laptopQuery} />
+          </Stack>
         ) : (
           <Box sx={boxNoReviewStyle}>
             <Typography variant='h2'>No Reviews</Typography>
@@ -107,6 +96,7 @@ function Review({ id_event, applied }: Props) {
         openModal={openModal}
         handleClose={handleClose}
         updateReviews={updateReviews}
+        laptopQuery={laptopQuery}
       />
     </>
   );
