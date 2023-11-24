@@ -63,6 +63,7 @@ export default function DateList({ dates, setDates }: Props) {
       </Stack>
       {dates.map((date, index) => (
         <Box
+          key={index}
           sx={{
             width: '100%',
             height: '12rem',
@@ -74,7 +75,6 @@ export default function DateList({ dates, setDates }: Props) {
             justifyContent='center'
             alignItems='center'
             rowSpacing={2}
-            key={index}
           >
             <Grid item xs={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
