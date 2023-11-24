@@ -16,6 +16,7 @@ type Props = {
   attendees: Attendee[];
   tags: Tag[];
   category: string;
+  forMobile: boolean
 }
 
 export default function DetailInfo(props: Props) {
@@ -29,7 +30,7 @@ export default function DetailInfo(props: Props) {
   })
 
   return (
-    <TableContainer>
+    <TableContainer style={{ width: props.forMobile? '100%':'70%'}}>
       <Table
         size='small'
       >
@@ -46,7 +47,7 @@ export default function DetailInfo(props: Props) {
           />
           <DetailInfoRow
             title='Max spots'
-            content={props.maxSpots.toString()}
+            content={ props.maxSpots == -1? 'No limit' : props.maxSpots.toString()}
           />
           {loginStatus === LoginStatus.LoggedIn &&
             <DetailInfoRow
