@@ -8,11 +8,9 @@ import {
   Rating,
 } from '@mui/material';
 import ImageHelper from '../common/image-helper';
-import { AiFillClockCircle } from 'react-icons/ai';
 import { Event, Tag } from '@/app/events/page';
 import {
   StarRounded,
-  EventOutlined,
   EventRounded,
   ScheduleRounded,
 } from '@mui/icons-material';
@@ -136,7 +134,7 @@ function EventCard({
             sx={{
               display: 'flex',
               justifyContent: 'flex-end',
-              marginTop: '1rem',
+              marginTop: '0.3rem',
             }}
           >
             <Box
@@ -159,8 +157,9 @@ function EventCard({
                   readOnly
                   precision={0.5}
                   size='small'
-                  emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
-                  icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+                  emptyIcon={<StarRounded />}
+                  icon={<StarRounded />}
+                  sx={{ fontSize: '1.3rem' }}
                 />
               )}
             </Box>

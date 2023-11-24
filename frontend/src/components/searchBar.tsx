@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, ChangeEvent } from 'react';
-import { TextField, Box, useMediaQuery, Grid } from '@mui/material';
+import { TextField, useMediaQuery, Grid, Button } from '@mui/material';
 import IconItem from './icons/iconItem';
 
 type Props = {
@@ -13,8 +13,8 @@ function SearchBar({ searchEvents }: Props) {
 
   const handleSearch = (event: any) => {
     event.preventDefault();
+    if (searchTerm === '') return;
     searchEvents(searchTerm);
-    setSearchTerm('');
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +59,7 @@ function SearchBar({ searchEvents }: Props) {
         />
       </Grid>
       <Grid item xs={2.5} style={gridIconContainerStyle}>
-        <Box>
+        <Button sx={{ width: '100%' }} onClick={handleSearch}>
           <IconItem
             iconName='FaSearch'
             onClick={handleSearch}
@@ -67,7 +67,7 @@ function SearchBar({ searchEvents }: Props) {
             color='white'
             size='1.3rem'
           />
-        </Box>
+        </Button>
       </Grid>
     </Grid>
   );

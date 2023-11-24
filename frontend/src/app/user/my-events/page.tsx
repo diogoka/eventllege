@@ -119,12 +119,15 @@ function UserEvents() {
       {!hasEvents.eventFound ? (
         <Typography
           sx={{
-            position: 'relative',
-            top: '16.3125rem',
             color: 'white',
             backgroundColor: '#2b3467',
             padding: '1rem',
             borderRadius: '5px',
+            width: '50%',
+            height: '5rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           {hasEvents.message}
