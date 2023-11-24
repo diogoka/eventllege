@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, Typography, Button, useMediaQuery, Stack } from '@mui/material';
 import axios from 'axios';
-import ReviewsSummary from './reviewsSummary';
 import ReviewsList from './reviewsList';
 import ModalRating from './modal-review';
 import { UserContext } from '@/context/userContext';
@@ -35,7 +34,7 @@ function Review({ id_event, applied }: Props) {
   const [hasReview, setHasReview] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { user } = useContext(UserContext);
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 

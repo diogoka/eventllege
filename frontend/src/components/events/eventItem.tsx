@@ -44,7 +44,7 @@ function EventItem({
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
     getAverageRating();

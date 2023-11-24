@@ -9,7 +9,7 @@ type Props = {
 
 function SearchBar({ searchEvents }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const handleSearch = (event: any) => {
     event.preventDefault();
