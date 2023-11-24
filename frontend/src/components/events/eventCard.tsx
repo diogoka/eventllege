@@ -10,7 +10,12 @@ import {
 import ImageHelper from '../common/image-helper';
 import { AiFillClockCircle } from 'react-icons/ai';
 import { Event, Tag } from '@/app/events/page';
-import StarIcon from '@mui/icons-material/Star';
+import {
+  StarRounded,
+  EventOutlined,
+  EventRounded,
+  ScheduleRounded,
+} from '@mui/icons-material';
 
 type Props = {
   handleCardClick: () => void;
@@ -86,11 +91,27 @@ function EventCard({
             alignItems: 'center',
           }}
         >
-          <AiFillClockCircle style={{ color: '#3874CB', fontSize: '0.6rem' }} />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <EventRounded
+            sx={{
+              color: '#3874CB',
+              fontSize: '0.8rem',
+              marginRight: '0.1rem',
+              fontWeight: 'bold',
+            }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant='body2' sx={{ color: '#3874CB' }}>
               {weekDay}, {monthAndDay}
             </Typography>
+            <ScheduleRounded
+              sx={{
+                color: '#3874CB',
+                fontSize: '0.8rem',
+                marginRight: '0.1rem',
+                fontWeight: 'bold',
+                marginLeft: '0.8rem',
+              }}
+            />
             <Typography variant='body2' sx={{ color: '#3874CB' }}>
               {startTime} - {endTime}
             </Typography>
@@ -102,6 +123,7 @@ function EventCard({
             gridArea: 'description',
             textAlign: 'justify',
             fontSize: '0.75rem',
+            height: '3rem',
           }}
         >
           {event.description_event.length > 100
@@ -137,8 +159,8 @@ function EventCard({
                   readOnly
                   precision={0.5}
                   size='small'
-                  emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-                  icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+                  emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+                  icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
                 />
               )}
             </Box>

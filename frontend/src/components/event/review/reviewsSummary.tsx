@@ -7,7 +7,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
-import StarIcon from '@mui/icons-material/Star';
+import { StarRounded } from '@mui/icons-material';
 import { averageRatingFn } from '../../../common/functions';
 
 type Props = {
@@ -70,7 +70,7 @@ function ReviewsSummary({ reviews }: Props) {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: '5% 95%',
+          gridTemplateColumns: '4% 95%',
           gridTemplateRows: 'repeat(5, 1.2rem)',
           alignItems: 'center',
           columnGap: '0.5rem',
@@ -110,8 +110,8 @@ function ReviewsSummary({ reviews }: Props) {
           value={avgRating}
           readOnly
           size='small'
-          emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-          icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+          emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+          icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
         />
         <Typography sx={{ fontSize: '0.75rem' }}>
           ({numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}

@@ -107,7 +107,12 @@ function EventIcons({
               },
             }}
           >
-            <Typography color='white' fontSize={'0.8125rem'}>
+            <Typography
+              color='white'
+              fontSize={'0.8125rem'}
+              width={'3.48rem'}
+              textAlign={'center'}
+            >
               {attending ? 'Applied' : 'Join Now'}
             </Typography>
           </Box>
