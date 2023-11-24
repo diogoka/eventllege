@@ -8,6 +8,7 @@ type Props = {
   setTitle: (value: string) => void;
   description: string;
   setDescription: (value: string) => void;
+  isMobile: boolean;
 };
 
 export default function BasicInfo({
@@ -15,17 +16,19 @@ export default function BasicInfo({
   setTitle,
   description,
   setDescription,
+  isMobile,
 }: Props) {
   return (
     <Stack
       direction='column'
       justifyContent='center'
       alignItems='center'
-      spacing={2}
+      spacing={{ sm: 2, md: 3 }}
       sx={{ width: '100%' }}
     >
       <TitleContainer title={title} setTitle={setTitle} />
       <DescriptionContainer
+        isMobile={isMobile}
         description={description}
         setDescription={setDescription}
       />
