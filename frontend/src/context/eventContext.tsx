@@ -46,7 +46,7 @@ const initialState: EventData = {
   name_event: '',
   description_event: '',
   dates: [{ dateStart: today, dateEnd: today }],
-  capacity_event: -1,
+  capacity_event: 0,
   location_event: '',
   price_event: 0,
   selectedTags: [],
