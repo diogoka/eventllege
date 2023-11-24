@@ -38,7 +38,7 @@ export default function EventsPage() {
     []
   );
   const [alertSearchBar, setAlertSearchBar] = useState({
-    status: true,
+    status: false,
     message: '',
   });
 
@@ -90,7 +90,10 @@ export default function EventsPage() {
           setTags(res.data.tags);
           setAlertSearchBar({
             status: true,
-            message: `${res.data.events.length} events found`,
+            message:
+              res.data.events.length === 1
+                ? `${res.data.events.length} event found`
+                : `${res.data.events.length} events found`,
           });
           setTimeout(() => {
             setAlertSearchBar({

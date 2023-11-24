@@ -98,8 +98,9 @@ export default function ModalDelete({
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography variant='h2' sx={{ textAlign: 'justify' }}>
-            Are you sure you want to delete the event {eventName}?
+          <Typography variant='h2' sx={{ textAlign: 'center' }}>
+            Are you sure you want to delete the event{' '}
+            <strong>{eventName}</strong> ?
           </Typography>
           <Box sx={iconContainer}>
             <Button

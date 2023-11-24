@@ -241,7 +241,6 @@ export const searchEvents = async (
   req: express.Request,
   res: express.Response
 ) => {
-  console.log(req.query);
   try {
     const text = req.query.text !== undefined ? req.query.text : '';
     const searchWords = text.toString().toLowerCase().split(' ');
@@ -264,13 +263,10 @@ export const searchEvents = async (
       ? `${query} and events.date_event_start < '%${today}%'`
       : query;
 
-    console.log('Query', query);
-
     const events = req.query.past
       ? await pool.query(query)
       : await pool.query(query);
 
-    console.log('events', events.rows);
     const ids =
       events.rows.length !== 0
         ? events.rows.map((val) => {
@@ -283,9 +279,6 @@ export const searchEvents = async (
       inner join events_tags on events.id_event = events_tags.id_event
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
       `);
-
-    console.log('rows', events.rows);
-    console.log('tags', tags.rows);
 
     res.status(200).json({
       events: events.rows,
