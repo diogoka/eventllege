@@ -77,6 +77,15 @@ let theme = createTheme({
       contrastText: '#fff',
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 375,
+      md: 769,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
 });
 
 theme.typography.h1.fontSize = '24px';

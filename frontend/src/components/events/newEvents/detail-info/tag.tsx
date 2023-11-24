@@ -30,7 +30,6 @@ type Tag = {
 
 type Props = {
   selectedTags: Tag[];
-
   setSelectedTags: (value: Tag[]) => void;
 };
 

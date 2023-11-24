@@ -20,12 +20,6 @@ export default function Price({ setPrice }: Props) {
     setPrice(event.target.checked ? 0 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
   };
-  // const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const inputValue = +event.target.value;
-  //   if (!isNaN(inputValue)) {
-  //     setPrice(inputValue);
-  //   }
-  // };
   return (
     <>
       <FormControlLabel

@@ -14,11 +14,12 @@ interface DateRange {
 type Props = {
   dates: DateRange[];
   setDates: (dates: DateRange[]) => void;
+  isMobile: boolean;
 };
 
 const today = dayjs();
 
-export default function DateList({ dates, setDates }: Props) {
+export default function DateList({ dates, setDates, isMobile }: Props) {
   const deleteDateHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;
@@ -66,7 +67,7 @@ export default function DateList({ dates, setDates }: Props) {
           key={index}
           sx={{
             width: '100%',
-            height: '12rem',
+            height: isMobile ? '12rem' : '6rem',
             position: 'relative',
           }}
         >
@@ -74,9 +75,10 @@ export default function DateList({ dates, setDates }: Props) {
             container
             justifyContent='center'
             alignItems='center'
-            rowSpacing={2}
+            rowSpacing={1}
+            columnSpacing={{ md: 2 }}
           >
-            <Grid item xs={12}>
+            <Grid item sm={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label={`Start Date ${index + 1}`}
@@ -90,7 +92,7 @@ export default function DateList({ dates, setDates }: Props) {
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item sm={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label={`End Date ${index + 1}`}
@@ -104,13 +106,16 @@ export default function DateList({ dates, setDates }: Props) {
                 />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={6}></Grid>
           </Grid>
           <Button
             onClick={() => deleteDateHandler(index)}
             variant='text'
             startIcon={<RemoveCircleOutlineIcon />}
-            sx={{ position: 'absolute', right: '1rem', bottom: '.5rem' }}
+            sx={{
+              position: 'absolute',
+              right: '1rem',
+              bottom: 0,
+            }}
           >
             Delete
           </Button>
