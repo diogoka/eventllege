@@ -4,7 +4,7 @@ import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Alert } from '@mui/material';
 
 type Event = {
   capacity_event: number;
@@ -44,6 +44,10 @@ function UserEvents() {
     []
   );
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
+  const [alertSearchBar, setAlertSearchBar] = useState({
+    status: false,
+    message: '',
+  });
 
   const currentUser: CurrentUser = {
     id: user!.id,
@@ -88,22 +92,44 @@ function UserEvents() {
       )
       .then((res) => {
         if (res.data.events.length === 0) {
-          setHasEvents({
-            eventFound: false,
+          setEvents([]);
+          setAlertSearchBar({
+            status: true,
             message: 'No events found',
           });
+          setTimeout(() => {
+            setAlertSearchBar({
+              status: false,
+              message: '',
+            });
+          }, 5000);
         } else {
-          setHasEvents({
-            eventFound: true,
-            message: '',
+          setEvents(res.data.events);
+          setTags(res.data.tags);
+          setAlertSearchBar({
+            status: true,
+            message:
+              res.data.events.length === 1
+                ? `${res.data.events.length} event found`
+                : `${res.data.events.length} events found`,
           });
-        }
-        setEvents(res.data.events);
-        setTags(res.data.tags);
-        if (res.data.events.length === 0) {
-          setAlertOpen(true);
+          setTimeout(() => {
+            setAlertSearchBar({
+              status: false,
+              message: '',
+            });
+          }, 5000);
         }
       });
+  };
+
+  const closeAlert = () => {
+    setTimeout(() => {
+      setAlertSearchBar({
+        status: false,
+        message: '',
+      });
+    }, 1000);
   };
 
   return (
@@ -115,19 +141,35 @@ function UserEvents() {
         flexDirection: 'column',
       }}
     >
+      {alertSearchBar.status && (
+        <Alert
+          severity='info'
+          variant='filled'
+          onClose={closeAlert}
+          sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
+        >
+          {alertSearchBar.message}
+        </Alert>
+      )}
+
       <SearchBar searchEvents={searchEvents} />
-      {!hasEvents.eventFound ? (
+      {events.length === 0 ? (
         <Typography
           sx={{
             position: 'relative',
-            top: '16.3125rem',
+            top: '12.3125rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             color: 'white',
             backgroundColor: '#2b3467',
             padding: '1rem',
             borderRadius: '5px',
+            width: '50%',
+            height: '5rem',
           }}
         >
-          {hasEvents.message}
+          {hasEvents.message !== '' ? hasEvents.message : 'No events found'}
         </Typography>
       ) : (
         <EventList

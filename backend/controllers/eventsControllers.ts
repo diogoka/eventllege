@@ -258,9 +258,15 @@ export const searchEvents = async (
             : ` LOWER(events.name_event) LIKE '%${word}%' AND`;
       });
     }
+
+    query = req.query.past
+      ? `${query} and events.date_event_start < '%${today}%'`
+      : query;
+
     const events = req.query.past
-      ? await pool.query(`${query} and events.date_event_start < $2`, [today])
+      ? await pool.query(query)
       : await pool.query(query);
+
     const ids =
       events.rows.length !== 0
         ? events.rows.map((val) => {
@@ -357,7 +363,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
         tags: tags.rows.map((val) => {
           return {
             id_tag: val.id_tag,
-            name_tag: val.name_tag
+            name_tag: val.name_tag,
           };
         }),
         attendees: attendees.rows.map((val) => {

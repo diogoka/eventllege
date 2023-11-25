@@ -50,7 +50,7 @@ export default function OrganizerEventsPage() {
     id: user!.id,
     role: user!.roleName,
   };
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
     axios
