@@ -20,6 +20,7 @@ export default function TitleContainer({ title, setTitle }: Props) {
         type='text'
         value={title}
         onChange={(event) => setTitle(event.target.value)}
+        required
       />
     </>
   );
