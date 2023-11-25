@@ -14,12 +14,27 @@ type Props = {
 export default function Price({ setPrice }: Props) {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(false);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
     setPrice(event.target.checked ? 0 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
+    setError(false);
   };
+  const handleTextPriceChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = +event.target.value;
+
+    if (value > 1) {
+      setPrice(value);
+      setError(false);
+    } else {
+      setError(true);
+    }
+  };
+
   return (
     <>
       <FormControlLabel
@@ -31,13 +46,11 @@ export default function Price({ setPrice }: Props) {
         variant='outlined'
         type='number'
         fullWidth
+        required
         disabled={disabled}
-        onChange={(event) => {
-          const value = +event.target.value;
-          if (value > 0) {
-            setPrice(value);
-          }
-        }}
+        onChange={handleTextPriceChange}
+        error={error}
+        helperText={error ? 'Price must be greater than 1' : ''}
         InputProps={{
           startAdornment: <InputAdornment position='start'>$</InputAdornment>,
         }}

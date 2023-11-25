@@ -9,11 +9,16 @@ import { UserContext, LoginStatus } from '@/context/userContext';
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
+  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
+    useContext(UserContext);
 
   useEffect(() => {
     initializeFirebase();
@@ -50,9 +55,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   type Permission = {
     isAllowed: boolean;
     redirection: string;
-  }
+  };
   const isAllowedPage = (): Permission => {
-
     if (is404(pathname)) {
       return { isAllowed: true, redirection: '' };
     }
@@ -71,7 +75,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           }
         }
       } else {
-        console.error('User is logged in but the data doesn\'t exist');
+        console.error("User is logged in but the data doesn't exist");
         return { isAllowed: false, redirection: '/events' };
       }
     }
@@ -107,7 +111,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   return (
     <>
       {pathname !== '/login' && <Header />}
-      {(isAllowedPage().isAllowed) && (
+      {isAllowedPage().isAllowed && (
         <Box
           component='main'
           maxWidth='1280px'
@@ -129,7 +133,7 @@ const loggedOutUserPages = [
   /^\/events$/,
   /^\/events\/\d+$/,
   /^\/signup$/,
-  /^\/login$/
+  /^\/login$/,
 ];
 
 const studentPages = [
@@ -137,13 +141,10 @@ const studentPages = [
   /^\/user\/edit$/,
   /^\/tickets$/,
   /^\/history$/,
-  /^\/user\/my-events$/
+  /^\/user\/my-events$/,
 ];
 
-const organizerPages = [
-  /^\/events\/\d+\/edit$/,
-  /^\/organizer-events$/,
-]
+const organizerPages = [/^\/events\/\d+\/edit$/, /^\/organizer-events$/];
 
 function isLoggedOutUserPage(pathname: string): boolean {
   return loggedOutUserPages.some((loggedOutUserPage) => {
@@ -158,7 +159,9 @@ function isStudentPage(pathname: string): boolean {
 }
 
 function is404(pathname: string): boolean {
-  return !organizerPages.concat(studentPages.concat(loggedOutUserPages)).some((page) => {
-    return page.test(pathname);
-  });
+  return !organizerPages
+    .concat(studentPages.concat(loggedOutUserPages))
+    .some((page) => {
+      return page.test(pathname);
+    });
 }

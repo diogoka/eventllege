@@ -14,11 +14,25 @@ type Props = {
 export default function Capacity({ spots, setSpots }: Props) {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSpotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
     setSpots(event.target.checked ? -1 : 0);
     setDisabled((prevDisabled) => !prevDisabled);
+    setError(false);
+  };
+
+  const handleTextSpotsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = +event.target.value;
+    if (value > 1) {
+      setSpots(value);
+      setError(false);
+    } else {
+      setError(true);
+    }
   };
 
   console.log('spots', spots);
@@ -36,12 +50,9 @@ export default function Capacity({ spots, setSpots }: Props) {
         type='number'
         fullWidth
         disabled={disabled}
-        onChange={(event) => {
-          const value = +event.target.value;
-          if (value > 0) {
-            setSpots(value);
-          }
-        }}
+        onChange={handleTextSpotsChange}
+        error={error}
+        helperText={error ? 'Spots must be greater than 1' : ''}
         InputProps={{
           endAdornment: (
             <InputAdornment position='end'>
