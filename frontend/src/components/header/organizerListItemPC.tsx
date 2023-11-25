@@ -22,9 +22,13 @@ export default function OrganizerListItemPC() {
 
   useEffect(() => {
     // Update the currentPage when the path changes
-    const page = organizerBtns.find((p) => p.path === pathName);
-    if (page) {
-      setCurrentPage(page);
+    if (pathName !== '/user') {
+      const page = organizerBtns.find((p) => p.path === pathName);
+      if (page) {
+        setCurrentPage(page);
+      }
+    } else {
+      setCurrentPage(null);
     }
   }, [pathName]);
 
@@ -50,6 +54,7 @@ export default function OrganizerListItemPC() {
           sx={{
             width: 'auto',
             margin: '0 .5rem',
+            padding: '0 1rem',
           }}
         >
           {button.label}

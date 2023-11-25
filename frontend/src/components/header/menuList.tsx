@@ -16,7 +16,7 @@ export default function MenuList() {
           alignItems='center'
           spacing={1}
           width='52%'
-          maxWidth='20.1rem'
+          maxWidth='20.5rem'
         >
           <Navigation />
           <AvatarIcon />
@@ -27,8 +27,8 @@ export default function MenuList() {
           justifyContent='center'
           alignItems='center'
           spacing={1}
-          width='52%'
-          maxWidth='37rem'
+          width='64%'
+          maxWidth='46rem'
         >
           <Navigation />
           <AvatarIcon />
