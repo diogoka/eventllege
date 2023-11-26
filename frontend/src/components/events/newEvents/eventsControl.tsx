@@ -109,7 +109,15 @@ export default function EventsControl({ editEvent, selectedTags }: Props) {
           })
         }
       />
-      <Location />
+      <Location
+        location={createdEvent.location_event}
+        setLocation={(location) =>
+          dispatch({
+            type: 'UPDATE_LOCATION',
+            payload: { ...createdEvent, location_event: location },
+          })
+        }
+      />
       <DetailList
         price={createdEvent.price_event}
         setPrice={(price) =>
