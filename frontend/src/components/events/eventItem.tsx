@@ -45,9 +45,14 @@ function EventItem({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
   const laptopQuery = useMediaQuery('(min-width:769px)');
+  const [modalities, setModalities] = useState({
+    inPerson: false,
+    online: false,
+  });
 
   useEffect(() => {
     getAverageRating();
+    checkModalities();
   }, []);
 
   const getAverageRating = async () => {
@@ -58,6 +63,20 @@ function EventItem({
           setAvgRating(averageRatingFn(res.data.reviews));
         });
     }
+  };
+
+  const checkModalities = () => {
+    let online = false;
+    let inPerson = false;
+    tags.map((tag) => {
+      if (tag.name_tag === 'In Person') {
+        inPerson = true;
+      }
+      if (tag.name_tag === 'Online') {
+        online = true;
+      }
+    });
+    setModalities({ inPerson, online });
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -98,6 +117,7 @@ function EventItem({
       attending={attending}
       setModalOpen={openModal}
       handleAlertFn={handleAlert}
+      modalities={modalities}
     />
   );
 
