@@ -131,6 +131,8 @@ exports.up = async (pgm) => {
     { name_tag: "Heritage Place" },
     { name_tag: "Culture" },
     { name_tag: "Music" },
+    { name_tag: "Online" },
+    { name_tag: "In Person" }
   ];
 
   for (const tag of tags) {
@@ -548,7 +550,8 @@ exports.up = async (pgm) => {
     { id_event: 3, id_tag: 7 },
     { id_event: 28, id_tag: 4 },
     { id_event: 28, id_tag: 7 },
-    { id_event: 27, id_tag: 15 }
+    { id_event: 27, id_tag: 15 },
+    { id_event: 9, id_tag: 16 }
 
   ];
 
