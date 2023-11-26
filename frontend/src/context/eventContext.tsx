@@ -61,6 +61,8 @@ export const eventReducer = (state: EventData, action: EventAction) => {
       return { ...state, description_event: action.payload.description_event };
     case 'UPDATE_DATES':
       return { ...state, dates: action.payload.dates };
+    case 'UPDATE_LOCATION':
+      return { ...state, location_event: action.payload.location_event };
     case 'UPDATE_PRICE':
       return { ...state, price_event: action.payload.price_event };
     case 'UPDATE_SPOTS':
