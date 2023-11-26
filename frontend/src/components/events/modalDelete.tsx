@@ -1,12 +1,7 @@
 'use client';
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { useState } from 'react';
+import { Button, Modal, Box, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { Typography } from '@mui/material';
 
 const iconContainer = {
   display: 'flex',
@@ -74,7 +69,6 @@ export default function ModalDelete({
     const response = await axios
       .delete(`http://localhost:3001/api/events/${eventId}`)
       .then((res) => {
-        console.log(res.data);
         setOpen(false);
         deleteEvent(eventId);
       })
@@ -82,12 +76,15 @@ export default function ModalDelete({
         console.log(err);
       });
 
-    setOpen(false);
-    onClose();
+    closingModal();
   };
 
   const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    closingModal();
+  };
+
+  const closingModal = () => {
     setOpen(false);
     onClose();
   };
@@ -96,13 +93,14 @@ export default function ModalDelete({
     <Box sx={{ flexGrow: 1, position: 'absolute' }}>
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={closingModal}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography variant='h2' sx={{ textAlign: 'justify' }}>
-            Are you sure you want to delete the event {eventName}?
+          <Typography variant='h2' sx={{ textAlign: 'center' }}>
+            Are you sure you want to delete the event{' '}
+            <strong>{eventName}</strong> ?
           </Typography>
           <Box sx={iconContainer}>
             <Button

@@ -1,19 +1,39 @@
 import React from 'react';
 import AvatarIcon from './avatar';
 import Navigation from './navigation';
+import { useContext } from 'react';
+import { UserContext } from '@/context/userContext';
 import { Stack } from '@mui/material';
 
 export default function MenuList() {
+  const { user } = useContext(UserContext);
   return (
-    <Stack
-      direction='row'
-      justifyContent='center'
-      alignItems='center'
-      spacing={1}
-      width='52%'
-    >
-      <Navigation />
-      <AvatarIcon />
-    </Stack>
+    <>
+      {user?.roleName === 'student' ? (
+        <Stack
+          direction='row'
+          justifyContent='center'
+          alignItems='center'
+          spacing={1}
+          width='52%'
+          maxWidth='20.5rem'
+        >
+          <Navigation />
+          <AvatarIcon />
+        </Stack>
+      ) : (
+        <Stack
+          direction='row'
+          justifyContent='center'
+          alignItems='center'
+          spacing={1}
+          width='64%'
+          maxWidth='46rem'
+        >
+          <Navigation />
+          <AvatarIcon />
+        </Stack>
+      )}
+    </>
   );
 }

@@ -9,8 +9,11 @@ export default function Navigation() {
   const { user } = useContext(UserContext);
   return (
     <Stack direction='row' alignItems='center' width='100%'>
-      <UsersListItemPC />
-      {user?.roleName === 'organizer' ? <OrganizerListItemPC /> : <></>}
+      {user?.roleName === 'student' ? (
+        <UsersListItemPC />
+      ) : (
+        <OrganizerListItemPC />
+      )}
     </Stack>
   );
 }

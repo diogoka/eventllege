@@ -46,7 +46,7 @@ const initialState: EventData = {
   name_event: '',
   description_event: '',
   dates: [{ dateStart: today, dateEnd: today }],
-  capacity_event: -1,
+  capacity_event: 0,
   location_event: '',
   price_event: 0,
   selectedTags: [],
@@ -85,6 +85,7 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
   const [addImage, setAddImage] = useState<Image>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
+  console.log('test', createdEvent);
 
   return (
     <EventContext.Provider

@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useState, useContext, use } from 'react';
-import { Box } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import { useEffect, useState, useContext } from 'react';
+import { Box, Alert, Typography } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
@@ -35,10 +34,13 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
+  const [alertSearchBar, setAlertSearchBar] = useState({
+    status: false,
+    message: '',
+  });
 
   const currentUser: CurrentUser = {
     id: user?.id,
@@ -49,6 +51,7 @@ export default function EventsPage() {
     await axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
+      console.log(res.data.events);
     });
     const attendingEvents: [number, boolean][] = [];
     await axios
@@ -71,13 +74,33 @@ export default function EventsPage() {
       .get('http://localhost:3001/api/events/search/?text=' + text)
       .then((res) => {
         if (res.data.events.length === 0) {
-          setAlertOpen(true);
+          setEvents([]);
+          setAlertSearchBar({
+            status: true,
+            message: 'No events found',
+          });
           setTimeout(() => {
-            setAlertOpen(false);
-          }, 3000);
+            setAlertSearchBar({
+              status: false,
+              message: '',
+            });
+          }, 5000);
         } else {
           setEvents(res.data.events);
           setTags(res.data.tags);
+          setAlertSearchBar({
+            status: true,
+            message:
+              res.data.events.length === 1
+                ? `${res.data.events.length} event found`
+                : `${res.data.events.length} events found`,
+          });
+          setTimeout(() => {
+            setAlertSearchBar({
+              status: false,
+              message: '',
+            });
+          }, 5000);
         }
       });
   };
@@ -91,24 +114,42 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      {alertOpen && (
+      {alertSearchBar.status && (
         <Alert
           severity='info'
           variant='filled'
-          onClose={() => setAlertOpen(false)}
+          onClose={() => setAlertSearchBar({ status: false, message: '' })}
           sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
         >
-          No events found
+          {alertSearchBar.message}
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
-      <EventList
-        events={events}
-        setEvents={setEvents}
-        tags={tags}
-        user={currentUser}
-        attendance={eventsOfUser}
-      ></EventList>
+      {events.length === 0 ? (
+        <Typography
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#141D4F',
+            color: 'white',
+            width: '50%',
+            height: '5rem',
+            borderRadius: '5px',
+            padding: '1rem',
+          }}
+        >
+          No events found
+        </Typography>
+      ) : (
+        <EventList
+          events={events}
+          setEvents={setEvents}
+          tags={tags}
+          user={currentUser}
+          attendance={eventsOfUser}
+        ></EventList>
+      )}
     </Box>
   );
 }

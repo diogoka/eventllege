@@ -7,7 +7,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
-import StarIcon from '@mui/icons-material/Star';
+import { StarRounded } from '@mui/icons-material';
 import { averageRatingFn } from '../../../common/functions';
 
 type Props = {
@@ -49,6 +49,7 @@ function ReviewsSummary({ reviews }: Props) {
     paddingLeft: '1rem',
     paddingRight: '1rem',
     width: '100%',
+    columnGap: '0.8rem',
   };
 
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -69,58 +70,31 @@ function ReviewsSummary({ reviews }: Props) {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: '1fr 8.125rem',
+          gridTemplateColumns: '4% 95%',
           gridTemplateRows: 'repeat(5, 1.2rem)',
           alignItems: 'center',
           columnGap: '0.5rem',
+          flex: '1',
         }}
       >
-        <Box>
-          <Typography sx={{ fontSize: '1rem' }}>5</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress
-            variant='determinate'
-            value={percentage(numOfRatings[4])}
-          />
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: '1rem' }}>4</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress
-            variant='determinate'
-            value={percentage(numOfRatings[3])}
-          />
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: '1rem' }}>3</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress
-            variant='determinate'
-            value={percentage(numOfRatings[2])}
-          />
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: '1rem' }}>2</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress
-            variant='determinate'
-            value={percentage(numOfRatings[1])}
-          />
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: '1rem' }}>1</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <BorderLinearProgress
-            variant='determinate'
-            value={percentage(numOfRatings[0])}
-          />
-        </Box>
+        {numOfRatings
+          .slice()
+          .reverse()
+          .map((num, index) => (
+            <React.Fragment key={index}>
+              <Box>
+                <Typography sx={{ fontSize: '1rem' }}>{5 - index}</Typography>
+              </Box>
+              <Box sx={{ width: '100%' }}>
+                <BorderLinearProgress
+                  variant='determinate'
+                  value={percentage(num)}
+                />
+              </Box>
+            </React.Fragment>
+          ))}
       </Box>
+
       <Box
         sx={{
           display: 'flex',
@@ -136,11 +110,12 @@ function ReviewsSummary({ reviews }: Props) {
           value={avgRating}
           readOnly
           size='small'
-          emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-          icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+          emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+          icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
         />
         <Typography sx={{ fontSize: '0.75rem' }}>
-          ({numReviews} Reviews)
+          ({numReviews === 1 ? `${numReviews} Review` : `${numReviews} Reviews`}
+          )
         </Typography>
       </Box>
     </Box>

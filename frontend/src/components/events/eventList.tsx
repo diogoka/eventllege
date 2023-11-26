@@ -1,5 +1,5 @@
 'use client';
-import { Stack, Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Event, Tag } from '@/app/events/page';
 import EventItem from '@/components/events/eventItem';
 import Pagination from '@mui/material/Pagination';
@@ -27,7 +27,7 @@ function EventList({
   oldEvent,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
   const eventsPerPage = laptopQuery ? 6 : 5;
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;

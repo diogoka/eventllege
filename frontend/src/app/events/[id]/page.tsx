@@ -1,12 +1,28 @@
 'use client';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, createContext } from 'react';
 import axios from 'axios';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
-import { Box, Stack, Typography, Button } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
+import DetailIconContainer from '@/components/event/detail-icon-container';
+import DetailTimeContainer from '@/components/event/detail-time-container';
+import DetailButtonContainer from '@/components/event/detail-button-container';
 import Review from '@/components/event/review/review';
 import { UserContext } from '@/context/userContext';
+import ImageHelper from '@/components/common/image-helper';
+import IconsContainer from '@/components/icons/iconsContainer';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { setKey, fromAddress, } from "react-geocode";
+
+type DetailPageContextProps = {
+  isAlertVisible: boolean,
+  setIsAlertVisible: (state: boolean) => void,
+  setAttendees: (state: Array<Attendee> | undefined) => void,
+  setApplied: (state: boolean) => void,
+}
+
+export const DetailPageContext = createContext<DetailPageContextProps>({} as DetailPageContextProps)
 
 export type Attendee = {
   id: string | undefined;
@@ -40,6 +56,11 @@ export type OtherInfo = {
   id_owner: string;
 };
 
+type Coordinate = {
+  lat: number,
+  lng: number
+};
+
 export default function EventPage() {
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
@@ -48,13 +69,19 @@ export default function EventPage() {
   const [attendees, setAttendees] = useState<Array<Attendee>>();
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
   const [oldEvent, setOldEvent] = useState<boolean>(false);
+  const [forMobile, setForMobile] = useState<boolean>();
+  const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
+  const [coordinate, setCoordinate] = useState<Coordinate>();
 
   const params = useParams();
-  const router = useRouter();
 
   const EVENT_ID = params.id;
+  const apiKey=process.env.NEXT_PUBLIC_API_KEY
 
   useEffect(() => {
+
+    window.innerWidth<=768? setForMobile(true) : setForMobile(false)
+
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
@@ -88,146 +115,190 @@ export default function EventPage() {
         eventDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
         eventDate < today && setOldEvent(true);
+
+        setKey(apiKey!);
+        fromAddress(res.data.event.location_event)
+          .then(({ results }) => {
+            const { lat, lng } = results[0].geometry.location;
+            setCoordinate({ lat: lat, lng: lng})
+          })
+          .catch(console.error);
+
       })
       .catch((error) => {
         console.error(error.response);
       });
+
   }, []);
 
-  const deleteEvent = (id: number) => {
-    axios
-      .delete(`http://localhost:3001/api/events/${id}`, {
-        data: {
-          id,
-        },
-      })
-      .then((res: any) => {
-        console.log('res', res.data.json);
-      });
-    router.push('/events');
-  };
+  window.onresize=(e)=>{
+    const w=e.target as Window;
+    w.innerWidth<=768? setForMobile(true) : setForMobile(false)
+  }
 
-  const editEventHandler = (id: number) => {
-    if (!id) {
-      console.log('Id does not exist');
-    } else {
-      router.push(`/events/${id}/edit`);
-    }
-  };
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: apiKey!
+  })
 
-  const addAttendee = () => {
-    axios
-      .post('http://localhost:3001/api/events/attendee', {
-        id_event: otherInfo?.id_event,
-        id_user: user?.id,
-      })
-      .then((res: any) => {
-        setApplied(true);
-        setAttendees((prevData: Array<Attendee> | undefined) => [
-          ...prevData!,
-          { id: user?.id, name: user?.name },
-        ]);
-      });
-  };
+  const provider={ isAlertVisible, setIsAlertVisible, setAttendees, setApplied }
+  
+if(forMobile){
+  ///////////////////// Mobile /////////////////////
+  return (
+    <DetailPageContext.Provider value={ provider }>
+      <Stack>
+        <DetailContainer
+          event={event!}
+          otherInfo={otherInfo!}
+          applied={applied}
+          organizerEvent={organizerEvent}
+          forMobile={forMobile}
+        />
+        {event && (
+          <DetailInfo
+            price={event.price_event}
+            maxSpots={event.capacity_event}
+            attendees={attendees!}
+            tags={event.tags}
+            category={event.category_event}
+            forMobile={forMobile!}
+          />
+        )}
+        {oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
 
-  const cancelEvent = () => {
-    axios
-      .delete('http://localhost:3001/api/events/attendee', {
-        data: {
-          id_event: otherInfo?.id_event,
-          id_user: user?.id,
-        },
-      })
-      .then((res: any) => {
-        setApplied(false);
-        setAttendees((prevData: Array<Attendee> | undefined) => {
-          return prevData!.filter((val: any) => val.id !== user?.id);
-        });
-      });
-  };
+        {!oldEvent && (
+          <DetailButtonContainer
+            event={event!}
+            otherInfo={otherInfo!}
+            applied={applied}
+            organizerEvent={organizerEvent}
+            forMobile={forMobile}
+          />
+        )}
+      </Stack>
+    </DetailPageContext.Provider>
+  );
+
+}else{
+  ///////////////////// Lap Top /////////////////////
 
   return (
-    <Stack>
-      <DetailContainer
-        event={event!}
-        otherInfo={otherInfo!}
-        applied={applied}
-        organizerEvent={organizerEvent}
-      />
+    <DetailPageContext.Provider value={provider}>
+      <>
+        <Stack>
+      
+          <Box display="flex" margin='30px auto 90px'>
 
-      {event && (
-        <DetailInfo
-          price={event.price_event}
-          maxSpots={event.capacity_event}
-          attendees={attendees!}
-          tags={event.tags}
-          category={event.category_event}
-        />
-      )}
-      {oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
-
-      {!oldEvent && (
-        <>
-          <Box
-            justifyContent='space-between'
-            display={
-              organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'
-            }
-            sx={{ marginBlock: '25px' }}
-          >
-            <Box style={{ width: '47%' }}>
-              {otherInfo?.id_event ? (
-                <Button
-                  type='submit'
-                  variant='outlined'
-                  color='primary'
-                  fullWidth
-                  onClick={() => editEventHandler(otherInfo.id_event)}
-                >
-                  Edit
-                </Button>
-              ) : (
-                <Box>Id is not found</Box>
+            {/* /////////// Left /////////// */}
+            <Box minWidth="70%" marginRight='40px'>
+              <DetailContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+              />
+              {event && (
+                <DetailInfo
+                  price={event.price_event}
+                  maxSpots={event.capacity_event}
+                  attendees={attendees!}
+                  tags={event.tags}
+                  category={event.category_event}
+                  forMobile={forMobile!}
+                />
               )}
             </Box>
 
-            <Box style={{ width: '47%' }}>
-              {otherInfo?.id_event ? (
-                <Button
-                  type='submit'
-                  variant='outlined'
-                  color='error'
-                  fullWidth
-                  onClick={() => deleteEvent(otherInfo.id_event)}
-                >
-                  Delete Event
-                </Button>
-              ) : (
-                <Box>Id is not found</Box>
-              )}
-            </Box>
-          </Box>
+            {/* /////////// Right /////////// */}
+            <Box>
+              <DetailIconContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+              />
+              <Box borderRadius='7px' overflow='hidden'>
+                <ImageHelper
+                  src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+                  width='100%'
+                  height='auto'
+                  alt={event?.name_event ?? 'Event'}
+                />
+              </Box>
 
-          <Button
-            style={{
-              display:
-                !organizerEvent && loginStatus == 'Logged In'
-                  ? 'block'
-                  : 'none',
-            }}
-            type='submit'
-            variant={applied ? 'outlined' : 'contained'}
-            color={applied ? 'error' : 'primary'}
-            fullWidth
-            sx={{ margin: '25px auto' }}
-            onClick={() => {
-              applied ? cancelEvent() : addAttendee();
-            }}
-          >
-            {applied ? 'Cancel' : 'Apply'}
-          </Button>
-        </>
-      )}
-    </Stack>
-  );
+              <Box display='flex' marginTop='20px'>
+                <IconsContainer
+                  icons={[
+                    { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
+                  ]}
+                  onIconClick={() => {
+                    return;
+                  }}
+                />
+                <Typography>{event?.location_event}</Typography>
+              </Box>
+              { isLoaded?
+                <GoogleMap
+                  mapContainerStyle={{widows: '100%', height: '250px', borderRadius: '7px'}}
+                  center={coordinate}
+                  zoom={14}
+                /> : <></>
+              }
+            </Box>{/* //right */}
+          </Box>{/* //flex */}
+        </Stack>
+
+        { oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
+
+        {/* /////////// Footer /////////// */}
+        { !oldEvent && (
+          <>
+            <Box
+              padding='0 30px'
+              display='flex'
+              justifyContent='space-between'
+              left='0'
+              width='100%'
+              margin='0 auto'
+              position='fixed'
+              bottom='40px'
+              style={{backgroundColor:'#dedede'}}
+            >
+
+              <Box display='flex' flexDirection='column' justifyContent='center'>
+                <DetailTimeContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forFooter={true}
+                />
+                <Box
+                  marginLeft='10px'
+                  fontWeight='bold'
+                >
+                  {event?.name_event}
+                </Box>
+              </Box>
+          
+              <Box width='30%'>
+                <DetailButtonContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                />
+              </Box>
+            </Box>
+          </>
+        )}
+      </>
+    </DetailPageContext.Provider>
+  )
+}
 }

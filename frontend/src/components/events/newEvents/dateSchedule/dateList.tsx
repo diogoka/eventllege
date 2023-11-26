@@ -14,11 +14,12 @@ interface DateRange {
 type Props = {
   dates: DateRange[];
   setDates: (dates: DateRange[]) => void;
+  isMobile: boolean;
 };
 
 const today = dayjs();
 
-export default function DateList({ dates, setDates }: Props) {
+export default function DateList({ dates, setDates, isMobile }: Props) {
   const deleteDateHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;
@@ -56,58 +57,69 @@ export default function DateList({ dates, setDates }: Props) {
           size='medium'
           variant='text'
           sx={{ fontSize: '1rem' }}
+          color='info'
         >
           Add Date
         </Button>
       </Stack>
       {dates.map((date, index) => (
-        <Grid
-          container
-          justifyContent='center'
-          alignItems='center'
-          rowSpacing={2}
-          border={'1px solid rgba(51, 3, 0, 0.1)'}
+        <Box
           key={index}
+          sx={{
+            width: '100%',
+            height: isMobile ? '12rem' : '6rem',
+            position: 'relative',
+          }}
         >
-          <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label={`Start Date ${index + 1}`}
-                value={date.dateStart}
-                onChange={(newDateStart) => {
-                  newDateStart
-                    ? updateDateHandler(index, newDateStart, date.dateEnd)
-                    : null;
-                }}
-                sx={{ width: '100%' }}
-              />
-            </LocalizationProvider>
+          <Grid
+            container
+            justifyContent='center'
+            alignItems='center'
+            rowSpacing={1}
+            columnSpacing={{ md: 2 }}
+          >
+            <Grid item sm={12} md={6}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label={`Start Date ${index + 1}`}
+                  value={date.dateStart}
+                  onChange={(newDateStart) => {
+                    newDateStart
+                      ? updateDateHandler(index, newDateStart, date.dateEnd)
+                      : null;
+                  }}
+                  sx={{ width: '100%' }}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item sm={12} md={6}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label={`End Date ${index + 1}`}
+                  value={date.dateEnd}
+                  onChange={(newDateEnd) => {
+                    newDateEnd
+                      ? updateDateHandler(index, date.dateStart, newDateEnd)
+                      : null;
+                  }}
+                  sx={{ width: '100%' }}
+                />
+              </LocalizationProvider>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label={`End Date ${index + 1}`}
-                value={date.dateEnd}
-                onChange={(newDateEnd) => {
-                  newDateEnd
-                    ? updateDateHandler(index, date.dateStart, newDateEnd)
-                    : null;
-                }}
-                sx={{ width: '100%' }}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={6}></Grid>
-          <Grid item xs={6} sx={{ bgcolor: 'green' }}>
-            <Button
-              onClick={() => deleteDateHandler(index)}
-              variant='text'
-              startIcon={<RemoveCircleOutlineIcon />}
-            >
-              Delete
-            </Button>
-          </Grid>
-        </Grid>
+          <Button
+            onClick={() => deleteDateHandler(index)}
+            variant='text'
+            startIcon={<RemoveCircleOutlineIcon />}
+            sx={{
+              position: 'absolute',
+              right: '1rem',
+              bottom: 0,
+            }}
+          >
+            Delete
+          </Button>
+        </Box>
       ))}
     </>
   );

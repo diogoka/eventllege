@@ -3,7 +3,7 @@ import Price from './price';
 import Capacity from './capacity';
 import Category from './category';
 import Tag from './tag';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 type Category = {
   category_course: string;
@@ -15,7 +15,6 @@ type Tag = {
 };
 
 type Props = {
-  price: number;
   setPrice: (value: number) => void;
   spots: number;
   setSpots: (value: number) => void;
@@ -23,33 +22,37 @@ type Props = {
   setCategory: (value: string) => void;
   selectedTags: Tag[];
   setSelectedTags: (value: Tag[]) => void;
+  isMobile: boolean;
 };
 
 export default function DetailList(props: Props) {
   return (
-    <Grid
-      container
-      direction='row'
-      justifyContent='center'
-      alignItems='center'
-      rowSpacing={2}
-      sx={{ width: '100%' }}
-    >
-      <Grid item xs={12}>
-        <Price price={props.price} setPrice={props.setPrice} />
+    <Box sx={{ width: '100%' }}>
+      <Grid
+        container
+        direction='row'
+        justifyContent='center'
+        alignItems='center'
+        rowSpacing={{ sm: 2, md: 3 }}
+        columnSpacing={{ md: 2 }}
+        sx={{ width: '100%' }}
+      >
+        <Grid item sm={12} md={6}>
+          <Price setPrice={props.setPrice} />
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <Capacity spots={props.spots} setSpots={props.setSpots} />
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <Category category={props.category} setCategory={props.setCategory} />
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <Tag
+            selectedTags={props.selectedTags}
+            setSelectedTags={props.setSelectedTags}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Capacity spots={props.spots} setSpots={props.setSpots} />
-      </Grid>
-      <Grid item xs={12}>
-        <Category category={props.category} setCategory={props.setCategory} />
-      </Grid>
-      <Grid item xs={12}>
-        <Tag
-          selectedTags={props.selectedTags}
-          setSelectedTags={props.setSelectedTags}
-        />
-      </Grid>
-    </Grid>
+    </Box>
   );
 }
