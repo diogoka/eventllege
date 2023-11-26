@@ -76,12 +76,15 @@ export default function ModalDelete({
         console.log(err);
       });
 
-    setOpen(false);
-    onClose();
+    closingModal();
   };
 
   const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    closingModal();
+  };
+
+  const closingModal = () => {
     setOpen(false);
     onClose();
   };
@@ -90,13 +93,14 @@ export default function ModalDelete({
     <Box sx={{ flexGrow: 1, position: 'absolute' }}>
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={closingModal}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography variant='h2' sx={{ textAlign: 'justify' }}>
-            Are you sure you want to delete the event {eventName}?
+          <Typography variant='h2' sx={{ textAlign: 'center' }}>
+            Are you sure you want to delete the event{' '}
+            <strong>{eventName}</strong> ?
           </Typography>
           <Box sx={iconContainer}>
             <Button

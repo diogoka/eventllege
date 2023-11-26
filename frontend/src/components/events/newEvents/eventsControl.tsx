@@ -68,7 +68,15 @@ export default function EventsControl() {
           })
         }
       />
-      <Location />
+      <Location
+        location={createdEvent.location_event}
+        setLocation={(location) =>
+          dispatch({
+            type: 'UPDATE_LOCATION',
+            payload: { ...createdEvent, location_event: location },
+          })
+        }
+      />
       <DetailList
         isMobile={isMobile}
         setPrice={(price) =>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Review } from './review';
 import Box from '@mui/material/Box';
 import { Avatar, Rating, Typography } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
+import { StarRounded } from '@mui/icons-material';
 
 type Props = {
   review: Review;
@@ -85,8 +85,8 @@ function ReviewItem({ review, laptopQuery }: Props) {
             readOnly
             size='small'
             precision={0.5}
-            emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-            icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
+            emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+            icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
           />
           <Typography
             sx={{ fontSize: '0.75rem', color: 'rgba(51, 51, 51, 0.75)' }}

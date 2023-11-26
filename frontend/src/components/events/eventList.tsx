@@ -27,7 +27,7 @@ function EventList({
   oldEvent,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  const laptopQuery = useMediaQuery('(min-width:768px)');
+  const laptopQuery = useMediaQuery('(min-width:769px)');
   const eventsPerPage = laptopQuery ? 6 : 5;
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
