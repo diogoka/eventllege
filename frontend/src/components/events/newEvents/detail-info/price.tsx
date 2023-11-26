@@ -8,13 +8,15 @@ import {
 } from '@mui/material';
 
 type Props = {
+  price: number;
   setPrice: (value: number) => void;
 };
 
-export default function Price({ setPrice }: Props) {
+export default function Price({ price, setPrice }: Props) {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
+  const [checkDisabled, setCheckDisabled] = useState(false);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -25,6 +27,7 @@ export default function Price({ setPrice }: Props) {
   const handleTextPriceChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setCheckDisabled((prev) => !prev);
     const value = +event.target.value;
 
     if (value > 1) {
@@ -34,12 +37,17 @@ export default function Price({ setPrice }: Props) {
       setError(true);
     }
   };
-
   return (
     <>
       <FormControlLabel
         label='Free'
-        control={<Checkbox checked={checked} onChange={handlePriceChange} />}
+        control={
+          <Checkbox
+            checked={checked}
+            onChange={handlePriceChange}
+            disabled={checkDisabled}
+          />
+        }
       />
       <TextField
         label='Price'

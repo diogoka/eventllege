@@ -32,11 +32,11 @@ export default function Capacity({ spots, setSpots }: Props) {
   const handleTextSpotsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setCheckDisabled((prev) => !prev);
     const value = +event.target.value;
     if (value > 0) {
       setSpots(value);
       setError(false);
-      setCheckDisabled((prev) => !prev);
     } else {
       setError(true);
     }

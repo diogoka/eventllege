@@ -79,6 +79,7 @@ export default function EventsControl() {
       />
       <DetailList
         isMobile={isMobile}
+        price={createdEvent.price_event}
         setPrice={(price) =>
           dispatch({
             type: 'UPDATE_PRICE',

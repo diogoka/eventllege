@@ -67,7 +67,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           key={index}
           sx={{
             width: '100%',
-            height: isMobile ? '12rem' : '6rem',
+            height: isMobile ? '10rem' : '6rem',
             position: 'relative',
           }}
         >
