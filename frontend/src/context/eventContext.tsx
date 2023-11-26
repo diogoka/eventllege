@@ -24,7 +24,7 @@ export type EventData = {
   capacity_event: number;
   location_event: string;
   price_event: number;
-  selectedTags: Tag[];
+  selectedTags: Array<Tag>;
   category_event: string;
 };
 
