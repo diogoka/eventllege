@@ -39,6 +39,7 @@ export default function EventsControl() {
       component={'form'}
       onSubmit={clickHandler}
       maxWidth='1280px'
+      sx={{ marginTop: '4rem' }}
     >
       <BasicInfo
         isMobile={isMobile}
@@ -78,6 +79,7 @@ export default function EventsControl() {
       />
       <DetailList
         isMobile={isMobile}
+        price={createdEvent.price_event}
         setPrice={(price) =>
           dispatch({
             type: 'UPDATE_PRICE',
