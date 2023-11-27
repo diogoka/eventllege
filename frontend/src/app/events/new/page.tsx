@@ -2,7 +2,6 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { UserContext } from '@/context/userContext';
 // import { EventContext } from '@/context/eventContext';
-import { Box } from '@mui/material';
 
 import EventsControl from '@/components/events/newEvents/eventsControl';
 // import { useRouter } from 'next/navigation';
@@ -60,8 +59,8 @@ export default function NewEventPage() {
   };
 
   return (
-    <Box sx={{ marginTop: '1rem' }}>
+    <>
       <EventsControl />
-    </Box>
+    </>
   );
 }

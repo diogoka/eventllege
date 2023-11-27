@@ -38,8 +38,8 @@ export default function EventsControl() {
       spacing={{ sm: 2, md: 3 }}
       component={'form'}
       onSubmit={clickHandler}
-      maxWidth='1280px'
-      sx={{ marginTop: '4rem' }}
+      maxWidth='869px'
+      sx={{ margin: '4rem auto 0' }}
     >
       <BasicInfo
         isMobile={isMobile}
