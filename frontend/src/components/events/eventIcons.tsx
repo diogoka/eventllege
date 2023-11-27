@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React from 'react';
 import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
@@ -12,10 +12,6 @@ type Props = {
   attending: boolean;
   setModalOpen: (isOpen: boolean) => void;
   handleAlertFn: (isOpen: boolean) => void;
-  modalities: {
-    inPerson: boolean;
-    online: boolean;
-  };
 };
 
 function EventIcons({
@@ -27,12 +23,10 @@ function EventIcons({
   attending,
   setModalOpen,
   handleAlertFn,
-  modalities,
 }: Props) {
-  console.log('eventId', eventId);
-  console.log('modalities', modalities);
   const router = useRouter();
   const handleOrganizerClick = (iconName: string) => {
+    console.log('clicked');
     if (iconName === 'FaEdit') {
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
@@ -62,54 +56,6 @@ function EventIcons({
       .catch((err) => {
         console.error('Failed to copy URL: ', err);
       });
-  };
-
-  const renderModalities = () => {
-    let modalitiesString = '';
-
-    if (modalities.inPerson && modalities.online) {
-      modalitiesString = 'In Person & Online';
-    } else if (modalities.inPerson) {
-      modalitiesString = 'In Person';
-    } else if (modalities.online) {
-      modalitiesString = 'Online';
-    }
-
-    const modalitiesColor = () => {
-      if (modalitiesString === 'In Person') {
-        return '#F5761A';
-      } else if (modalitiesString === 'Online') {
-        return '#66660e';
-      } else {
-        return '#7C0A02';
-      }
-    };
-
-    return (
-      <Box
-        sx={{
-          backgroundColor: modalitiesColor(),
-          borderRadius: '5px',
-          paddingTop: '0.1rem',
-          paddingBottom: '0.1rem',
-          paddingLeft: '0.3rem',
-          paddingRight: '0.3rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginRight: '0.5rem',
-        }}
-      >
-        <Typography
-          color='white'
-          fontSize={'0.8125rem'}
-          width={'7rem'}
-          textAlign={'center'}
-        >
-          {modalitiesString}
-        </Typography>
-      </Box>
-    );
   };
 
   const renderIcons = () => {
@@ -144,7 +90,6 @@ function EventIcons({
             justifyContent: 'center',
           }}
         >
-          {laptopQuery && renderModalities()}
           <Box
             sx={{
               backgroundColor: attending ? '#4CAF50' : 'rgb(20, 29, 79)',

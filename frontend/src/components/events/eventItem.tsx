@@ -117,7 +117,6 @@ function EventItem({
       attending={attending}
       setModalOpen={openModal}
       handleAlertFn={handleAlert}
-      modalities={modalities}
     />
   );
 
@@ -138,6 +137,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
+            modalities={modalities}
           />
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete
@@ -166,6 +166,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
+            modalities={modalities}
           />
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete

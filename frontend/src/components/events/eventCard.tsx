@@ -28,6 +28,10 @@ type Props = {
   avgRating?: number;
   iconsComponent?: JSX.Element;
   tags: Tag[];
+  modalities: {
+    inPerson: boolean;
+    online: boolean;
+  };
 };
 
 function EventCard({
@@ -42,14 +46,65 @@ function EventCard({
   avgRating,
   iconsComponent,
   tags,
+  modalities,
 }: Props) {
   const eventId = event.id_event;
+
+  const renderModalities = () => {
+    let modalitiesString = '';
+
+    if (modalities.inPerson && modalities.online) {
+      modalitiesString = 'In Person & Online';
+    } else if (modalities.inPerson) {
+      modalitiesString = 'In Person';
+    } else if (modalities.online) {
+      modalitiesString = 'Online';
+    }
+
+    const modalitiesColor = () => {
+      if (modalitiesString === 'In Person') {
+        return '#FF5733';
+      } else if (modalitiesString === 'Online') {
+        return '#FFD700';
+      } else {
+        return '#FFA500';
+      }
+    };
+
+    return (
+      <Box
+        sx={{
+          backgroundColor: modalitiesColor(),
+          borderRadius: '5px',
+          paddingTop: '0.1rem',
+          paddingBottom: '0.1rem',
+          paddingLeft: '0.3rem',
+          paddingRight: '0.3rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: '0.5rem',
+        }}
+      >
+        <Typography
+          color='black'
+          fontSize={'0.8125rem'}
+          textAlign={'center'}
+          fontWeight={'bold'}
+        >
+          {modalitiesString}
+        </Typography>
+      </Box>
+    );
+  };
+
   return (
     <Card
       onClick={handleCardClick}
       sx={{
+        position: 'relative',
         width: '23.75rem',
-        height: '24.0625rem',
+        height: '23.5rem',
         borderRadius: '5px',
         cursor: 'pointer',
         '&:hover': {
@@ -57,6 +112,22 @@ function EventCard({
         },
       }}
     >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'start',
+          justifyContent: 'start',
+          zIndex: 1,
+          padding: '0.5rem',
+        }}
+      >
+        {renderModalities()}
+      </Box>
       <CardMedia>
         <ImageHelper
           src={`http://localhost:3001/img/events/${eventId}`}
@@ -165,7 +236,15 @@ function EventCard({
             </Box>
           </CardActions>
         ) : (
-          <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <CardActions
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              padding: '0',
+              width: '100%',
+            }}
+          >
             <Box
               sx={{
                 gridArea: 'icons',
@@ -177,6 +256,14 @@ function EventCard({
             >
               {iconsComponent}
             </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'start',
+                width: '100%',
+                marginBottom: '0.5rem',
+              }}
+            ></Box>
           </CardActions>
         )}
       </CardContent>
