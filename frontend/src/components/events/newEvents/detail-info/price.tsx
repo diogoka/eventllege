@@ -8,36 +8,57 @@ import {
 } from '@mui/material';
 
 type Props = {
+  price: number;
   setPrice: (value: number) => void;
 };
 
-export default function Price({ setPrice }: Props) {
+export default function Price({ price, setPrice }: Props) {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(false);
+  const [checkDisabled, setCheckDisabled] = useState(false);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
     setPrice(event.target.checked ? 0 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
+    setError(false);
+  };
+  const handleTextPriceChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCheckDisabled((prev) => !prev);
+    const value = +event.target.value;
+
+    if (value > 1) {
+      setPrice(value);
+      setError(false);
+    } else {
+      setError(true);
+    }
   };
   return (
     <>
       <FormControlLabel
         label='Free'
-        control={<Checkbox checked={checked} onChange={handlePriceChange} />}
+        control={
+          <Checkbox
+            checked={checked}
+            onChange={handlePriceChange}
+            disabled={checkDisabled}
+          />
+        }
       />
       <TextField
         label='Price'
         variant='outlined'
         type='number'
         fullWidth
+        required
         disabled={disabled}
-        onChange={(event) => {
-          const value = +event.target.value;
-          if (value > 0) {
-            setPrice(value);
-          }
-        }}
+        onChange={handleTextPriceChange}
+        error={error}
+        helperText={error ? 'Price must be greater than 1' : ''}
         InputProps={{
           startAdornment: <InputAdornment position='start'>$</InputAdornment>,
         }}

@@ -26,7 +26,7 @@ type SelectedEvent = {
   capacity_event: number;
   price_event: number;
   category_event: string;
-  tags: Tag[];
+  tags: Array<Tag>;
 };
 
 type Tag = {

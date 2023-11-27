@@ -69,7 +69,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
 
   return (
     <>
-      <FormControl fullWidth>
+      <FormControl fullWidth required>
         <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
         <Select
           labelId='demo-multiple-checkbox-label'

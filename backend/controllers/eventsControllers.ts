@@ -3,16 +3,17 @@ import express from 'express';
 import { sendEmail, EmailOption } from '../helpers/mail';
 import fs from 'fs-extra';
 
-// type EventInput = {
-//   owner: string;
-//   title: string;
-//   description: string;
-//   location: string;
-//   spots: number;
-//   price: number;
-//   image: string;
-//   tag: number;
-// };
+type EventInput = {
+  owner: string;
+  title: string;
+  description: string;
+  dates: Array<Date>;
+  location: string;
+  spots: number;
+  price: number;
+  image: string;
+  tag: number;
+};
 
 type Date = {
   dateStart: string;
@@ -444,6 +445,7 @@ export const createEvents = async (
   req: express.Request,
   res: express.Response
 ) => {
+  console.log('create events', req.body);
   const {
     owner,
     title,
@@ -456,6 +458,7 @@ export const createEvents = async (
     tagId,
     category,
   } = req.body;
+
   try {
     dates.forEach(async (date: Date) => {
       const events = await pool.query(
@@ -753,33 +756,38 @@ export const sendTicket = async (eventId: any, userId: any) => {
   }
 };
 
-// function validateEventInput(eventInput: EventInput): { result: boolean; message: string } {
-//   let result = false;
-//   let message = '';
+function validateEventInput(eventInput: EventInput): {
+  result: boolean;
+  message: string;
+} {
+  let result = false;
+  let message = '';
 
-//   if (!/.+/.test(eventInput.owner)) {
-//     message = 'Please enter a owner';
-//   } else if (!/.+/.test(eventInput.title)) {
-//     message = 'Please enter a title';
-//   } else if (!/.+/.test(eventInput.description)) {
-//     message = 'Please enter a description';
-//   } else if (!/.+/.test(eventInput.location)) {
-//     message = 'Please enter a location';
-//   } else if (isNaN(eventInput.spots)) {
-//     message = 'Invalid Number';
-//   } else if (isNaN(eventInput.price)) {
-//     message = 'Invalid price';
-//   } else if (isNaN(eventInput.tag)) {
-//     message = 'Invalid tag';
-//   } else {
-//     result = true;
-//   }
+  if (!eventInput.owner) {
+    message = 'Invalid owner';
+  } else if (!/.+/.test(eventInput.title)) {
+    message = 'Please enter a title';
+  } else if (!/.+/.test(eventInput.description)) {
+    message = 'Please enter a description';
+  } else if (!eventInput.dates) {
+    message = 'Please chose a date';
+  } else if (!/.+/.test(eventInput.location)) {
+    message = 'Please enter a location';
+  } else if (isNaN(eventInput.spots)) {
+    message = 'Invalid spots ';
+  } else if (isNaN(eventInput.price)) {
+    message = 'Invalid price';
+  } else if (isNaN(eventInput.tag)) {
+    message = 'Invalid tag';
+  } else {
+    result = true;
+  }
 
-//   return {
-//     result,
-//     message,
-//   };
-// }
+  return {
+    result,
+    message,
+  };
+}
 
 function moveImage(filename: string, eventId: number) {
   const oldPath = `${__dirname}/../public/img/events/temp/${filename}`;
