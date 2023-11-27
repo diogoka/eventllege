@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { Box } from '@mui/material';
@@ -9,6 +10,11 @@ export default function ImageHelper(props: any) {
   const { src, alt, width, height, style, ...rest } = props;
 
   const [isImageFound, setIsImageFound] = useState(true);
+  
+  useEffect(() => {
+    setIsImageFound(true);
+  }, [src]);
+
 
   return (
     <Box
