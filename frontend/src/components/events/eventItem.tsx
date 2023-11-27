@@ -89,6 +89,14 @@ function EventItem({
     setIsAlertVisible(false);
   };
 
+  const checkIsOld = () => {
+    if (new Date(event.date_event_end) < new Date()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const alertCopyURLFn = () => {
     return (
       <Alert
@@ -117,6 +125,8 @@ function EventItem({
       attending={attending}
       setModalOpen={openModal}
       handleAlertFn={handleAlert}
+      averageRating={avgRating}
+      oldEvent={checkIsOld()}
     />
   );
 

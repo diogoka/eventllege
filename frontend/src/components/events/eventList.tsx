@@ -33,6 +33,7 @@ function EventList({
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
   const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
 
+  console.log('oldEvent EventList', oldEvent);
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number
