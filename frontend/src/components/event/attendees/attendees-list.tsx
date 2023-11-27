@@ -16,8 +16,8 @@ export default function AttendeesList({ attendees }: Props) {
       flexWrap='wrap'
       justifyContent='space-between'
     >
-      {attendees.map((attendee: Attendee) => {
-        return <AttendeesItem attendee={attendee} />
+      {attendees.map((attendee: Attendee, index: number) => {
+        return <AttendeesItem key={index} attendee={attendee} />
       })}
     </Box>
   )
