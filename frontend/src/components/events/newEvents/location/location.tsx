@@ -12,17 +12,14 @@ export default function Location({ location, setLocation }: Props) {
 
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
 
-  console.log(location);
-
   const updateOptions = async (input: string) => {
-    const result = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=address&key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}`)
-
-    const options: string[] = result.data.predictions.map((prediction: any) => {
-      return prediction.description;
-    });
-
-    setLocationOptions(options);
-  } 
+    try {
+      const result = await axios.get(`http://localhost:3001/api/location?input=${input}`)
+      setLocationOptions(result.data);
+    } catch (error: any) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
