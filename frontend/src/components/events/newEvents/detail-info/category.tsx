@@ -30,7 +30,7 @@ export default function Category({ category, setCategory }: Props) {
 
   return (
     <>
-      <FormControl fullWidth>
+      <FormControl fullWidth required>
         <InputLabel id='Category'>Category</InputLabel>
         <Select
           labelId='Category'

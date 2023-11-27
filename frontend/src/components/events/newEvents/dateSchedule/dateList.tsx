@@ -81,6 +81,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
             <Grid item sm={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
+                  disablePast
                   label={`Start Date ${index + 1}`}
                   value={date.dateStart}
                   onChange={(newDateStart) => {
@@ -95,6 +96,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
             <Grid item sm={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
+                  disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
                   onChange={(newDateEnd) => {
