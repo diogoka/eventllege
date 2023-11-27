@@ -143,8 +143,6 @@ export const getEventsByUser = async (
           tags ON events_tags.id_tag = tags.id_tag 
         WHERE 
           events.id_event IN (${ids.join(',')});
-        ORDER BY 
-          events.date_event_start ASC
       `);
     }
 

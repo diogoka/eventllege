@@ -2,6 +2,7 @@
 import { IconContext } from 'react-icons';
 import * as IconLibrary from 'react-icons/fa';
 import IconButton from '@mui/material/IconButton';
+import { Box } from '@mui/material';
 
 interface Props {
   iconName: string;
@@ -34,10 +35,9 @@ function IconItem({ iconName, size, color, onClick, isClickable }: Props) {
   };
 
   return (
-    <IconButton
+    <Box
       onClick={handleClick}
       sx={IconStyle}
-      disabled={!isClickable}
       style={{
         background: 'none',
         display: 'flex',
@@ -48,7 +48,7 @@ function IconItem({ iconName, size, color, onClick, isClickable }: Props) {
       <IconContext.Provider value={{ color: color, size: size || '1rem' }}>
         <SelectedIcon />
       </IconContext.Provider>
-    </IconButton>
+    </Box>
   );
 }
 

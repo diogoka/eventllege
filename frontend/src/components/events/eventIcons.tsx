@@ -110,28 +110,6 @@ function EventIcons({
           )}
         </>
       );
-
-      //   return (
-      //     <IconsContainer
-      //       icons={[
-      //         {
-      //           name: 'FaEdit',
-      //           isClickable: true,
-      //           color: '#3874CB',
-      //           title: laptopQuery ? 'Edit' : '',
-      //           hoverColor: '#d7e3f4',
-      //         },
-      //         {
-      //           name: 'FaTrashAlt',
-      //           isClickable: true,
-      //           color: '#D00000',
-      //           title: laptopQuery ? 'Delete' : '',
-      //           hoverColor: '#ffd0d0',
-      //         },
-      //       ]}
-      //       onIconClick={handleOrganizerClick}
-      //     />
-      //   );
     } else {
       return (
         <Box
