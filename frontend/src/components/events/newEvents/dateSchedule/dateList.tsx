@@ -50,7 +50,12 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
         spacing={1}
         sx={{ width: '100%' }}
       >
-        <Typography variant='h2'>Date</Typography>
+        <Typography variant='h2'>
+          Date {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </Typography>
         <Button
           onClick={addDateHandler}
           startIcon={<AddCircleOutlineIcon />}
@@ -109,18 +114,22 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
               </LocalizationProvider>
             </Grid>
           </Grid>
-          <Button
-            onClick={() => deleteDateHandler(index)}
-            variant='text'
-            startIcon={<RemoveCircleOutlineIcon />}
-            sx={{
-              position: 'absolute',
-              right: '1rem',
-              bottom: 0,
-            }}
-          >
-            Delete
-          </Button>
+          {index === 0 ? (
+            <></>
+          ) : (
+            <Button
+              onClick={() => deleteDateHandler(index)}
+              variant='text'
+              startIcon={<RemoveCircleOutlineIcon />}
+              sx={{
+                position: 'absolute',
+                right: '1rem',
+                bottom: 0,
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </Box>
       ))}
     </>
