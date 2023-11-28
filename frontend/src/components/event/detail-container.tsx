@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Box, Typography, AlertTitle, Alert } from '@mui/material';
+import { Box, Typography, AlertTitle, Alert, Link } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
 import { Event, OtherInfo, DetailPageContext } from '../../app/events/[id]/page';
 import IconsContainer from '../icons/iconsContainer';
@@ -12,9 +12,10 @@ export type Props = {
   organizerEvent: boolean;
   otherInfo: OtherInfo;
   forMobile: boolean;
+  forPreview: boolean;
 };
 
-const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile }: Props) => {
+const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile, forPreview }: Props) => {
   
   const { isAlertVisible, setIsAlertVisible } = useContext(DetailPageContext);
   const locationContainerStyle = { fontSize:forMobile?'auto':'1.2em',marginTop: '3px' };
@@ -46,6 +47,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile 
           applied={applied}
           organizerEvent={organizerEvent}
           forMobile={forMobile}
+          forPreview={forPreview}
         />
       </Box>
 
@@ -58,17 +60,20 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile 
           forMobile={forMobile!}
           forFooter={false}
         />
-        <Box display='flex' alignItems='center'>
-          <IconsContainer
-            icons={[
-              { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
-            ]}
-            onIconClick={() => {
-              return;
-            }}
-          />
-          <Typography sx={locationContainerStyle}>{event?.location_event}</Typography>
-        </Box>
+
+        <Link href={`https://maps.google.com/?q=${event?.location_event}`} target='_blank'>
+          <Box display='flex' alignItems='center'>
+            <IconsContainer
+              icons={[
+                { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
+              ]}
+              onIconClick={() => {
+                return;
+              }}
+            />
+            <Typography sx={locationContainerStyle}>{event?.location_event}</Typography>
+          </Box>
+        </Link>
       </Box>
 
       <Box
