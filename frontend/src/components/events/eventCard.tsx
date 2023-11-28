@@ -87,7 +87,7 @@ function EventCard({
         }}
       >
         <Typography
-          color='black'
+          color={modalitiesString === 'Online' ? 'black' : 'white'}
           fontSize={'0.8125rem'}
           textAlign={'center'}
           fontWeight={'bold'}
