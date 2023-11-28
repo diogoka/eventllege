@@ -35,6 +35,7 @@ type EventContextProps = {
   setAddImage: (addImage: Image) => void;
   createdEvent: EventData;
   dispatch: Dispatch<EventAction>;
+  initialState: EventData;
 };
 
 type EventAction = {
@@ -73,6 +74,8 @@ export const eventReducer = (state: EventData, action: EventAction) => {
       return { ...state, selectedTags: action.payload.selectedTags };
     case 'GET_WHOLE_DATA':
       return action.payload;
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }
@@ -89,7 +92,7 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
 
   return (
     <EventContext.Provider
-      value={{ createdEvent, dispatch, addImage, setAddImage }}
+      value={{ createdEvent, dispatch, initialState, addImage, setAddImage }}
     >
       {children}
     </EventContext.Provider>

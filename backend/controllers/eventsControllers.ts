@@ -454,46 +454,31 @@ export const createEvents = async (
     location,
     spots,
     price,
-    picture,
+    // picture,
     tagId,
     category,
   } = req.body;
 
   try {
     dates.forEach(async (date: Date) => {
-      const events = await pool.query(
-        `INSERT INTO
-        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
-        VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        RETURNING
-        *;
-        `,
-        [
-          owner,
-          title,
-          description,
-          date.dateStart,
-          date.dateEnd,
-          location,
-          spots,
-          price,
-          picture,
-          category,
-        ]
-      );
+      const events = await pool.query(`
+        INSERT INTO
+        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event)
+        VALUES ('${owner}','${title}','${description}','${date.dateStart}','${date.dateEnd}','${location}','${spots}','${price}','${category}')
+        RETURNING *;
+      `);
 
-      await pool.query(
-        `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
-        [events.rows[0].id_event, tagId]
-      );
+      console.log('----New Event Created----')
+      console.log('ID:',events.rows[0].id_event)
 
-      if (req.file) {
-        moveImage(req.file.filename, events.rows[0].id_event);
-      }
-
-      res.status(201).json(events.rows);
+      tagId.forEach((id:string)=>{
+        pool.query(
+          `INSERT INTO events_tags (id_event, id_tag) VALUES ('${events.rows[0].id_event}','${id}') RETURNING *;`,
+        );
+      })
+      // res.status(201).json(events.rows);
     });
+    res.status(201).json({});
   } catch (err: any) {
     if (req.file) {
       deleteImage(req.file.filename);

@@ -5,6 +5,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
+import { useSearchParams } from 'next/navigation';
 
 export type Event = {
   capacity_event: number;
@@ -34,9 +35,14 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
+  const [justCreated, setJustCreated] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
+
+  const searchParams=useSearchParams()
+
   const [alertSearchBar, setAlertSearchBar] = useState({
     status: false,
     message: '',
@@ -66,8 +72,15 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
+
+    if(searchParams.get('isPublished')){
+      setJustCreated(true)
+      setShowAlert(true)
+    }
+
     getEvents();
-  }, []);
+
+  }, [justCreated]);
 
   const searchEvents = (text: string) => {
     axios
@@ -114,6 +127,17 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
+      { showAlert && (
+        <Alert
+          severity='info'
+          variant='filled'
+          onClose={() => setShowAlert(false)}
+          sx={{ position: 'absolute', top: '50px', zIndex: 9999 }}
+        >
+          {'Event was Created successfully'}
+        </Alert>
+      )}
+
       {alertSearchBar.status && (
         <Alert
           severity='info'
