@@ -63,6 +63,7 @@ export default function Price({ price, setPrice }: Props) {
         label='Free'
         control={
           <Checkbox
+            id='Free'
             checked={checked}
             onChange={handlePriceChange}
             disabled={checkDisabled}
@@ -71,11 +72,9 @@ export default function Price({ price, setPrice }: Props) {
       />
 
       <TextField
-        // label='Price'
         variant='outlined'
         type='number'
         fullWidth
-        required
         disabled={disabled}
         onChange={handleTextPriceChange}
         error={error}

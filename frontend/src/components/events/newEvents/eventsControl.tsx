@@ -29,6 +29,27 @@ export default function EventsControl() {
     if (!createdEvent.name_event) {
       alert('Please enter a title');
       return;
+    } else if (!createdEvent.description_event) {
+      alert('Please enter a discussion');
+      return;
+    } else if (!createdEvent.dates) {
+      alert('Please choose dates');
+      return;
+    } else if (!createdEvent.location_event) {
+      alert('Please enter a location');
+      return;
+    } else if (createdEvent.price_event < 0) {
+      alert('Please choose price');
+      return;
+    } else if (!createdEvent.capacity_event) {
+      alert('Please choose spots');
+      return;
+    } else if (!createdEvent.category_event) {
+      alert('Please choose a category');
+      return;
+    } else if (createdEvent.selectedTags.length <= 0) {
+      alert('Please choose tags');
+      return;
     } else {
       console.log('success');
     }

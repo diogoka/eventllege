@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-  OutlinedInput,
   InputLabel,
   MenuItem,
   FormControl,
@@ -44,7 +43,6 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
     const {
       target: { value },
     } = event;
-    console.log('selected tags: ', event);
 
     const selectedValue =
       typeof value === 'string' ? value.split(',').map(Number) : value;

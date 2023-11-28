@@ -42,7 +42,6 @@ export default function DescriptionContainer({
         rows={isMobile ? 5 : 8}
         value={description}
         onChange={(event) => setDescription(event.target.value)}
-        required
       />
     </Stack>
   );

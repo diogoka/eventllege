@@ -25,7 +25,7 @@ export default function Location({ location, setLocation }: Props) {
   return (
     <>
       <Autocomplete
-        placeholder='Location'
+        // placeholder='Location'
         options={locationOptions}
         onInputChange={(e, value) => {
           if (value) updateOptions(value);
@@ -35,23 +35,27 @@ export default function Location({ location, setLocation }: Props) {
         }}
         fullWidth
         disablePortal
-        renderInput={(params) => (
-          <Stack
-            direction='column'
-            justifyContent='center'
-            alignItems='flex-start'
-            spacing={1}
-            sx={{ width: '100%' }}
-          >
-            <InputLabel>
-              Location{' '}
-              <Box component={'span'} sx={{ color: '#f14c4c' }}>
-                *
-              </Box>
-            </InputLabel>
-            <TextField {...params} placeholder='please enter location' />
-          </Stack>
-        )}
+        renderInput={(params) => {
+          console.log(params);
+
+          return (
+            <Stack
+              direction='column'
+              justifyContent='center'
+              alignItems='flex-start'
+              spacing={1}
+              sx={{ width: '100%' }}
+            >
+              <InputLabel>
+                Location{' '}
+                <Box component={'span'} sx={{ color: '#f14c4c' }}>
+                  *
+                </Box>
+              </InputLabel>
+              <TextField {...params} placeholder='please enter location' />
+            </Stack>
+          );
+        }}
       />
     </>
   );

@@ -25,11 +25,6 @@ export default function Capacity({ spots, setSpots }: Props) {
     setSpots(event.target.checked ? -1 : 0);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
-
-    if (isChecked && error === true) {
-      setCheckDisabled(false);
-      setSpots(0);
-    }
   };
 
   const handleTextSpotsChange = (
@@ -44,8 +39,6 @@ export default function Capacity({ spots, setSpots }: Props) {
       setError(true);
     }
   };
-
-  console.log('spots', spots);
 
   return (
     <Stack
@@ -77,7 +70,7 @@ export default function Capacity({ spots, setSpots }: Props) {
       />
 
       <TextField
-        label='Limited spots'
+        // label='Limited spots'
         variant='outlined'
         type='number'
         fullWidth
