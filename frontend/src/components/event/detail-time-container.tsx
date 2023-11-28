@@ -13,6 +13,11 @@ type Props = {
   forFooter: boolean;
 };
 
+export type EventDateString = {
+  date_event_start: string;
+  date_event_end: string;
+};
+
 const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) => {
 
   const deepCopy = event?.dates_event.map((dt:EventDate)=>
@@ -48,7 +53,10 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) 
   };
 
   const eventDates = deepCopy?.map((dt:EventDate)=>
-    (setDate(dt.date_event_start, dt.date_event_end))
+    setDate(
+      dt.date_event_start.toString(),
+      dt.date_event_end.toString()
+      )
   );
 
   const timeContainerStyle = {
@@ -59,7 +67,7 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) 
 
   return (
     <>
-      {eventDates?.map((dt:EventDate, key:number)=>{
+      { eventDates?.map((dt:EventDateString, key:number)=>{
         return (
           <Fragment key={key}>
             <Box display='flex' alignItems='center'>

@@ -1,7 +1,8 @@
-import React, { use, useEffect, useState } from 'react';
+import React from 'react';
 import IconsContainer from '../icons/iconsContainer';
 import { useRouter } from 'next/navigation';
-import { Box, Typography } from '@mui/material';
+import { Box, Rating, Typography } from '@mui/material';
+import { StarRounded } from '@mui/icons-material';
 
 type Props = {
   role?: string;
@@ -12,6 +13,8 @@ type Props = {
   attending: boolean;
   setModalOpen: (isOpen: boolean) => void;
   handleAlertFn: (isOpen: boolean) => void;
+  averageRating?: number;
+  oldEvent?: boolean;
 };
 
 function EventIcons({
@@ -23,9 +26,12 @@ function EventIcons({
   attending,
   setModalOpen,
   handleAlertFn,
+  averageRating,
+  oldEvent,
 }: Props) {
   const router = useRouter();
   const handleOrganizerClick = (iconName: string) => {
+    console.log('clicked');
     if (iconName === 'FaEdit') {
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
@@ -60,25 +66,49 @@ function EventIcons({
   const renderIcons = () => {
     if (role === 'organizer' && userId === owner) {
       return (
-        <IconsContainer
-          icons={[
-            {
-              name: 'FaEdit',
-              isClickable: true,
-              color: '#3874CB',
-              title: laptopQuery ? 'Edit' : '',
-              hoverColor: '#d7e3f4',
-            },
-            {
-              name: 'FaTrashAlt',
-              isClickable: true,
-              color: '#D00000',
-              title: laptopQuery ? 'Delete' : '',
-              hoverColor: '#ffd0d0',
-            },
-          ]}
-          onIconClick={handleOrganizerClick}
-        />
+        <>
+          {oldEvent ? (
+            <>
+              {' '}
+              {!averageRating ? (
+                <Typography sx={{ fontSize: '0.8rem' }}>
+                  No reviews yet
+                </Typography>
+              ) : (
+                <Rating
+                  name='read-only'
+                  value={averageRating}
+                  readOnly
+                  precision={0.5}
+                  size='small'
+                  emptyIcon={<StarRounded />}
+                  icon={<StarRounded />}
+                  sx={{ fontSize: '1.3rem' }}
+                />
+              )}
+            </>
+          ) : (
+            <IconsContainer
+              icons={[
+                {
+                  name: 'FaEdit',
+                  isClickable: true,
+                  color: '#3874CB',
+                  title: laptopQuery ? 'Edit' : '',
+                  hoverColor: '#d7e3f4',
+                },
+                {
+                  name: 'FaTrashAlt',
+                  isClickable: true,
+                  color: '#D00000',
+                  title: laptopQuery ? 'Delete' : '',
+                  hoverColor: '#ffd0d0',
+                },
+              ]}
+              onIconClick={handleOrganizerClick}
+            />
+          )}
+        </>
       );
     } else {
       return (

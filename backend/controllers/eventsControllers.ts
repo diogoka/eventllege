@@ -20,49 +20,6 @@ type Date = {
   dateEnd: string;
 };
 
-// export const getEvents = async (req: express.Request, res:any) => {
-
-//   try {
-//     const dateFrom = res.req.query.dateFrom? new Date(res.req.query.dateFrom) : new Date();
-//     const dateTo = res.req.query.dateTo? new Date(res.req.query.dateTo) : new Date(new Date().getFullYear()+3+'-12-31');
-//     const text =  res.req.query.text !== undefined? res.req.query.text.split(' ') : [''];
-//     const andor = res.req.query.andor? res.req.query.andor : null;
-
-//     let query='';
-//     text.forEach((val:string, key:number)=>{
-//       query += key==text.length-1?
-//       ` events.name_event like '%${val}%'` :
-//       ` events.name_event like '%${val}%' ${andor}`;
-//     });
-
-//     const events =
-//     res.req.query.past?
-//     await pool.query('SELECT * FROM events where events.date_event_start < $1', [dateFrom]):
-
-//     req.query.id_organizer?
-//     await pool.query('SELECT * FROM events where id_owner= $1 and date_event_start >= $2', [req.query.id_organizer, dateFrom]):
-
-//     await pool.query(`SELECT * FROM events where (${query}) and (events.date_event_start >= $1 and events.date_event_start < $2)`,
-//       [dateFrom, dateTo]
-//       );
-
-//     const ids = events.rows.length!==0? events.rows.map(val => { return val.id_event }) : null;
-
-//     const tags = await pool.query(`
-//       SELECT events.id_event, tags.name_tag FROM events
-//       inner join events_tags on events.id_event = events_tags.id_event
-//       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
-//       `);
-
-//     res.status(200).json({
-//       events: events.rows,
-//       tags: tags.rows
-//     });
-
-//   } catch (err :any) {
-//     res.status(500).send(err.message);
-//   };
-// };
 export const getEvents = async (
   req: express.Request,
   res: express.Response
@@ -79,11 +36,11 @@ export const getEvents = async (
 
     const events = req.query.past
       ? await pool.query(
-          `SELECT * FROM events where events.date_event_start <= $1 `,
+          `SELECT * FROM events where events.date_event_start <= $1 ORDER BY events.date_event_start ASC`,
           [today]
         )
       : await pool.query(
-          `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`,
+          `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2 ORDER BY events.date_event_start ASC`,
           [today, dayFromNow]
         );
 
@@ -124,7 +81,7 @@ export const getPastEvents = async (
     const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     const events = await pool.query(
-      `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2`,
+      `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2 ORDER BY events.date_event_start ASC`,
       [dateLimit, today]
     );
 
@@ -262,7 +219,7 @@ export const searchEvents = async (
 
     query = req.query.past
       ? `${query} and events.date_event_start < '%${today}%'`
-      : query;
+      : `${query} and events.date_event_start >= '%${today}%'`;
 
     const events = req.query.past
       ? await pool.query(query)
@@ -279,6 +236,7 @@ export const searchEvents = async (
       SELECT events.id_event, tags.name_tag FROM events
       inner join events_tags on events.id_event = events_tags.id_event
       inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})
+      ORDER BY events.date_event_start ASC
       `);
 
     res.status(200).json({
@@ -304,7 +262,9 @@ export const getEventsByOwner = async (
     FROM 
       events
     WHERE 
-      events.id_owner = $1;
+      events.id_owner = $1
+    ORDER BY
+      events.date_event_start ASC;
     `,
       [owner_id]
     );
@@ -454,46 +414,31 @@ export const createEvents = async (
     location,
     spots,
     price,
-    picture,
+    // picture,
     tagId,
     category,
   } = req.body;
 
   try {
     dates.forEach(async (date: Date) => {
-      const events = await pool.query(
-        `INSERT INTO
-        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
-        VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        RETURNING
-        *;
-        `,
-        [
-          owner,
-          title,
-          description,
-          date.dateStart,
-          date.dateEnd,
-          location,
-          spots,
-          price,
-          picture,
-          category,
-        ]
-      );
+      const events = await pool.query(`
+        INSERT INTO
+        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event)
+        VALUES ('${owner}','${title}','${description}','${date.dateStart}','${date.dateEnd}','${location}','${spots}','${price}','${category}')
+        RETURNING *;
+      `);
 
-      await pool.query(
-        `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
-        [events.rows[0].id_event, tagId]
-      );
+      console.log('----New Event Created----')
+      console.log('ID:',events.rows[0].id_event)
 
-      if (req.file) {
-        moveImage(req.file.filename, events.rows[0].id_event);
-      }
-
-      res.status(201).json(events.rows);
+      tagId.forEach((id:string)=>{
+        pool.query(
+          `INSERT INTO events_tags (id_event, id_tag) VALUES ('${events.rows[0].id_event}','${id}') RETURNING *;`,
+        );
+      })
+      // res.status(201).json(events.rows);
     });
+    res.status(201).json({});
   } catch (err: any) {
     if (req.file) {
       deleteImage(req.file.filename);

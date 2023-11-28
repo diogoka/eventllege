@@ -5,7 +5,7 @@ import IconsContainer from '../icons/iconsContainer';
 import { UserContext } from '@/context/userContext';
 import { Props } from './detail-container'
 
-const DetailIconContainer = ({ otherInfo, applied, organizerEvent }: Props) => {
+const DetailIconContainer = ({ otherInfo, applied, organizerEvent, forPreview }: Props) => {
 
   const { loginStatus } = useContext(UserContext);
   const { setIsAlertVisible } = useContext(DetailPageContext);
@@ -39,9 +39,10 @@ const DetailIconContainer = ({ otherInfo, applied, organizerEvent }: Props) => {
     <Box
       display={ loginStatus == 'Logged In' ? 'flex' : 'none' }
       justifyContent='space-between'
+      visibility={ forPreview? 'hidden' : 'visible' }
     >
       <Box
-        visibility={applied && !organizerEvent ? 'visible' : 'hidden'}
+        visibility={ applied && !organizerEvent ? 'visible' : 'hidden'}
         display='flex'
         alignItems='center'
       >

@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, createContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Link } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
 import DetailIconContainer from '@/components/event/detail-icon-container';
 import DetailTimeContainer from '@/components/event/detail-time-container';
@@ -14,6 +14,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { setKey, fromAddress, } from "react-geocode";
+import dayjs from 'dayjs';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean,
@@ -30,8 +31,8 @@ export type Attendee = {
 };
 
 export type EventDate = {
-  date_event_start: string;
-  date_event_end: string;
+  date_event_start: dayjs.Dayjs;
+  date_event_end: dayjs.Dayjs;
 };
 
 export type Tag = {
@@ -72,6 +73,7 @@ export default function EventPage() {
   const [forMobile, setForMobile] = useState<boolean>();
   const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
   const [coordinate, setCoordinate] = useState<Coordinate>();
+  const [forPreview, setForPreview] = useState<boolean>(false);
 
   const params = useParams();
 
@@ -89,8 +91,8 @@ export default function EventPage() {
           ...res.data.event,
           dates_event: [
             {
-              date_event_start: res.data.event.date_event_start,
-              date_event_end: res.data.event.date_event_end,
+              date_event_start: dayjs(res.data.event.date_event_start),
+              date_event_end: dayjs(res.data.event.date_event_end),
             },
           ],
         });
@@ -154,6 +156,7 @@ if(forMobile){
           applied={applied}
           organizerEvent={organizerEvent}
           forMobile={forMobile}
+          forPreview={forPreview}
         />
         {event && (
           <DetailInfo
@@ -163,6 +166,7 @@ if(forMobile){
             tags={event.tags}
             category={event.category_event}
             forMobile={forMobile!}
+            forPreview={forPreview}
           />
         )}
         {oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
@@ -174,6 +178,7 @@ if(forMobile){
             applied={applied}
             organizerEvent={organizerEvent}
             forMobile={forMobile}
+            forPreview={forPreview}
           />
         )}
       </Stack>
@@ -188,16 +193,17 @@ if(forMobile){
       <>
         <Stack>
       
-          <Box display="flex" margin='30px auto 90px'>
+          <Box display='flex' margin='30px auto 90px'>
 
             {/* /////////// Left /////////// */}
-            <Box minWidth="70%" marginRight='40px'>
+            <Box minWidth='70%' marginRight='40px'>
               <DetailContainer
                 event={event!}
                 otherInfo={otherInfo!}
                 applied={applied}
                 organizerEvent={organizerEvent}
                 forMobile={forMobile!}
+                forPreview={forPreview}
               />
               {event && (
                 <DetailInfo
@@ -207,6 +213,7 @@ if(forMobile){
                   tags={event.tags}
                   category={event.category_event}
                   forMobile={forMobile!}
+                  forPreview={forPreview}
                 />
               )}
             </Box>
@@ -219,6 +226,7 @@ if(forMobile){
                 applied={applied}
                 organizerEvent={organizerEvent}
                 forMobile={forMobile!}
+                forPreview={forPreview}
               />
               <Box borderRadius='7px' overflow='hidden'>
                 <ImageHelper
@@ -228,18 +236,19 @@ if(forMobile){
                   alt={event?.name_event ?? 'Event'}
                 />
               </Box>
-
-              <Box display='flex' marginTop='20px'>
-                <IconsContainer
-                  icons={[
-                    { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
-                  ]}
-                  onIconClick={() => {
-                    return;
-                  }}
-                />
-                <Typography>{event?.location_event}</Typography>
-              </Box>
+              <Link href={`https://maps.google.com/?q=${event?.location_event}`} target='_blank'>
+                <Box display='flex' marginTop='20px'>
+                  <IconsContainer
+                    icons={[
+                      { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
+                    ]}
+                    onIconClick={() => {
+                      return;
+                    }}
+                  />
+                  <Typography>{event?.location_event}</Typography>
+                </Box>
+              </Link>
               { isLoaded?
                 <GoogleMap
                   mapContainerStyle={{widows: '100%', height: '250px', borderRadius: '7px'}}
@@ -264,7 +273,7 @@ if(forMobile){
               width='100%'
               margin='0 auto'
               position='fixed'
-              bottom='40px'
+              bottom='0'
               style={{backgroundColor:'#dedede'}}
             >
 
@@ -292,6 +301,7 @@ if(forMobile){
                   applied={applied}
                   organizerEvent={organizerEvent}
                   forMobile={forMobile!}
+                  forPreview={forPreview}
                 />
               </Box>
             </Box>
