@@ -62,15 +62,14 @@ export default function PreviewEventPage() {
       description_event: createdEvent.description_event,
       dates_event: newArray,
       capacity_event: createdEvent.capacity_event,
-      // location_event: createdEvent.location_event,
-      location_event: 'Stanley park',
+      location_event: createdEvent.location_event,
       price_event: createdEvent.price_event,
       tags: createdEvent.selectedTags,
       category_event: createdEvent.category_event,
     })
 
     setKey(apiKey!);
-    fromAddress('Stanley park')
+    fromAddress(createdEvent.location_event)
     .then(({ results }) => {
       const { lat, lng } = results[0].geometry.location;
       setCoordinate({ lat: lat, lng: lng})
