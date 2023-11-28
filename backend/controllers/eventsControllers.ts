@@ -219,7 +219,7 @@ export const searchEvents = async (
 
     query = req.query.past
       ? `${query} and events.date_event_start < '%${today}%'`
-      : query;
+      : `${query} and events.date_event_start >= '%${today}%'`;
 
     const events = req.query.past
       ? await pool.query(query)
