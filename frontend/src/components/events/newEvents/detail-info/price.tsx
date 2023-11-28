@@ -5,6 +5,9 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
+  InputLabel,
+  Box,
+  Stack,
 } from '@mui/material';
 
 type Props = {
@@ -38,7 +41,24 @@ export default function Price({ price, setPrice }: Props) {
     }
   };
   return (
-    <>
+    <Stack
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
+      spacing={1}
+      sx={{ width: '100%' }}
+    >
+      <InputLabel
+        htmlFor='price'
+        sx={{
+          fontSize: '1.25rem',
+        }}
+      >
+        Price {''}
+        <Box component={'span'} sx={{ color: '#f14c4c' }}>
+          *
+        </Box>
+      </InputLabel>
       <FormControlLabel
         label='Free'
         control={
@@ -49,8 +69,9 @@ export default function Price({ price, setPrice }: Props) {
           />
         }
       />
+
       <TextField
-        label='Price'
+        // label='Price'
         variant='outlined'
         type='number'
         fullWidth
@@ -63,6 +84,6 @@ export default function Price({ price, setPrice }: Props) {
           startAdornment: <InputAdornment position='start'>$</InputAdornment>,
         }}
       />
-    </>
+    </Stack>
   );
 }

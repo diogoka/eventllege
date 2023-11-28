@@ -1,16 +1,18 @@
 import React from 'react';
-import useUploadImage from '@/services/imageInput';
-import { useContext } from 'react';
-import { EventContext } from '@/context/eventContext';
 import { Button, Input, Typography } from '@mui/material';
 import CollectionsIcon from '@mui/icons-material/Collections';
 
 type Props = {
   warning: string;
   onFileInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  isMobile: boolean;
 };
 
-export default function ImageContainer({ warning, onFileInputChange }: Props) {
+export default function ImageContainer({
+  warning,
+  onFileInputChange,
+  isMobile,
+}: Props) {
   return (
     <>
       <Button
@@ -20,6 +22,9 @@ export default function ImageContainer({ warning, onFileInputChange }: Props) {
         color='info'
         fullWidth
         disableRipple
+        sx={{
+          width: isMobile ? '100%' : '40%',
+        }}
       >
         Add Image
         <Input

@@ -1,5 +1,4 @@
 import React, { Dispatch, useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 import { useContext, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
@@ -27,6 +26,12 @@ export default function EventsControl() {
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!createdEvent.name_event) {
+      alert('Please enter a title');
+      return;
+    } else {
+      console.log('success');
+    }
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
@@ -109,7 +114,11 @@ export default function EventsControl() {
         }
       />
       <img src={tempImage} alt='' />
-      <ImageContainer warning={warning} onFileInputChange={onFileInputChange} />
+      <ImageContainer
+        warning={warning}
+        onFileInputChange={onFileInputChange}
+        isMobile={isMobile}
+      />
       <Button
         type='submit'
         variant='contained'

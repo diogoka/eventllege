@@ -10,18 +10,9 @@ import {
   Checkbox,
   Select,
   SelectChangeEvent,
+  Stack,
+  Box,
 } from '@mui/material';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 type Tag = {
   id_tag: number;
@@ -68,23 +59,34 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
   };
 
   return (
-    <>
-      <FormControl fullWidth required>
-        <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
+    <Stack
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
+      spacing={1}
+      sx={{ width: '100%' }}
+    >
+      <InputLabel>
+        Tags {''}
+        <Box component={'span'} sx={{ color: '#f14c4c' }}>
+          *
+        </Box>
+      </InputLabel>
+      <FormControl fullWidth>
         <Select
-          labelId='demo-multiple-checkbox-label'
-          id='demo-multiple-checkbox'
+          displayEmpty
           multiple
           value={selectedId}
           onChange={handleChange}
-          input={<OutlinedInput label='Tag' />}
           renderValue={(selectedIds) => {
+            if (selectedIds.length === 0) {
+              return <em>Please select tags</em>;
+            }
             const selectedNames = selectedTags
               .filter((tag) => selectedIds.includes(tag.id_tag))
               .map((tag) => tag.name_tag);
             return selectedNames.join(',');
           }}
-          MenuProps={MenuProps}
         >
           {tags.map((tag) => (
             <MenuItem key={tag.id_tag} value={tag.id_tag}>
@@ -94,6 +96,6 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
           ))}
         </Select>
       </FormControl>
-    </>
+    </Stack>
   );
 }
