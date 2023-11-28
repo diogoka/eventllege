@@ -114,18 +114,22 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
               </LocalizationProvider>
             </Grid>
           </Grid>
-          <Button
-            onClick={() => deleteDateHandler(index)}
-            variant='text'
-            startIcon={<RemoveCircleOutlineIcon />}
-            sx={{
-              position: 'absolute',
-              right: '1rem',
-              bottom: 0,
-            }}
-          >
-            Delete
-          </Button>
+          {index === 0 ? (
+            <></>
+          ) : (
+            <Button
+              onClick={() => deleteDateHandler(index)}
+              variant='text'
+              startIcon={<RemoveCircleOutlineIcon />}
+              sx={{
+                position: 'absolute',
+                right: '1rem',
+                bottom: 0,
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </Box>
       ))}
     </>
