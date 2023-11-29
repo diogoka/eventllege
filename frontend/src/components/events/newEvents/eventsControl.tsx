@@ -16,7 +16,7 @@ export default function EventsControl() {
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
 
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+  const { image, warning, onFileInputChange } = useUploadImage(20, 10, 480);
 
   useEffect(() => {
     if (image) {

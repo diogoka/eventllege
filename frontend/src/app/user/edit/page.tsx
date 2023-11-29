@@ -29,7 +29,7 @@ export default function UserEditPage() {
   const [name, setName] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+  const { image, warning, onFileInputChange } = useUploadImage(10, 1, 480);
   const [tempImageSrc, setTempImageSrc] = useState(`http://localhost:3001/img/users/${user?.id}`);
 
   useEffect(() => {
