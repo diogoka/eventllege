@@ -22,12 +22,12 @@ export default function EventsControl() {
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
+      setAddImage(image);
     }
   }, [image]);
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
   return (
