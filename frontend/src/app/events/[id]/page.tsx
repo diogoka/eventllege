@@ -264,48 +264,49 @@ if(forMobile){
 
         {/* /////////// Footer /////////// */}
         { !oldEvent && (
-          <>
-            <Box
-              padding='0 30px'
-              display='flex'
-              justifyContent='space-between'
-              left='0'
-              width='100%'
-              margin='0 auto'
-              position='fixed'
-              bottom='0'
-              style={{backgroundColor:'#dedede'}}
-            >
-
-              <Box display='flex' flexDirection='column' justifyContent='center'>
-                <DetailTimeContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
-                  forFooter={true}
-                />
-                <Box
-                  marginLeft='10px'
-                  fontWeight='bold'
-                >
-                  {event?.name_event}
-                </Box>
-              </Box>
           
-              <Box width='30%'>
-                <DetailButtonContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
-                  forPreview={forPreview}
-                />
+          <Box
+            padding='0 30px'
+            display='flex'
+            justifyContent='space-between'
+            left='0'
+            width='100%'
+            margin='0 auto'
+            position='fixed'
+            bottom='0'
+            zIndex='201'
+            style={{backgroundColor:'#dedede'}}
+          >
+
+            <Box display='flex' flexDirection='column' justifyContent='center'>
+              <DetailTimeContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+                forFooter={true}
+              />
+              <Box
+                marginLeft='10px'
+                fontWeight='bold'
+              >
+                {event?.name_event}
               </Box>
             </Box>
-          </>
+        
+            <Box width='30%'>
+              <DetailButtonContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+                forPreview={forPreview}
+              />
+            </Box>
+          </Box>
+          
         )}
       </>
     </DetailPageContext.Provider>
