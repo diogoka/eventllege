@@ -6,6 +6,7 @@ import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
+import SwitchButtonEvent from '@/components/events/switchEventDate';
 
 type Event = {
   id_event: number;
@@ -102,7 +103,14 @@ export default function OrganizerEventsPage() {
     >
       <SearchBar searchEvents={searchEvents} />
       {laptopQuery && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '98%' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '98%',
+          }}
+        >
+          <SwitchButtonEvent />
           <Button
             type='submit'
             variant='outlined'

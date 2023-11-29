@@ -51,11 +51,12 @@ export default function EventsControl() {
       alert('Please choose tags');
       return;
     } else {
-      console.log('success');
     }
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
+
+  console.log('createdEvent in eventsControl', createdEvent);
   return (
     <Stack
       direction='column'
