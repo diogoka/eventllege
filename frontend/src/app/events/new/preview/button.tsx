@@ -94,7 +94,7 @@ export default function ButtonsForPreview({
           onClick={() =>
             // editEventHandler()
             {
-              router.push('/events/new');
+              router.push('/events/new?preview=true');
             }
           }
         >

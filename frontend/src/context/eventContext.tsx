@@ -103,7 +103,6 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
   const [addImage, setAddImage] = useState<Image>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
-  console.log('test', createdEvent);
 
   return (
     <EventContext.Provider

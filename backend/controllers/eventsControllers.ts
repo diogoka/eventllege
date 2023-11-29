@@ -47,8 +47,8 @@ export const getEvents = async (
     const ids =
       events.rows.length !== 0
         ? events.rows.map((val) => {
-            return val.id_event;
-          })
+          return val.id_event;
+        })
         : null;
 
     const tags = await pool.query(`
@@ -88,8 +88,8 @@ export const getPastEvents = async (
     const ids =
       events.rows.length !== 0
         ? events.rows.map((val) => {
-            return val.id_event;
-          })
+          return val.id_event;
+        })
         : null;
 
     const tags = await pool.query(`
@@ -228,8 +228,8 @@ export const searchEvents = async (
     const ids =
       events.rows.length !== 0
         ? events.rows.map((val) => {
-            return val.id_event;
-          })
+          return val.id_event;
+        })
         : null;
 
     const tags = await pool.query(`
@@ -306,15 +306,15 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
 
     const tags = await pool.query(
       'SELECT tags.id_tag, tags.name_tag FROM events ' +
-        'inner join events_tags on events.id_event = events_tags.id_event ' +
-        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
+      'inner join events_tags on events.id_event = events_tags.id_event ' +
+      'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
       'SELECT users.id_user, users.name_user FROM events ' +
-        'inner join attendees on events.id_event = attendees.id_event ' +
-        'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
+      'inner join attendees on events.id_event = attendees.id_event ' +
+      'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
       [EVENT_ID]
     );
 
@@ -350,8 +350,8 @@ export const getUserEvents = async (
   try {
     const att = await pool.query(
       'SELECT * FROM attendees ' +
-        'inner join events on attendees.id_event = events.id_event ' +
-        'where attendees.id_user = $1 and events.date_event_start >= $2',
+      'inner join events on attendees.id_event = events.id_event ' +
+      'where attendees.id_user = $1 and events.date_event_start >= $2',
       [SAMPLE_USER, date]
     );
 
@@ -361,14 +361,14 @@ export const getUserEvents = async (
 
     const tags = await pool.query(
       `SELECT events.id_event, tags.name_tag FROM events ` +
-        `inner join events_tags on events.id_event = events_tags.id_event ` +
-        `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
+      `inner join events_tags on events.id_event = events_tags.id_event ` +
+      `inner join tags on events_tags.id_tag = tags.id_tag where events_tags.id_event in (${ids})`
     );
 
     const attendees = await pool.query(
       `SELECT users.name_user, attendees.id_event FROM events ` +
-        `inner join attendees on events.id_event = attendees.id_event ` +
-        `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
+      `inner join attendees on events.id_event = attendees.id_event ` +
+      `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
     );
 
     const events = att.rows.map((val) => {
@@ -431,6 +431,10 @@ export const createEvents = async (
       console.log('----New Event Created----')
       console.log('ID:',events.rows[0].id_event)
 
+      if (req.file) {
+        moveImage(req.file.filename, events.rows[0].id_event);
+      }
+
       tagId.forEach((id:string)=>{
         pool.query(
           `INSERT INTO events_tags (id_event, id_tag) VALUES ('${events.rows[0].id_event}','${id}') RETURNING *;`,
@@ -440,9 +444,6 @@ export const createEvents = async (
     });
     res.status(201).json({});
   } catch (err: any) {
-    if (req.file) {
-      deleteImage(req.file.filename);
-    }
     res.status(500).send(err.message);
   }
 };
@@ -497,9 +498,6 @@ export const updateEvents = async (
         res.status(200).json(events.rows);
       });
     } catch (err: any) {
-      if (req.file) {
-        deleteImage(req.file.filename);
-      }
       res.status(500).send(err.message);
     }
   }

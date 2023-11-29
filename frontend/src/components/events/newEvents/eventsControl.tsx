@@ -16,11 +16,12 @@ export default function EventsControl() {
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
 
-  const { image, warning, onFileInputChange } = useUploadImage(10, 0.1, 480);
+  const { image, warning, onFileInputChange } = useUploadImage(20, 10, 480);
 
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
+      setAddImage(image);
     }
   }, [image]);
 
@@ -51,14 +52,12 @@ export default function EventsControl() {
       alert('Please choose tags');
       return;
     } else {
-      console.log('success');
     }
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
 
-  console.log('created event', createdEvent);
-
+  console.log('createdEvent in eventsControl', createdEvent);
   return (
     <Stack
       direction='column'
