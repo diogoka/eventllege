@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Price from './price';
 import Capacity from './capacity';
 import Category from './category';
