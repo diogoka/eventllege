@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@mui/material';
+import { TextField, InputLabel, Box, Stack } from '@mui/material';
 
 type Props = {
   description: string;
@@ -12,10 +12,27 @@ export default function DescriptionContainer({
   isMobile,
 }: Props) {
   return (
-    <>
+    <Stack
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
+      spacing={1}
+      sx={{ width: '100%' }}
+    >
+      <InputLabel
+        htmlFor='description'
+        sx={{
+          fontSize: '1.25rem',
+        }}
+      >
+        description{' '}
+        <Box component={'span'} sx={{ color: '#f14c4c' }}>
+          *
+        </Box>
+      </InputLabel>
       <TextField
-        id='outlined-basic'
-        label='description'
+        id='description'
+        // label='description'
         variant='outlined'
         placeholder='Please enter description'
         fullWidth
@@ -25,8 +42,7 @@ export default function DescriptionContainer({
         rows={isMobile ? 5 : 8}
         value={description}
         onChange={(event) => setDescription(event.target.value)}
-        required
       />
-    </>
+    </Stack>
   );
 }

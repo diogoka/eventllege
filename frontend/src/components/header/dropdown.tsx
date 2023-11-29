@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import { getAuth, signOut } from 'firebase/auth';
-import { Menu, MenuItem, Avatar, ListItemIcon, Divider } from '@mui/material';
+import { Menu, MenuItem, Avatar, ListItemIcon } from '@mui/material';
 import Logout from '@mui/icons-material/Logout';
 
 type Props = {
@@ -80,21 +80,12 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
         />{' '}
         My Profile
       </MenuItem>
-      {/* <Divider
-        sx={{
-          border: '1px solid green',
-          marginTop: 0,
-          '& .MuiDivider-root': {
-            marginTop: 0,
-          },
-        }}
-      /> */}
       <MenuItem
         onClick={handleLogout}
-        sx={{ padding: '.5rem 2rem', height: '3rem' }}
+        sx={{ padding: '.5rem 2rem', height: '4rem' }}
       >
         <ListItemIcon>
-          <Logout />
+          <Logout fontSize='large' sx={{ marginRight: '3px' }} />
         </ListItemIcon>
         Log out
       </MenuItem>

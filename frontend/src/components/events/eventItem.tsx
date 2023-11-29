@@ -45,9 +45,14 @@ function EventItem({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
   const laptopQuery = useMediaQuery('(min-width:769px)');
+  const [modalities, setModalities] = useState({
+    inPerson: false,
+    online: false,
+  });
 
   useEffect(() => {
     getAverageRating();
+    checkModalities();
   }, []);
 
   const getAverageRating = async () => {
@@ -60,6 +65,20 @@ function EventItem({
     }
   };
 
+  const checkModalities = () => {
+    let online = false;
+    let inPerson = false;
+    tags.map((tag) => {
+      if (tag.name_tag === 'In Person') {
+        inPerson = true;
+      }
+      if (tag.name_tag === 'Online') {
+        online = true;
+      }
+    });
+    setModalities({ inPerson, online });
+  };
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const handleAlert = (isOpen: boolean) => setIsAlertVisible(isOpen);
@@ -68,6 +87,14 @@ function EventItem({
   const handleAlertClose = (event: React.SyntheticEvent) => {
     event.stopPropagation();
     setIsAlertVisible(false);
+  };
+
+  const checkIsOld = () => {
+    if (new Date(event.date_event_end) < new Date()) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const alertCopyURLFn = () => {
@@ -98,6 +125,8 @@ function EventItem({
       attending={attending}
       setModalOpen={openModal}
       handleAlertFn={handleAlert}
+      averageRating={avgRating}
+      oldEvent={checkIsOld()}
     />
   );
 
@@ -118,6 +147,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
+            modalities={modalities}
           />
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete
@@ -146,6 +176,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
+            modalities={modalities}
           />
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete

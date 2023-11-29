@@ -1,30 +1,31 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, InputLabel, TextField, Box, Stack } from '@mui/material';
 import axios from 'axios';
 
 type Props = {
   location: string;
   setLocation: (value: string) => void;
-}
+};
 
 export default function Location({ location, setLocation }: Props) {
-
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
 
   const updateOptions = async (input: string) => {
     try {
-      const result = await axios.get(`http://localhost:3001/api/location?input=${input}`)
+      const result = await axios.get(
+        `http://localhost:3001/api/location?input=${input}`
+      );
       setLocationOptions(result.data);
     } catch (error: any) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <>
       <Autocomplete
-        placeholder='Location'
+        // placeholder='Location'
         options={locationOptions}
         onInputChange={(e, value) => {
           if (value) updateOptions(value);
@@ -34,7 +35,27 @@ export default function Location({ location, setLocation }: Props) {
         }}
         fullWidth
         disablePortal
-        renderInput={(params) => <TextField {...params} label='Location' />}
+        renderInput={(params) => {
+          console.log(params);
+
+          return (
+            <Stack
+              direction='column'
+              justifyContent='center'
+              alignItems='flex-start'
+              spacing={1}
+              sx={{ width: '100%' }}
+            >
+              <InputLabel>
+                Location{' '}
+                <Box component={'span'} sx={{ color: '#f14c4c' }}>
+                  *
+                </Box>
+              </InputLabel>
+              <TextField {...params} placeholder='please enter location' />
+            </Stack>
+          );
+        }}
       />
     </>
   );

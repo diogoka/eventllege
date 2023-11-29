@@ -5,6 +5,9 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
+  Stack,
+  Box,
+  InputLabel,
 } from '@mui/material';
 
 type Props = {
@@ -22,11 +25,6 @@ export default function Capacity({ spots, setSpots }: Props) {
     setSpots(event.target.checked ? -1 : 0);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
-
-    if (isChecked && error === true) {
-      setCheckDisabled(false);
-      setSpots(0);
-    }
   };
 
   const handleTextSpotsChange = (
@@ -42,10 +40,24 @@ export default function Capacity({ spots, setSpots }: Props) {
     }
   };
 
-  console.log('spots', spots);
-
   return (
-    <>
+    <Stack
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
+      spacing={1}
+      sx={{ width: '100%' }}
+    >
+      <InputLabel
+        sx={{
+          fontSize: '1.25rem',
+        }}
+      >
+        Spots {''}
+        <Box component={'span'} sx={{ color: '#f14c4c' }}>
+          *
+        </Box>
+      </InputLabel>
       <FormControlLabel
         label='Non limited people'
         control={
@@ -58,7 +70,7 @@ export default function Capacity({ spots, setSpots }: Props) {
       />
 
       <TextField
-        label='Limited spots'
+        // label='Limited spots'
         variant='outlined'
         type='number'
         fullWidth
@@ -74,6 +86,6 @@ export default function Capacity({ spots, setSpots }: Props) {
           ),
         }}
       />
-    </>
+    </Stack>
   );
 }

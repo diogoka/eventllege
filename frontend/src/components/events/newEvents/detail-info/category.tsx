@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { FormControl, InputLabel, MenuItem } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Stack, Box } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type Category = {
@@ -10,8 +10,6 @@ type Category = {
 type Props = {
   category: string;
   setCategory: (value: string) => void;
-  // categories: Category[];
-  // setCategories: (categories: Category[]) => void;
 };
 export default function Category({ category, setCategory }: Props) {
   //categories are from server
@@ -29,17 +27,30 @@ export default function Category({ category, setCategory }: Props) {
   }, []);
 
   return (
-    <>
-      <FormControl fullWidth required>
-        <InputLabel id='Category'>Category</InputLabel>
+    <Stack
+      direction='column'
+      justifyContent='center'
+      alignItems='flex-start'
+      spacing={1}
+      sx={{ width: '100%' }}
+    >
+      <InputLabel>
+        Category {''}
+        <Box component={'span'} sx={{ color: '#f14c4c' }}>
+          *
+        </Box>
+      </InputLabel>
+      <FormControl fullWidth>
         <Select
-          labelId='Category'
+          displayEmpty
           value={categories.length > 0 ? category : ''}
-          label='category'
           onChange={(event: SelectChangeEvent) =>
             setCategory(event.target.value)
           }
         >
+          <MenuItem value=''>
+            <em>Please select a category</em>
+          </MenuItem>
           {categories.map((category: Category, index: number) => (
             <MenuItem key={index} value={category.category_course}>
               {category.category_course}
@@ -47,6 +58,6 @@ export default function Category({ category, setCategory }: Props) {
           ))}
         </Select>
       </FormControl>
-    </>
+    </Stack>
   );
 }

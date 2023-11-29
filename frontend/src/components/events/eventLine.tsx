@@ -17,6 +17,10 @@ type Props = {
   avgRating?: number;
   iconsComponent?: JSX.Element;
   tags: Tag[];
+  modalities: {
+    inPerson: boolean;
+    online: boolean;
+  };
 };
 
 function EventLine({
@@ -31,6 +35,7 @@ function EventLine({
   avgRating,
   iconsComponent,
   tags,
+  modalities,
 }: Props) {
   const BoxStyle = {
     display: 'grid',
@@ -47,6 +52,7 @@ function EventLine({
     cursor: 'pointer',
     marginTop: '0',
     width: '100%',
+    position: 'relative',
   };
 
   const titleStyle = {
@@ -80,6 +86,18 @@ function EventLine({
   const imageContainerStyle = {
     gridArea: 'picture',
     borderRadius: '5px',
+    position: 'relative',
+  };
+
+  const modalitiesContainerStyle = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '0.3rem',
+    marginRight: '0.1rem',
   };
 
   const iconContainerStyle = {
@@ -89,6 +107,54 @@ function EventLine({
     alignItems: 'center',
     width: '100%',
   };
+
+  const renderModalities = () => {
+    let modalitiesString = '';
+
+    if (modalities.inPerson && modalities.online) {
+      modalitiesString = 'In Person & Online';
+    } else if (modalities.inPerson) {
+      modalitiesString = 'In Person';
+    } else if (modalities.online) {
+      modalitiesString = 'Online';
+    }
+
+    const modalitiesColor = () => {
+      if (modalitiesString === 'In Person') {
+        return '#FF5733';
+      } else if (modalitiesString === 'Online') {
+        return '#FFD700';
+      } else {
+        return '#FFA500';
+      }
+    };
+
+    return (
+      <Box
+        sx={{
+          backgroundColor: modalitiesColor(),
+          borderRadius: '5px',
+          paddingTop: '0.1rem',
+          paddingBottom: '0.1rem',
+          paddingLeft: '0.3rem',
+          paddingRight: '0.3rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          color='black'
+          fontSize={'0.5rem'}
+          textAlign={'center'}
+          fontWeight={'bold'}
+        >
+          {modalitiesString}
+        </Typography>
+      </Box>
+    );
+  };
+
   return (
     <Box onClick={handleCardClick} sx={BoxStyle}>
       <Typography sx={titleStyle}>
@@ -122,6 +188,7 @@ function EventLine({
         style={imageContainerStyle}
         alt={event.name_event}
       />
+      <Box sx={modalitiesContainerStyle}>{renderModalities()}</Box>
 
       {oldEvent ? (
         <Box sx={iconContainerStyle}>
