@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   TextField,
   InputAdornment,
@@ -40,6 +40,13 @@ export default function Price({ price, setPrice }: Props) {
       setError(true);
     }
   };
+
+  useEffect(() => {
+    if (price === 0) {
+      setChecked(true);
+      setCheckDisabled(false);
+    }
+  }, [price]);
   return (
     <Stack
       direction='column'

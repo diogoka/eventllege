@@ -6,7 +6,13 @@ import React, {
   useReducer,
   Dispatch,
 } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import dayjs from 'dayjs';
+
+interface Page {
+  label: string;
+  path: string;
+}
 
 export interface DateRange {
   dateStart: dayjs.Dayjs;
@@ -37,6 +43,9 @@ type EventContextProps = {
   createdEvent: EventData;
   dispatch: Dispatch<EventAction>;
   initialState: EventData;
+  showedPage: Page | null;
+  setShowedPage: (showedPage: Page | null) => void;
+  pathName: string;
 };
 
 type EventAction = {
@@ -86,6 +95,11 @@ export const EventContext = createContext<EventContextProps>(
 );
 
 export function EventContextProvider({ children }: { children: ReactNode }) {
+  const pathName = usePathname();
+  const [showedPage, setShowedPage] = useState<Page | null>({
+    label: 'Events',
+    path: '/',
+  });
   const [addImage, setAddImage] = useState<Image>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
@@ -93,7 +107,16 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
 
   return (
     <EventContext.Provider
-      value={{ createdEvent, dispatch, initialState, addImage, setAddImage }}
+      value={{
+        createdEvent,
+        dispatch,
+        initialState,
+        addImage,
+        setAddImage,
+        showedPage,
+        setShowedPage,
+        pathName,
+      }}
     >
       {children}
     </EventContext.Provider>

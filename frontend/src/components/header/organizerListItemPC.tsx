@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@mui/material';
 
@@ -8,7 +9,7 @@ interface Page {
 }
 
 const organizerBtns: Page[] = [
-  { label: 'Events', path: '/' },
+  { label: 'Events', path: '/' || '/events?isPublished=true' },
   { label: 'My events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
   { label: 'Created Event', path: '/organizer-events' },
@@ -17,18 +18,19 @@ const organizerBtns: Page[] = [
 
 export default function OrganizerListItemPC() {
   const router = useRouter();
-  const pathName = usePathname();
-  const [currentPage, setCurrentPage] = useState<Page | null>(organizerBtns[0]);
+  // const pathName = usePathname();
+  const { showedPage, setShowedPage, pathName } = useContext(EventContext);
+  // const [currentPage, setCurrentPage] = useState<Page | null>(organizerBtns[0]);
 
   useEffect(() => {
     // Update the currentPage when the path changes
     if (pathName !== '/user') {
       const page = organizerBtns.find((p) => p.path === pathName);
       if (page) {
-        setCurrentPage(page);
+        setShowedPage(page);
       }
     } else {
-      setCurrentPage(null);
+      setShowedPage(null);
     }
   }, [pathName]);
 
@@ -42,12 +44,16 @@ export default function OrganizerListItemPC() {
           key={index}
           onClick={() => clickHandler(button.path)}
           variant={
-            currentPage && currentPage.path === button.path
+            showedPage &&
+            (showedPage.path === button.path ||
+              showedPage?.path === `/events/?isPublished=true`)
               ? 'contained'
               : 'text'
           }
           color={
-            currentPage && currentPage.path === button.path
+            showedPage &&
+            (showedPage.path === button.path ||
+              showedPage?.path === `/events/?isPublished=true`)
               ? 'primary'
               : 'secondary'
           }
