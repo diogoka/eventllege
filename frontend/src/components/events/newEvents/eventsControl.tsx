@@ -56,6 +56,9 @@ export default function EventsControl() {
     setAddImage(image);
     router.push('http://localhost:3000/events/new/preview');
   };
+
+  console.log('created event', createdEvent);
+
   return (
     <Stack
       direction='column'

@@ -44,7 +44,7 @@ type EventAction = {
   payload: EventData;
 };
 
-const initialState: EventData = {
+export const initialState: EventData = {
   name_event: '',
   description_event: '',
   dates: [{ dateStart: today, dateEnd: today }],
