@@ -6,7 +6,13 @@ import React, {
   useReducer,
   Dispatch,
 } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import dayjs from 'dayjs';
+
+interface Page {
+  label: string;
+  path: string;
+}
 
 export interface DateRange {
   dateStart: dayjs.Dayjs;
@@ -37,6 +43,9 @@ type EventContextProps = {
   createdEvent: EventData;
   dispatch: Dispatch<EventAction>;
   initialState: EventData;
+  showedPage: Page | null;
+  setShowedPage: (showedPage: Page | null) => void;
+  pathName: string;
 };
 
 type EventAction = {
@@ -44,11 +53,11 @@ type EventAction = {
   payload: EventData;
 };
 
-const initialState: EventData = {
+export const initialState: EventData = {
   name_event: '',
   description_event: '',
   dates: [{ dateStart: today, dateEnd: today }],
-  capacity_event: 0,
+  capacity_event: -1,
   location_event: '',
   price_event: 0,
   selectedTags: [],
@@ -86,13 +95,27 @@ export const EventContext = createContext<EventContextProps>(
 );
 
 export function EventContextProvider({ children }: { children: ReactNode }) {
+  const pathName = usePathname();
+  const [showedPage, setShowedPage] = useState<Page | null>({
+    label: 'Events',
+    path: '/',
+  });
   const [addImage, setAddImage] = useState<Image>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
 
   return (
     <EventContext.Provider
-      value={{ createdEvent, dispatch, initialState, addImage, setAddImage }}
+      value={{
+        createdEvent,
+        dispatch,
+        initialState,
+        addImage,
+        setAddImage,
+        showedPage,
+        setShowedPage,
+        pathName,
+      }}
     >
       {children}
     </EventContext.Provider>

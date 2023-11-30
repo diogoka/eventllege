@@ -82,7 +82,6 @@ export default function EventPage() {
   const EVENT_ID = params.id;
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
-  console.log('event', event?.capacity_event);
   useEffect(() => {
     window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
@@ -131,7 +130,7 @@ export default function EventPage() {
       .catch((error) => {
         console.error(error.response);
       });
-  }, [applied]);
+  }, []);
 
   window.onresize = (e) => {
     const w = e.target as Window;
@@ -152,7 +151,6 @@ export default function EventPage() {
 
   if (forMobile) {
     ///////////////////// Mobile /////////////////////
-    const eventCapacity = event?.capacity_event;
     return (
       <DetailPageContext.Provider value={provider}>
         <Stack>
@@ -187,7 +185,6 @@ export default function EventPage() {
               organizerEvent={organizerEvent}
               forMobile={forMobile}
               forPreview={forPreview}
-              maxSpots={eventCapacity}
             />
           )}
         </Stack>
@@ -287,49 +284,47 @@ export default function EventPage() {
 
           {/* /////////// Footer /////////// */}
           {!oldEvent && (
-            <>
+            <Box
+              padding='0 30px'
+              display='flex'
+              justifyContent='space-between'
+              left='0'
+              width='100%'
+              margin='0 auto'
+              position='fixed'
+              bottom='0'
+              zIndex='201'
+              style={{ backgroundColor: '#dedede' }}
+            >
               <Box
-                padding='0 30px'
                 display='flex'
-                justifyContent='space-between'
-                left='0'
-                width='100%'
-                margin='0 auto'
-                position='fixed'
-                bottom='0'
-                style={{ backgroundColor: '#dedede' }}
+                flexDirection='column'
+                justifyContent='center'
               >
-                <Box
-                  display='flex'
-                  flexDirection='column'
-                  justifyContent='center'
-                >
-                  <DetailTimeContainer
-                    event={event!}
-                    otherInfo={otherInfo!}
-                    applied={applied}
-                    organizerEvent={organizerEvent}
-                    forMobile={forMobile!}
-                    forFooter={true}
-                  />
-                  <Box marginLeft='10px' fontWeight='bold'>
-                    {event?.name_event}
-                  </Box>
-                </Box>
-
-                <Box width='30%'>
-                  <DetailButtonContainer
-                    event={event!}
-                    otherInfo={otherInfo!}
-                    applied={applied}
-                    organizerEvent={organizerEvent}
-                    forMobile={forMobile!}
-                    forPreview={forPreview}
-                    maxSpots={event?.capacity_event}
-                  />
+                <DetailTimeContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forFooter={true}
+                />
+                <Box marginLeft='10px' fontWeight='bold'>
+                  {event?.name_event}
                 </Box>
               </Box>
-            </>
+
+              <Box width='30%'>
+                <DetailButtonContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forPreview={forPreview}
+                />
+              </Box>
+            </Box>
           )}
         </>
       </DetailPageContext.Provider>

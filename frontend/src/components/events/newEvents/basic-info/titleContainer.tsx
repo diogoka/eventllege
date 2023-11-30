@@ -1,22 +1,16 @@
 import React from 'react';
+import { useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import { TextField, InputLabel, Stack, Box } from '@mui/material';
 
-type Props = {
-  title: string;
-  setTitle: (value: string) => void;
-};
-export default function TitleContainer({ title, setTitle }: Props) {
-  // const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const title = event.target.value;
-  //   if (!title) {
-  //     alert('Please enter a title');
-  //     console.log('empty');
-  //   } else {
-  //     console.log('not empty');
-
-  //     setTitle(title);
-  //   }
-  // };
+export default function TitleContainer() {
+  const { createdEvent, dispatch } = useContext(EventContext);
+  const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: 'UPDATE_TITLE',
+      payload: { ...createdEvent, name_event: event.target.value },
+    });
+  };
   return (
     <Stack
       direction='column'
@@ -44,9 +38,8 @@ export default function TitleContainer({ title, setTitle }: Props) {
         size='small'
         color='secondary'
         type='text'
-        value={title}
-        // onChange={changeTitle}
-        onChange={(event) => setTitle(event.target.value)}
+        value={createdEvent.name_event}
+        onChange={changeTitle}
       />
     </Stack>
   );
