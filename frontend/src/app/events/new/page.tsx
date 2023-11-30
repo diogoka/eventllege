@@ -5,7 +5,7 @@ import EventsControl from '@/components/events/newEvents/eventsControl';
 export default function NewEventPage() {
   return (
     <>
-      <EventsControl />
+      <EventsControl eventId={-1}/>
     </>
   );
 }

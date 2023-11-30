@@ -11,6 +11,7 @@ import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { setKey, fromAddress, } from "react-geocode";
+import { useSearchParams } from 'next/navigation';
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;
@@ -40,11 +41,15 @@ type Coordinate = {
 
 export default function PreviewEventPage() {
 
+  const searchParams=useSearchParams()
+
   const { createdEvent, addImage } = useContext(EventContext);
   const [tempState, setTempState]= useState<EventData>()
   const [forMobile, setForMobile] = useState<boolean>();
   const [forPreview, setForPreview] = useState<boolean>(true);
   const [coordinate, setCoordinate] = useState<Coordinate>();
+
+  const [eventId, setEventId] = useState<number>();
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY
 
@@ -76,6 +81,8 @@ export default function PreviewEventPage() {
     })
     .catch(console.error);
 
+    setEventId(parseInt(searchParams.get('eventId')!))
+
   },[])
 
   window.onresize=(e)=>{
@@ -93,14 +100,11 @@ export default function PreviewEventPage() {
     <Stack>
       <Typography
         margin='30px auto 0'
-        padding='0 20px'
-        borderRadius='5px'
         fontSize='1.3em'
         color='crimson'
         width='fit-content'
-        sx={{backgroundColor:'salmon'}}
       >
-        Event is not created yet.
+        { eventId!>0? 'Event is not updated yet.':'Event is not created yet.'}
       </Typography>
       
       <DetailContainer
@@ -130,7 +134,7 @@ export default function PreviewEventPage() {
           forPreview={forPreview}
         />
       )}
-      <ButtonsForPreview forMobile={forMobile} tempState={tempState!}/>
+      <ButtonsForPreview forMobile={forMobile} tempState={tempState!} eventId={eventId!}/>
 
     </Stack>
   );
@@ -141,14 +145,11 @@ export default function PreviewEventPage() {
       <Stack>
         <Typography
           margin='40px auto 0'
-          padding='0 20px'
-          borderRadius='5px'
           fontSize='1.3em'
           color='crimson'
           width='fit-content'
-          style={{backgroundColor:'salmon'}}
         >
-          Event is not created yet.
+          { eventId!>0? 'Event is not updated yet.':'Event is not created yet.'}
         </Typography>
     
         <Box display='flex' margin='0 auto 90px'>
@@ -230,7 +231,7 @@ export default function PreviewEventPage() {
             }
           </Box>{/* //right */}
         </Box>{/* //flex */}
-        <ButtonsForPreview forMobile={forMobile!} tempState={tempState!}/>
+        <ButtonsForPreview forMobile={forMobile!} tempState={tempState!} eventId={eventId!}/>
       </Stack>
     </>
   )

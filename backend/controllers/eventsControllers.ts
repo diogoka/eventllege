@@ -486,17 +486,20 @@ export const updateEvents = async (
             id,
           ]
         );
-        await pool.query(
-          `UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`,
-          [tagId, id]
-        );
+
+        tagId.forEach(async (tag: number) => {
+          await pool.query(
+            `UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`,
+            [tag, id]
+          );
+        })
 
         if (req.file) {
           moveImage(req.file.filename, events.rows[0].id_event);
         }
 
-        res.status(200).json(events.rows);
       });
+      res.status(200).json({});
     } catch (err: any) {
       res.status(500).send(err.message);
     }
