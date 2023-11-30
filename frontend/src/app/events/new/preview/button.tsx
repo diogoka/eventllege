@@ -17,11 +17,18 @@ export default function ButtonsForPreview({
   eventId: number;
 }) {
   const { user } = useContext(UserContext);
-  const { dispatch, initialState, addImage } = useContext(EventContext);
+  const {
+    dispatch,
+    initialState,
+    addImage,
+    showedPage,
+    setShowedPage,
+    pathName,
+  } = useContext(EventContext);
 
   const router = useRouter();
 
-  const submitEventHandler = (id:number) => {
+  const submitEventHandler = (id: number) => {
     const formData = new FormData();
 
     formData.append('owner', user!.id);
@@ -46,26 +53,32 @@ export default function ButtonsForPreview({
       formData.append(`dates[${key}][dateEnd]`, date.date_event_end.toString());
     });
 
-    if(id>0){
+    if (id > 0) {
       axios
-      .put(`http://localhost:3001/api/events/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .then((res) => {
-        console.log('updated', res.data);
-        router.replace(`/events/?isUpdated=true`);
+        .put(`http://localhost:3001/api/events/${id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((res) => {
+          console.log('updated', res.data);
+          // if (pathName === `/events/?isPublished=true`) {
+          //   setShowedPage({
+          //     label: 'Events',
+          //     path: `/events/?isPublished=true`,
+          //   });
+          // }
 
-        dispatch({
-          type: 'RESET',
-          payload: initialState,
+          router.replace(`/events/?isUpdated=true`);
+
+          dispatch({
+            type: 'RESET',
+            payload: initialState,
+          });
+        })
+        .catch((err) => {
+          // console.error('Err:',err.response.data);
+          console.error('Err:', err.response);
         });
-      })
-      .catch((err) => {
-        // console.error('Err:',err.response.data);
-        console.error('Err:', err.response);
-      });
-    }else{
-
+    } else {
       axios
         .post('http://localhost:3001/api/events/new', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -73,7 +86,7 @@ export default function ButtonsForPreview({
         .then((res) => {
           console.log('axios', res.data);
           router.replace(`/events/?isPublished=true`);
-  
+
           dispatch({
             type: 'RESET',
             payload: initialState,
@@ -90,9 +103,9 @@ export default function ButtonsForPreview({
 
   return (
     <Box
-    display='flex'
-    justifyContent={forMobile ? 'space-between' : 'center'}
-    sx={{ marginBlock: forMobile ? '25px' : '15px' }}
+      display='flex'
+      justifyContent={forMobile ? 'space-between' : 'center'}
+      sx={{ marginBlock: forMobile ? '25px' : '15px' }}
     >
       <Box style={buttonWidth} marginRight={forMobile ? 0 : '50px'}>
         <Button
@@ -103,7 +116,11 @@ export default function ButtonsForPreview({
           onClick={() =>
             // editEventHandler()
             {
-              router.push( eventId>0? `/events/${eventId}/edit` : '/events/new?preview=true');
+              router.push(
+                eventId > 0
+                  ? `/events/${eventId}/edit`
+                  : '/events/new?preview=true'
+              );
             }
           }
         >
@@ -119,7 +136,7 @@ export default function ButtonsForPreview({
           fullWidth
           onClick={() => submitEventHandler(eventId)}
         >
-          { eventId>0? 'Update':'Create' }
+          {eventId > 0 ? 'Update' : 'Create'}
         </Button>
       </Box>
     </Box>

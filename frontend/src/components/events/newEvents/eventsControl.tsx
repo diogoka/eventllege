@@ -1,5 +1,4 @@
-import React, { Dispatch, useState, useEffect } from 'react';
-import { useContext, useReducer } from 'react';
+import React, { Dispatch, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
 import { Box, Stack, Button, useMediaQuery } from '@mui/material';
@@ -69,23 +68,7 @@ export default function EventsControl({ eventId }: {eventId :number}) {
       maxWidth='869px'
       sx={{ margin: '4rem auto 0' }}
     >
-      <BasicInfo
-        isMobile={isMobile}
-        title={createdEvent.name_event}
-        setTitle={(title) =>
-          dispatch({
-            type: 'UPDATE_TITLE',
-            payload: { ...createdEvent, name_event: title },
-          })
-        }
-        description={createdEvent.description_event}
-        setDescription={(description) =>
-          dispatch({
-            type: 'UPDATE_DESCRIPTION',
-            payload: { ...createdEvent, description_event: description },
-          })
-        }
-      />
+      <BasicInfo isMobile={isMobile} />
       <DateList
         isMobile={isMobile}
         dates={createdEvent.dates}
@@ -107,20 +90,6 @@ export default function EventsControl({ eventId }: {eventId :number}) {
       />
       <DetailList
         isMobile={isMobile}
-        price={createdEvent.price_event}
-        setPrice={(price) =>
-          dispatch({
-            type: 'UPDATE_PRICE',
-            payload: { ...createdEvent, price_event: price },
-          })
-        }
-        spots={createdEvent.capacity_event}
-        setSpots={(spots) =>
-          dispatch({
-            type: 'UPDATE_SPOTS',
-            payload: { ...createdEvent, capacity_event: spots },
-          })
-        }
         category={createdEvent.category_event}
         setCategory={(category) =>
           dispatch({
