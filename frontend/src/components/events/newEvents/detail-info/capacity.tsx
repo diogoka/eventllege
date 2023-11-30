@@ -62,8 +62,8 @@ export default function Capacity() {
     }
   }, [createdEvent.capacity_event]);
 
-  console.log('spotValue', spotValue);
-  console.log('spots', createdEvent.capacity_event);
+  // console.log('spotValue', spotValue);
+  // console.log('spots', createdEvent.capacity_event);
 
   return (
     <Stack

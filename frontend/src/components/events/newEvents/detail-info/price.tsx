@@ -52,8 +52,8 @@ export default function Price() {
     }
   }, [createdEvent.price_event]);
 
-  console.log('price', createdEvent.price_event);
-  console.log('priceValue', priceValue);
+  // console.log('price', createdEvent.price_event);
+  // console.log('priceValue', priceValue);
 
   return (
     <Stack

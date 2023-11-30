@@ -25,7 +25,7 @@ export default function TitleContainer() {
           fontSize: '1.25rem',
         }}
       >
-        title{' '}
+        Title{' '}
         <Box component={'span'} sx={{ color: '#f14c4c' }}>
           *
         </Box>

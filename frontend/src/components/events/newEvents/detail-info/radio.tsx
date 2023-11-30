@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  SelectChangeEvent,
 } from '@mui/material';
 
 type Tag = {
@@ -18,6 +19,7 @@ type Tag = {
 
 export default function RadioBtn() {
   const [radioTags, setRadioTags] = useState<Tag[]>([]);
+  const [selectedRadio, setSelectedRadio] = useState<number | null>(null);
   const { createdEvent, dispatch } = useContext(EventContext);
 
   useEffect(() => {
@@ -30,16 +32,33 @@ export default function RadioBtn() {
         console.error(error.response.data);
       });
   }, []);
-  console.log('radioTags: ', radioTags);
 
-  const online = radioTags.find((radioTag) => radioTag.id_tag === 16);
-  const inPerson = radioTags.find((radioTag) => radioTag.id_tag === 17);
+  const handleChange = (event: SelectChangeEvent<typeof selectedRadio>) => {
+    if (event.target.value) {
+      const value = +event.target.value;
+      console.log('value', value);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // dispatch({
-    //   type: 'UPDATE_SELECTED_TAGS',
-    //   payload: { ...createdEvent,  event.target.value  },
-    // })
+      setSelectedRadio(value);
+
+      let selectedTags: Tag[] = [];
+
+      if (value === 18) {
+        selectedTags = radioTags.filter(
+          (tag) => tag.id_tag === 16 || tag.id_tag === 17
+        );
+      } else {
+        const selectedTag = radioTags.find((tag) => tag.id_tag === value);
+        selectedTags = selectedTag ? [selectedTag] : [];
+      }
+
+      dispatch({
+        type: 'UPDATE_SELECTED_TAGS',
+        payload: {
+          ...createdEvent,
+          selectedTags,
+        },
+      });
+    }
   };
 
   return (
@@ -54,12 +73,15 @@ export default function RadioBtn() {
         row
         aria-labelledby='demo-row-radio-buttons-group-label'
         name='row-radio-buttons-group'
+        value={selectedRadio}
+        onChange={handleChange}
       >
-        <FormControlLabel value={online} control={<Radio />} label='Online' />
+        <FormControlLabel value={16} control={<Radio />} label='Online' />
+        <FormControlLabel value={17} control={<Radio />} label='In Person' />
         <FormControlLabel
-          value={inPerson}
+          value={18}
           control={<Radio />}
-          label='In Person'
+          label='OnLine and In Person'
         />
       </RadioGroup>
     </FormControl>
