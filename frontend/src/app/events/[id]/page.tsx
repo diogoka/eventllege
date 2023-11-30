@@ -13,17 +13,19 @@ import { UserContext } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { setKey, fromAddress, } from "react-geocode";
+import { setKey, fromAddress } from 'react-geocode';
 import dayjs from 'dayjs';
 
 type DetailPageContextProps = {
-  isAlertVisible: boolean,
-  setIsAlertVisible: (state: boolean) => void,
-  setAttendees: (state: Array<Attendee> | undefined) => void,
-  setApplied: (state: boolean) => void,
-}
+  isAlertVisible: boolean;
+  setIsAlertVisible: (state: boolean) => void;
+  setAttendees: (state: Array<Attendee> | undefined) => void;
+  setApplied: (state: boolean) => void;
+};
 
-export const DetailPageContext = createContext<DetailPageContextProps>({} as DetailPageContextProps)
+export const DetailPageContext = createContext<DetailPageContextProps>(
+  {} as DetailPageContextProps
+);
 
 export type Attendee = {
   id: string | undefined;
@@ -58,8 +60,8 @@ export type OtherInfo = {
 };
 
 type Coordinate = {
-  lat: number,
-  lng: number
+  lat: number;
+  lng: number;
 };
 
 export default function EventPage() {
@@ -78,11 +80,10 @@ export default function EventPage() {
   const params = useParams();
 
   const EVENT_ID = params.id;
-  const apiKey=process.env.NEXT_PUBLIC_API_KEY
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
   useEffect(() => {
-
-    window.innerWidth<=768? setForMobile(true) : setForMobile(false)
+    window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
@@ -122,57 +123,40 @@ export default function EventPage() {
         fromAddress(res.data.event.location_event)
           .then(({ results }) => {
             const { lat, lng } = results[0].geometry.location;
-            setCoordinate({ lat: lat, lng: lng})
+            setCoordinate({ lat: lat, lng: lng });
           })
           .catch(console.error);
-
       })
       .catch((error) => {
         console.error(error.response);
       });
+  }, [applied]);
 
-  }, []);
-
-  window.onresize=(e)=>{
-    const w=e.target as Window;
-    w.innerWidth<=768? setForMobile(true) : setForMobile(false)
-  }
+  window.onresize = (e) => {
+    const w = e.target as Window;
+    w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
+  };
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: apiKey!
-  })
+    googleMapsApiKey: apiKey!,
+  });
 
-  const provider={ isAlertVisible, setIsAlertVisible, setAttendees, setApplied }
-  
-if(forMobile){
-  ///////////////////// Mobile /////////////////////
-  return (
-    <DetailPageContext.Provider value={ provider }>
-      <Stack>
-        <DetailContainer
-          event={event!}
-          otherInfo={otherInfo!}
-          applied={applied}
-          organizerEvent={organizerEvent}
-          forMobile={forMobile}
-          forPreview={forPreview}
-        />
-        {event && (
-          <DetailInfo
-            price={event.price_event}
-            maxSpots={event.capacity_event}
-            attendees={attendees!}
-            tags={event.tags}
-            category={event.category_event}
-            forMobile={forMobile!}
-            forPreview={forPreview}
-          />
-        )}
-        {oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
+  const provider = {
+    isAlertVisible,
+    setIsAlertVisible,
+    setAttendees,
+    setApplied,
+  };
 
-        {!oldEvent && (
-          <DetailButtonContainer
+  const eventCapacity = event?.capacity_event;
+
+  if (forMobile) {
+    ///////////////////// Mobile /////////////////////
+    return (
+      <DetailPageContext.Provider value={provider}>
+        <Stack>
+          <DetailContainer
             event={event!}
             otherInfo={otherInfo!}
             applied={applied}
@@ -180,136 +164,174 @@ if(forMobile){
             forMobile={forMobile}
             forPreview={forPreview}
           />
-        )}
-      </Stack>
-    </DetailPageContext.Provider>
-  );
+          {event && (
+            <DetailInfo
+              price={event.price_event}
+              maxSpots={event.capacity_event}
+              attendees={attendees!}
+              tags={event.tags}
+              category={event.category_event}
+              forMobile={forMobile!}
+              forPreview={forPreview}
+            />
+          )}
+          {oldEvent && (
+            <Review id_event={otherInfo!.id_event} applied={applied} />
+          )}
 
-}else{
-  ///////////////////// Lap Top /////////////////////
+          {!oldEvent && (
+            <DetailButtonContainer
+              event={event!}
+              otherInfo={otherInfo!}
+              applied={applied}
+              organizerEvent={organizerEvent}
+              forMobile={forMobile}
+              forPreview={forPreview}
+              maxSpots={eventCapacity}
+            />
+          )}
+        </Stack>
+      </DetailPageContext.Provider>
+    );
+  } else {
+    ///////////////////// Lap Top /////////////////////
 
-  return (
-    <DetailPageContext.Provider value={provider}>
-      <>
-        <Stack>
-      
-          <Box display='flex' margin='30px auto 90px'>
-
-            {/* /////////// Left /////////// */}
-            <Box minWidth='70%' marginRight='40px'>
-              <DetailContainer
-                event={event!}
-                otherInfo={otherInfo!}
-                applied={applied}
-                organizerEvent={organizerEvent}
-                forMobile={forMobile!}
-                forPreview={forPreview}
-              />
-              {event && (
-                <DetailInfo
-                  price={event.price_event}
-                  maxSpots={event.capacity_event}
-                  attendees={attendees!}
-                  tags={event.tags}
-                  category={event.category_event}
+    return (
+      <DetailPageContext.Provider value={provider}>
+        <>
+          <Stack>
+            <Box display='flex' margin='30px auto 90px'>
+              {/* /////////// Left /////////// */}
+              <Box minWidth='70%' marginRight='40px'>
+                <DetailContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
                   forMobile={forMobile!}
                   forPreview={forPreview}
                 />
-              )}
-            </Box>
+                {event && (
+                  <DetailInfo
+                    price={event.price_event}
+                    maxSpots={event.capacity_event}
+                    attendees={attendees!}
+                    tags={event.tags}
+                    category={event.category_event}
+                    forMobile={forMobile!}
+                    forPreview={forPreview}
+                  />
+                )}
+              </Box>
 
-            {/* /////////// Right /////////// */}
-            <Box>
-              <DetailIconContainer
-                event={event!}
-                otherInfo={otherInfo!}
-                applied={applied}
-                organizerEvent={organizerEvent}
-                forMobile={forMobile!}
-                forPreview={forPreview}
-              />
-              <Box borderRadius='7px' overflow='hidden'>
-                <ImageHelper
-                  src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
-                  width='100%'
-                  height='auto'
-                  alt={event?.name_event ?? 'Event'}
+              {/* /////////// Right /////////// */}
+              <Box>
+                <DetailIconContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forPreview={forPreview}
+                />
+                <Box borderRadius='7px' overflow='hidden'>
+                  <ImageHelper
+                    src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+                    width='100%'
+                    height='auto'
+                    alt={event?.name_event ?? 'Event'}
+                  />
+                </Box>
+                <Link
+                  href={`https://maps.google.com/?q=${event?.location_event}`}
+                  target='_blank'
+                >
+                  <Box display='flex' marginTop='20px'>
+                    <IconsContainer
+                      icons={[
+                        {
+                          name: 'FaLocationArrow',
+                          isClickable: false,
+                          color: 'navy',
+                        },
+                      ]}
+                      onIconClick={() => {
+                        return;
+                      }}
+                    />
+                    <Typography>{event?.location_event}</Typography>
+                  </Box>
+                </Link>
+                {isLoaded ? (
+                  <GoogleMap
+                    mapContainerStyle={{
+                      widows: '100%',
+                      height: '250px',
+                      borderRadius: '7px',
+                    }}
+                    center={coordinate}
+                    zoom={14}
+                  />
+                ) : (
+                  <></>
+                )}
+              </Box>
+              {/* //right */}
+            </Box>
+            {/* //flex */}
+          </Stack>
+
+          {oldEvent && (
+            <Review id_event={otherInfo!.id_event} applied={applied} />
+          )}
+
+          {/* /////////// Footer /////////// */}
+          {!oldEvent && (
+            <Box
+              padding='0 30px'
+              display='flex'
+              justifyContent='space-between'
+              left='0'
+              width='100%'
+              margin='0 auto'
+              position='fixed'
+              bottom='0'
+              zIndex='201'
+              style={{ backgroundColor: '#dedede' }}
+            >
+              <Box
+                display='flex'
+                flexDirection='column'
+                justifyContent='center'
+              >
+                <DetailTimeContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forFooter={true}
+                />
+                <Box marginLeft='10px' fontWeight='bold'>
+                  {event?.name_event}
+                </Box>
+              </Box>
+
+              <Box width='30%'>
+                <DetailButtonContainer
+                  event={event!}
+                  otherInfo={otherInfo!}
+                  applied={applied}
+                  organizerEvent={organizerEvent}
+                  forMobile={forMobile!}
+                  forPreview={forPreview}
+                  maxSpots={eventCapacity}
                 />
               </Box>
-              <Link href={`https://maps.google.com/?q=${event?.location_event}`} target='_blank'>
-                <Box display='flex' marginTop='20px'>
-                  <IconsContainer
-                    icons={[
-                      { name: 'FaLocationArrow', isClickable: false, color: 'navy' },
-                    ]}
-                    onIconClick={() => {
-                      return;
-                    }}
-                  />
-                  <Typography>{event?.location_event}</Typography>
-                </Box>
-              </Link>
-              { isLoaded?
-                <GoogleMap
-                  mapContainerStyle={{widows: '100%', height: '250px', borderRadius: '7px'}}
-                  center={coordinate}
-                  zoom={14}
-                /> : <></>
-              }
-            </Box>{/* //right */}
-          </Box>{/* //flex */}
-        </Stack>
-
-        { oldEvent && <Review id_event={otherInfo!.id_event} applied={applied} />}
-
-        {/* /////////// Footer /////////// */}
-        { !oldEvent && (
-          
-          <Box
-            padding='0 30px'
-            display='flex'
-            justifyContent='space-between'
-            left='0'
-            width='100%'
-            margin='0 auto'
-            position='fixed'
-            bottom='0'
-            zIndex='201'
-            style={{backgroundColor:'#dedede'}}
-          >
-
-            <Box display='flex' flexDirection='column' justifyContent='center'>
-              <DetailTimeContainer
-                event={event!}
-                otherInfo={otherInfo!}
-                applied={applied}
-                organizerEvent={organizerEvent}
-                forMobile={forMobile!}
-                forFooter={true}
-              />
-              <Box
-                marginLeft='10px'
-                fontWeight='bold'
-              >
-                {event?.name_event}
-              </Box>
             </Box>
-        
-            <Box width='30%'>
-              <DetailButtonContainer
-                event={event!}
-                otherInfo={otherInfo!}
-                applied={applied}
-                organizerEvent={organizerEvent}
-                forMobile={forMobile!}
-                forPreview={forPreview}
-              />
-            </Box>
-          </Box>
-          
-        )}
-      </>
-    </DetailPageContext.Provider>
-  )
-}
+          )}
+        </>
+      </DetailPageContext.Provider>
+    );
+  }
 }

@@ -1,10 +1,14 @@
 import { useState, useContext } from 'react';
 import { Box, Typography, AlertTitle, Alert, Link } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
-import { Event, OtherInfo, DetailPageContext } from '../../app/events/[id]/page';
+import {
+  Event,
+  OtherInfo,
+  DetailPageContext,
+} from '../../app/events/[id]/page';
 import IconsContainer from '../icons/iconsContainer';
-import DetailIconContainer from './detail-icon-container'
-import DetailTimeContainer from './detail-time-container'
+import DetailIconContainer from './detail-icon-container';
+import DetailTimeContainer from './detail-time-container';
 
 export type Props = {
   event: Event;
@@ -13,14 +17,26 @@ export type Props = {
   otherInfo: OtherInfo;
   forMobile: boolean;
   forPreview: boolean;
+  maxSpots?: number;
 };
 
-const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile, forPreview }: Props) => {
-  
+const DetailContainer = ({
+  event,
+  otherInfo,
+  applied,
+  organizerEvent,
+  forMobile,
+  forPreview,
+}: Props) => {
   const { isAlertVisible, setIsAlertVisible } = useContext(DetailPageContext);
-  const locationContainerStyle = { fontSize:forMobile?'auto':'1.2em',marginTop: '3px' };
-  const h1Style = !forMobile? { textAlign:'left', fontWeight: 'bold', fontSize: '2.5em' }:null;
-  const timeContainerStyle = { margin:forMobile? '10px auto':'40px auto'};
+  const locationContainerStyle = {
+    fontSize: forMobile ? 'auto' : '1.2em',
+    marginTop: '3px',
+  };
+  const h1Style = !forMobile
+    ? { textAlign: 'left', fontWeight: 'bold', fontSize: '2.5em' }
+    : null;
+  const timeContainerStyle = { margin: forMobile ? '10px auto' : '40px auto' };
 
   return (
     <>
@@ -29,7 +45,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile,
       </Typography>
 
       <Box
-        display={ forMobile? 'block' : 'none'}
+        display={forMobile ? 'block' : 'none'}
         style={{ marginInline: 'auto' }}
       >
         <ImageHelper
@@ -40,7 +56,7 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile,
         />
       </Box>
 
-      <Box display={forMobile?'block':'none'}>
+      <Box display={forMobile ? 'block' : 'none'}>
         <DetailIconContainer
           event={event!}
           otherInfo={otherInfo!}
@@ -61,7 +77,10 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile,
           forFooter={false}
         />
 
-        <Link href={`https://maps.google.com/?q=${event?.location_event}`} target='_blank'>
+        <Link
+          href={`https://maps.google.com/?q=${event?.location_event}`}
+          target='_blank'
+        >
           <Box display='flex' alignItems='center'>
             <IconsContainer
               icons={[
@@ -71,14 +90,16 @@ const DetailContainer = ({ event, otherInfo, applied, organizerEvent, forMobile,
                 return;
               }}
             />
-            <Typography sx={locationContainerStyle}>{event?.location_event}</Typography>
+            <Typography sx={locationContainerStyle}>
+              {event?.location_event}
+            </Typography>
           </Box>
         </Link>
       </Box>
 
       <Box
-        fontSize={forMobile?'1em':'1.1em'}
-        margin={forMobile?'10px auto':'30px auto'}
+        fontSize={forMobile ? '1em' : '1.1em'}
+        margin={forMobile ? '10px auto' : '30px auto'}
       >
         <Box fontWeight='bold'>About this event:</Box>
         {event?.description_event}

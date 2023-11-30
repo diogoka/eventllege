@@ -99,7 +99,7 @@ export default function ModalDelete({
       >
         <Box sx={style}>
           <Typography variant='h2' sx={{ textAlign: 'center' }}>
-            Are you sure you want to delete the event{' '}
+            Are you sure you want to delete the event <br></br>
             <strong>{eventName}</strong> ?
           </Typography>
           <Box sx={iconContainer}>

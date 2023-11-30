@@ -1,32 +1,32 @@
 import { useState, useContext } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { DetailPageContext,Attendee } from '../../app/events/[id]/page';
+import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
-import { Props } from './detail-container'
+import { Props } from './detail-container';
+import ModalCancelParticipation from './modalCancelParticipation';
 
-const DetailButtonContainer = ({ otherInfo, applied, organizerEvent, forMobile }: Props) => {
-
-  const { setAttendees,setApplied } = useContext(DetailPageContext);
+const DetailButtonContainer = ({
+  otherInfo,
+  applied,
+  organizerEvent,
+  forMobile,
+  maxSpots,
+}: Props) => {
+  const { setAttendees, setApplied } = useContext(DetailPageContext);
   const { loginStatus, user } = useContext(UserContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const laptopQuery = useMediaQuery('(min-width:769px)');
+
+  console.log('maxSpots', maxSpots);
+  console.log('applied', applied);
+  console.log('organizerEvent', organizerEvent);
 
   const router = useRouter();
 
   const cancelEvent = () => {
-    axios
-      .delete('http://localhost:3001/api/events/attendee', {
-        data: {
-          id_event: otherInfo?.id_event,
-          id_user: user?.id,
-        },
-      })
-      .then((res: any) => {
-        setApplied(false);
-        setAttendees((prevData: Array<Attendee> | undefined) => {
-          return prevData!.filter((val: any) => val.id !== user?.id);
-        });
-      });
+    setIsModalOpen(true);
   };
 
   const addAttendee = () => {
@@ -53,25 +53,20 @@ const DetailButtonContainer = ({ otherInfo, applied, organizerEvent, forMobile }
   };
 
   const deleteEvent = (id: number) => {
-    axios
-      .delete(`http://localhost:3001/api/events/${id}`, {
-        data: {
-          id,
-        },
-      })
-      .then((res: any) => {
-        console.log('res', res.data.json);
-      });
-    router.push('/events');
+    setIsModalOpen(true);
   };
 
-  const margin={ marginBlock:forMobile? '25px' : '15px' }
-  
+  const margin = { marginBlock: forMobile ? '25px' : '15px' };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const id_event = otherInfo?.id_event;
+  const id_user = user?.id;
+
   return (
     <>
       <Box
         justifyContent='space-between'
-        display={ organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none' }
+        display={organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'}
         sx={margin}
       >
         <Box style={{ width: '47%' }}>
@@ -110,11 +105,9 @@ const DetailButtonContainer = ({ otherInfo, applied, organizerEvent, forMobile }
       <Button
         style={{
           display:
-            !organizerEvent && loginStatus == 'Logged In'
-              ? 'block'
-              : 'none',
-              marginLeft: 'auto',
-              width:forMobile? '100%' : '70%'
+            !organizerEvent && loginStatus == 'Logged In' ? 'block' : 'none',
+          marginLeft: 'auto',
+          width: forMobile ? '100%' : '70%',
         }}
         type='submit'
         variant={applied ? 'outlined' : 'contained'}
@@ -123,9 +116,20 @@ const DetailButtonContainer = ({ otherInfo, applied, organizerEvent, forMobile }
         onClick={() => {
           applied ? cancelEvent() : addAttendee();
         }}
+        disabled={maxSpots! <= 0 && !applied}
       >
-        {applied ? 'Cancel' : 'Apply'}
+        {applied ? 'Cancel' : maxSpots! <= 0 ? 'No spot available' : 'Apply'}
       </Button>
+      <ModalCancelParticipation
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        laptopQuery={laptopQuery}
+        setApplied={setApplied}
+        setAttendees={setAttendees}
+        id_event={id_event}
+        id_user={id_user}
+        organizerEvent={organizerEvent}
+      />
     </>
   );
 };
