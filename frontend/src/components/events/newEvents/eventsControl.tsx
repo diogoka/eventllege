@@ -9,7 +9,7 @@ import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
 
-export default function EventsControl() {
+export default function EventsControl({ eventId }: {eventId :number}) {
   const router = useRouter();
   const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
@@ -53,7 +53,7 @@ export default function EventsControl() {
     } else {
     }
     setAddImage(image);
-    router.push('http://localhost:3000/events/new/preview');
+    router.push(`http://localhost:3000/events/new/preview/?eventId=${eventId}`);
   };
 
   console.log('createdEvent in eventsControl', createdEvent);

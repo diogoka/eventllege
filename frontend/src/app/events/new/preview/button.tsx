@@ -10,9 +10,11 @@ import { EventData } from './page';
 export default function ButtonsForPreview({
   forMobile,
   tempState,
+  eventId,
 }: {
   forMobile: boolean;
   tempState: EventData;
+  eventId: number;
 }) {
   const { user } = useContext(UserContext);
   const {
@@ -26,7 +28,7 @@ export default function ButtonsForPreview({
 
   const router = useRouter();
 
-  const submitEventHandler = () => {
+  const submitEventHandler = (id: number) => {
     const formData = new FormData();
 
     formData.append('owner', user!.id);
@@ -51,30 +53,50 @@ export default function ButtonsForPreview({
       formData.append(`dates[${key}][dateEnd]`, date.date_event_end.toString());
     });
 
-    axios
-      .post('http://localhost:3001/api/events/new', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .then((res) => {
-        console.log('axios', res.data);
-        if (pathName === `/events/?isPublished=true`) {
-          setShowedPage({
-            label: 'Events',
-            path: `/events/?isPublished=true`,
+    if (id > 0) {
+      axios
+        .put(`http://localhost:3001/api/events/${id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((res) => {
+          console.log('updated', res.data);
+          // if (pathName === `/events/?isPublished=true`) {
+          //   setShowedPage({
+          //     label: 'Events',
+          //     path: `/events/?isPublished=true`,
+          //   });
+          // }
+
+          router.replace(`/events/?isUpdated=true`);
+
+          dispatch({
+            type: 'RESET',
+            payload: initialState,
           });
-        }
-
-        router.replace(`/events/?isPublished=true`);
-
-        dispatch({
-          type: 'RESET',
-          payload: initialState,
+        })
+        .catch((err) => {
+          // console.error('Err:',err.response.data);
+          console.error('Err:', err.response);
         });
-      })
-      .catch((err) => {
-        // console.error('Err:',err.response.data);
-        console.error('Err:', err.response);
-      });
+    } else {
+      axios
+        .post('http://localhost:3001/api/events/new', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((res) => {
+          console.log('axios', res.data);
+          router.replace(`/events/?isPublished=true`);
+
+          dispatch({
+            type: 'RESET',
+            payload: initialState,
+          });
+        })
+        .catch((err) => {
+          // console.error('Err:',err.response.data);
+          console.error('Err:', err.response);
+        });
+    }
   }; // submitEventHandler
 
   const buttonWidth = { width: forMobile ? '47%' : '200px' };
@@ -94,7 +116,11 @@ export default function ButtonsForPreview({
           onClick={() =>
             // editEventHandler()
             {
-              router.push('/events/new?preview=true');
+              router.push(
+                eventId > 0
+                  ? `/events/${eventId}/edit`
+                  : '/events/new?preview=true'
+              );
             }
           }
         >
@@ -105,12 +131,12 @@ export default function ButtonsForPreview({
       <Box style={buttonWidth}>
         <Button
           type='submit'
-          variant='outlined'
-          color='error'
+          variant='contained'
+          color='primary'
           fullWidth
-          onClick={() => submitEventHandler()}
+          onClick={() => submitEventHandler(eventId)}
         >
-          Create
+          {eventId > 0 ? 'Update' : 'Create'}
         </Button>
       </Box>
     </Box>

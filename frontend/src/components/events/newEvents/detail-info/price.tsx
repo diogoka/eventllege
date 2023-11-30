@@ -25,7 +25,7 @@ export default function Price() {
       type: 'UPDATE_PRICE',
       payload: { ...createdEvent, price_event: event.target.checked ? 0 : 1 },
     });
-    // setDisabled((prevDisabled) => !prevDisabled);
+    setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
   const handleTextPriceChange = (event: any) => {
@@ -51,6 +51,9 @@ export default function Price() {
       setCheckDisabled(false);
     }
   }, [createdEvent.price_event]);
+
+  console.log('price', createdEvent.price_event);
+  console.log('priceValue', priceValue);
 
   return (
     <Stack

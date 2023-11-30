@@ -55,11 +55,14 @@ export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
   const { createdEvent, dispatch } = useContext(EventContext);
 
+  const [ eventId, setEventId ] = useState<number>();
+
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/events/${params.id}`)
       .then((res) => {
         setEditEvent(res.data.event);
+        setEventId(res.data.event.id_event)
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -102,7 +105,7 @@ export default function EditEventPage({ params }: Params) {
   }, [editEvent, dispatch]);
   return (
     <Stack>
-      <EventsControl />
+      <EventsControl eventId={eventId!}/>
     </Stack>
   );
 }

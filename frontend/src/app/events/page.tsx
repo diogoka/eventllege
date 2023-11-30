@@ -36,6 +36,7 @@ export default function EventsPage() {
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [justCreated, setJustCreated] = useState<boolean>(false);
+  const [justUpdated, setJustUpdated] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
@@ -77,10 +78,14 @@ export default function EventsPage() {
       setJustCreated(true)
       setShowAlert(true)
     }
+    if(searchParams.get('isUpdated')){
+      setJustUpdated(true)
+      setShowAlert(true)
+    }
 
     getEvents();
 
-  }, [justCreated]);
+  }, [justCreated, justUpdated]);
 
   const searchEvents = (text: string) => {
     axios
@@ -134,7 +139,7 @@ export default function EventsPage() {
           onClose={() => setShowAlert(false)}
           sx={{ position: 'absolute', top: '50px', zIndex: 9999 }}
         >
-          {'Event was Created successfully'}
+          { justCreated? 'Event was created successfully.':'Event was updated successfully.'}
         </Alert>
       )}
 
