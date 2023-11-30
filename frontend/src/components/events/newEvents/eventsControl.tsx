@@ -90,13 +90,6 @@ export default function EventsControl() {
       />
       <DetailList
         isMobile={isMobile}
-        spots={createdEvent.capacity_event}
-        setSpots={(spots) =>
-          dispatch({
-            type: 'UPDATE_SPOTS',
-            payload: { ...createdEvent, capacity_event: spots },
-          })
-        }
         category={createdEvent.category_event}
         setCategory={(category) =>
           dispatch({

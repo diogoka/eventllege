@@ -44,6 +44,7 @@ export default function Price() {
       setChecked(false);
       setDisabled(false);
       setCheckDisabled(true);
+      setError(false);
       setPriceValue(createdEvent.price_event);
     } else {
       setError(true);

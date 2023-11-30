@@ -14,8 +14,6 @@ type Tag = {
 };
 
 type Props = {
-  spots: number;
-  setSpots: (value: number) => void;
   category: string;
   setCategory: (value: string) => void;
   selectedTags: Tag[];
@@ -39,7 +37,7 @@ export default function DetailList(props: Props) {
           <Price />
         </Grid>
         <Grid item sm={12} md={6}>
-          <Capacity spots={props.spots} setSpots={props.setSpots} />
+          <Capacity />
         </Grid>
         <Grid item sm={12} md={6}>
           <Category category={props.category} setCategory={props.setCategory} />

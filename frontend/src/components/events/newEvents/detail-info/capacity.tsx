@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import {
   TextField,
   InputAdornment,
@@ -14,7 +15,8 @@ type Props = {
   spots: number;
   setSpots: (value: number) => void;
 };
-export default function Capacity({ spots, setSpots }: Props) {
+export default function Capacity() {
+  const { createdEvent, dispatch } = useContext(EventContext);
   const [isChecked, setIsChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkDisabled, setCheckDisabled] = useState(false);
@@ -23,30 +25,45 @@ export default function Capacity({ spots, setSpots }: Props) {
 
   const handleSpotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
-    setSpots(event.target.checked ? -1 : 1);
+    dispatch({
+      type: 'UPDATE_SPOTS',
+      payload: {
+        ...createdEvent,
+        capacity_event: event.target.checked ? -1 : 1,
+      },
+    });
+    // setSpots(event.target.checked ? -1 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
 
   const handleTextSpotsChange = (event: any) => {
     setSpotValue(event.target.value);
-    setSpots(event.target.value);
+    dispatch({
+      type: 'UPDATE_SPOTS',
+      payload: { ...createdEvent, capacity_event: event.target.value },
+    });
+    // setSpots(event.target.value);
   };
 
   useEffect(() => {
-    if (spots === -1) {
+    if (createdEvent.capacity_event === -1) {
       setIsChecked(true);
       setDisabled(true);
-    } else if (spots > 1) {
+    } else if (createdEvent.capacity_event >= 1) {
       setIsChecked(false);
       setDisabled(false);
       setCheckDisabled(true);
-      setSpotValue(spots);
+      setError(false);
+      setSpotValue(createdEvent.capacity_event);
+    } else {
+      setError(true);
+      setCheckDisabled(false);
     }
-  }, [spots]);
+  }, [createdEvent.capacity_event]);
 
   console.log('spotValue', spotValue);
-  console.log('spots', spots);
+  console.log('spots', createdEvent.capacity_event);
 
   return (
     <Stack
@@ -89,9 +106,15 @@ export default function Capacity({ spots, setSpots }: Props) {
         InputProps={{
           endAdornment: (
             <InputAdornment position='end'>
-              {spots >= 2 ? 'people' : 'person'}
+              {createdEvent.capacity_event >= 2 ? 'people' : 'person'}
             </InputAdornment>
           ),
+        }}
+        sx={{
+          '& .MuiFormHelperText-root': {
+            position: 'absolute',
+            bottom: '-1rem',
+          },
         }}
       />
     </Stack>
