@@ -10,7 +10,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { setKey, fromAddress, } from "react-geocode";
+import { setKey, fromAddress, } from 'react-geocode';
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;

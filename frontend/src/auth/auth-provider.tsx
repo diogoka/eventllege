@@ -75,7 +75,7 @@ export default function AuthProvider({
           }
         }
       } else {
-        console.error("User is logged in but the data doesn't exist");
+        console.error('User is logged in but the data doesn\'t exist');
         return { isAllowed: false, redirection: '/events' };
       }
     }

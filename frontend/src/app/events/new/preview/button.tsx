@@ -50,7 +50,7 @@ export default function ButtonsForPreview({
       })
       .then((res) => {
         console.log('axios', res.data);
-        router.replace(`/events/?isPublished=true`);
+        router.replace('/events/?isPublished=true');
 
         dispatch({
           type: 'RESET',
