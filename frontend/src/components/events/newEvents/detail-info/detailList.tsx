@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Price from './price';
 import Capacity from './capacity';
 import Category from './category';
+import RadioBtn from './radio';
 import Tag from './tag';
 import { Box, Grid } from '@mui/material';
 
@@ -43,6 +44,9 @@ export default function DetailList(props: Props) {
         </Grid>
         <Grid item sm={12} md={6}>
           <Capacity spots={props.spots} setSpots={props.setSpots} />
+        </Grid>
+        <Grid item sm={12} md={12}>
+          <RadioBtn />
         </Grid>
         <Grid item sm={12} md={6}>
           <Category category={props.category} setCategory={props.setCategory} />

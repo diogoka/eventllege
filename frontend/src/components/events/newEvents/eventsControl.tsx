@@ -1,5 +1,5 @@
-import React, { Dispatch, useState, useEffect } from 'react';
-import { useContext, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
 import { Box, Stack, Button, useMediaQuery, Grid } from '@mui/material';

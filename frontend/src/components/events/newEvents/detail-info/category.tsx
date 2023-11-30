@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { FormControl, InputLabel, MenuItem, Stack, Box } from '@mui/material';
+import { FormControl, FormLabel, MenuItem, Stack, Box } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type Category = {
@@ -32,16 +32,17 @@ export default function Category({ category, setCategory }: Props) {
       justifyContent='center'
       alignItems='flex-start'
       spacing={1}
-      sx={{ width: '100%' }}
+      sx={{ width: '100%', fontSize: '1.25rem' }}
     >
-      <InputLabel>
-        Category {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
       <FormControl fullWidth>
+        <FormLabel id='category' sx={{ marginBlock: '.5rem' }}>
+          Category {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
         <Select
+          aria-labelledby='category'
           displayEmpty
           value={categories.length > 0 ? category : ''}
           onChange={(event: SelectChangeEvent) =>

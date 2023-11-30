@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-  InputLabel,
   MenuItem,
   FormControl,
   ListItemText,
@@ -11,6 +10,7 @@ import {
   SelectChangeEvent,
   Stack,
   Box,
+  FormLabel,
 } from '@mui/material';
 
 type Tag = {
@@ -64,14 +64,15 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       spacing={1}
       sx={{ width: '100%' }}
     >
-      <InputLabel>
-        Tags {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
       <FormControl fullWidth>
+        <FormLabel id='tags' sx={{ marginBlock: '.5rem' }}>
+          Tags {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
         <Select
+          aria-labelledby='tags'
           displayEmpty
           multiple
           value={selectedId}
@@ -86,12 +87,16 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
             return selectedNames.join(',');
           }}
         >
-          {tags.map((tag) => (
-            <MenuItem key={tag.id_tag} value={tag.id_tag}>
-              <Checkbox checked={selectedId.indexOf(tag.id_tag) > -1} />
-              <ListItemText primary={tag.name_tag} />
-            </MenuItem>
-          ))}
+          {tags.map((tag) =>
+            tag.name_tag !== 'Online' && tag.name_tag !== 'In Person' ? (
+              <MenuItem key={tag.id_tag} value={tag.id_tag}>
+                <Checkbox checked={selectedId.indexOf(tag.id_tag) > -1} />
+                <ListItemText primary={tag.name_tag} />
+              </MenuItem>
+            ) : (
+              ''
+            )
+          )}
         </Select>
       </FormControl>
     </Stack>
