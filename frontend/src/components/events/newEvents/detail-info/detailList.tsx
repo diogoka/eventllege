@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import Price from './price';
 import Capacity from './capacity';
 import Category from './category';
@@ -16,10 +15,6 @@ type Tag = {
 };
 
 type Props = {
-  price: number;
-  setPrice: (value: number) => void;
-  spots: number;
-  setSpots: (value: number) => void;
   category: string;
   setCategory: (value: string) => void;
   selectedTags: Tag[];
@@ -40,10 +35,10 @@ export default function DetailList(props: Props) {
         sx={{ width: '100%' }}
       >
         <Grid item sm={12} md={6}>
-          <Price price={props.price} setPrice={props.setPrice} />
+          <Price />
         </Grid>
         <Grid item sm={12} md={6}>
-          <Capacity spots={props.spots} setSpots={props.setSpots} />
+          <Capacity />
         </Grid>
         <Grid item sm={12} md={12}>
           <RadioBtn />

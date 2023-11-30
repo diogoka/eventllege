@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 import axios from 'axios';
 import EventsControl from '@/components/events/newEvents/eventsControl';
+
 type Params = {
   params: {
     id: number;
@@ -84,14 +85,14 @@ export default function EditEventPage({ params }: Params) {
         dateEnd: convertedEndDay,
       });
       const newObj: EventData = {
-        name_event: editEvent?.name_event || '',
-        description_event: editEvent?.description_event || '',
+        name_event: editEvent?.name_event,
+        description_event: editEvent?.description_event,
         dates: replaceDates,
-        capacity_event: editEvent?.capacity_event || 0,
-        location_event: editEvent?.location_event || '',
-        price_event: editEvent?.price_event || 0,
-        selectedTags: editEvent?.tags || [],
-        category_event: editEvent?.category_event || '',
+        capacity_event: editEvent?.capacity_event,
+        location_event: editEvent?.location_event,
+        price_event: editEvent?.price_event,
+        selectedTags: editEvent?.tags,
+        category_event: editEvent?.category_event,
       };
       console.log('replaceDate', replaceDates);
       console.log('newObj', newObj);

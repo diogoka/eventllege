@@ -1,16 +1,19 @@
 import React from 'react';
+import { useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import { TextField, InputLabel, Box, Stack } from '@mui/material';
 
 type Props = {
-  description: string;
-  setDescription: (value: string) => void;
   isMobile: boolean;
 };
-export default function DescriptionContainer({
-  description,
-  setDescription,
-  isMobile,
-}: Props) {
+export default function DescriptionContainer({ isMobile }: Props) {
+  const { createdEvent, dispatch } = useContext(EventContext);
+  const changeDesc = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: 'UPDATE_DESCRIPTION',
+      payload: { ...createdEvent, description_event: event.target.value },
+    });
+  };
   return (
     <Stack
       direction='column'
@@ -32,7 +35,6 @@ export default function DescriptionContainer({
       </InputLabel>
       <TextField
         id='description'
-        // label='description'
         variant='outlined'
         placeholder='Please enter description'
         fullWidth
@@ -40,8 +42,8 @@ export default function DescriptionContainer({
         type='textarea'
         multiline
         rows={isMobile ? 5 : 8}
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
+        value={createdEvent.description_event}
+        onChange={changeDesc}
       />
     </Stack>
   );
