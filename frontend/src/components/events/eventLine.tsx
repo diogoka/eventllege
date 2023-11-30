@@ -81,6 +81,7 @@ function EventLine({
     fontSize: 10,
     gridArea: 'description',
     textAlign: 'justify',
+    width: '11.1875rem',
   };
 
   const imageContainerStyle = {

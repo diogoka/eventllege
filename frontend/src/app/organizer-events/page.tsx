@@ -6,7 +6,7 @@ import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
-import SwitchButtonEvent from '@/components/events/switchEventDate';
+import SwitchButtonOrganizer from '@/components/events/switchButtonOrganizer';
 
 type Event = {
   id_event: number;
@@ -46,6 +46,7 @@ export default function OrganizerEventsPage() {
   );
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
   const router = useRouter();
+  const [switchButtonState, setSwitchButtonState] = useState<boolean>(false);
 
   const currentUser: CurrentUser = {
     id: user!.id,
@@ -54,8 +55,13 @@ export default function OrganizerEventsPage() {
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
+    console.log('switchButtonState', switchButtonState);
+    let url = switchButtonState
+      ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
+      : `http://localhost:3001/api/events/owner/${currentUser.id}`;
+    console.log('url', url);
     axios
-      .get(`http://localhost:3001/api/events/owner/${currentUser.id}`)
+      .get(url)
       .then((res) => {
         console.log(res.data);
         if (res.data.events.length === 0) {
@@ -82,7 +88,7 @@ export default function OrganizerEventsPage() {
         });
       });
     setEventsOfUser(attendingEvents);
-  }, []);
+  }, [switchButtonState]);
 
   const searchEvents = (text: string) => {
     console.log(text);
@@ -110,7 +116,7 @@ export default function OrganizerEventsPage() {
             width: '98%',
           }}
         >
-          <SwitchButtonEvent />
+          <SwitchButtonOrganizer setSwitchButtonState={setSwitchButtonState} />
           <Button
             type='submit'
             variant='outlined'
