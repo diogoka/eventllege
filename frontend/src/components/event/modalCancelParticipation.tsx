@@ -29,6 +29,8 @@ function ModalCancelParticipation({
   const [open, setOpen] = useState(isOpen);
   const router = useRouter();
 
+  console.log('organizerEvent', organizerEvent);
+
   const iconContainer = {
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -73,7 +75,6 @@ function ModalCancelParticipation({
 
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    console.log('delete');
 
     axios
       .delete('http://localhost:3001/api/events/attendee', {
@@ -143,7 +144,7 @@ function ModalCancelParticipation({
               value='delete'
               variant='contained'
               onClick={
-                { organizerEvent }
+                organizerEvent
                   ? (event) => deleteEvent(id_event)
                   : (event) => handleDelete(event)
               }

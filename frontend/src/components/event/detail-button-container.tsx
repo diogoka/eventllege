@@ -6,7 +6,6 @@ import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
 import { Props } from './detail-container';
 import ModalCancelParticipation from './modalCancelParticipation';
-import { set } from 'firebase/database';
 
 const DetailButtonContainer = ({
   otherInfo,
@@ -19,6 +18,10 @@ const DetailButtonContainer = ({
   const { loginStatus, user } = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const laptopQuery = useMediaQuery('(min-width:769px)');
+
+  console.log('maxSpots', maxSpots);
+  console.log('applied', applied);
+  console.log('organizerEvent', organizerEvent);
 
   const router = useRouter();
 
@@ -113,9 +116,9 @@ const DetailButtonContainer = ({
         onClick={() => {
           applied ? cancelEvent() : addAttendee();
         }}
-        disabled={maxSpots! === 0 && !applied}
+        disabled={maxSpots! <= 0 && !applied}
       >
-        {applied ? 'Cancel' : maxSpots! < 0 ? 'No spot available' : 'Apply'}
+        {applied ? 'Cancel' : maxSpots! <= 0 ? 'No spot available' : 'Apply'}
       </Button>
       <ModalCancelParticipation
         isOpen={isModalOpen}

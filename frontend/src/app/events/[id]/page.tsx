@@ -130,7 +130,7 @@ export default function EventPage() {
       .catch((error) => {
         console.error(error.response);
       });
-  }, []);
+  }, [applied]);
 
   window.onresize = (e) => {
     const w = e.target as Window;
@@ -148,6 +148,8 @@ export default function EventPage() {
     setAttendees,
     setApplied,
   };
+
+  const eventCapacity = event?.capacity_event;
 
   if (forMobile) {
     ///////////////////// Mobile /////////////////////
@@ -185,6 +187,7 @@ export default function EventPage() {
               organizerEvent={organizerEvent}
               forMobile={forMobile}
               forPreview={forPreview}
+              maxSpots={eventCapacity}
             />
           )}
         </Stack>
@@ -322,6 +325,7 @@ export default function EventPage() {
                   organizerEvent={organizerEvent}
                   forMobile={forMobile!}
                   forPreview={forPreview}
+                  maxSpots={eventCapacity}
                 />
               </Box>
             </Box>
