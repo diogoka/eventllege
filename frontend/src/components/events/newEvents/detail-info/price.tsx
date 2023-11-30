@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { EventContext } from '@/context/eventContext';
 import {
   TextField,
   InputAdornment,
@@ -10,12 +11,8 @@ import {
   Stack,
 } from '@mui/material';
 
-type Props = {
-  price: number;
-  setPrice: (value: number) => void;
-};
-
-export default function Price({ price, setPrice }: Props) {
+export default function Price() {
+  const { createdEvent, dispatch } = useContext(EventContext);
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
@@ -24,37 +21,35 @@ export default function Price({ price, setPrice }: Props) {
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-    setPrice(event.target.checked ? 0 : 1);
-    setDisabled((prevDisabled) => !prevDisabled);
+    dispatch({
+      type: 'UPDATE_PRICE',
+      payload: { ...createdEvent, price_event: event.target.checked ? 0 : 1 },
+    });
+    // setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
   const handleTextPriceChange = (event: any) => {
     setPriceValue(event.target.value);
-    setPrice(event.target.value);
-    // setCheckDisabled((prev) => !prev);
-    // const value = +event.target.value;
-    // if (value > 1) {
-    //   setPrice(value);
-    //   setError(false);
-    // } else {
-    //   setError(true);
-    // }
-
-    console.log('event.target.value', event.target.value);
+    dispatch({
+      type: 'UPDATE_PRICE',
+      payload: { ...createdEvent, price_event: event.target.value },
+    });
   };
 
   useEffect(() => {
-    console.log('price in price', price);
-    if (price === 0) {
+    if (createdEvent.price_event === 0) {
       setChecked(true);
       setDisabled(true);
-    } else if (price > 0) {
+    } else if (createdEvent.price_event >= 1) {
       setChecked(false);
       setDisabled(false);
-      setPriceValue(price);
-      console.log('priceValue in price', priceValue);
+      setCheckDisabled(true);
+      setPriceValue(createdEvent.price_event);
+    } else {
+      setError(true);
+      setCheckDisabled(false);
     }
-  }, [price]);
+  }, [createdEvent.price_event]);
 
   return (
     <Stack
@@ -98,6 +93,12 @@ export default function Price({ price, setPrice }: Props) {
         helperText={error ? 'Price must be greater than 1' : ''}
         InputProps={{
           startAdornment: <InputAdornment position='start'>$</InputAdornment>,
+        }}
+        sx={{
+          '& .MuiFormHelperText-root': {
+            position: 'absolute',
+            bottom: '-1rem',
+          },
         }}
       />
     </Stack>

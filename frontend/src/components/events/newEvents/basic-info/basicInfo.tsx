@@ -4,20 +4,10 @@ import DescriptionContainer from './descriptionContainer';
 import { Stack, Box } from '@mui/material';
 
 type Props = {
-  title: string;
-  setTitle: (value: string) => void;
-  description: string;
-  setDescription: (value: string) => void;
   isMobile: boolean;
 };
 
-export default function BasicInfo({
-  title,
-  setTitle,
-  description,
-  setDescription,
-  isMobile,
-}: Props) {
+export default function BasicInfo({ isMobile }: Props) {
   return (
     <Stack
       direction='column'
@@ -26,12 +16,8 @@ export default function BasicInfo({
       spacing={{ sm: 2, md: 3 }}
       sx={{ width: '100%' }}
     >
-      <TitleContainer title={title} setTitle={setTitle} />
-      <DescriptionContainer
-        isMobile={isMobile}
-        description={description}
-        setDescription={setDescription}
-      />
+      <TitleContainer />
+      <DescriptionContainer isMobile={isMobile} />
     </Stack>
   );
 }

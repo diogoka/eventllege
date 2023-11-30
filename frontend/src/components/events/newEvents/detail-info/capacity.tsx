@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   TextField,
   InputAdornment,
@@ -19,26 +19,34 @@ export default function Capacity({ spots, setSpots }: Props) {
   const [disabled, setDisabled] = useState(false);
   const [checkDisabled, setCheckDisabled] = useState(false);
   const [error, setError] = useState(false);
+  const [spotValue, setSpotValue] = useState<number>();
 
   const handleSpotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
-    setSpots(event.target.checked ? -1 : 0);
+    setSpots(event.target.checked ? -1 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
 
-  const handleTextSpotsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCheckDisabled((prev) => !prev);
-    const value = +event.target.value;
-    if (value > 0) {
-      setSpots(value);
-      setError(false);
-    } else {
-      setError(true);
-    }
+  const handleTextSpotsChange = (event: any) => {
+    setSpotValue(event.target.value);
+    setSpots(event.target.value);
   };
+
+  useEffect(() => {
+    if (spots === -1) {
+      setIsChecked(true);
+      setDisabled(true);
+    } else if (spots > 1) {
+      setIsChecked(false);
+      setDisabled(false);
+      setCheckDisabled(true);
+      setSpotValue(spots);
+    }
+  }, [spots]);
+
+  console.log('spotValue', spotValue);
+  console.log('spots', spots);
 
   return (
     <Stack
@@ -70,11 +78,11 @@ export default function Capacity({ spots, setSpots }: Props) {
       />
 
       <TextField
-        // label='Limited spots'
         variant='outlined'
         type='number'
         fullWidth
         disabled={disabled}
+        value={spotValue}
         onChange={handleTextSpotsChange}
         error={error}
         helperText={error ? 'Spots must be greater than 1' : ''}
