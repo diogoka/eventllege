@@ -63,7 +63,6 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           startIcon={<AddCircleOutlineIcon />}
           size='medium'
           variant='text'
-          sx={{ fontSize: '1rem' }}
           color='info'
         >
           Add Date
@@ -126,6 +125,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
               onClick={() => deleteDateHandler(index)}
               variant='text'
               startIcon={<RemoveCircleOutlineIcon />}
+              size='medium'
               sx={{
                 position: 'absolute',
                 right: '1rem',
