@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { Box, Stack, Typography, Link } from '@mui/material';
+import { useMediaQuery, Box, Stack, Typography, Link } from '@mui/material';
 import dayjs from 'dayjs'; // Remove
 import DetailContainer from '@/components/event/detail-container';
 import DetailInfo from '@/components/event/detail-info';
@@ -44,16 +44,16 @@ export default function PreviewEventPage() {
 
   const { createdEvent, addImage } = useContext(EventContext);
   const [tempState, setTempState] = useState<EventData>();
-  const [forMobile, setForMobile] = useState<boolean>();
   const [forPreview, setForPreview] = useState<boolean>(true);
   const [coordinate, setCoordinate] = useState<Coordinate>();
-
+  
   const [eventId, setEventId] = useState<number>();
-
+  
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  
+  const forMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
-    window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
     const newArray = createdEvent.dates.map((date) => ({
       date_event_start: date.dateStart,
@@ -81,11 +81,6 @@ export default function PreviewEventPage() {
 
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
-
-  window.onresize = (e) => {
-    const w = e.target as Window;
-    w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-  };
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
