@@ -267,8 +267,6 @@ export const getEventsByOwner = async (
       `;
     }
 
-    console.log('query', query);
-
     const events = await pool.query(query);
 
     let tags: any = [];
@@ -407,7 +405,6 @@ export const createEvents = async (
   req: express.Request,
   res: express.Response
 ) => {
-  console.log('create events', req.body);
   const {
     owner,
     title,
@@ -429,9 +426,6 @@ export const createEvents = async (
         VALUES ('${owner}','${title}','${description}','${date.dateStart}','${date.dateEnd}','${location}','${spots}','${price}','${category}')
         RETURNING *;
       `);
-
-      console.log('----New Event Created----');
-      console.log('ID:', events.rows[0].id_event);
 
       if (req.file) {
         moveImage(req.file.filename, events.rows[0].id_event);
@@ -489,18 +483,19 @@ export const updateEvents = async (
           ]
         );
 
+        await pool.query(`DELETE FROM events_tags WHERE id_event = $1`, [id]);
         tagId.forEach(async (tag: number) => {
           await pool.query(
-            `UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`,
-            [tag, id]
+            `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
+            [id, tag]
           );
-        })
+        });
 
         if (req.file) {
           moveImage(req.file.filename, events.rows[0].id_event);
         }
-
       });
+
       res.status(200).json({});
     } catch (err: any) {
       res.status(500).send(err.message);

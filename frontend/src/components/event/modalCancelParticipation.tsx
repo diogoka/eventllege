@@ -35,9 +35,6 @@ function ModalCancelParticipation({
 }: Props) {
   const [open, setOpen] = useState(isOpen);
   const router = useRouter();
-
-  console.log('organizerEvent', organizerEvent);
-
   const iconContainer = {
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -117,17 +114,10 @@ function ModalCancelParticipation({
         },
       })
       .then((res: any) => {
-        handleAlertFn(
-          true,
-          'Success',
-          'The event was successfully deleted',
-          'success'
-        );
-        setOpen(false);
-        setTimeout(() => {
-          handleAlertFn(false, '', '', 'success');
-          router.push('/events');
-        }, 1500);
+        router.push('/events?deletedEvent=true');
+      })
+      .catch((err: any) => {
+        router.push('/events?deletedEvent=false');
       });
   };
 
