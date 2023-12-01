@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { EventContext } from '@/context/eventContext';
+import { EventContext, initialState } from '@/context/eventContext';
 import { Box, Stack, Button, useMediaQuery, Grid } from '@mui/material';
 import useUploadImage from '@/services/imageInput';
 import BasicInfo from './basic-info/basicInfo';
@@ -54,6 +54,11 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     }
     setAddImage(image);
     router.push(`http://localhost:3000/events/new/preview/?eventId=${eventId}`);
+  };
+
+  const cancelHandler = () => {
+    dispatch({ type: 'RESET', payload: initialState });
+    router.push('/');
   };
 
   console.log('createdEvent in eventsControl', createdEvent);
@@ -123,7 +128,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
         >
           <Grid item sm={12} md={6}>
             <Button
-              onClick={() => router.push('/')}
+              onClick={cancelHandler}
               variant='outlined'
               color='error'
               fullWidth

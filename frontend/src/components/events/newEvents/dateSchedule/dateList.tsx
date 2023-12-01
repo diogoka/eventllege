@@ -110,6 +110,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                   disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
+                  maxDate={endHourOfToday}
                   onChange={(newDateEnd) => {
                     newDateEnd
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
