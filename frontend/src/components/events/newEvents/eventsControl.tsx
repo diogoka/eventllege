@@ -1,7 +1,7 @@
-import React, { Dispatch, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
-import { Box, Stack, Button, useMediaQuery } from '@mui/material';
+import { Box, Stack, Button, useMediaQuery, Grid } from '@mui/material';
 import useUploadImage from '@/services/imageInput';
 import BasicInfo from './basic-info/basicInfo';
 import DateList from './dateSchedule/dateList';
@@ -9,7 +9,7 @@ import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
 
-export default function EventsControl({ eventId }: {eventId :number}) {
+export default function EventsControl({ eventId }: { eventId: number }) {
   const router = useRouter();
   const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
@@ -111,17 +111,33 @@ export default function EventsControl({ eventId }: {eventId :number}) {
         onFileInputChange={onFileInputChange}
         isMobile={isMobile}
       />
-      <Button
-        type='submit'
-        variant='contained'
-        color='primary'
-        sx={{
-          width: isMobile ? '100%' : '40%',
-        }}
-        fullWidth
-      >
-        Go to preview
-      </Button>
+      <Box sx={{ width: '100%' }}>
+        <Grid
+          container
+          direction='row'
+          justifyContent='center'
+          alignItems='center'
+          rowSpacing={{ sm: 2, md: 3 }}
+          columnSpacing={{ md: 2 }}
+          sx={{ width: '100%' }}
+        >
+          <Grid item sm={12} md={6}>
+            <Button
+              onClick={() => router.push('/')}
+              variant='outlined'
+              color='error'
+              fullWidth
+            >
+              cancel
+            </Button>
+          </Grid>
+          <Grid item sm={12} md={6}>
+            <Button type='submit' variant='contained' color='primary' fullWidth>
+              Go to preview
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </Stack>
   );
 }
