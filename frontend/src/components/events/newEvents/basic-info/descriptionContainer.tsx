@@ -28,7 +28,7 @@ export default function DescriptionContainer({ isMobile }: Props) {
           fontSize: '1.25rem',
         }}
       >
-        description{' '}
+        Description{' '}
         <Box component={'span'} sx={{ color: '#f14c4c' }}>
           *
         </Box>
