@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@mui/material';
 
 interface Page {
@@ -18,6 +18,8 @@ const organizerBtns: Page[] = [
 
 export default function OrganizerListItemPC() {
   const router = useRouter();
+  const params = useParams();
+
   const { showedPage, setShowedPage, pathName } = useContext(EventContext);
 
   useEffect(() => {
@@ -45,7 +47,8 @@ export default function OrganizerListItemPC() {
             showedPage &&
             (showedPage.path === button.path ||
               showedPage?.path === '/events/?isUpdated=true' ||
-              showedPage?.path === '/events/?isPublished=true')
+              showedPage?.path === '/events/?isPublished=true' ||
+              showedPage?.path === `/events/${params}/edit`)
               ? 'contained'
               : 'text'
           }
