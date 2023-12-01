@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getLocation = async (req: express.Request, res: express.Response) => {
 
   try {
-    const result = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.input}&types=address&key=${process.env.GOOGLE_PLACES_API_KEY}`);
+    const result = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?types=address&input=${req.query.input}&components=country:ca|country:us&key=${process.env.GOOGLE_PLACES_API_KEY}`);
     
     const options: string[] = result.data.predictions.map((prediction: any) => {
       return prediction.description;
