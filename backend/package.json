@@ -8,7 +8,8 @@
     "server": "ts-node server.ts",
     "migrate": "node-pg-migrate",
     "serverw": "nodemon server.ts",
-    "start": "ts-node server.ts"
+    "start": "ts-node server.ts",
+    "build": "tsc"
   },
   "author": "DDMS",
   "license": "ISC",
