@@ -21,9 +21,6 @@ export interface DateRange {
 const today = dayjs();
 const hourOfToday = today.add(1, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
-// const yesterday = dayjs().subtract(1, 'day');
-// const tomorrow = dayjs().add(1, 'day');
-// const endTime = tomorrow.add(1, 'hour');
 
 type Tag = {
   id_tag: number;
