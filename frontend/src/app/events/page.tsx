@@ -69,7 +69,7 @@ export default function EventsPage() {
     await axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
-      console.log(res.data.events);
+      // console.log(res.data.events);
     });
     const attendingEvents: [number, boolean][] = [];
     await axios

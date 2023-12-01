@@ -1,7 +1,9 @@
 import React from 'react';
+import { useContext } from 'react';
 import IconsContainer from '../icons/iconsContainer';
-import { useRouter } from 'next/navigation';
 import { AlertColor, Box, Rating, Typography } from '@mui/material';
+import { useRouter, usePathname } from 'next/navigation';
+import { EventContext } from '@/context/eventContext';
 import { StarRounded } from '@mui/icons-material';
 
 type Props = {
@@ -35,9 +37,18 @@ function EventIcons({
   oldEvent,
 }: Props) {
   const router = useRouter();
+  const pathName = usePathname();
+  const { setShowedPage } = useContext(EventContext);
   const handleOrganizerClick = (iconName: string) => {
     console.log('clicked');
     if (iconName === 'FaEdit') {
+      if (pathName === '/events' || 'organizer-events') {
+        setShowedPage({
+          label: 'Create Event',
+          path: '/events/new',
+        });
+      }
+
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
       openDeleteModal();

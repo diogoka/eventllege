@@ -461,6 +461,7 @@ export const updateEvents = async (
     tagId,
     category,
   } = req.body;
+  console.log('backend update events', tagId);
 
   if (!id) {
     res.status(404).send('Update events failed');
@@ -485,6 +486,8 @@ export const updateEvents = async (
 
         await pool.query(`DELETE FROM events_tags WHERE id_event = $1`, [id]);
         tagId.forEach(async (tag: number) => {
+          console.log('backend tag', tag);
+
           await pool.query(
             `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
             [id, tag]

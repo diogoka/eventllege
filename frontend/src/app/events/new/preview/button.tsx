@@ -29,6 +29,8 @@ export default function ButtonsForPreview({
   const router = useRouter();
 
   const submitEventHandler = (id: number) => {
+    console.log('update tags', tempState.tags);
+
     const formData = new FormData();
 
     formData.append('owner', user!.id);
@@ -59,13 +61,12 @@ export default function ButtonsForPreview({
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {
-          console.log('updated', res.data);
-          // if (pathName === `/events/?isPublished=true`) {
-          //   setShowedPage({
-          //     label: 'Events',
-          //     path: `/events/?isPublished=true`,
-          //   });
-          // }
+          if (pathName === '/events/new/preview') {
+            setShowedPage({
+              label: 'Events',
+              path: '/',
+            });
+          }
 
           router.replace('/events/?isUpdated=true');
 
@@ -84,6 +85,12 @@ export default function ButtonsForPreview({
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {
+          if (pathName === '/events/new/preview') {
+            setShowedPage({
+              label: 'Events',
+              path: '/',
+            });
+          }
           console.log('axios', res.data);
           router.replace('/events/?isPublished=true');
 
@@ -100,7 +107,6 @@ export default function ButtonsForPreview({
   }; // submitEventHandler
 
   const buttonWidth = { width: forMobile ? '47%' : '200px' };
-
   return (
     <Box
       display='flex'

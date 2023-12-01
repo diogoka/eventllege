@@ -61,6 +61,8 @@ export default function RadioBtn() {
     }
   };
 
+  console.log('update selected', createdEvent.selectedTags);
+
   return (
     <FormControl>
       <FormLabel id='demo-row-radio-buttons-group-label'>
