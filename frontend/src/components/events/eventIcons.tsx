@@ -1,9 +1,9 @@
 import React from 'react';
 import { useContext } from 'react';
 import IconsContainer from '../icons/iconsContainer';
+import { AlertColor, Box, Rating, Typography } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
-import { Box, Rating, Typography } from '@mui/material';
 import { StarRounded } from '@mui/icons-material';
 
 type Props = {
@@ -14,7 +14,12 @@ type Props = {
   eventId: number;
   attending: boolean;
   setModalOpen: (isOpen: boolean) => void;
-  handleAlertFn: (isOpen: boolean) => void;
+  handleAlertFn: (
+    isOpen: boolean,
+    title: string,
+    message: string,
+    severity: AlertColor
+  ) => void;
   averageRating?: number;
   oldEvent?: boolean;
 };
@@ -64,9 +69,14 @@ function EventIcons({
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        handleAlertFn(true);
+        handleAlertFn(
+          true,
+          'URL Copied',
+          'The event URL has been copied to your clipboard.',
+          'success'
+        );
         setTimeout(() => {
-          handleAlertFn(false);
+          handleAlertFn(false, '', '', 'success');
         }, 3000);
       })
       .catch((err) => {
