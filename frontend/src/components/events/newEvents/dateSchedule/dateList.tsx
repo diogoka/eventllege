@@ -18,6 +18,8 @@ type Props = {
 };
 
 const today = dayjs();
+const hourOfToday = today.add(1, 'minute');
+const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates, isMobile }: Props) {
   const deleteDateHandler = (index: number) => {
@@ -28,7 +30,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
   };
 
   const addDateHandler = () => {
-    setDates([...dates, { dateStart: today, dateEnd: today }]);
+    setDates([...dates, { dateStart: hourOfToday, dateEnd: endHourOfToday }]);
   };
 
   const updateDateHandler = (
