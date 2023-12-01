@@ -2,7 +2,7 @@
 import { Event, Tag } from '@/app/events/page';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { AlertTitle, Alert, useMediaQuery } from '@mui/material';
+import { AlertTitle, Alert, useMediaQuery, AlertColor } from '@mui/material';
 import ModalDelete from './modalDelete';
 import axios from 'axios';
 import {
@@ -27,6 +27,12 @@ type Props = {
   oldEvent?: boolean;
 };
 
+interface AlertState {
+  title: string;
+  message: string;
+  severity: AlertColor;
+}
+
 function EventItem({
   event,
   tags,
@@ -48,6 +54,11 @@ function EventItem({
   const [modalities, setModalities] = useState({
     inPerson: false,
     online: false,
+  });
+  const [alertMessage, setAlertMessage] = useState<AlertState>({
+    title: '',
+    message: '',
+    severity: 'success',
   });
 
   useEffect(() => {
@@ -81,7 +92,19 @@ function EventItem({
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const handleAlert = (isOpen: boolean) => setIsAlertVisible(isOpen);
+  const handleAlert = (
+    isOpen: boolean,
+    titleParam: string,
+    messageParam: string,
+    severityParam: AlertColor
+  ) => {
+    setAlertMessage({
+      title: titleParam,
+      message: messageParam,
+      severity: severityParam,
+    });
+    setIsAlertVisible(isOpen);
+  };
   const handleCardClick = () => router.push(`/events/${eventId}`);
 
   const handleAlertClose = (event: React.SyntheticEvent) => {
@@ -111,6 +134,24 @@ function EventItem({
       >
         <AlertTitle>URL Copied</AlertTitle>
         The event URL has been copied to your clipboard.
+      </Alert>
+    );
+  };
+
+  const alertFn = (title: string, message: string, severity: AlertColor) => {
+    return (
+      <Alert
+        severity={severity}
+        onClose={handleAlertClose}
+        variant='filled'
+        sx={{
+          position: 'absolute',
+          top: '10px',
+          zIndex: 9999,
+        }}
+      >
+        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
+        {message}
       </Alert>
     );
   };
@@ -149,7 +190,12 @@ function EventItem({
             laptopQuery={laptopQuery}
             modalities={modalities}
           />
-          {isAlertVisible && alertCopyURLFn()}
+          {isAlertVisible &&
+            alertFn(
+              alertMessage.title,
+              alertMessage.message,
+              alertMessage.severity
+            )}
           <ModalDelete
             eventId={eventId}
             eventName={event.name_event}
@@ -157,6 +203,7 @@ function EventItem({
             onClose={closeModal}
             deleteEvent={deleteEvent}
             laptopQuery={laptopQuery}
+            handleAlertFn={handleAlert}
           />
         </>
       );
@@ -186,6 +233,7 @@ function EventItem({
             onClose={closeModal}
             deleteEvent={deleteEvent}
             laptopQuery={laptopQuery}
+            handleAlertFn={handleAlert}
           />
         </>
       );
