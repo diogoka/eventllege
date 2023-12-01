@@ -25,7 +25,7 @@ export default function Location({ location, setLocation }: Props) {
   return (
     <>
       <Autocomplete
-        // placeholder='Location'
+        value={location}
         options={locationOptions}
         onInputChange={(e, value) => {
           if (value) updateOptions(value);
