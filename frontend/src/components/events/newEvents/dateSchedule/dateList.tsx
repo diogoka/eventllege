@@ -48,7 +48,9 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
         justifyContent='space-between'
         alignItems='center'
         spacing={1}
-        sx={{ width: '100%' }}
+        sx={{
+          width: '100%',
+        }}
       >
         <Typography variant='h2'>
           Date {''}
@@ -73,6 +75,9 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           sx={{
             width: '100%',
             height: isMobile ? '10rem' : '6rem',
+            '& .MuiBox-root': {
+              backgroundColor: 'red',
+            },
             position: 'relative',
           }}
         >
@@ -124,7 +129,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
               sx={{
                 position: 'absolute',
                 right: '1rem',
-                bottom: 0,
+                bottom: '-.6rem',
               }}
             >
               Delete

@@ -42,7 +42,7 @@ export default function EventsPage() {
     []
   );
 
-  const searchParams=useSearchParams()
+  const searchParams = useSearchParams();
 
   const [alertSearchBar, setAlertSearchBar] = useState({
     status: false,
@@ -58,7 +58,7 @@ export default function EventsPage() {
     await axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
-      console.log(res.data.events);
+      // console.log(res.data.events);
     });
     const attendingEvents: [number, boolean][] = [];
     await axios
@@ -73,18 +73,16 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
-
-    if(searchParams.get('isPublished')){
-      setJustCreated(true)
-      setShowAlert(true)
+    if (searchParams.get('isPublished')) {
+      setJustCreated(true);
+      setShowAlert(true);
     }
-    if(searchParams.get('isUpdated')){
-      setJustUpdated(true)
-      setShowAlert(true)
+    if (searchParams.get('isUpdated')) {
+      setJustUpdated(true);
+      setShowAlert(true);
     }
 
     getEvents();
-
   }, [justCreated, justUpdated]);
 
   const searchEvents = (text: string) => {
@@ -132,14 +130,16 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      { showAlert && (
+      {showAlert && (
         <Alert
           severity='info'
           variant='filled'
           onClose={() => setShowAlert(false)}
           sx={{ position: 'absolute', top: '50px', zIndex: 9999 }}
         >
-          { justCreated? 'Event was created successfully.':'Event was updated successfully.'}
+          {justCreated
+            ? 'Event was created successfully.'
+            : 'Event was updated successfully.'}
         </Alert>
       )}
 

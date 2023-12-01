@@ -1,9 +1,10 @@
 import { useState, useContext } from 'react';
 import { Box, Button, useMediaQuery } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
+import { EventContext } from '@/context/eventContext';
 import { Props } from './detail-container';
 import ModalCancelParticipation from './modalCancelParticipation';
 
@@ -16,14 +17,17 @@ const DetailButtonContainer = ({
 }: Props) => {
   const { setAttendees, setApplied } = useContext(DetailPageContext);
   const { loginStatus, user } = useContext(UserContext);
+  const { showedPage, setShowedPage } = useContext(EventContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
-  console.log('maxSpots', maxSpots);
-  console.log('applied', applied);
-  console.log('organizerEvent', organizerEvent);
+  // console.log('maxSpots', maxSpots);
+  // console.log('applied', applied);
+  // console.log('organizerEvent', organizerEvent);
 
   const router = useRouter();
+  const pathName = usePathname();
+  const params = useParams();
 
   const cancelEvent = () => {
     setIsModalOpen(true);
@@ -48,6 +52,13 @@ const DetailButtonContainer = ({
     if (!id) {
       console.log('Id does not exist');
     } else {
+      if (pathName === `/events/${params.id}`) {
+        setShowedPage({
+          label: 'Create Event',
+          path: '/events/new',
+        });
+      }
+
       router.push(`/events/${id}/edit`);
     }
   };
@@ -61,7 +72,6 @@ const DetailButtonContainer = ({
   const closeModal = () => setIsModalOpen(false);
   const id_event = otherInfo?.id_event;
   const id_user = user?.id;
-
   return (
     <>
       <Box

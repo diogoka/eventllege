@@ -267,7 +267,7 @@ export const getEventsByOwner = async (
       `;
     }
 
-    console.log('query', query);
+    // console.log('query', query);
 
     const events = await pool.query(query);
 
@@ -467,6 +467,7 @@ export const updateEvents = async (
     tagId,
     category,
   } = req.body;
+  console.log('backend update events', tagId);
 
   if (!id) {
     res.status(404).send('Update events failed');
@@ -490,16 +491,17 @@ export const updateEvents = async (
         );
 
         tagId.forEach(async (tag: number) => {
+          console.log('backend tag', tag);
+
           await pool.query(
             `UPDATE events_tags SET id_tag = $1 WHERE id_event = $2 RETURNING *`,
             [tag, id]
           );
-        })
+        });
 
         if (req.file) {
           moveImage(req.file.filename, events.rows[0].id_event);
         }
-
       });
       res.status(200).json({});
     } catch (err: any) {
