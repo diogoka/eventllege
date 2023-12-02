@@ -94,7 +94,7 @@ export default function EditEventPage({ params }: Params) {
         selectedTags: editEvent?.tags,
         category_event: editEvent?.category_event,
       };
-      console.log('newObj', newObj);
+      // console.log('newObj', newObj);
 
       dispatch({
         type: 'GET_WHOLE_DATA',

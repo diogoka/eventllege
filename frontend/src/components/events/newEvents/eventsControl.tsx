@@ -61,7 +61,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     router.push('/');
   };
 
-  console.log('createdEvent in eventsControl', createdEvent);
+  // console.log('createdEvent in eventsControl', createdEvent);
   return (
     <Stack
       direction='column'

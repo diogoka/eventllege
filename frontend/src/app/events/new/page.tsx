@@ -42,7 +42,6 @@ export default function NewEventPage() {
         type: 'GET_WHOLE_DATA',
         payload: createdEvent,
       });
-      // dispatch({ type: 'RESET', payload: initialState });
     } else {
       dispatch({ type: 'RESET', payload: initialState });
     }

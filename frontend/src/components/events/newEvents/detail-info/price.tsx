@@ -103,6 +103,9 @@ export default function Price() {
             position: 'absolute',
             bottom: '-1rem',
           },
+          // '& .MuiInputBase-input.Mui-disabled': {
+          //   WebkitTextFillColor: '#000000',
+          // },
         }}
       />
     </Stack>
