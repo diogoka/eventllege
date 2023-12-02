@@ -14,6 +14,7 @@ import {
 import EventCard from './eventCard';
 import EventLine from './eventLine';
 import EventIcons from './eventIcons';
+import alertFn from '@/components/common/alertFunction';
 
 type Props = {
   event: Event;
@@ -138,24 +139,6 @@ function EventItem({
     );
   };
 
-  const alertFn = (title: string, message: string, severity: AlertColor) => {
-    return (
-      <Alert
-        severity={severity}
-        onClose={handleAlertClose}
-        variant='filled'
-        sx={{
-          position: 'absolute',
-          top: '10px',
-          zIndex: 9999,
-        }}
-      >
-        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
-        {message}
-      </Alert>
-    );
-  };
-
   const EventIcon = (
     <EventIcons
       role={user.role}
@@ -194,7 +177,8 @@ function EventItem({
             alertFn(
               alertMessage.title,
               alertMessage.message,
-              alertMessage.severity
+              alertMessage.severity,
+              handleAlertClose
             )}
           <ModalDelete
             eventId={eventId}
