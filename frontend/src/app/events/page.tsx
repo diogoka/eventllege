@@ -7,6 +7,7 @@ import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 import { useSearchParams } from 'next/navigation';
 import { usePathname, useRouter } from 'next/navigation';
+import alertFn from '@/components/common/alertFunction';
 
 export type Event = {
   capacity_event: number;
@@ -151,6 +152,10 @@ export default function EventsPage() {
       });
   };
 
+  const message = justCreated? 'Event was created successfully.': 'Event was updated successfully.'
+
+  const title = justCreated? 'Created' : 'Updated';
+
   return (
     <Box
       sx={{
@@ -161,16 +166,12 @@ export default function EventsPage() {
       }}
     >
       {showAlert && (
-        <Alert
-          severity='info'
-          variant='filled'
-          onClose={() => setShowAlert(false)}
-          sx={{ position: 'absolute', top: '50px', zIndex: 9999 }}
-        >
-          {justCreated
-            ? 'Event was created successfully.'
-            : 'Event was updated successfully.'}
-        </Alert>
+        alertFn(
+          title,
+          message,
+          'success',
+          () => setShowAlert(false)
+        )
       )}
 
       {alert.status && (
