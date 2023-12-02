@@ -11,7 +11,7 @@ import ImageContainer from '../newEvents/basic-info/imageContainer';
 
 export default function EventsControl({ eventId }: { eventId: number }) {
   const router = useRouter();
-  const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
+  const { setImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
 
@@ -20,7 +20,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
-      setAddImage(image);
+      setImage(image);
     }
   }, [image]);
 
@@ -52,7 +52,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       return;
     } else {
     }
-    setAddImage(image);
+    setImage(image);
     router.push(`http://localhost:3000/events/new/preview/?eventId=${eventId}`);
   };
 

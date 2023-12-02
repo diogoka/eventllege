@@ -238,7 +238,7 @@ export default function EventPage() {
                   <ImageHelper
                     src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
                     width='100%'
-                    height='auto'
+                    height='180px'
                     alt={event?.name_event ?? 'Event'}
                   />
                 </Box>

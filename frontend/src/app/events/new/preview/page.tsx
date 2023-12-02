@@ -42,10 +42,11 @@ type Coordinate = {
 export default function PreviewEventPage() {
   const searchParams = useSearchParams();
 
-  const { createdEvent, addImage } = useContext(EventContext);
+  const { image, createdEvent } = useContext(EventContext);
   const [tempState, setTempState] = useState<EventData>();
   const [forPreview, setForPreview] = useState<boolean>(true);
   const [coordinate, setCoordinate] = useState<Coordinate>();
+  // const [tempImage, setTempImage] = useState<string>('');
   
   const [eventId, setEventId] = useState<number>();
   
@@ -201,9 +202,9 @@ export default function PreviewEventPage() {
               />
               <Box borderRadius='7px' overflow='hidden'>
                 <ImageHelper
-                  src={`http://localhost:3001/img/events/${0}`}
+                  src={image ? URL.createObjectURL(image) : '/event_placeholder.png'}
                   width='100%'
-                  height='auto'
+                  height='180px'
                   alt={tempState?.name_event ?? 'Event'}
                 />
               </Box>
