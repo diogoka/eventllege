@@ -9,6 +9,7 @@ import {
 import IconsContainer from '../icons/iconsContainer';
 import DetailIconContainer from './detail-icon-container';
 import DetailTimeContainer from './detail-time-container';
+import alertFn from '@/components/common/alertFunction';
 
 export type Props = {
   event: Event;
@@ -74,7 +75,6 @@ const DetailContainer = ({
           applied={applied}
           organizerEvent={organizerEvent}
           forMobile={forMobile!}
-          forFooter={false}
         />
 
         <Link
@@ -105,23 +105,14 @@ const DetailContainer = ({
         {event?.description_event}
       </Box>
 
-      {isAlertVisible && (
-        <Alert
-          severity='success'
-          onClose={() => {
-            setIsAlertVisible(false);
-          }}
-          sx={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            zIndex: 9999,
-          }}
-        >
-          <AlertTitle>URL Copied</AlertTitle>
-          The event URL has been copied to your clipboard.
-        </Alert>
-      )}
+      {isAlertVisible &&
+        alertFn(
+          'URL Copied',
+          'The event URL has been copied to your clipboard.',
+          'success',
+          () => setIsAlertVisible(false)
+        )
+      }
     </>
   );
 };

@@ -10,7 +10,6 @@ type Props = {
   organizerEvent: boolean;
   otherInfo: OtherInfo;
   forMobile: boolean;
-  forFooter: boolean;
 };
 
 export type EventDateString = {
@@ -18,7 +17,7 @@ export type EventDateString = {
   date_event_end: string;
 };
 
-const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) => {
+const DetailTimeContainer = ({ event, otherInfo, forMobile }: Props) => {
 
   const deepCopy = event?.dates_event.map((dt:EventDate)=>
   ({
@@ -61,7 +60,6 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) 
 
   const timeContainerStyle = {
     marginTop: '3px',
-    color: forFooter? 'blue' : 'black',
     fontSize:forMobile?'auto':'1.2em'
   };
 
@@ -72,7 +70,7 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile, forFooter }: Props) 
           <Fragment key={key}>
             <Box display='flex' alignItems='center'>
               <IconsContainer
-                icons={[{ name: 'FaClock', isClickable: false, color: forFooter? 'blue':'#333333' }]}
+                icons={[{ name: 'FaClock', isClickable: false, color: '#333333' }]}
                 onIconClick={() => {
                     return;
                 }}
