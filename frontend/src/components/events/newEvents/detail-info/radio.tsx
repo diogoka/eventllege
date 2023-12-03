@@ -78,32 +78,32 @@ export default function RadioBtn() {
           value={16}
           control={<Radio />}
           label='Online'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some((tag) => tag.id_tag === 16)
-          }
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some((tag) => tag.id_tag === 16)
+          // }
         />
         <FormControlLabel
           value={17}
           control={<Radio />}
           label='In Person'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
-          }
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
+          // }
         />
         <FormControlLabel
           value={18}
           control={<Radio />}
           label='Online and In Person'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some(
-              (tag) =>
-                tag.id_tag === 16 &&
-                createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
-            )
-          }
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some(
+          //     (tag) =>
+          //       tag.id_tag === 16 &&
+          //       createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
+          //   )
+          // }
         />
       </RadioGroup>
     </FormControl>
