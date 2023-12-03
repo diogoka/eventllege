@@ -6,9 +6,10 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
-  InputLabel,
   Box,
   Stack,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 
 export default function Price() {
@@ -63,51 +64,51 @@ export default function Price() {
       spacing={1}
       sx={{ width: '100%' }}
     >
-      <InputLabel
-        htmlFor='price'
-        sx={{
-          fontSize: '1.25rem',
-        }}
-      >
-        Price {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
-      <FormControlLabel
-        label='Free'
-        control={
-          <Checkbox
-            id='Free'
-            checked={checked}
-            onChange={handlePriceChange}
-            disabled={checkDisabled}
-          />
-        }
-      />
+      <FormControl fullWidth>
+        <FormLabel
+          id='price'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
+          Price {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
+        <FormControlLabel
+          label='Free'
+          control={
+            <Checkbox
+              id='Free'
+              checked={checked}
+              onChange={handlePriceChange}
+              disabled={checkDisabled}
+            />
+          }
+        />
 
-      <TextField
-        variant='outlined'
-        type='number'
-        fullWidth
-        disabled={disabled}
-        value={priceValue}
-        onChange={handleTextPriceChange}
-        error={error}
-        helperText={error ? 'Price must be greater than 1' : ''}
-        InputProps={{
-          startAdornment: <InputAdornment position='start'>$</InputAdornment>,
-        }}
-        sx={{
-          '& .MuiFormHelperText-root': {
-            position: 'absolute',
-            bottom: '-1rem',
-          },
-          // '& .MuiInputBase-input.Mui-disabled': {
-          //   WebkitTextFillColor: '#000000',
-          // },
-        }}
-      />
+        <TextField
+          variant='outlined'
+          type='number'
+          fullWidth
+          disabled={disabled}
+          value={priceValue}
+          onChange={handleTextPriceChange}
+          error={error}
+          helperText={error ? 'Price must be greater than 1' : ''}
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>$</InputAdornment>,
+          }}
+          sx={{
+            '& .MuiFormHelperText-root': {
+              position: 'absolute',
+              bottom: '-1rem',
+            },
+            // '& .MuiInputBase-input.Mui-disabled': {
+            //   WebkitTextFillColor: '#000000',
+            // },
+          }}
+        />
+      </FormControl>
     </Stack>
   );
 }

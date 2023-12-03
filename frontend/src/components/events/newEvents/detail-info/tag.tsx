@@ -65,7 +65,10 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       sx={{ width: '100%' }}
     >
       <FormControl fullWidth>
-        <FormLabel id='tags' sx={{ marginBlock: '.5rem' }}>
+        <FormLabel
+          id='tags'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
           Tags {''}
           <Box component={'span'} sx={{ color: '#f14c4c' }}>
             *

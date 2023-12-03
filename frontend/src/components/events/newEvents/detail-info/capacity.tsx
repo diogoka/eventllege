@@ -8,13 +8,10 @@ import {
   Checkbox,
   Stack,
   Box,
-  InputLabel,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 
-type Props = {
-  spots: number;
-  setSpots: (value: number) => void;
-};
 export default function Capacity() {
   const { createdEvent, dispatch } = useContext(EventContext);
   const [isChecked, setIsChecked] = useState(false);
@@ -62,9 +59,6 @@ export default function Capacity() {
     }
   }, [createdEvent.capacity_event]);
 
-  // console.log('spotValue', spotValue);
-  // console.log('spots', createdEvent.capacity_event);
-
   return (
     <Stack
       direction='column'
@@ -73,50 +67,51 @@ export default function Capacity() {
       spacing={1}
       sx={{ width: '100%' }}
     >
-      <InputLabel
-        sx={{
-          fontSize: '1.25rem',
-        }}
-      >
-        Spots {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
-      <FormControlLabel
-        label='Non limited people'
-        control={
-          <Checkbox
-            checked={isChecked}
-            onChange={handleSpotsChange}
-            disabled={checkDisabled}
-          />
-        }
-      />
+      <FormControl fullWidth>
+        <FormLabel
+          id='capacity'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
+          Spots {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
+        <FormControlLabel
+          label='Non limited people'
+          control={
+            <Checkbox
+              checked={isChecked}
+              onChange={handleSpotsChange}
+              disabled={checkDisabled}
+            />
+          }
+        />
 
-      <TextField
-        variant='outlined'
-        type='number'
-        fullWidth
-        disabled={disabled}
-        value={spotValue}
-        onChange={handleTextSpotsChange}
-        error={error}
-        helperText={error ? 'Spots must be greater than 1' : ''}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position='end'>
-              {createdEvent.capacity_event >= 2 ? 'people' : 'person'}
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          '& .MuiFormHelperText-root': {
-            position: 'absolute',
-            bottom: '-1rem',
-          },
-        }}
-      />
+        <TextField
+          variant='outlined'
+          type='number'
+          fullWidth
+          disabled={disabled}
+          value={spotValue}
+          onChange={handleTextSpotsChange}
+          error={error}
+          helperText={error ? 'Spots must be greater than 1' : ''}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                {createdEvent.capacity_event >= 2 ? 'people' : 'person'}
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            '& .MuiFormHelperText-root': {
+              position: 'absolute',
+              bottom: '-1rem',
+            },
+          }}
+        />
+      </FormControl>
     </Stack>
   );
 }

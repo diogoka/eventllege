@@ -35,7 +35,10 @@ export default function Category({ category, setCategory }: Props) {
       sx={{ width: '100%', fontSize: '1.25rem' }}
     >
       <FormControl fullWidth>
-        <FormLabel id='category' sx={{ marginBlock: '.5rem' }}>
+        <FormLabel
+          id='category'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
           Category {''}
           <Box component={'span'} sx={{ color: '#f14c4c' }}>
             *

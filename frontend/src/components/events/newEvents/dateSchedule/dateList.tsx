@@ -54,7 +54,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           width: '100%',
         }}
       >
-        <Typography variant='h2'>
+        <Typography variant='h2' sx={{ fontWeight: 400, lineHeight: '26px' }}>
           Date {''}
           <Box component={'span'} sx={{ color: '#f14c4c' }}>
             *

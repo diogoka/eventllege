@@ -61,7 +61,7 @@ export default function RadioBtn() {
 
   return (
     <FormControl>
-      <FormLabel id='demo-row-radio-buttons-group-label'>
+      <FormLabel id='radio-buttons' sx={{ fontSize: '1.125rem' }}>
         Place {''}
         <Box component={'span'} sx={{ color: '#f14c4c' }}>
           *
@@ -69,7 +69,7 @@ export default function RadioBtn() {
       </FormLabel>
       <RadioGroup
         row
-        aria-labelledby='demo-row-radio-buttons-group-label'
+        aria-labelledby='radio-buttons'
         name='row-radio-buttons-group'
         value={selectedRadio}
         onChange={handleChange}
