@@ -4,10 +4,93 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
+import { PageContext, PageStatus } from "@/context/pageContext";
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
+
+enum Limitation {
+  None,       // Pages with no limitation
+  LoggedIn,   // Pages only for logged in users
+  Organizer,  // Pages only for organizers
+  Admin       // Pages only for administrators
+}
+
+type Page = {
+  path: RegExp;
+  limitation: Limitation;
+  isFetchRequired: boolean;
+}
+
+const PAGES: Page[] = [
+  {
+    path: /^\/$/,
+    limitation: Limitation.None,
+    isFetchRequired: false
+  },
+  {
+    path: /^\/events$/,
+    limitation: Limitation.None,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/events\/\d+$/,
+    limitation: Limitation.None,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/signup$/,
+    limitation: Limitation.None,
+    isFetchRequired: false
+  },
+  {
+    path: /^\/login$/,
+    limitation: Limitation.None,
+    isFetchRequired: false
+  },
+  {
+    path: /^\/user$/,
+    limitation: Limitation.LoggedIn,
+    isFetchRequired: false            // User data is fetched by auth provider
+  },
+  {
+    path: /^\/user\/edit$/,
+    limitation: Limitation.LoggedIn,
+    isFetchRequired: false
+  },
+  {
+    path: /^\/history$/,
+    limitation: Limitation.LoggedIn,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/user\/my-events$/,
+    limitation: Limitation.LoggedIn,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/events\/new$/,
+    limitation: Limitation.Organizer,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/events\/new\/preview$/,
+    limitation: Limitation.Organizer,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/events\/\d+\/edit$/,
+    limitation: Limitation.Organizer,
+    isFetchRequired: true
+  },
+  {
+    path: /^\/organizer-events$/,
+    limitation: Limitation.Organizer,
+    isFetchRequired: true
+  },
+]
+
 
 export default function AuthProvider({
   children,
@@ -19,6 +102,7 @@ export default function AuthProvider({
 
   const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
     useContext(UserContext);
+  const { pageStatus, setPageStatus } = useContext(PageContext);
 
   useEffect(() => {
     initializeFirebase();
@@ -57,7 +141,8 @@ export default function AuthProvider({
     redirection: string;
   };
   const isAllowedPage = (): Permission => {
-    if (is404(pathname)) {
+    const page = getPage(pathname);
+    if (page === undefined) {
       return { isAllowed: true, redirection: '' };
     }
     // Wait until the login status is confirmed
@@ -70,7 +155,7 @@ export default function AuthProvider({
       if (user) {
         if (user.roleName === 'student') {
           // Give permission only to allowed pages
-          if (!isStudentPage(pathname)) {
+          if (!(page.limitation === Limitation.None || page.limitation === Limitation.LoggedIn)) {
             return { isAllowed: false, redirection: '/events' };
           }
         }
@@ -82,7 +167,7 @@ export default function AuthProvider({
     // If this user is not logged in
     else if (loginStatus === LoginStatus.LoggedOut) {
       // Give permission only to allowed pages
-      if (!isLoggedOutUserPage(pathname)) {
+      if (page.limitation !== Limitation.None) {
         // Go to the login page, but don't redirect from sign-up page
         if (pathname !== '/signup' && pathname !== '/login') {
           return { isAllowed: false, redirection: '/login' };
@@ -108,60 +193,55 @@ export default function AuthProvider({
     }
   }, [pathname, loginStatus]);
 
+  useEffect(() => {
+    setPageStatus(PageStatus.Ready);
+  }, [pathname]);
+
+  const getMainComponents = () => {
+
+    if (!isAllowedPage().isAllowed) {
+      return <></>
+    }
+
+    switch (pageStatus) {
+      case PageStatus.Loading:
+        return (
+          <CircularProgress
+            sx={{
+              position: 'absolute',
+              inset: '50vh auto auto 50%'
+            }} />
+        )
+      case PageStatus.Ready:
+        return (
+          <Box
+            component='main'
+            maxWidth='1280px'
+            minHeight='100vh'
+            paddingInline='40px'
+            paddingBlock='50px'
+            marginInline='auto'
+          >
+            {children}
+          </Box>
+        )
+      case PageStatus.NotFound:
+        return <></>
+    }
+  }
+
   return (
     <>
       {pathname !== '/login' && <Header />}
-      {isAllowedPage().isAllowed && (
-        <Box
-          component='main'
-          maxWidth='1280px'
-          minHeight='100vh'
-          paddingInline='40px'
-          paddingBlock='50px'
-          marginInline='auto'
-        >
-          {children}
-        </Box>
-      )}
+      {getMainComponents()}
       <Footer />
     </>
   );
 }
 
-const loggedOutUserPages = [
-  /^\/$/,
-  /^\/events$/,
-  /^\/events\/\d+$/,
-  /^\/signup$/,
-  /^\/login$/,
-];
 
-const studentPages = [
-  /^\/user$/,
-  /^\/user\/edit$/,
-  /^\/tickets$/,
-  /^\/history$/,
-  /^\/user\/my-events$/,
-];
-
-const organizerPages = [/^\/events\/\d+\/edit$/, /^\/organizer-events$/];
-
-function isLoggedOutUserPage(pathname: string): boolean {
-  return loggedOutUserPages.some((loggedOutUserPage) => {
-    return loggedOutUserPage.test(pathname);
-  });
-}
-
-function isStudentPage(pathname: string): boolean {
-  return studentPages.concat(loggedOutUserPages).some((studentPage) => {
-    return studentPage.test(pathname);
-  });
-}
-
-function is404(pathname: string): boolean {
-  return !organizerPages
-    .concat(studentPages.concat(loggedOutUserPages))
-    .some((page) => {
-      return page.test(pathname);
-    });
+function getPage(pathname: string): Page | undefined {
+  return PAGES.find((PAGE: Page) => {
+    return PAGE.path.test(pathname);
+  })
 }
