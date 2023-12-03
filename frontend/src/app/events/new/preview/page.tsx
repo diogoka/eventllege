@@ -43,15 +43,16 @@ export default function PreviewEventPage() {
   const searchParams = useSearchParams();
 
   const { image, createdEvent } = useContext(EventContext);
+  console.log('image', image);
   const [tempState, setTempState] = useState<EventData>();
   const [forPreview, setForPreview] = useState<boolean>(true);
   const [coordinate, setCoordinate] = useState<Coordinate>();
   // const [tempImage, setTempImage] = useState<string>('');
-  
+
   const [eventId, setEventId] = useState<number>();
-  
+
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-  
+
   const forMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -87,6 +88,13 @@ export default function PreviewEventPage() {
     id: 'google-map-script',
     googleMapsApiKey: apiKey!,
   });
+
+  const [tempImage, setTempImage] = useState('');
+  useEffect(() => {
+    if (image) {
+      setTempImage(URL.createObjectURL(image));
+    }
+  }, [image])
 
   if (forMobile) {
     return (
@@ -201,10 +209,10 @@ export default function PreviewEventPage() {
                 forPreview={forPreview}
               />
               <Box borderRadius='7px' overflow='hidden'>
-                <ImageHelper
-                  src={image ? URL.createObjectURL(image) : '/event_placeholder.png'}
-                  width='100%'
-                  height='180px'
+                  <ImageHelper
+                    src={tempImage}
+                  width='320px'
+                  height='220px'
                   alt={tempState?.name_event ?? 'Event'}
                 />
               </Box>
