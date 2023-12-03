@@ -30,7 +30,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       alert('Please enter a title');
       return;
     } else if (!createdEvent.description_event) {
-      alert('Please enter a discussion');
+      alert('Please enter a description');
       return;
     } else if (!createdEvent.dates) {
       alert('Please choose dates');
@@ -133,12 +133,12 @@ export default function EventsControl({ eventId }: { eventId: number }) {
               color='error'
               fullWidth
             >
-              cancel
+              Cancel
             </Button>
           </Grid>
           <Grid item sm={12} md={6}>
             <Button type='submit' variant='contained' color='primary' fullWidth>
-              Go to preview
+              Preview
             </Button>
           </Grid>
         </Grid>
