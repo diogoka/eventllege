@@ -12,9 +12,8 @@ import Review from '@/components/event/review/review';
 import { UserContext } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { setKey, fromAddress } from 'react-geocode';
 import dayjs from 'dayjs';
+import MapWithMarker from "@/components/map/mapWithMarker";
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -59,11 +58,6 @@ export type OtherInfo = {
   id_owner: string;
 };
 
-type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
 export default function EventPage() {
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
@@ -74,13 +68,12 @@ export default function EventPage() {
   const [oldEvent, setOldEvent] = useState<boolean>(false);
   const [forMobile, setForMobile] = useState<boolean>();
   const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
-  const [coordinate, setCoordinate] = useState<Coordinate>();
+
   const [forPreview, setForPreview] = useState<boolean>(false);
 
   const params = useParams();
 
   const EVENT_ID = params.id;
-  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
   useEffect(() => {
     window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
@@ -119,13 +112,7 @@ export default function EventPage() {
         today.setHours(0, 0, 0, 0);
         eventDate < today && setOldEvent(true);
 
-        setKey(apiKey!);
-        fromAddress(res.data.event.location_event)
-          .then(({ results }) => {
-            const { lat, lng } = results[0].geometry.location;
-            setCoordinate({ lat: lat, lng: lng });
-          })
-          .catch(console.error);
+
       })
       .catch((error) => {
         console.error(error.response);
@@ -136,11 +123,6 @@ export default function EventPage() {
     const w = e.target as Window;
     w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
   };
-
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: apiKey!,
-  });
 
   const provider = {
     isAlertVisible,
@@ -262,19 +244,7 @@ export default function EventPage() {
                     <Typography>{event?.location_event}</Typography>
                   </Box>
                 </Link>
-                {isLoaded ? (
-                  <GoogleMap
-                    mapContainerStyle={{
-                      widows: '100%',
-                      height: '250px',
-                      borderRadius: '7px',
-                    }}
-                    center={coordinate}
-                    zoom={14}
-                  />
-                ) : (
-                  <></>
-                )}
+                <MapWithMarker location={event?.location_event ?? ''} />
               </Box>
               {/* //right */}
             </Box>
