@@ -75,10 +75,8 @@ export default function EditEventPage({ params }: Params) {
         const response = await fetch(imagePath);
         if (response.status === 200) {
           const blob = await response.blob();
-          console.log("response", response);
 
           const file = new File([blob], 'hoge', { type: blob.type });
-          console.log(file);
           setImage(file);
         }
 
