@@ -44,8 +44,8 @@ export default function NewEventPage() {
       });
     } else {
       dispatch({ type: 'RESET', payload: initialState });
+      setImage(null);
     }
-    setImage(null);
   }, []);
   return (
     <>
