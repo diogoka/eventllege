@@ -18,7 +18,7 @@ export default function Price() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
   const [checkDisabled, setCheckDisabled] = useState(false);
-  const [priceValue, setPriceValue] = useState<number>();
+  const [priceValue, setPriceValue] = useState<string>();
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -40,16 +40,18 @@ export default function Price() {
   useEffect(() => {
     if (createdEvent.price_event === 0) {
       setChecked(true);
-      setDisabled(true);
+      setDisabled(false);
+      setPriceValue('');
     } else if (createdEvent.price_event >= 1) {
       setChecked(false);
       setDisabled(false);
-      setCheckDisabled(true);
+      // setCheckDisabled(true);
       setError(false);
-      setPriceValue(createdEvent.price_event);
+      setPriceValue(createdEvent.price_event.toString());
     } else {
       setError(true);
       setCheckDisabled(false);
+      setPriceValue('');
     }
   }, [createdEvent.price_event]);
 
