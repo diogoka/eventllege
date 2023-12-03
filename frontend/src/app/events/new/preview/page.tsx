@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { Box, Stack, Typography, Link } from '@mui/material';
+import { useMediaQuery, Box, Stack, Typography, Link } from '@mui/material';
 import dayjs from 'dayjs'; // Remove
 import DetailContainer from '@/components/event/detail-container';
 import DetailInfo from '@/components/event/detail-info';
@@ -42,18 +42,20 @@ type Coordinate = {
 export default function PreviewEventPage() {
   const searchParams = useSearchParams();
 
-  const { createdEvent, addImage } = useContext(EventContext);
+  const { image, createdEvent } = useContext(EventContext);
+  console.log('image', image);
   const [tempState, setTempState] = useState<EventData>();
-  const [forMobile, setForMobile] = useState<boolean>();
   const [forPreview, setForPreview] = useState<boolean>(true);
   const [coordinate, setCoordinate] = useState<Coordinate>();
+  // const [tempImage, setTempImage] = useState<string>('');
 
   const [eventId, setEventId] = useState<number>();
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
+  const forMobile = useMediaQuery('(max-width: 768px)');
+
   useEffect(() => {
-    window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
     const newArray = createdEvent.dates.map((date) => ({
       date_event_start: date.dateStart,
@@ -82,15 +84,17 @@ export default function PreviewEventPage() {
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
 
-  window.onresize = (e) => {
-    const w = e.target as Window;
-    w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-  };
-
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey!,
   });
+
+  const [tempImage, setTempImage] = useState('');
+  useEffect(() => {
+    if (image) {
+      setTempImage(URL.createObjectURL(image));
+    }
+  }, [image])
 
   if (forMobile) {
     return (
@@ -205,10 +209,10 @@ export default function PreviewEventPage() {
                 forPreview={forPreview}
               />
               <Box borderRadius='7px' overflow='hidden'>
-                <ImageHelper
-                  src={`http://localhost:3001/img/events/${0}`}
-                  width='100%'
-                  height='auto'
+                  <ImageHelper
+                    src={tempImage}
+                  width='320px'
+                  height='220px'
                   alt={tempState?.name_event ?? 'Event'}
                 />
               </Box>

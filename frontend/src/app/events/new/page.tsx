@@ -25,7 +25,7 @@ type EventData = {
   category_event: string;
 };
 export default function NewEventPage() {
-  const { createdEvent, dispatch } = useContext(EventContext);
+  const { createdEvent, dispatch, setImage } = useContext(EventContext);
   const initialState: EventData = {
     name_event: '',
     description_event: '',
@@ -38,6 +38,7 @@ export default function NewEventPage() {
   };
   useEffect(() => {
     dispatch({ type: 'RESET', payload: initialState });
+    setImage(null);
   }, []);
   return (
     <>
