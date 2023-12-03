@@ -109,21 +109,11 @@ export default function EventsControl({ eventId }: { eventId: number }) {
           })
         }
       />
-      {tempImage &&
-        <img
-          src={tempImage}
-          alt=''
-          style={{
-            width: '320px',
-            height: '220px',
-            objectFit: 'cover'
-          }}
-        />}
-
       <ImageContainer
         warning={warning}
         onFileInputChange={onFileInputChange}
         isMobile={isMobile}
+        tempImage={tempImage}
       />
       <Box sx={{ width: '100%' }}>
         <Grid
