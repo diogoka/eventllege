@@ -37,11 +37,9 @@ export type EventData = {
   category_event: string;
 };
 
-export type Image = File | null;
-
 type EventContextProps = {
-  addImage: Image | undefined;
-  setAddImage: (addImage: Image) => void;
+  image: File | null;
+  setImage: (image: File | null) => void;
   createdEvent: EventData;
   dispatch: Dispatch<EventAction>;
   initialState: EventData;
@@ -102,7 +100,7 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
     label: 'Events',
     path: '/',
   });
-  const [addImage, setAddImage] = useState<Image>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
 
@@ -112,8 +110,8 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
         createdEvent,
         dispatch,
         initialState,
-        addImage,
-        setAddImage,
+        image,
+        setImage,
         showedPage,
         setShowedPage,
         pathName,

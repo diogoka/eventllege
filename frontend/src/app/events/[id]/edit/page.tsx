@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 import axios from 'axios';
 import EventsControl from '@/components/events/newEvents/eventsControl';
+import { assert } from "console";
 
 type Params = {
   params: {
@@ -53,7 +54,7 @@ type EventData = {
 
 export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
-  const { createdEvent, dispatch } = useContext(EventContext);
+  const { createdEvent, dispatch, setImage } = useContext(EventContext);
 
   const [eventId, setEventId] = useState<number>();
 
@@ -67,6 +68,24 @@ export default function EditEventPage({ params }: Params) {
       .catch((error) => {
         console.error(error.response.data);
       });
+
+    const setEventImage = async () => {
+      try {
+        const imagePath = `http://localhost:3001/img/events/${params.id}`;
+        const response = await fetch(imagePath);
+        if (response.status === 200) {
+          const blob = await response.blob();
+
+          const file = new File([blob], 'hoge', { type: blob.type });
+          setImage(file);
+        }
+
+      } catch (error: any) {
+        console.error(error);
+      }
+    }
+
+    setEventImage();
   }, [params.id]);
 
   useEffect(() => {
