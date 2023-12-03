@@ -14,7 +14,7 @@ interface Page {
   path: string;
 }
 
-export interface DateRange {
+interface DateRange {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
 }
@@ -22,7 +22,7 @@ const today = dayjs();
 const hourOfToday = today.add(1, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
 
-type Tag = {
+export type Tag = {
   id_tag: number;
   name_tag: string;
 };
