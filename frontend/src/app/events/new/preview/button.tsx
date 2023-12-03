@@ -20,7 +20,7 @@ export default function ButtonsForPreview({
   const {
     dispatch,
     initialState,
-    addImage,
+    image,
     showedPage,
     setShowedPage,
     pathName,
@@ -45,7 +45,7 @@ export default function ButtonsForPreview({
       formData.append(`tagId[${key}]`, tag.id_tag.toString());
     });
 
-    addImage && formData.append('picture', addImage);
+    image && formData.append('picture', image);
 
     tempState.dates_event.forEach((date, key) => {
       formData.append(

@@ -11,18 +11,23 @@ import ImageContainer from '../newEvents/basic-info/imageContainer';
 
 export default function EventsControl({ eventId }: { eventId: number }) {
   const router = useRouter();
-  const { setAddImage, createdEvent, dispatch } = useContext(EventContext);
+  const { image, setImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
 
-  const { image, warning, onFileInputChange } = useUploadImage(20, 10, 480);
+  const { image: inputImage, warning, onFileInputChange } = useUploadImage(20, 10, 480);
+
+  useEffect(() => {
+    if (inputImage) {
+      setImage(inputImage);
+    }
+  }, [inputImage]);
 
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
-      setAddImage(image);
     }
-  }, [image]);
+  }, [image])
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,8 +57,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       return;
     } else {
     }
-    setAddImage(image);
-    router.push(`http://localhost:3000/events/new/preview/?eventId=${eventId}`);
+    router.push(`/events/new/preview/?eventId=${eventId}`);
   };
 
   console.log('createdEvent in eventsControl', createdEvent);
@@ -105,11 +109,11 @@ export default function EventsControl({ eventId }: { eventId: number }) {
           })
         }
       />
-      <img src={tempImage} alt='' />
       <ImageContainer
         warning={warning}
         onFileInputChange={onFileInputChange}
         isMobile={isMobile}
+        tempImage={tempImage}
       />
       <Box sx={{ width: '100%' }}>
         <Grid

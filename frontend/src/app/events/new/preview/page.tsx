@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { Box, Stack, Typography, Link } from '@mui/material';
+import { useMediaQuery, Box, Stack, Typography, Link } from '@mui/material';
 import dayjs from 'dayjs'; // Remove
 import DetailContainer from '@/components/event/detail-container';
 import DetailInfo from '@/components/event/detail-info';
@@ -33,23 +33,22 @@ export type EventData = {
   category_event: string;
 };
 
-type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
 export default function PreviewEventPage() {
   const searchParams = useSearchParams();
 
-  const { createdEvent, addImage } = useContext(EventContext);
+  const { image, createdEvent } = useContext(EventContext);
   const [tempState, setTempState] = useState<EventData>();
-  const [forMobile, setForMobile] = useState<boolean>();
   const [forPreview, setForPreview] = useState<boolean>(true);
-
   const [eventId, setEventId] = useState<number>();
+  const forMobile = useMediaQuery('(max-width: 768px)');
+  const [tempImage, setTempImage] = useState('');
+  useEffect(() => {
+    if (image) {
+      setTempImage(URL.createObjectURL(image));
+    }
+  }, [image]);
 
   useEffect(() => {
-    window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
     const newArray = createdEvent.dates.map((date) => ({
       date_event_start: date.dateStart,
@@ -69,11 +68,6 @@ export default function PreviewEventPage() {
 
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
-
-  window.onresize = (e) => {
-    const w = e.target as Window;
-    w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-  };
 
   if (forMobile) {
     return (
@@ -189,9 +183,9 @@ export default function PreviewEventPage() {
               />
               <Box borderRadius='7px' overflow='hidden'>
                 <ImageHelper
-                  src={`http://localhost:3001/img/events/${0}`}
-                  width='100%'
-                  height='auto'
+                  src={tempImage}
+                  width='320px'
+                  height='220px'
                   alt={tempState?.name_event ?? 'Event'}
                 />
               </Box>
