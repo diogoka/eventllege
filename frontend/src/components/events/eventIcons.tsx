@@ -1,7 +1,9 @@
 import React from 'react';
+import { useContext } from 'react';
 import IconsContainer from '../icons/iconsContainer';
-import { useRouter } from 'next/navigation';
-import { Box, Rating, Typography } from '@mui/material';
+import { AlertColor, Box, Rating, Typography } from '@mui/material';
+import { useRouter, usePathname } from 'next/navigation';
+import { EventContext } from '@/context/eventContext';
 import { StarRounded } from '@mui/icons-material';
 
 type Props = {
@@ -12,7 +14,12 @@ type Props = {
   eventId: number;
   attending: boolean;
   setModalOpen: (isOpen: boolean) => void;
-  handleAlertFn: (isOpen: boolean) => void;
+  handleAlertFn: (
+    isOpen: boolean,
+    title: string,
+    message: string,
+    severity: AlertColor
+  ) => void;
   averageRating?: number;
   oldEvent?: boolean;
 };
@@ -30,9 +37,18 @@ function EventIcons({
   oldEvent,
 }: Props) {
   const router = useRouter();
+  const pathName = usePathname();
+  const { setShowedPage } = useContext(EventContext);
   const handleOrganizerClick = (iconName: string) => {
     console.log('clicked');
     if (iconName === 'FaEdit') {
+      if (pathName === '/events' || 'organizer-events') {
+        setShowedPage({
+          label: 'Create Event',
+          path: '/events/new',
+        });
+      }
+
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
       openDeleteModal();
@@ -53,9 +69,14 @@ function EventIcons({
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        handleAlertFn(true);
+        handleAlertFn(
+          true,
+          'URL Copied',
+          'The event URL has been copied to your clipboard.',
+          'success'
+        );
         setTimeout(() => {
-          handleAlertFn(false);
+          handleAlertFn(false, '', '', 'success');
         }, 3000);
       })
       .catch((err) => {

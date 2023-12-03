@@ -310,7 +310,6 @@ export default function EventPage() {
                   applied={applied}
                   organizerEvent={organizerEvent}
                   forMobile={forMobile!}
-                  forFooter={true}
                 />
                 <Box marginLeft='10px' fontWeight='bold'>
                   {event?.name_event}

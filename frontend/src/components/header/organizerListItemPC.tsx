@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@mui/material';
 
 interface Page {
@@ -18,9 +18,9 @@ const organizerBtns: Page[] = [
 
 export default function OrganizerListItemPC() {
   const router = useRouter();
-  // const pathName = usePathname();
+  const params = useParams();
+
   const { showedPage, setShowedPage, pathName } = useContext(EventContext);
-  // const [currentPage, setCurrentPage] = useState<Page | null>(organizerBtns[0]);
 
   useEffect(() => {
     // Update the currentPage when the path changes
@@ -46,14 +46,17 @@ export default function OrganizerListItemPC() {
           variant={
             showedPage &&
             (showedPage.path === button.path ||
-              showedPage?.path === `/events/?isPublished=true`)
+              showedPage?.path === '/events/?isUpdated=true' ||
+              showedPage?.path === '/events/?isPublished=true' ||
+              showedPage?.path === `/events/${params}/edit`)
               ? 'contained'
               : 'text'
           }
           color={
             showedPage &&
             (showedPage.path === button.path ||
-              showedPage?.path === `/events/?isPublished=true`)
+              showedPage?.path === `/events/?isUpdated=true` ||
+              showedPage?.path === '/events/?isPublished=true')
               ? 'primary'
               : 'secondary'
           }

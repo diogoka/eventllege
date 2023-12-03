@@ -1,5 +1,5 @@
 'use client';
-import { Button, Modal, Box, Typography } from '@mui/material';
+import { Button, Modal, Box, Typography, AlertColor } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -35,6 +35,12 @@ type Props = {
   deleteEvent: (id: number) => void;
   eventName?: string;
   laptopQuery: boolean;
+  handleAlertFn: (
+    isOpen: boolean,
+    title: string,
+    message: string,
+    severity: AlertColor
+  ) => void;
 };
 
 export default function ModalDelete({
@@ -44,6 +50,7 @@ export default function ModalDelete({
   deleteEvent,
   eventName,
   laptopQuery,
+  handleAlertFn,
 }: Props) {
   const [open, setOpen] = useState(isOpen);
 
@@ -66,9 +73,19 @@ export default function ModalDelete({
 
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    console.log('delete');
     const response = await axios
       .delete(`http://localhost:3001/api/events/${eventId}`)
       .then((res) => {
+        handleAlertFn(
+          true,
+          'Event Deleted',
+          'The event was successfully deleted',
+          'success'
+        );
+        setTimeout(() => {
+          handleAlertFn(false, '', '', 'success');
+        }, 2000);
         setOpen(false);
         deleteEvent(eventId);
       })

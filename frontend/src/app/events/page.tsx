@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box, Alert, Typography } from '@mui/material';
+import { Box, Alert, Typography, AlertColor } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import alertFn from '@/components/common/alertFunction';
 
 export type Event = {
   capacity_event: number;
@@ -31,6 +33,12 @@ type CurrentUser = {
   role: string | undefined;
 };
 
+interface AlertState {
+  status: boolean;
+  message: string;
+  severity: AlertColor;
+}
+
 export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -42,11 +50,12 @@ export default function EventsPage() {
     []
   );
 
-  const searchParams=useSearchParams()
+  const searchParams = useSearchParams();
 
-  const [alertSearchBar, setAlertSearchBar] = useState({
+  const [alert, setAlert] = useState<AlertState>({
     status: false,
     message: '',
+    severity: 'info',
   });
 
   const currentUser: CurrentUser = {
@@ -54,11 +63,14 @@ export default function EventsPage() {
     role: user?.roleName,
   };
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   const getEvents = async () => {
     await axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
-      console.log(res.data.events);
+      // console.log(res.data.events);
     });
     const attendingEvents: [number, boolean][] = [];
     await axios
@@ -73,19 +85,32 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
-
-    if(searchParams.get('isPublished')){
-      setJustCreated(true)
-      setShowAlert(true)
+    if (searchParams.get('isPublished')) {
+      setJustCreated(true);
+      setShowAlert(true);
     }
-    if(searchParams.get('isUpdated')){
-      setJustUpdated(true)
-      setShowAlert(true)
+    if (searchParams.get('isUpdated')) {
+      setJustUpdated(true);
+      setShowAlert(true);
+    }
+    if (searchParams.get('deletedEvent')) {
+      setAlert({
+        status: true,
+        message: 'Event was deleted successfully.',
+        severity: 'success',
+      });
+      setTimeout(() => {
+        setAlert({
+          status: false,
+          message: '',
+          severity: 'info',
+        });
+      }, 4000);
     }
 
+    router.replace('/events', { scroll: false });
     getEvents();
-
-  }, [justCreated, justUpdated]);
+  }, [justCreated, justUpdated, searchParams]);
 
   const searchEvents = (text: string) => {
     axios
@@ -93,35 +118,43 @@ export default function EventsPage() {
       .then((res) => {
         if (res.data.events.length === 0) {
           setEvents([]);
-          setAlertSearchBar({
+          setAlert({
             status: true,
             message: 'No events found',
+            severity: 'info',
           });
           setTimeout(() => {
-            setAlertSearchBar({
+            setAlert({
               status: false,
               message: '',
+              severity: 'info',
             });
           }, 5000);
         } else {
           setEvents(res.data.events);
           setTags(res.data.tags);
-          setAlertSearchBar({
+          setAlert({
             status: true,
             message:
               res.data.events.length === 1
                 ? `${res.data.events.length} event found`
                 : `${res.data.events.length} events found`,
+            severity: 'info',
           });
           setTimeout(() => {
-            setAlertSearchBar({
+            setAlert({
               status: false,
               message: '',
+              severity: 'info',
             });
           }, 5000);
         }
       });
   };
+
+  const message = justCreated? 'Event was created successfully.': 'Event was updated successfully.'
+
+  const title = justCreated? 'Created' : 'Updated';
 
   return (
     <Box
@@ -132,25 +165,25 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      { showAlert && (
-        <Alert
-          severity='info'
-          variant='filled'
-          onClose={() => setShowAlert(false)}
-          sx={{ position: 'absolute', top: '50px', zIndex: 9999 }}
-        >
-          { justCreated? 'Event was created successfully.':'Event was updated successfully.'}
-        </Alert>
+      {showAlert && (
+        alertFn(
+          title,
+          message,
+          'success',
+          () => setShowAlert(false)
+        )
       )}
 
-      {alertSearchBar.status && (
+      {alert.status && (
         <Alert
           severity='info'
           variant='filled'
-          onClose={() => setAlertSearchBar({ status: false, message: '' })}
+          onClose={() =>
+            setAlert({ status: false, message: '', severity: 'info' })
+          }
           sx={{ position: 'absolute', top: '10px', zIndex: 9999 }}
         >
-          {alertSearchBar.message}
+          {alert.message}
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />

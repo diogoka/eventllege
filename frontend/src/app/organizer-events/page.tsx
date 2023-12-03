@@ -55,15 +55,15 @@ export default function OrganizerEventsPage() {
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
-    console.log('switchButtonState', switchButtonState);
+    // console.log('switchButtonState', switchButtonState);
     let url = switchButtonState
       ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
       : `http://localhost:3001/api/events/owner/${currentUser.id}`;
-    console.log('url', url);
+    // console.log('url', url);
     axios
       .get(url)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.events.length === 0) {
           setHasEvents({
             eventFound: false,

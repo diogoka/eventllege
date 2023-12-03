@@ -113,7 +113,6 @@ export default function EditEventPage({ params }: Params) {
         selectedTags: editEvent?.tags,
         category_event: editEvent?.category_event,
       };
-      console.log('replaceDate', replaceDates);
       console.log('newObj', newObj);
 
       dispatch({

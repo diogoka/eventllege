@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Box, Typography } from '@mui/material';
+import { Button, Modal, Box, Typography, AlertColor } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Attendee } from '@/app/events/[id]/page';
@@ -14,6 +14,12 @@ type Props = {
   id_event: number;
   id_user: string | undefined;
   organizerEvent: boolean;
+  handleAlertFn: (
+    isOpen: boolean,
+    title: string,
+    message: string,
+    severity: AlertColor
+  ) => void;
 };
 
 function ModalCancelParticipation({
@@ -25,12 +31,10 @@ function ModalCancelParticipation({
   id_event,
   id_user,
   organizerEvent,
+  handleAlertFn,
 }: Props) {
   const [open, setOpen] = useState(isOpen);
   const router = useRouter();
-
-  console.log('organizerEvent', organizerEvent);
-
   const iconContainer = {
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -75,7 +79,6 @@ function ModalCancelParticipation({
 
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-
     axios
       .delete('http://localhost:3001/api/events/attendee', {
         data: {
@@ -84,6 +87,15 @@ function ModalCancelParticipation({
         },
       })
       .then((res: any) => {
+        handleAlertFn(
+          true,
+          'Success',
+          'You have successfully cancelled your participation.',
+          'success'
+        );
+        setTimeout(() => {
+          handleAlertFn(false, '', '', 'success');
+        }, 2000);
         setApplied(false);
         setOpen(false);
         setAttendees((prevData: Array<Attendee> | undefined) => {
@@ -102,9 +114,11 @@ function ModalCancelParticipation({
         },
       })
       .then((res: any) => {
-        console.log('res', res.data.json);
+        router.push('/events?deletedEvent=true');
+      })
+      .catch((err: any) => {
+        router.push('/events?deletedEvent=false');
       });
-    router.push('/events');
   };
 
   const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
