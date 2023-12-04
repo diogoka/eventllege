@@ -16,9 +16,8 @@ export default function Capacity() {
   const { createdEvent, dispatch } = useContext(EventContext);
   const [isChecked, setIsChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [checkDisabled, setCheckDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [spotValue, setSpotValue] = useState<number>();
+  const [spotValue, setSpotValue] = useState<string>();
 
   const handleSpotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -29,7 +28,6 @@ export default function Capacity() {
         capacity_event: event.target.checked ? -1 : 1,
       },
     });
-    // setSpots(event.target.checked ? -1 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
@@ -40,24 +38,27 @@ export default function Capacity() {
       type: 'UPDATE_SPOTS',
       payload: { ...createdEvent, capacity_event: event.target.value },
     });
-    // setSpots(event.target.value);
   };
 
   useEffect(() => {
     if (createdEvent.capacity_event === -1) {
       setIsChecked(true);
-      setDisabled(true);
+      setDisabled(false);
+      setSpotValue('');
     } else if (createdEvent.capacity_event >= 1) {
       setIsChecked(false);
       setDisabled(false);
-      setCheckDisabled(true);
+
       setError(false);
-      setSpotValue(createdEvent.capacity_event);
+      setSpotValue(createdEvent.capacity_event.toString());
     } else {
       setError(true);
-      setCheckDisabled(false);
+      setIsChecked(false);
+      setSpotValue('');
     }
   }, [createdEvent.capacity_event]);
+
+  console.log('spots', createdEvent.capacity_event);
 
   return (
     <Stack
@@ -80,11 +81,7 @@ export default function Capacity() {
         <FormControlLabel
           label='Non limited people'
           control={
-            <Checkbox
-              checked={isChecked}
-              onChange={handleSpotsChange}
-              disabled={checkDisabled}
-            />
+            <Checkbox checked={isChecked} onChange={handleSpotsChange} />
           }
         />
 
