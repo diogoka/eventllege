@@ -62,6 +62,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
 
   const cancelHandler = () => {
     dispatch({ type: 'RESET', payload: initialState });
+    setImage(null);
     router.push('/');
   };
 
