@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext, createContext } from 'react';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
 import { Box, Stack, Typography, Link } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
@@ -10,10 +10,12 @@ import DetailTimeContainer from '@/components/event/detail-time-container';
 import DetailButtonContainer from '@/components/event/detail-button-container';
 import Review from '@/components/event/review/review';
 import { UserContext } from '@/context/userContext';
+import { PageContext } from "@/context/pageContext";
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from "@/components/map/mapWithMarker";
+import Loading from "@/app/loading";
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -59,6 +61,8 @@ export type OtherInfo = {
 };
 
 export default function EventPage() {
+
+  const { ready } = useContext(PageContext);
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
   const [otherInfo, setOtherInfo] = useState<OtherInfo>();
@@ -81,6 +85,9 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
+
+        ready();
+
         setEvent({
           ...res.data.event,
           dates_event: [

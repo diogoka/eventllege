@@ -4,11 +4,12 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import { PageContext, PageStatus } from "@/context/pageContext";
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
+import Loading from "@/app/loading";
 
 enum Limitation {
   None,       // Pages with no limitation
@@ -20,74 +21,74 @@ enum Limitation {
 type Page = {
   path: RegExp;
   limitation: Limitation;
-  isFetchRequired: boolean;
+  isLoadingRequired: boolean;
 }
 
 const PAGES: Page[] = [
   {
     path: /^\/$/,
     limitation: Limitation.None,
-    isFetchRequired: false
+    isLoadingRequired: false
   },
   {
     path: /^\/events$/,
     limitation: Limitation.None,
-    isFetchRequired: true
+    isLoadingRequired: true
   },
   {
     path: /^\/events\/\d+$/,
     limitation: Limitation.None,
-    isFetchRequired: true
+    isLoadingRequired: true
   },
   {
     path: /^\/signup$/,
     limitation: Limitation.None,
-    isFetchRequired: false
+    isLoadingRequired: false
   },
   {
     path: /^\/login$/,
     limitation: Limitation.None,
-    isFetchRequired: false
+    isLoadingRequired: false
   },
   {
     path: /^\/user$/,
     limitation: Limitation.LoggedIn,
-    isFetchRequired: false            // User data is fetched by auth provider
+    isLoadingRequired: false
   },
   {
     path: /^\/user\/edit$/,
     limitation: Limitation.LoggedIn,
-    isFetchRequired: false
+    isLoadingRequired: false
   },
   {
     path: /^\/history$/,
     limitation: Limitation.LoggedIn,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
   {
     path: /^\/user\/my-events$/,
     limitation: Limitation.LoggedIn,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
   {
     path: /^\/events\/new$/,
     limitation: Limitation.Organizer,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
   {
     path: /^\/events\/new\/preview$/,
     limitation: Limitation.Organizer,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
   {
     path: /^\/events\/\d+\/edit$/,
     limitation: Limitation.Organizer,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
   {
     path: /^\/organizer-events$/,
     limitation: Limitation.Organizer,
-    isFetchRequired: true
+    isLoadingRequired: false
   },
 ]
 
@@ -100,9 +101,9 @@ export default function AuthProvider({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
-    useContext(UserContext);
   const { pageStatus, setPageStatus } = useContext(PageContext);
+  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
+
 
   useEffect(() => {
     initializeFirebase();
@@ -194,46 +195,71 @@ export default function AuthProvider({
   }, [pathname, loginStatus]);
 
   useEffect(() => {
-    setPageStatus(PageStatus.Ready);
-  }, [pathname]);
-
-  const getMainComponents = () => {
-
-    if (!isAllowedPage().isAllowed) {
-      return <></>
+    if (loginStatus === LoginStatus.Unknown) {
+      setPageStatus(PageStatus.UserLoading);
+    } else {
+      if (getPage(pathname)?.isLoadingRequired) {
+        setPageStatus(PageStatus.PageLoading);
+      } else {
+        setPageStatus(PageStatus.Ready);
+      }
     }
+  }, [pathname, loginStatus])
 
+  const getComponent = () => {
     switch (pageStatus) {
-      case PageStatus.Loading:
+      case PageStatus.UserLoading:
         return (
-          <CircularProgress
-            sx={{
-              position: 'absolute',
-              inset: '50vh auto auto 50%'
-            }} />
+          <>
+            <Loading />
+          </>
         )
+      case PageStatus.PageLoading:
+        if (isAllowedPage().isAllowed) {
+          return (
+            <>
+              <Loading />
+              <Box
+                component='main'
+                maxWidth='1280px'
+                minHeight='100vh'
+                paddingInline='40px'
+                paddingBlock='50px'
+                marginInline='auto'
+              >
+                {children}
+              </Box>
+            </>
+          )
+        } else {
+          return <></>
+        }
       case PageStatus.Ready:
         return (
-          <Box
-            component='main'
-            maxWidth='1280px'
-            minHeight='100vh'
-            paddingInline='40px'
-            paddingBlock='50px'
-            marginInline='auto'
-          >
-            {children}
-          </Box>
+          <>
+            <Box
+              component='main'
+              maxWidth='1280px'
+              minHeight='100vh'
+              paddingInline='40px'
+              paddingBlock='50px'
+              marginInline='auto'
+            >
+              {children}
+            </Box>
+          </>
         )
       case PageStatus.NotFound:
-        return <></>
+        return (
+          <Typography>Not Found</Typography>
+        )
     }
   }
 
   return (
     <>
       {pathname !== '/login' && <Header />}
-      {getMainComponents()}
+      {getComponent()}
       <Footer />
     </>
   );

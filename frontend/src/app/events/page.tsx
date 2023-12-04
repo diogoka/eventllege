@@ -5,6 +5,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
+import { PageContext } from "@/context/pageContext";
 import { useSearchParams } from 'next/navigation';
 import { usePathname, useRouter } from 'next/navigation';
 import alertFn from '@/components/common/alertFunction';
@@ -40,6 +41,7 @@ interface AlertState {
 }
 
 export default function EventsPage() {
+  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -81,6 +83,7 @@ export default function EventsPage() {
           attendingEvents.push(attendingEvent);
         });
       });
+    ready();
     setEventsOfUser(attendingEvents);
   };
 
