@@ -1,14 +1,14 @@
 'use client'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import { Stack, Button, Chip, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
+import { PageContext, PageStatus } from "@/context/pageContext";
 import { BsFillPersonFill } from 'react-icons/bs';
 import { HiMail } from 'react-icons/hi';
 import { IoIosSchool } from 'react-icons/io';
 import UserInfoItem from '@/components/user/user-info-item';
 import { useMediaQuery } from '@mui/material';
-
 
 export default function UserPage() {
 
@@ -17,6 +17,11 @@ export default function UserPage() {
   const router = useRouter();
 
   const { user } = useContext(UserContext);
+  const { setPageStatus } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageStatus(PageStatus.Ready);
+  });
 
   return (
     <Stack width='100%' paddingBlock='4rem'>

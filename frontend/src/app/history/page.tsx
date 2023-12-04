@@ -4,6 +4,7 @@ import { Box, Alert, Typography } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
+import { PageContext } from "@/context/pageContext";
 import { UserContext } from '@/context/userContext';
 
 type Event = {
@@ -31,6 +32,7 @@ type CurrentUser = {
 };
 
 export default function PastEvent() {
+  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -64,6 +66,7 @@ export default function PastEvent() {
           attendingEvents.push(attendingEvent);
         });
       });
+    ready();
     setEventsOfUser(attendingEvents);
   };
 

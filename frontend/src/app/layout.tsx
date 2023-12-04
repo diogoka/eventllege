@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ThemeRegistry from './theme-registry';
+import { PageContextProvider } from "@/context/pageContext";
 import { UserContextProvider } from '@/context/userContext';
 import { EventContextProvider } from '@/context/eventContext';
 import AuthProvider from '@/auth/auth-provider';
@@ -31,11 +32,13 @@ export default function RootLayout({
       </head>
       <Box component='body' position='relative'>
         <ThemeRegistry options={{ key: 'mui' }}>
-          <UserContextProvider>
-            <EventContextProvider>
-              <AuthProvider>{children}</AuthProvider>
-            </EventContextProvider>
-          </UserContextProvider>
+          <PageContextProvider>
+            <UserContextProvider>
+              <EventContextProvider>
+                <AuthProvider>{children}</AuthProvider>
+              </EventContextProvider>
+            </UserContextProvider>
+          </PageContextProvider>
         </ThemeRegistry>
       </Box>
     </html>
