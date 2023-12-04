@@ -15,7 +15,6 @@ import {
 export default function Price() {
   const { createdEvent, dispatch } = useContext(EventContext);
   const [checked, setChecked] = useState(false);
-  const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
   const [priceValue, setPriceValue] = useState<string>();
 
@@ -25,7 +24,6 @@ export default function Price() {
       type: 'UPDATE_PRICE',
       payload: { ...createdEvent, price_event: event.target.checked ? 0 : 1 },
     });
-    setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
   const handleTextPriceChange = (event: any) => {
@@ -39,11 +37,9 @@ export default function Price() {
   useEffect(() => {
     if (createdEvent.price_event === 0) {
       setChecked(true);
-      setDisabled(false);
       setPriceValue('');
     } else if (createdEvent.price_event >= 1) {
       setChecked(false);
-      setDisabled(false);
       setError(false);
       setPriceValue(createdEvent.price_event.toString());
     } else {
@@ -86,7 +82,6 @@ export default function Price() {
           variant='outlined'
           type='number'
           fullWidth
-          disabled={disabled}
           value={priceValue}
           onChange={handleTextPriceChange}
           error={error}
@@ -99,9 +94,6 @@ export default function Price() {
               position: 'absolute',
               bottom: '-1rem',
             },
-            // '& .MuiInputBase-input.Mui-disabled': {
-            //   WebkitTextFillColor: '#000000',
-            // },
           }}
         />
       </FormControl>

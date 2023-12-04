@@ -76,10 +76,10 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           sx={{
             width: '100%',
             height: isMobile ? '10rem' : '6rem',
-            '& .MuiBox-root': {
-              backgroundColor: 'red',
-            },
             position: 'relative',
+            '& .MuiBox-root': {
+              backgroundColor: '#f14c4',
+            },
           }}
         >
           <Grid
@@ -100,7 +100,9 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                       ? updateDateHandler(index, newDateStart, date.dateEnd)
                       : null;
                   }}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
@@ -116,13 +118,15 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
                       : null;
                   }}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
           </Grid>
           {index === 0 ? (
-            <></>
+            <Box sx={{ display: 'none' }}></Box>
           ) : (
             <Button
               onClick={() => deleteDateHandler(index)}
