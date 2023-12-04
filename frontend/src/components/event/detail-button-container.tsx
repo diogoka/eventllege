@@ -56,6 +56,15 @@ const DetailButtonContainer = ({
         id_user: user?.id,
       })
       .then((res: any) => {
+        handleAlert(
+          true,
+          'Success',
+          'You have successfully applied to this event',
+          'success'
+        );
+        setTimeout(() => {
+          handleAlert(false, '', '', 'success');
+        }, 3000);
         setApplied(true);
         setAttendees((prevData: Array<Attendee> | undefined) => [
           ...prevData!,

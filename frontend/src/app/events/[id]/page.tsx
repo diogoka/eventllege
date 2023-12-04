@@ -13,12 +13,14 @@ import { UserContext } from '@/context/userContext';
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
-import MapWithMarker from "@/components/map/mapWithMarker";
+import MapWithMarker from '@/components/map/mapWithMarker';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
   setIsAlertVisible: (state: boolean) => void;
-  setAttendees: (state: Array<Attendee> | undefined) => void;
+  setAttendees: (
+    state: (prevData: Attendee[] | undefined) => Attendee[]
+  ) => void;
   setApplied: (state: boolean) => void;
 };
 
@@ -111,8 +113,6 @@ export default function EventPage() {
         eventDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
         eventDate < today && setOldEvent(true);
-
-
       })
       .catch((error) => {
         console.error(error.response);
