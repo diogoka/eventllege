@@ -55,11 +55,9 @@ export default function OrganizerEventsPage() {
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
-    // console.log('switchButtonState', switchButtonState);
     let url = switchButtonState
       ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
       : `http://localhost:3001/api/events/owner/${currentUser.id}`;
-    // console.log('url', url);
     axios
       .get(url)
       .then((res) => {
@@ -67,7 +65,11 @@ export default function OrganizerEventsPage() {
         if (res.data.events.length === 0) {
           setHasEvents({
             eventFound: false,
-            message: 'You have not created events yet',
+            message: switchButtonState
+              ? // eslint-disable-next-line quotes
+                "You don't have past events"
+              : // eslint-disable-next-line quotes
+                "You don't have upcoming events yet.",
           });
         } else {
           setHasEvents({ eventFound: true, message: '' });
