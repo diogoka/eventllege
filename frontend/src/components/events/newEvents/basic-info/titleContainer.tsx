@@ -24,8 +24,6 @@ export default function TitleContainer() {
     });
   };
 
-  console.log('count', countedTTL);
-
   return (
     <Stack
       direction='column'

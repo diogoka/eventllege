@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 import axios from 'axios';
 import EventsControl from '@/components/events/newEvents/eventsControl';
-import { assert } from "console";
 
 type Params = {
   params: {
@@ -79,11 +78,10 @@ export default function EditEventPage({ params }: Params) {
           const file = new File([blob], 'hoge', { type: blob.type });
           setImage(file);
         }
-
       } catch (error: any) {
         console.error(error);
       }
-    }
+    };
 
     setEventImage();
   }, [params.id]);

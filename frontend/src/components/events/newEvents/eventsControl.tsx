@@ -8,12 +8,17 @@ import DateList from './dateSchedule/dateList';
 import DetailList from './detail-info/detailList';
 import Location from './location/location';
 import ImageContainer from '../newEvents/basic-info/imageContainer';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
+dayjs.extend(isSameOrBefore);
 
 export default function EventsControl({ eventId }: { eventId: number }) {
   const router = useRouter();
   const { image, setImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
+  const [checkDate, setCheckDate] = useState(false);
 
   const {
     image: inputImage,
@@ -33,6 +38,27 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     }
   }, [image]);
 
+  console.log('events', createdEvent);
+
+  // createdEvent.dates.map((date) => {
+  //   console.log('start date: ', date.dateStart.hour());
+  //   console.log('start date: ', date.dateStart.minute());
+  //   console.log('date: ', date.dateStart);
+  // });
+
+  // const checkTime = () => {
+  //   createdEvent.dates.map((date) => {
+  //     // console.log('start date: ', date.dateStart.date());
+  //     // const endTime = date.dateEnd.toString();
+  //     // const startTime = date.dateStart.toString();
+  //     if (date.dateEnd.isSameOrBefore(date.dateStart, 'hour')) {
+  //       return setCheckDate(true);
+  //     }
+  //   });
+  // };
+
+  // checkTime();
+
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!createdEvent.name_event) {
@@ -48,6 +74,9 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       alert('Your description is too long');
       return;
     } else if (!createdEvent.dates) {
+      alert('Please choose dates');
+      return;
+    } else if (checkDate) {
       alert('Please choose dates');
       return;
     } else if (!createdEvent.location_event) {

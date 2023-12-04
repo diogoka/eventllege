@@ -39,7 +39,10 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
     newDateEnd: dayjs.Dayjs
   ) => {
     const updatedDates = [...dates];
-    updatedDates[index] = { dateStart: newDateStart, dateEnd: newDateEnd };
+    updatedDates[index] = {
+      dateStart: newDateStart,
+      dateEnd: newDateEnd,
+    };
     setDates(updatedDates);
   };
 
@@ -77,9 +80,6 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
             width: '100%',
             height: isMobile ? '10rem' : '6rem',
             position: 'relative',
-            '& .MuiBox-root': {
-              backgroundColor: '#f14c4',
-            },
           }}
         >
           <Grid
@@ -112,7 +112,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                   disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
-                  maxDate={endHourOfToday}
+                  // maxDate={endHourOfToday}
                   onChange={(newDateEnd) => {
                     newDateEnd
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
