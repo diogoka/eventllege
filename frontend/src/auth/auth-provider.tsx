@@ -4,10 +4,94 @@ import { useRouter, usePathname, redirect } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
+import { PageContext, PageStatus } from "@/context/pageContext";
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
+import Loading from "@/app/loading";
+
+enum Limitation {
+  None,       // Pages with no limitation
+  LoggedIn,   // Pages only for logged in users
+  Organizer,  // Pages only for organizers
+  Admin       // Pages only for administrators
+}
+
+type Page = {
+  path: RegExp;
+  limitation: Limitation;
+  isLoadingRequired: boolean;
+}
+
+const PAGES: Page[] = [
+  {
+    path: /^\/$/,
+    limitation: Limitation.None,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/events$/,
+    limitation: Limitation.None,
+    isLoadingRequired: true
+  },
+  {
+    path: /^\/events\/\d+$/,
+    limitation: Limitation.None,
+    isLoadingRequired: true
+  },
+  {
+    path: /^\/signup$/,
+    limitation: Limitation.None,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/login$/,
+    limitation: Limitation.None,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/user$/,
+    limitation: Limitation.LoggedIn,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/user\/edit$/,
+    limitation: Limitation.LoggedIn,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/history$/,
+    limitation: Limitation.LoggedIn,
+    isLoadingRequired: true
+  },
+  {
+    path: /^\/user\/my-events$/,
+    limitation: Limitation.LoggedIn,
+    isLoadingRequired: true
+  },
+  {
+    path: /^\/events\/new$/,
+    limitation: Limitation.Organizer,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/events\/new\/preview$/,
+    limitation: Limitation.Organizer,
+    isLoadingRequired: false
+  },
+  {
+    path: /^\/events\/\d+\/edit$/,
+    limitation: Limitation.Organizer,
+    isLoadingRequired: true
+  },
+  {
+    path: /^\/organizer-events$/,
+    limitation: Limitation.Organizer,
+    isLoadingRequired: true
+  },
+]
+
 
 export default function AuthProvider({
   children,
@@ -17,8 +101,9 @@ export default function AuthProvider({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
-    useContext(UserContext);
+  const { pageStatus, setPageStatus } = useContext(PageContext);
+  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
+
 
   useEffect(() => {
     initializeFirebase();
@@ -57,7 +142,8 @@ export default function AuthProvider({
     redirection: string;
   };
   const isAllowedPage = (): Permission => {
-    if (is404(pathname)) {
+    const page = getPage(pathname);
+    if (page === undefined) {
       return { isAllowed: true, redirection: '' };
     }
     // Wait until the login status is confirmed
@@ -70,7 +156,7 @@ export default function AuthProvider({
       if (user) {
         if (user.roleName === 'student') {
           // Give permission only to allowed pages
-          if (!isStudentPage(pathname)) {
+          if (!(page.limitation === Limitation.None || page.limitation === Limitation.LoggedIn)) {
             return { isAllowed: false, redirection: '/events' };
           }
         }
@@ -82,7 +168,7 @@ export default function AuthProvider({
     // If this user is not logged in
     else if (loginStatus === LoginStatus.LoggedOut) {
       // Give permission only to allowed pages
-      if (!isLoggedOutUserPage(pathname)) {
+      if (page.limitation !== Limitation.None) {
         // Go to the login page, but don't redirect from sign-up page
         if (pathname !== '/signup' && pathname !== '/login') {
           return { isAllowed: false, redirection: '/login' };
@@ -108,60 +194,80 @@ export default function AuthProvider({
     }
   }, [pathname, loginStatus]);
 
+  useEffect(() => {
+    if (loginStatus === LoginStatus.Unknown) {
+      setPageStatus(PageStatus.UserLoading);
+    } else {
+      if (getPage(pathname)?.isLoadingRequired) {
+        setPageStatus(PageStatus.PageLoading);
+      } else {
+        setPageStatus(PageStatus.Ready);
+      }
+    }
+  }, [pathname, loginStatus])
+
+  const getComponent = () => {
+    switch (pageStatus) {
+      case PageStatus.UserLoading:
+        return (
+          <>
+            <Loading />
+          </>
+        )
+      case PageStatus.PageLoading:
+        if (isAllowedPage().isAllowed) {
+          return (
+            <>
+              <Loading />
+              <Box
+                component='main'
+                maxWidth='1280px'
+                minHeight='100vh'
+                paddingInline='40px'
+                paddingBlock='50px'
+                marginInline='auto'
+              >
+                {children}
+              </Box>
+            </>
+          )
+        } else {
+          return <></>
+        }
+      case PageStatus.Ready:
+        return (
+          <>
+            <Box
+              component='main'
+              maxWidth='1280px'
+              minHeight='100vh'
+              paddingInline='40px'
+              paddingBlock='50px'
+              marginInline='auto'
+            >
+              {children}
+            </Box>
+          </>
+        )
+      case PageStatus.NotFound:
+        return (
+          <Typography>Not Found</Typography>
+        )
+    }
+  }
+
   return (
     <>
       {pathname !== '/login' && <Header />}
-      {isAllowedPage().isAllowed && (
-        <Box
-          component='main'
-          maxWidth='1280px'
-          minHeight='100vh'
-          paddingInline='40px'
-          paddingBlock='50px'
-          marginInline='auto'
-        >
-          {children}
-        </Box>
-      )}
+      {getComponent()}
       <Footer />
     </>
   );
 }
 
-const loggedOutUserPages = [
-  /^\/$/,
-  /^\/events$/,
-  /^\/events\/\d+$/,
-  /^\/signup$/,
-  /^\/login$/,
-];
 
-const studentPages = [
-  /^\/user$/,
-  /^\/user\/edit$/,
-  /^\/tickets$/,
-  /^\/history$/,
-  /^\/user\/my-events$/,
-];
-
-const organizerPages = [/^\/events\/\d+\/edit$/, /^\/organizer-events$/];
-
-function isLoggedOutUserPage(pathname: string): boolean {
-  return loggedOutUserPages.some((loggedOutUserPage) => {
-    return loggedOutUserPage.test(pathname);
-  });
-}
-
-function isStudentPage(pathname: string): boolean {
-  return studentPages.concat(loggedOutUserPages).some((studentPage) => {
-    return studentPage.test(pathname);
-  });
-}
-
-function is404(pathname: string): boolean {
-  return !organizerPages
-    .concat(studentPages.concat(loggedOutUserPages))
-    .some((page) => {
-      return page.test(pathname);
-    });
+function getPage(pathname: string): Page | undefined {
+  return PAGES.find((PAGE: Page) => {
+    return PAGE.path.test(pathname);
+  })
 }

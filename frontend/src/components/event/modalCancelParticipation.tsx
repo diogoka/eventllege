@@ -89,13 +89,14 @@ function ModalCancelParticipation({
       .then((res: any) => {
         handleAlertFn(
           true,
-          'Success',
+          //eslint-disable-next-line
+          "We're sorry to see you go!",
           'You have successfully cancelled your participation.',
-          'success'
+          'warning'
         );
         setTimeout(() => {
           handleAlertFn(false, '', '', 'success');
-        }, 2000);
+        }, 3500);
         setApplied(false);
         setOpen(false);
         setAttendees((prevData: Array<Attendee> | undefined) => {
@@ -114,10 +115,25 @@ function ModalCancelParticipation({
         },
       })
       .then((res: any) => {
-        router.push('/events?deletedEvent=true');
+        closingModal();
+        handleAlertFn(
+          true,
+          'Event deleted!',
+          'You will be redirected to the events page',
+          'success'
+        );
+        setTimeout(() => {
+          handleAlertFn(false, '', '', 'success');
+          router.push('/events');
+        }, 3500);
       })
       .catch((err: any) => {
-        router.push('/events?deletedEvent=false');
+        handleAlertFn(
+          true,
+          'Error',
+          'Something went wrong. Please try again.',
+          'error'
+        );
       });
   };
 

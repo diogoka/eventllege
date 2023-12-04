@@ -13,6 +13,7 @@ import { IoMdClose } from 'react-icons/io';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Review } from './review';
+import { StarRounded } from '@mui/icons-material';
 
 type Props = {
   user_id: string;
@@ -81,7 +82,7 @@ export default function ModalRating({
     event.preventDefault();
     const data = { event_id, user_id, review };
 
-    if (review.rating === 0) {
+    if (review.rating < 1) {
       setSnackbarSeverity('error');
       setSnackbarMessage('The minimum rating is 1 star');
       setSnackbarOpen(true);
@@ -171,14 +172,16 @@ export default function ModalRating({
             >
               <Rating
                 name='half-rating'
-                defaultValue={2.5}
-                precision={0.5}
+                defaultValue={2}
+                precision={1}
                 onChange={(event, newValue) => setRating(Number(newValue))}
+                emptyIcon={<StarRounded />}
+                icon={<StarRounded />}
               />
 
               <TextField
                 id='outlined-multiline-static'
-                label='Comments'
+                label='Comments '
                 multiline
                 rows={9}
                 placeholder='Tell us about your experience!'

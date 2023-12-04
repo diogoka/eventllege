@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
+import { PageContext } from '@/context/pageContext';
 import { EventContext } from '@/context/eventContext';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
@@ -53,6 +54,7 @@ type EventData = {
 
 export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
+  const { ready } = useContext(PageContext);
   const { createdEvent, dispatch, setImage } = useContext(EventContext);
 
   const [eventId, setEventId] = useState<number>();
@@ -77,6 +79,7 @@ export default function EditEventPage({ params }: Params) {
 
           const file = new File([blob], 'hoge', { type: blob.type });
           setImage(file);
+          ready();
         }
       } catch (error: any) {
         console.error(error);

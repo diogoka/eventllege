@@ -5,6 +5,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
+import { PageContext } from "@/context/pageContext";
 import { useSearchParams } from 'next/navigation';
 import { usePathname, useRouter } from 'next/navigation';
 import alertFn from '@/components/common/alertFunction';
@@ -40,6 +41,7 @@ interface AlertState {
 }
 
 export default function EventsPage() {
+  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -81,6 +83,7 @@ export default function EventsPage() {
           attendingEvents.push(attendingEvent);
         });
       });
+    ready();
     setEventsOfUser(attendingEvents);
   };
 
@@ -93,22 +96,7 @@ export default function EventsPage() {
       setJustUpdated(true);
       setShowAlert(true);
     }
-    if (searchParams.get('deletedEvent')) {
-      setAlert({
-        status: true,
-        message: 'Event was deleted successfully.',
-        severity: 'success',
-      });
-      setTimeout(() => {
-        setAlert({
-          status: false,
-          message: '',
-          severity: 'info',
-        });
-      }, 4000);
-    }
 
-    router.replace('/events', { scroll: false });
     getEvents();
   }, [justCreated, justUpdated, searchParams]);
 
@@ -152,9 +140,11 @@ export default function EventsPage() {
       });
   };
 
-  const message = justCreated? 'Event was created successfully.': 'Event was updated successfully.'
+  const message = justCreated
+    ? 'Event was created successfully.'
+    : 'Event was updated successfully.';
 
-  const title = justCreated? 'Created' : 'Updated';
+  const title = justCreated ? 'Created' : 'Updated';
 
   return (
     <Box
@@ -165,14 +155,8 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      {showAlert && (
-        alertFn(
-          title,
-          message,
-          'success',
-          () => setShowAlert(false)
-        )
-      )}
+      {showAlert &&
+        alertFn(title, message, 'success', () => setShowAlert(false))}
 
       {alert.status && (
         <Alert
