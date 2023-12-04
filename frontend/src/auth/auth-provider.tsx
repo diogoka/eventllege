@@ -63,12 +63,12 @@ const PAGES: Page[] = [
   {
     path: /^\/history$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: false
+    isLoadingRequired: true
   },
   {
     path: /^\/user\/my-events$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: false
+    isLoadingRequired: true
   },
   {
     path: /^\/events\/new$/,
@@ -83,12 +83,12 @@ const PAGES: Page[] = [
   {
     path: /^\/events\/\d+\/edit$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: false
+    isLoadingRequired: true
   },
   {
     path: /^\/organizer-events$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: false
+    isLoadingRequired: true
   },
 ]
 
