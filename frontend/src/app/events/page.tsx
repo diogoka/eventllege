@@ -93,22 +93,7 @@ export default function EventsPage() {
       setJustUpdated(true);
       setShowAlert(true);
     }
-    if (searchParams.get('deletedEvent')) {
-      setAlert({
-        status: true,
-        message: 'Event was deleted successfully.',
-        severity: 'success',
-      });
-      setTimeout(() => {
-        setAlert({
-          status: false,
-          message: '',
-          severity: 'info',
-        });
-      }, 4000);
-    }
 
-    router.replace('/events', { scroll: false });
     getEvents();
   }, [justCreated, justUpdated, searchParams]);
 
@@ -152,9 +137,11 @@ export default function EventsPage() {
       });
   };
 
-  const message = justCreated? 'Event was created successfully.': 'Event was updated successfully.'
+  const message = justCreated
+    ? 'Event was created successfully.'
+    : 'Event was updated successfully.';
 
-  const title = justCreated? 'Created' : 'Updated';
+  const title = justCreated ? 'Created' : 'Updated';
 
   return (
     <Box
@@ -165,14 +152,8 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      {showAlert && (
-        alertFn(
-          title,
-          message,
-          'success',
-          () => setShowAlert(false)
-        )
-      )}
+      {showAlert &&
+        alertFn(title, message, 'success', () => setShowAlert(false))}
 
       {alert.status && (
         <Alert

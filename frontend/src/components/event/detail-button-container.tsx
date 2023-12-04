@@ -92,7 +92,13 @@ const DetailButtonContainer = ({
     setIsModalOpen(true);
   };
 
-  const margin = { marginBlock: forMobile ? '25px' : '15px' };
+  const margin = {
+    marginBlock: forMobile ? '25px' : '15px',
+    '&:disabled': {
+      backgroundColor: '#f14c4c',
+      color: '#fff',
+    },
+  };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const id_event = otherInfo?.id_event;
