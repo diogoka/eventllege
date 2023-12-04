@@ -15,7 +15,11 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
 
-  const { image: inputImage, warning, onFileInputChange } = useUploadImage(20, 10, 480);
+  const {
+    image: inputImage,
+    warning,
+    onFileInputChange,
+  } = useUploadImage(20, 10, 480);
 
   useEffect(() => {
     if (inputImage) {
@@ -27,15 +31,21 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     if (image) {
       setTempImage(URL.createObjectURL(image));
     }
-  }, [image])
+  }, [image]);
 
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!createdEvent.name_event) {
       alert('Please enter a title');
       return;
+    } else if (createdEvent.name_event.length > 32) {
+      alert('Your title is too long');
+      return;
     } else if (!createdEvent.description_event) {
       alert('Please enter a description');
+      return;
+    } else if (createdEvent.description_event.length > 200) {
+      alert('Your description is too long');
       return;
     } else if (!createdEvent.dates) {
       alert('Please choose dates');

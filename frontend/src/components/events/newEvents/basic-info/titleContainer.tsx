@@ -1,16 +1,31 @@
 import React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { TextField, InputLabel, Stack, Box } from '@mui/material';
+import {
+  TextField,
+  InputLabel,
+  Stack,
+  Box,
+  InputAdornment,
+} from '@mui/material';
 
 export default function TitleContainer() {
   const { createdEvent, dispatch } = useContext(EventContext);
+  const [countedTTL, setCountedTTL] = useState<number>(32);
+
   const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCountedTTL(32 - event.target.value.length);
+    if (countedTTL < 0) {
+      alert('Your title is too long');
+    }
     dispatch({
       type: 'UPDATE_TITLE',
       payload: { ...createdEvent, name_event: event.target.value },
     });
   };
+
+  console.log('count', countedTTL);
+
   return (
     <Stack
       direction='column'
@@ -41,6 +56,16 @@ export default function TitleContainer() {
         type='text'
         value={createdEvent.name_event}
         onChange={changeTitle}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment
+              position='end'
+              sx={{ color: countedTTL < 0 ? 'red' : '#CACFD2' }}
+            >
+              {countedTTL}
+            </InputAdornment>
+          ),
+        }}
       />
     </Stack>
   );
