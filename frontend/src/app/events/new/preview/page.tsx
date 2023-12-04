@@ -9,9 +9,8 @@ import DetailIconContainer from '@/components/event/detail-icon-container';
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { setKey, fromAddress } from 'react-geocode';
 import { useSearchParams } from 'next/navigation';
+import MapWithMarker from "@/components/map/mapWithMarker";
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;
@@ -34,26 +33,20 @@ export type EventData = {
   category_event: string;
 };
 
-type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
 export default function PreviewEventPage() {
   const searchParams = useSearchParams();
 
   const { image, createdEvent } = useContext(EventContext);
-  console.log('image', image);
   const [tempState, setTempState] = useState<EventData>();
   const [forPreview, setForPreview] = useState<boolean>(true);
-  const [coordinate, setCoordinate] = useState<Coordinate>();
-  // const [tempImage, setTempImage] = useState<string>('');
-
   const [eventId, setEventId] = useState<number>();
-
-  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
   const forMobile = useMediaQuery('(max-width: 768px)');
+  const [tempImage, setTempImage] = useState('');
+  useEffect(() => {
+    if (image) {
+      setTempImage(URL.createObjectURL(image));
+    }
+  }, [image]);
 
   useEffect(() => {
 
@@ -73,28 +66,8 @@ export default function PreviewEventPage() {
       category_event: createdEvent.category_event,
     });
 
-    setKey(apiKey!);
-    fromAddress(createdEvent.location_event)
-      .then(({ results }) => {
-        const { lat, lng } = results[0].geometry.location;
-        setCoordinate({ lat: lat, lng: lng });
-      })
-      .catch(console.error);
-
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
-
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: apiKey!,
-  });
-
-  const [tempImage, setTempImage] = useState('');
-  useEffect(() => {
-    if (image) {
-      setTempImage(URL.createObjectURL(image));
-    }
-  }, [image])
 
   if (forMobile) {
     return (
@@ -209,8 +182,8 @@ export default function PreviewEventPage() {
                 forPreview={forPreview}
               />
               <Box borderRadius='7px' overflow='hidden'>
-                  <ImageHelper
-                    src={tempImage}
+                <ImageHelper
+                  src={tempImage}
                   width='320px'
                   height='220px'
                   alt={tempState?.name_event ?? 'Event'}
@@ -238,20 +211,7 @@ export default function PreviewEventPage() {
                 </Box>
               </Link>
 
-              {/* Google Map */}
-              {isLoaded ? (
-                <GoogleMap
-                  mapContainerStyle={{
-                    widows: '100%',
-                    height: '250px',
-                    borderRadius: '7px',
-                  }}
-                  center={coordinate}
-                  zoom={14}
-                />
-              ) : (
-                <></>
-              )}
+              <MapWithMarker location={createdEvent.location_event} />
             </Box>
             {/* //right */}
           </Box>
