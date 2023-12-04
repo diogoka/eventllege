@@ -48,7 +48,7 @@ function ReviewsList({ reviews, laptopQuery }: Props) {
           />
         ))}
       </Stack>
-      {totalReviews > 3 && (
+      {totalReviews > 6 && (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             variant='outlined'

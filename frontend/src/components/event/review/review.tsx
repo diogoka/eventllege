@@ -88,15 +88,17 @@ function Review({ id_event, applied }: Props) {
           </Box>
         )}
       </Box>
-      <ModalRating
-        user_id={user!.id}
-        event_id={id_event}
-        user_name={user!.name}
-        openModal={openModal}
-        handleClose={handleClose}
-        updateReviews={updateReviews}
-        laptopQuery={laptopQuery}
-      />
+      {user && (
+        <ModalRating
+          user_id={user!.id}
+          event_id={id_event}
+          user_name={user!.name}
+          openModal={openModal}
+          handleClose={handleClose}
+          updateReviews={updateReviews}
+          laptopQuery={laptopQuery}
+        />
+      )}
     </>
   );
 }

@@ -10,17 +10,19 @@ import DetailTimeContainer from '@/components/event/detail-time-container';
 import DetailButtonContainer from '@/components/event/detail-button-container';
 import Review from '@/components/event/review/review';
 import { UserContext } from '@/context/userContext';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
-import MapWithMarker from "@/components/map/mapWithMarker";
-import Loading from "@/app/loading";
+import MapWithMarker from '@/components/map/mapWithMarker';
+import Loading from '@/app/loading';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
   setIsAlertVisible: (state: boolean) => void;
-  setAttendees: (state: Array<Attendee> | undefined) => void;
+  setAttendees: (
+    state: (prevData: Attendee[] | undefined) => Attendee[]
+  ) => void;
   setApplied: (state: boolean) => void;
 };
 
@@ -61,7 +63,6 @@ export type OtherInfo = {
 };
 
 export default function EventPage() {
-
   const { ready } = useContext(PageContext);
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
@@ -85,7 +86,6 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-
         ready();
 
         setEvent({
@@ -118,8 +118,6 @@ export default function EventPage() {
         eventDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
         eventDate < today && setOldEvent(true);
-
-
       })
       .catch((error) => {
         console.error(error.response);
@@ -140,10 +138,9 @@ export default function EventPage() {
 
   const eventCapacity = event?.capacity_event;
 
-  if(!otherInfo?.id_event){
-    return <Box marginTop='100px'>No event found.</Box>
-
-  }else if (forMobile) {
+  if (!otherInfo?.id_event) {
+    return <Box marginTop='100px'>No event found.</Box>;
+  } else if (forMobile) {
     ///////////////////// Mobile /////////////////////
     return (
       <DetailPageContext.Provider value={provider}>
