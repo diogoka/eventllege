@@ -48,22 +48,20 @@ export default function PastEvent() {
     role: user!.roleName,
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const getEvents = async () => {
-    await axios
-      .get('http://localhost:3001/api/events/?past=true')
-      .then((res) => {
-        setEvents(res.data.events);
-        setTags(res.data.tags);
-      });
+    await axios.get(`${url}/api/events/?past=true`).then((res) => {
+      setEvents(res.data.events);
+      setTags(res.data.tags);
+    });
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
+    await axios.get(`${url}/api/events/user/${currentUser.id}`).then((res) => {
+      res.data.events.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
       });
+    });
     setEventsOfUser(attendingEvents);
   };
 
@@ -73,7 +71,7 @@ export default function PastEvent() {
 
   const searchEvents = (text: string) => {
     axios
-      .get(`http://localhost:3001/api/events/search/?text=${text}&past=true`)
+      .get(`${url}/api/events/search/?text=${text}&past=true`)
       .then((res) => {
         if (res.data.events.length === 0) {
           setEvents([]);

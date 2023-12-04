@@ -10,12 +10,11 @@ type Props = {
 
 export default function Location({ location, setLocation }: Props) {
   const [locationOptions, setLocationOptions] = useState<string[]>([]);
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const updateOptions = async (input: string) => {
     try {
-      const result = await axios.get(
-        `http://localhost:3001/api/location?input=${input}`
-      );
+      const result = await axios.get(`${url}/api/location?input=${input}`);
       setLocationOptions(result.data);
     } catch (error: any) {
       console.error(error);

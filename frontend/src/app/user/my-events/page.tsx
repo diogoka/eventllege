@@ -54,30 +54,30 @@ function UserEvents() {
     role: user!.roleName,
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const getEvents = async () => {
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          console.log('res.data.events', res.data.events.length);
-          setHasEvents({
-            eventFound: false,
-            message: 'You have not attended any events yet',
-          });
-        } else {
-          setHasEvents({
-            eventFound: true,
-            message: '',
-          });
-        }
-        setEvents(res.data.events);
-        setTags(res.data.tags);
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
+    await axios.get(`${url}/api/events/user/${currentUser.id}`).then((res) => {
+      if (res.data.events.length === 0) {
+        console.log('res.data.events', res.data.events.length);
+        setHasEvents({
+          eventFound: false,
+          message: 'You have not attended any events yet',
         });
+      } else {
+        setHasEvents({
+          eventFound: true,
+          message: '',
+        });
+      }
+      setEvents(res.data.events);
+      setTags(res.data.tags);
+      res.data.events.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
       });
+    });
     setEventsOfUser(attendingEvents);
   };
 
@@ -87,9 +87,7 @@ function UserEvents() {
 
   const searchEvents = (text: string) => {
     axios
-      .get(
-        `http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}`
-      )
+      .get(`${url}/api/events/user/${currentUser.id}/?search=${text}`)
       .then((res) => {
         if (res.data.events.length === 0) {
           setEvents([]);

@@ -1,5 +1,5 @@
-'use client'
-import { useState, useEffect, useContext } from 'react'
+'use client';
+import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import {
@@ -10,7 +10,7 @@ import {
   Typography,
   Button,
   FormControl,
-  Box
+  Box,
 } from '@mui/material';
 import { FcGoogle } from 'react-icons/fc';
 import { LoginStatus, UserContext } from '@/context/userContext';
@@ -23,18 +23,23 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
 } from 'firebase/auth';
 
 export default function SignUpPage() {
-
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const router = useRouter();
 
   const theme = useTheme();
 
-  const { setUser, firebaseAccount, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
+  const {
+    setUser,
+    firebaseAccount,
+    setFirebaseAccount,
+    loginStatus,
+    setLoginStatus,
+  } = useContext(UserContext);
 
   // User Input
   const [email, setEmail] = useState('');
@@ -48,8 +53,9 @@ export default function SignUpPage() {
   // Alert Message
   const [alertMessage, setAlertMessage] = useState('');
 
-  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password === confirmPassword) {
@@ -60,14 +66,13 @@ export default function SignUpPage() {
         })
         .catch((error: any) => {
           setAlertMessage(getErrorMessage(error.code));
-        })
+        });
     } else {
-      setAlertMessage('Password and Confirm Password doesn\'t match');
+      setAlertMessage("Password and Confirm Password doesn't match");
     }
   };
 
   const handleGoogleAuth = async () => {
-
     signInWithPopup(getAuth(), new GoogleAuthProvider())
       .then((result) => {
         setFirebaseAccount(result.user);
@@ -77,11 +82,10 @@ export default function SignUpPage() {
         setFirebaseAccount(null);
         setAlertMessage(getErrorMessage(error.code));
       });
-  }
+  };
 
   // Send user info to our server
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
-
     event.preventDefault();
 
     if (!firebaseAccount) {
@@ -99,8 +103,8 @@ export default function SignUpPage() {
     if (phone) formData.append('phone', phone);
 
     axios
-      .post('http://localhost:3001/api/users', formData, {
-        headers: { 'content-type': 'multipart/form-data' }
+      .post(`${url}/api/users`, formData, {
+        headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {
         setUser(res.data);
@@ -109,8 +113,8 @@ export default function SignUpPage() {
       })
       .catch((error) => {
         console.error(error.response.data);
-      })
-  }
+      });
+  };
 
   return (
     <>
@@ -123,9 +127,9 @@ export default function SignUpPage() {
             inset: '4rem auto auto 0',
             backgroundImage: 'url("/auth-bg.png")',
             backgroundSize: 'cover',
-            backgroundPositionX: '50%'
-          }}>
-        </Box>
+            backgroundPositionX: '50%',
+          }}
+        ></Box>
       )}
 
       <Box
@@ -146,7 +150,7 @@ export default function SignUpPage() {
           marginInline='auto'
           padding={isMobile ? 'none' : '0 6rem 2rem 6rem'}
         >
-          {!isMobile &&
+          {!isMobile && (
             <Typography
               marginBlock={isMobile ? 'none' : '2rem'}
               variant='h1'
@@ -154,23 +158,30 @@ export default function SignUpPage() {
             >
               Sign Up
             </Typography>
-          }
+          )}
 
           {/* Step1: Firebase Authentication */}
           {loginStatus === LoginStatus.LoggedOut && (
             <Stack rowGap={'20px'}>
               <form onSubmit={handleEmailAuth}>
                 <Stack rowGap={'20px'}>
-
                   <Stack rowGap={'10px'}>
                     <FormControl required>
-                      <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                      <TextField
+                        type='email'
+                        label='Email'
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                      />
                     </FormControl>
                     <FormControl required>
                       <PasswordInput label='Password' setter={setPassword} />
                     </FormControl>
                     <FormControl required>
-                      <PasswordInput label='Confirm Password' setter={setConfirmPassword} />
+                      <PasswordInput
+                        label='Confirm Password'
+                        setter={setConfirmPassword}
+                      />
                     </FormControl>
                     <Typography color='error'>{alertMessage}</Typography>
                   </Stack>
@@ -183,7 +194,6 @@ export default function SignUpPage() {
                   >
                     Next
                   </Button>
-
                 </Stack>
               </form>
 
@@ -194,12 +204,11 @@ export default function SignUpPage() {
                 startIcon={<FcGoogle />}
                 onClick={handleGoogleAuth}
                 sx={{
-                  borderColor: theme.palette.secondary.light
+                  borderColor: theme.palette.secondary.light,
                 }}
               >
                 Sign up with Google
               </Button>
-
             </Stack>
           )}
 
@@ -208,21 +217,26 @@ export default function SignUpPage() {
             <form onSubmit={handleSignup}>
               <Stack rowGap={'20px'}>
                 <Stack rowGap={'10px'}>
-
                   <NameInput name={name} setName={setName} />
                   <CourseInput courseId={courseId} setCourseId={setCourseId} />
 
                   <Typography variant='body2' align='center'>
                     If you are an instructor, please contact admin.
                   </Typography>
-
                 </Stack>
-                <Button type='submit' variant='contained' color='primary' fullWidth>Register</Button>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  fullWidth
+                >
+                  Register
+                </Button>
               </Stack>
             </form>
           )}
         </Stack>
       </Box>
     </>
-  )
+  );
 }

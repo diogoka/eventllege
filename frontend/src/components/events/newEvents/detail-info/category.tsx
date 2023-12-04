@@ -15,9 +15,11 @@ export default function Category({ category, setCategory }: Props) {
   //categories are from server
   const [categories, setCategories] = React.useState<Category[]>([]);
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/courses/category')
+      .get(`${url}/api/courses/category`)
       .then((res) => {
         setCategories(res.data);
       })

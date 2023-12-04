@@ -45,6 +45,8 @@ export default function ModalRating({
   const [snackbarSeverity, setSnackbarSeverity] =
     useState<AlertProps['severity']>('success');
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -94,7 +96,7 @@ export default function ModalRating({
     }
 
     const postReview = await axios
-      .post('http://localhost:3001/api/events/review/new', {
+      .post(`${url}/api/events/review/new`, {
         id_user: user_id,
         id_event: event_id,
         review: {

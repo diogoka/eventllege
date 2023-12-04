@@ -57,9 +57,11 @@ export default function EditEventPage({ params }: Params) {
 
   const [eventId, setEventId] = useState<number>();
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/events/${params.id}`)
+      .get(`${url}/api/events/${params.id}`)
       .then((res) => {
         setEditEvent(res.data.event);
         setEventId(res.data.event.id_event);

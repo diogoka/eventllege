@@ -66,13 +66,13 @@ function EventItem({
     checkModalities();
   }, []);
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const getAverageRating = async () => {
     if (oldEvent) {
-      await axios
-        .get(`http://localhost:3001/api/events/reviews/${eventId}`)
-        .then((res) => {
-          setAvgRating(averageRatingFn(res.data.reviews));
-        });
+      await axios.get(`${url}/api/events/reviews/${eventId}`).then((res) => {
+        setAvgRating(averageRatingFn(res.data.reviews));
+      });
     }
   };
 

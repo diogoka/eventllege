@@ -37,16 +37,15 @@ function Review({ id_event, applied }: Props) {
   const laptopQuery = useMediaQuery('(min-width:769px)');
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/events/reviews/${id_event}`)
-      .then((res) => {
-        setReviews(res.data.reviews);
-        if (res.data.reviews.length > 0) {
-          setHasReview(true);
-        }
-      });
+    axios.get(`${url}/api/events/reviews/${id_event}`).then((res) => {
+      setReviews(res.data.reviews);
+      if (res.data.reviews.length > 0) {
+        setHasReview(true);
+      }
+    });
   }, []);
 
   const updateReviews = (newReview: Review) => {

@@ -37,6 +37,7 @@ const DetailContainer = ({
     ? { textAlign: 'left', fontWeight: 'bold', fontSize: '2.5em' }
     : null;
   const timeContainerStyle = { margin: forMobile ? '10px auto' : '40px auto' };
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <>
@@ -49,7 +50,7 @@ const DetailContainer = ({
         style={{ marginInline: 'auto' }}
       >
         <ImageHelper
-          src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+          src={`${url}/img/events/${otherInfo?.id_event}`}
           width='100%'
           height='auto'
           alt={event?.name_event ?? 'Event'}

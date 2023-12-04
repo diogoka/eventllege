@@ -25,10 +25,11 @@ type Props = {
 
 export default function Tag({ selectedTags, setSelectedTags }: Props) {
   const [tags, setTags] = useState<Tag[]>([]);
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   // Tag data from server
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/tags')
+      .get(`${url}/api/tags`)
       .then((res) => {
         setTags(res.data);
       })

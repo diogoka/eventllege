@@ -71,11 +71,13 @@ export default function ModalDelete({
     setOpen(isOpen);
   }, [isOpen]);
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     console.log('delete');
     const response = await axios
-      .delete(`http://localhost:3001/api/events/${eventId}`)
+      .delete(`${url}/api/events/${eventId}`)
       .then((res) => {
         handleAlertFn(
           true,

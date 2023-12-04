@@ -51,6 +51,7 @@ export default function PreviewEventPage() {
   const [eventId, setEventId] = useState<number>();
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
@@ -206,7 +207,7 @@ export default function PreviewEventPage() {
               />
               <Box borderRadius='7px' overflow='hidden'>
                 <ImageHelper
-                  src={`http://localhost:3001/img/events/${0}`}
+                  src={`${url}/img/events/${0}`}
                   width='100%'
                   height='auto'
                   alt={tempState?.name_event ?? 'Event'}

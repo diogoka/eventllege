@@ -77,10 +77,12 @@ function ModalCancelParticipation({
     setOpen(isOpen);
   }, [isOpen]);
 
+  const url = process.env.NEXT_PUBLIC_API_URL;
+
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     axios
-      .delete('http://localhost:3001/api/events/attendee', {
+      .delete(`${url}/api/events/attendee`, {
         data: {
           id_event: id_event,
           id_user: id_user,
@@ -108,7 +110,7 @@ function ModalCancelParticipation({
 
   const deleteEvent = (id: number) => {
     axios
-      .delete(`http://localhost:3001/api/events/${id}`, {
+      .delete(`${url}/api/events/${id}`, {
         data: {
           id,
         },

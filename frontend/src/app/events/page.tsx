@@ -66,20 +66,19 @@ export default function EventsPage() {
   const router = useRouter();
 
   const getEvents = async () => {
-    await axios.get('http://localhost:3001/api/events').then((res) => {
+    const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+    await axios.get(`${url}/api/events`).then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
       // console.log(res.data.events);
     });
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
+    await axios.get(`${url}/api/events/user/${currentUser.id}`).then((res) => {
+      res.data.events.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
       });
+    });
     setEventsOfUser(attendingEvents);
   };
 
@@ -112,43 +111,42 @@ export default function EventsPage() {
   }, [justCreated, justUpdated, searchParams]);
 
   const searchEvents = (text: string) => {
-    axios
-      .get('http://localhost:3001/api/events/search/?text=' + text)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          setEvents([]);
+    const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+    axios.get(`${url}/api/events/search/?text=` + text).then((res) => {
+      if (res.data.events.length === 0) {
+        setEvents([]);
+        setAlert({
+          status: true,
+          message: 'No events found',
+          severity: 'info',
+        });
+        setTimeout(() => {
           setAlert({
-            status: true,
-            message: 'No events found',
+            status: false,
+            message: '',
             severity: 'info',
           });
-          setTimeout(() => {
-            setAlert({
-              status: false,
-              message: '',
-              severity: 'info',
-            });
-          }, 5000);
-        } else {
-          setEvents(res.data.events);
-          setTags(res.data.tags);
+        }, 5000);
+      } else {
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+        setAlert({
+          status: true,
+          message:
+            res.data.events.length === 1
+              ? `${res.data.events.length} event found`
+              : `${res.data.events.length} events found`,
+          severity: 'info',
+        });
+        setTimeout(() => {
           setAlert({
-            status: true,
-            message:
-              res.data.events.length === 1
-                ? `${res.data.events.length} event found`
-                : `${res.data.events.length} events found`,
+            status: false,
+            message: '',
             severity: 'info',
           });
-          setTimeout(() => {
-            setAlert({
-              status: false,
-              message: '',
-              severity: 'info',
-            });
-          }, 5000);
-        }
-      });
+        }, 5000);
+      }
+    });
   };
 
   return (

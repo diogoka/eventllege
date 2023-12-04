@@ -19,6 +19,8 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
     router.push('/user');
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleLogout = async () => {
     signOut(getAuth())
       .then(() => {
@@ -74,9 +76,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       >
         <Avatar
           alt={user?.name}
-          src={`http://localhost:3001/img/users/${
-            user?.id
-          }?${new Date().getTime()}`}
+          src={`${url}/img/users/${user?.id}?${new Date().getTime()}`}
         />{' '}
         My Profile
       </MenuItem>

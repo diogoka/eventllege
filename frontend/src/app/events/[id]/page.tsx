@@ -81,12 +81,12 @@ export default function EventPage() {
 
   const EVENT_ID = params.id;
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-
     axios
-      .get(`http://localhost:3001/api/events/${EVENT_ID}`)
+      .get(`${url}/api/events/${EVENT_ID}`)
       .then((res) => {
         setEvent({
           ...res.data.event,
@@ -236,7 +236,7 @@ export default function EventPage() {
                 />
                 <Box borderRadius='7px' overflow='hidden'>
                   <ImageHelper
-                    src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+                    src={`${url}/img/events/${otherInfo?.id_event}`}
                     width='100%'
                     height='auto'
                     alt={event?.name_event ?? 'Event'}

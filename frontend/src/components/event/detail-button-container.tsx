@@ -44,6 +44,7 @@ const DetailButtonContainer = ({
   const router = useRouter();
   const pathName = usePathname();
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const cancelEvent = () => {
     setIsModalOpen(true);
@@ -51,7 +52,7 @@ const DetailButtonContainer = ({
 
   const addAttendee = () => {
     axios
-      .post('http://localhost:3001/api/events/attendee', {
+      .post(`${url}/api/events/attendee`, {
         id_event: otherInfo?.id_event,
         id_user: user?.id,
       })

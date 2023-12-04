@@ -98,6 +98,7 @@ function EventCard({
     );
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   return (
     <Card
       onClick={handleCardClick}
@@ -130,7 +131,7 @@ function EventCard({
       </Box>
       <CardMedia>
         <ImageHelper
-          src={`http://localhost:3001/img/events/${eventId}`}
+          src={`${url}/img/events/${eventId}`}
           width='23.75rem'
           height='13.75rem'
           alt={event.name_event}

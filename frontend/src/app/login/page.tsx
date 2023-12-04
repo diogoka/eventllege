@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
 } from 'firebase/auth';
 import { getErrorMessage } from '@/auth/errors';
 import { UserContext, LoginStatus } from '@/context/userContext';
@@ -27,15 +27,14 @@ import { useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 
 export default function LoginPage() {
-
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const route = useRouter();
 
   const theme = useTheme();
 
-  const { setUser, setFirebaseAccount, setLoginStatus } = useContext(UserContext);
-
+  const { setUser, setFirebaseAccount, setLoginStatus } =
+    useContext(UserContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -45,9 +44,11 @@ export default function LoginPage() {
 
   const [isPasswordReset, setIsPasswordReset] = useState(false);
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const getUserFromServer = (uid: string) => {
     axios
-      .get(`http://localhost:3001/api/users/${uid}`)
+      .get(`${url}/api/users/${uid}`)
       .then((res: any) => {
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);
@@ -56,8 +57,8 @@ export default function LoginPage() {
       .catch((error: any) => {
         setUser(null);
         setLoginStatus(LoginStatus.SigningUp);
-      })
-  }
+      });
+  };
 
   const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,10 +80,8 @@ export default function LoginPage() {
       })
       .catch((error) => {
         setAlertMessage(getErrorMessage(error.code));
-      })
-  }
-
-
+      });
+  };
 
   return (
     <>
@@ -95,9 +94,8 @@ export default function LoginPage() {
             inset: '0 auto auto 0',
             backgroundImage: 'url("/auth-bg.png")',
             backgroundSize: 'cover',
-            
-          }}>
-        </Box>
+          }}
+        ></Box>
       )}
       <Stack
         width={isMobile ? 'auto' : '600px'}
@@ -110,10 +108,9 @@ export default function LoginPage() {
         sx={{
           position: isMobile ? 'static' : 'absolute',
           inset: isMobile ? '0' : '50% auto auto 50%',
-          transform: isMobile ? '' : 'translate(-50%, -50%)'
+          transform: isMobile ? '' : 'translate(-50%, -50%)',
         }}
       >
-
         <Container sx={{ width: 'auto', margin: 'auto', paddingBlock: '2rem' }}>
           <Image
             src='/eventllege_logo.svg'
@@ -125,10 +122,14 @@ export default function LoginPage() {
         <Stack rowGap={'20px'}>
           <form onSubmit={handleEmailLogin}>
             <Stack rowGap={'20px'}>
-
               <Stack rowGap={'10px'}>
                 <FormControl required>
-                  <TextField type='email' label='Email' onChange={(event) => setEmail(event.target.value)} required />
+                  <TextField
+                    type='email'
+                    label='Email'
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                  />
                 </FormControl>
                 <FormControl required>
                   <PasswordInput label='Password' setter={setPassword} />
@@ -141,7 +142,7 @@ export default function LoginPage() {
                   color={theme.palette.info.main}
                   sx={{
                     textAlign: 'right',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   Forgot password?
@@ -160,7 +161,6 @@ export default function LoginPage() {
               >
                 Log In
               </Button>
-
             </Stack>
           </form>
 
@@ -170,7 +170,7 @@ export default function LoginPage() {
             startIcon={<FcGoogle />}
             onClick={handleGoogleLogin}
             sx={{
-              borderColor: theme.palette.secondary.light
+              borderColor: theme.palette.secondary.light,
             }}
           >
             Log in with Google
@@ -186,9 +186,8 @@ export default function LoginPage() {
           >
             Sign Up
           </Button>
-
         </Stack>
       </Stack>
     </>
-  )
+  );
 }

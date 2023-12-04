@@ -156,6 +156,7 @@ function EventLine({
     );
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   return (
     <Box onClick={handleCardClick} sx={BoxStyle}>
       <Typography sx={titleStyle}>
@@ -183,7 +184,7 @@ function EventLine({
           : event.description_event}
       </Typography>
       <ImageHelper
-        src={`http://localhost:3001/img/events/${event.id_event}`}
+        src={`${url}/img/events/${event.id_event}`}
         width='6.25rem'
         height='4.0625rem'
         style={imageContainerStyle}

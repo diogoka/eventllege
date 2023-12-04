@@ -16,6 +16,7 @@ export default function AuthProvider({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
     useContext(UserContext);
@@ -34,7 +35,7 @@ export default function AuthProvider({
 
         // Get user data from server
         axios
-          .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
+          .get(`${url}/api/users/${firebaseAccount.uid}`)
           .then((res: any) => {
             setUser(res.data);
             setLoginStatus(LoginStatus.LoggedIn);
@@ -75,7 +76,7 @@ export default function AuthProvider({
           }
         }
       } else {
-        console.error('User is logged in but the data doesn\'t exist');
+        console.error("User is logged in but the data doesn't exist");
         return { isAllowed: false, redirection: '/events' };
       }
     }

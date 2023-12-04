@@ -28,6 +28,8 @@ export default function ButtonsForPreview({
 
   const router = useRouter();
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const submitEventHandler = (id: number) => {
     console.log('update tags', tempState.tags);
 
@@ -57,7 +59,7 @@ export default function ButtonsForPreview({
 
     if (id > 0) {
       axios
-        .put(`http://localhost:3001/api/events/${id}`, formData, {
+        .put(`${url}/api/events/${id}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {
@@ -81,7 +83,7 @@ export default function ButtonsForPreview({
         });
     } else {
       axios
-        .post('http://localhost:3001/api/events/new', formData, {
+        .post(`${url}/api/events/new`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then((res) => {

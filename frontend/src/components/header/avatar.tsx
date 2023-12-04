@@ -22,6 +22,8 @@ export default function AvatarIcon() {
     setAnchorEl(null);
   };
 
+  const url = process.env.BACKEND_URL;
+
   return (
     <Switcher
       sp={
@@ -29,9 +31,7 @@ export default function AvatarIcon() {
           <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
             <Avatar
               alt={user?.name}
-              src={`http://localhost:3001/img/users/${
-                user?.id
-              }?${new Date().getTime()}`}
+              src={`${url}/img/users/${user?.id}?${new Date().getTime()}`}
             ></Avatar>
           </IconButton>
           <Drawer
@@ -55,9 +55,7 @@ export default function AvatarIcon() {
           >
             <Avatar
               alt={user?.name}
-              src={`http://localhost:3001/img/users/${
-                user?.id
-              }?${new Date().getTime()}`}
+              src={`${url}/img/users/${user?.id}?${new Date().getTime()}`}
             ></Avatar>
           </IconButton>
           <Dropdown anchorEl={anchorEl} open={open} handleClose={handleClose} />

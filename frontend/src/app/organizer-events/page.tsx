@@ -53,12 +53,13 @@ export default function OrganizerEventsPage() {
     role: user!.roleName,
   };
   const laptopQuery = useMediaQuery('(min-width:769px)');
+  const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     // console.log('switchButtonState', switchButtonState);
     let url = switchButtonState
-      ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
-      : `http://localhost:3001/api/events/owner/${currentUser.id}`;
+      ? `${backendURL}/api/events/owner/${currentUser.id}?past=true`
+      : `${backendURL}/api/events/owner/${currentUser.id}`;
     // console.log('url', url);
     axios
       .get(url)
@@ -79,14 +80,12 @@ export default function OrganizerEventsPage() {
         console.error(error.response.data);
       });
     const attendingEvents: [number, boolean][] = [];
-    axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
+    axios.get(`${backendURL}/api/events/user/${currentUser.id}`).then((res) => {
+      res.data.events.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
       });
+    });
     setEventsOfUser(attendingEvents);
   }, [switchButtonState]);
 

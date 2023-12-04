@@ -51,6 +51,8 @@ function ReviewItem({ review, laptopQuery }: Props) {
     }
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   return (
     <Box sx={boxReviewStyle}>
       <Box sx={boxReviewLaptopStyle}>
@@ -63,9 +65,7 @@ function ReviewItem({ review, laptopQuery }: Props) {
           }}
         >
           <Avatar
-            src={`http://localhost:3001/img/users/${
-              review.id_user
-            }?${new Date().getTime()}`}
+            src={`${url}/img/users/${review.id_user}?${new Date().getTime()}`}
             alt={review.name_user}
             sx={{
               width: '2.1875rem',

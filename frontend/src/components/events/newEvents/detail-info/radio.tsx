@@ -21,10 +21,11 @@ export default function RadioBtn() {
   const [radioTags, setRadioTags] = useState<Tag[]>([]);
   const [selectedRadio, setSelectedRadio] = useState<number | null>(null);
   const { createdEvent, dispatch } = useContext(EventContext);
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/tags')
+      .get(`${url}/api/tags`)
       .then((res) => {
         setRadioTags(res.data);
       })

@@ -53,8 +53,10 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     } else {
     }
     setAddImage(image);
-    router.push(`http://localhost:3000/events/new/preview/?eventId=${eventId}`);
+    router.push(`${url}/events/new/preview/?eventId=${eventId}`);
   };
+
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   console.log('createdEvent in eventsControl', createdEvent);
   return (

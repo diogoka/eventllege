@@ -55,13 +55,15 @@ function EventIcons({
     }
   };
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const openDeleteModal = () => {
     setModalOpen(true);
   };
 
   const handleUserClick = (iconName: string) => {
     if (iconName === 'FaShareSquare') {
-      copyToClipboard(`http://localhost:3000/events/${eventId}`);
+      copyToClipboard(`${url}/events/${eventId}`);
     }
   };
 
