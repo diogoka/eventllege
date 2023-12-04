@@ -71,6 +71,13 @@ export default function LoginPage() {
       .catch((error) => {
         setAlertMessage(getErrorMessage(error.code));
       });
+
+    if (pathName === '/login') {
+      setShowedPage({
+        label: 'Events',
+        path: '/',
+      });
+    }
   };
 
   const handleGoogleLogin = async () => {
