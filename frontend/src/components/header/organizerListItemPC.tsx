@@ -20,7 +20,7 @@ export default function OrganizerListItemPC() {
   const router = useRouter();
   const params = useParams();
 
-  const { showedPage, setShowedPage, pathName, dispatch } =
+  const { showedPage, setShowedPage, pathName, dispatch, setImage } =
     useContext(EventContext);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function OrganizerListItemPC() {
     router.push(path);
     if (path === '/events/new') {
       dispatch({ type: 'RESET', payload: initialState });
+      setImage(null);
     }
   };
   return (
