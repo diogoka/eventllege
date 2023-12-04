@@ -140,7 +140,10 @@ export default function EventPage() {
 
   const eventCapacity = event?.capacity_event;
 
-  if (forMobile) {
+  if(!otherInfo?.id_event){
+    return <Box marginTop='100px'>No event found.</Box>
+
+  }else if (forMobile) {
     ///////////////////// Mobile /////////////////////
     return (
       <DetailPageContext.Provider value={provider}>
@@ -189,7 +192,7 @@ export default function EventPage() {
       <DetailPageContext.Provider value={provider}>
         <>
           <Stack>
-            <Box display='flex' margin='30px auto 90px'>
+            <Box width='100%' display='flex' margin='30px auto 90px'>
               {/* /////////// Left /////////// */}
               <Box minWidth='70%' marginRight='40px'>
                 <DetailContainer
