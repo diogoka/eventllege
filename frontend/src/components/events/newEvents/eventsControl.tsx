@@ -14,6 +14,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   const { image, setImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
+  const [checkedTime, setCheckedTime] = useState(false);
 
   const {
     image: inputImage,
@@ -33,8 +34,21 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     }
   }, [image]);
 
+  useEffect(() => {
+    createdEvent.dates.some((date) => {
+      if (date.dateEnd.isBefore(date.dateStart, 'minute')) {
+        setCheckedTime(true);
+      } else {
+        setCheckedTime(false);
+      }
+      console.log('here', checkedTime);
+    });
+  }, [createdEvent.dates]);
+
+  console.log(checkedTime);
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!createdEvent.name_event) {
       alert('Please enter a title');
       return;
@@ -49,6 +63,9 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       return;
     } else if (!createdEvent.dates) {
       alert('Please choose dates');
+      return;
+    } else if (checkedTime === true) {
+      alert('Please choose correct time');
       return;
     } else if (!createdEvent.location_event) {
       alert('Please enter a location');
