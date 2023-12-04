@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
+import { PageContext } from "@/context/pageContext";
 import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
@@ -36,6 +37,7 @@ interface HasEvents {
 }
 
 function UserEvents() {
+  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -77,6 +79,7 @@ function UserEvents() {
           let attendingEvent: [number, boolean] = [event.id_event, true];
           attendingEvents.push(attendingEvent);
         });
+        ready();
       });
     setEventsOfUser(attendingEvents);
   };

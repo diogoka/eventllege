@@ -4,6 +4,7 @@ import { Box, Button, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
+import { PageContext } from "@/context/pageContext";
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
 import SwitchButtonOrganizer from '@/components/events/switchButtonOrganizer';
@@ -38,6 +39,7 @@ interface HasEvents {
 }
 
 export default function OrganizerEventsPage() {
+  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -74,6 +76,8 @@ export default function OrganizerEventsPage() {
         }
         setEvents(res.data.events);
         setTags(res.data.tags);
+
+        ready();
       })
       .catch((error) => {
         console.error(error.response.data);
