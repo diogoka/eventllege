@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { EventContext } from '@/context/eventContext';
+import { EventContext, initialState } from '@/context/eventContext';
 import { Box, Stack, Button, useMediaQuery, Grid } from '@mui/material';
 import useUploadImage from '@/services/imageInput';
 import BasicInfo from './basic-info/basicInfo';
@@ -35,7 +35,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       alert('Please enter a title');
       return;
     } else if (!createdEvent.description_event) {
-      alert('Please enter a discussion');
+      alert('Please enter a description');
       return;
     } else if (!createdEvent.dates) {
       alert('Please choose dates');
@@ -60,7 +60,12 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     router.push(`/events/new/preview/?eventId=${eventId}`);
   };
 
-  console.log('createdEvent in eventsControl', createdEvent);
+  const cancelHandler = () => {
+    dispatch({ type: 'RESET', payload: initialState });
+    router.push('/');
+  };
+
+  // console.log('createdEvent in eventsControl', createdEvent);
   return (
     <Stack
       direction='column'
@@ -127,17 +132,17 @@ export default function EventsControl({ eventId }: { eventId: number }) {
         >
           <Grid item sm={12} md={6}>
             <Button
-              onClick={() => router.push('/')}
+              onClick={cancelHandler}
               variant='outlined'
               color='error'
               fullWidth
             >
-              cancel
+              Cancel
             </Button>
           </Grid>
           <Grid item sm={12} md={6}>
             <Button type='submit' variant='contained' color='primary' fullWidth>
-              Go to preview
+              Preview
             </Button>
           </Grid>
         </Grid>

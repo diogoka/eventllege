@@ -25,7 +25,8 @@ export default function DescriptionContainer({ isMobile }: Props) {
       <InputLabel
         htmlFor='description'
         sx={{
-          fontSize: '1.25rem',
+          fontSize: '1.125rem',
+          color: '#333',
         }}
       >
         Description{' '}

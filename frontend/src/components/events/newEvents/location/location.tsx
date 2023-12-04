@@ -46,7 +46,7 @@ export default function Location({ location, setLocation }: Props) {
               spacing={1}
               sx={{ width: '100%' }}
             >
-              <InputLabel>
+              <InputLabel sx={{ color: '#333' }}>
                 Location{' '}
                 <Box component={'span'} sx={{ color: '#f14c4c' }}>
                   *

@@ -37,12 +37,19 @@ export default function NewEventPage() {
     category_event: '',
   };
   useEffect(() => {
-    dispatch({ type: 'RESET', payload: initialState });
-    setImage(null);
+    if (createdEvent) {
+      dispatch({
+        type: 'GET_WHOLE_DATA',
+        payload: createdEvent,
+      });
+    } else {
+      dispatch({ type: 'RESET', payload: initialState });
+      setImage(null);
+    }
   }, []);
   return (
     <>
-      <EventsControl eventId={-1}/>
+      <EventsControl eventId={-1} />
     </>
   );
 }

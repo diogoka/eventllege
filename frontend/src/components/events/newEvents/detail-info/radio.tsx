@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useReducer } from 'react';
 import { EventContext } from '@/context/eventContext';
 import axios from 'axios';
 import {
@@ -36,8 +36,6 @@ export default function RadioBtn() {
   const handleChange = (event: SelectChangeEvent<typeof selectedRadio>) => {
     if (event.target.value) {
       const value = +event.target.value;
-      console.log('value', value);
-
       setSelectedRadio(value);
 
       let selectedTags: Tag[] = [];
@@ -61,11 +59,9 @@ export default function RadioBtn() {
     }
   };
 
-  console.log('update selected', createdEvent.selectedTags);
-
   return (
     <FormControl>
-      <FormLabel id='demo-row-radio-buttons-group-label'>
+      <FormLabel id='radio-buttons' sx={{ fontSize: '1.125rem' }}>
         Place {''}
         <Box component={'span'} sx={{ color: '#f14c4c' }}>
           *
@@ -73,17 +69,41 @@ export default function RadioBtn() {
       </FormLabel>
       <RadioGroup
         row
-        aria-labelledby='demo-row-radio-buttons-group-label'
+        aria-labelledby='radio-buttons'
         name='row-radio-buttons-group'
         value={selectedRadio}
         onChange={handleChange}
       >
-        <FormControlLabel value={16} control={<Radio />} label='Online' />
-        <FormControlLabel value={17} control={<Radio />} label='In Person' />
+        <FormControlLabel
+          value={16}
+          control={<Radio />}
+          label='Online'
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some((tag) => tag.id_tag === 16)
+          // }
+        />
+        <FormControlLabel
+          value={17}
+          control={<Radio />}
+          label='In Person'
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
+          // }
+        />
         <FormControlLabel
           value={18}
           control={<Radio />}
-          label='OnLine and In Person'
+          label='Online and In Person'
+          // checked={
+          //   createdEvent &&
+          //   createdEvent.selectedTags.some(
+          //     (tag) =>
+          //       tag.id_tag === 16 &&
+          //       createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
+          //   )
+          // }
         />
       </RadioGroup>
     </FormControl>

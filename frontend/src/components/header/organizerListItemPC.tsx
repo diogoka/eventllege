@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { EventContext } from '@/context/eventContext';
+import { EventContext, initialState } from '@/context/eventContext';
 import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@mui/material';
 
@@ -20,7 +20,8 @@ export default function OrganizerListItemPC() {
   const router = useRouter();
   const params = useParams();
 
-  const { showedPage, setShowedPage, pathName } = useContext(EventContext);
+  const { showedPage, setShowedPage, pathName, dispatch } =
+    useContext(EventContext);
 
   useEffect(() => {
     // Update the currentPage when the path changes
@@ -36,6 +37,9 @@ export default function OrganizerListItemPC() {
 
   const clickHandler = (path: string) => {
     router.push(path);
+    if (path === '/events/new') {
+      dispatch({ type: 'RESET', payload: initialState });
+    }
   };
   return (
     <>
