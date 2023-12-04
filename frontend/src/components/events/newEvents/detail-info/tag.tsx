@@ -65,7 +65,10 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       sx={{ width: '100%' }}
     >
       <FormControl fullWidth>
-        <FormLabel id='tags' sx={{ marginBlock: '.5rem' }}>
+        <FormLabel
+          id='tags'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
           Tags {''}
           <Box component={'span'} sx={{ color: '#f14c4c' }}>
             *
@@ -81,10 +84,15 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
             if (selectedIds.length === 0) {
               return <em>Please select tags</em>;
             }
+
             const selectedNames = selectedTags
               .filter((tag) => selectedIds.includes(tag.id_tag))
-              .map((tag) => tag.name_tag);
-            return selectedNames.join(',');
+              .map((tag) =>
+                tag.name_tag === 'Online' || tag.name_tag === 'In Person'
+                  ? ''
+                  : tag.name_tag
+              );
+            return selectedNames.join(`\t\t`);
           }}
         >
           {tags.map((tag) =>

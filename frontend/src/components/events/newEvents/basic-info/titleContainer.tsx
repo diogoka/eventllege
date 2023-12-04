@@ -22,7 +22,8 @@ export default function TitleContainer() {
       <InputLabel
         htmlFor='title'
         sx={{
-          fontSize: '1.25rem',
+          fontSize: '1.125rem',
+          color: '#333',
         }}
       >
         Title{' '}

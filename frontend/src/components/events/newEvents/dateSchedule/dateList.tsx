@@ -18,6 +18,8 @@ type Props = {
 };
 
 const today = dayjs();
+const hourOfToday = today.add(1, 'minute');
+const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates, isMobile }: Props) {
   const deleteDateHandler = (index: number) => {
@@ -28,7 +30,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
   };
 
   const addDateHandler = () => {
-    setDates([...dates, { dateStart: today, dateEnd: today }]);
+    setDates([...dates, { dateStart: hourOfToday, dateEnd: endHourOfToday }]);
   };
 
   const updateDateHandler = (
@@ -52,7 +54,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           width: '100%',
         }}
       >
-        <Typography variant='h2'>
+        <Typography variant='h2' sx={{ fontWeight: 400, lineHeight: '26px' }}>
           Date {''}
           <Box component={'span'} sx={{ color: '#f14c4c' }}>
             *
@@ -63,7 +65,6 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           startIcon={<AddCircleOutlineIcon />}
           size='medium'
           variant='text'
-          sx={{ fontSize: '1rem' }}
           color='info'
         >
           Add Date
@@ -109,6 +110,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                   disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
+                  maxDate={endHourOfToday}
                   onChange={(newDateEnd) => {
                     newDateEnd
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
@@ -126,6 +128,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
               onClick={() => deleteDateHandler(index)}
               variant='text'
               startIcon={<RemoveCircleOutlineIcon />}
+              size='medium'
               sx={{
                 position: 'absolute',
                 right: '1rem',

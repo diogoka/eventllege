@@ -8,20 +8,16 @@ import {
   Checkbox,
   Stack,
   Box,
-  InputLabel,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 
-type Props = {
-  spots: number;
-  setSpots: (value: number) => void;
-};
 export default function Capacity() {
   const { createdEvent, dispatch } = useContext(EventContext);
   const [isChecked, setIsChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [checkDisabled, setCheckDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [spotValue, setSpotValue] = useState<number>();
+  const [spotValue, setSpotValue] = useState<string>();
 
   const handleSpotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -32,7 +28,6 @@ export default function Capacity() {
         capacity_event: event.target.checked ? -1 : 1,
       },
     });
-    // setSpots(event.target.checked ? -1 : 1);
     setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
@@ -43,27 +38,27 @@ export default function Capacity() {
       type: 'UPDATE_SPOTS',
       payload: { ...createdEvent, capacity_event: event.target.value },
     });
-    // setSpots(event.target.value);
   };
 
   useEffect(() => {
     if (createdEvent.capacity_event === -1) {
       setIsChecked(true);
-      setDisabled(true);
+      setDisabled(false);
+      setSpotValue('');
     } else if (createdEvent.capacity_event >= 1) {
       setIsChecked(false);
       setDisabled(false);
-      setCheckDisabled(true);
+
       setError(false);
-      setSpotValue(createdEvent.capacity_event);
+      setSpotValue(createdEvent.capacity_event.toString());
     } else {
       setError(true);
-      setCheckDisabled(false);
+      setIsChecked(false);
+      setSpotValue('');
     }
   }, [createdEvent.capacity_event]);
 
-  // console.log('spotValue', spotValue);
-  // console.log('spots', createdEvent.capacity_event);
+  console.log('spots', createdEvent.capacity_event);
 
   return (
     <Stack
@@ -73,50 +68,47 @@ export default function Capacity() {
       spacing={1}
       sx={{ width: '100%' }}
     >
-      <InputLabel
-        sx={{
-          fontSize: '1.25rem',
-        }}
-      >
-        Spots {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
-      <FormControlLabel
-        label='Non limited people'
-        control={
-          <Checkbox
-            checked={isChecked}
-            onChange={handleSpotsChange}
-            disabled={checkDisabled}
-          />
-        }
-      />
+      <FormControl fullWidth>
+        <FormLabel
+          id='capacity'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
+          Spots {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
+        <FormControlLabel
+          label='Non limited people'
+          control={
+            <Checkbox checked={isChecked} onChange={handleSpotsChange} />
+          }
+        />
 
-      <TextField
-        variant='outlined'
-        type='number'
-        fullWidth
-        disabled={disabled}
-        value={spotValue}
-        onChange={handleTextSpotsChange}
-        error={error}
-        helperText={error ? 'Spots must be greater than 1' : ''}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position='end'>
-              {createdEvent.capacity_event >= 2 ? 'people' : 'person'}
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          '& .MuiFormHelperText-root': {
-            position: 'absolute',
-            bottom: '-1rem',
-          },
-        }}
-      />
+        <TextField
+          variant='outlined'
+          type='number'
+          fullWidth
+          disabled={disabled}
+          value={spotValue}
+          onChange={handleTextSpotsChange}
+          error={error}
+          helperText={error ? 'Spots must be greater than 1' : ''}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                {createdEvent.capacity_event >= 2 ? 'people' : 'person'}
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            '& .MuiFormHelperText-root': {
+              position: 'absolute',
+              bottom: '-1rem',
+            },
+          }}
+        />
+      </FormControl>
     </Stack>
   );
 }

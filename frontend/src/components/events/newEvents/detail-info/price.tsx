@@ -6,9 +6,10 @@ import {
   InputAdornment,
   FormControlLabel,
   Checkbox,
-  InputLabel,
   Box,
   Stack,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 
 export default function Price() {
@@ -16,8 +17,7 @@ export default function Price() {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
-  const [checkDisabled, setCheckDisabled] = useState(false);
-  const [priceValue, setPriceValue] = useState<number>();
+  const [priceValue, setPriceValue] = useState<string>();
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -39,21 +39,19 @@ export default function Price() {
   useEffect(() => {
     if (createdEvent.price_event === 0) {
       setChecked(true);
-      setDisabled(true);
+      setDisabled(false);
+      setPriceValue('');
     } else if (createdEvent.price_event >= 1) {
       setChecked(false);
       setDisabled(false);
-      setCheckDisabled(true);
       setError(false);
-      setPriceValue(createdEvent.price_event);
+      setPriceValue(createdEvent.price_event.toString());
     } else {
       setError(true);
-      setCheckDisabled(false);
+      setChecked(false);
+      setPriceValue('');
     }
   }, [createdEvent.price_event]);
-
-  // console.log('price', createdEvent.price_event);
-  // console.log('priceValue', priceValue);
 
   return (
     <Stack
@@ -63,48 +61,50 @@ export default function Price() {
       spacing={1}
       sx={{ width: '100%' }}
     >
-      <InputLabel
-        htmlFor='price'
-        sx={{
-          fontSize: '1.25rem',
-        }}
-      >
-        Price {''}
-        <Box component={'span'} sx={{ color: '#f14c4c' }}>
-          *
-        </Box>
-      </InputLabel>
-      <FormControlLabel
-        label='Free'
-        control={
-          <Checkbox
-            id='Free'
-            checked={checked}
-            onChange={handlePriceChange}
-            disabled={checkDisabled}
-          />
-        }
-      />
+      <FormControl fullWidth>
+        <FormLabel
+          id='price'
+          sx={{ marginBlock: '.5rem', fontSize: '1.125rem' }}
+        >
+          Price {''}
+          <Box component={'span'} sx={{ color: '#f14c4c' }}>
+            *
+          </Box>
+        </FormLabel>
+        <FormControlLabel
+          label='Free'
+          control={
+            <Checkbox
+              id='Free'
+              checked={checked}
+              onChange={handlePriceChange}
+            />
+          }
+        />
 
-      <TextField
-        variant='outlined'
-        type='number'
-        fullWidth
-        disabled={disabled}
-        value={priceValue}
-        onChange={handleTextPriceChange}
-        error={error}
-        helperText={error ? 'Price must be greater than 1' : ''}
-        InputProps={{
-          startAdornment: <InputAdornment position='start'>$</InputAdornment>,
-        }}
-        sx={{
-          '& .MuiFormHelperText-root': {
-            position: 'absolute',
-            bottom: '-1rem',
-          },
-        }}
-      />
+        <TextField
+          variant='outlined'
+          type='number'
+          fullWidth
+          disabled={disabled}
+          value={priceValue}
+          onChange={handleTextPriceChange}
+          error={error}
+          helperText={error ? 'Price must be greater than 1' : ''}
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>$</InputAdornment>,
+          }}
+          sx={{
+            '& .MuiFormHelperText-root': {
+              position: 'absolute',
+              bottom: '-1rem',
+            },
+            // '& .MuiInputBase-input.Mui-disabled': {
+            //   WebkitTextFillColor: '#000000',
+            // },
+          }}
+        />
+      </FormControl>
     </Stack>
   );
 }
