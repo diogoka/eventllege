@@ -22,14 +22,14 @@ const hourOfToday = today.add(1, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates, isMobile }: Props) {
-  const deleteDateHandler = (index: number) => {
+  const deleteDateBtnHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;
     });
     setDates(updatedDate);
   };
 
-  const addDateHandler = () => {
+  const addDateBtnHandler = () => {
     setDates([...dates, { dateStart: hourOfToday, dateEnd: endHourOfToday }]);
   };
 
@@ -64,7 +64,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           </Box>
         </Typography>
         <Button
-          onClick={addDateHandler}
+          onClick={addDateBtnHandler}
           startIcon={<AddCircleOutlineIcon />}
           size='medium'
           variant='text'
@@ -112,7 +112,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                   disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
-                  // maxDate={endHourOfToday}
+                  minDateTime={date.dateStart}
                   onChange={(newDateEnd) => {
                     newDateEnd
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
@@ -129,7 +129,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
             <Box sx={{ display: 'none' }}></Box>
           ) : (
             <Button
-              onClick={() => deleteDateHandler(index)}
+              onClick={() => deleteDateBtnHandler(index)}
               variant='text'
               startIcon={<RemoveCircleOutlineIcon />}
               size='medium'
