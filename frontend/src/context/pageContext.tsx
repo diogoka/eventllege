@@ -12,6 +12,7 @@ type PageContextProps = {
   pageStatus: PageStatus,
   setPageStatus: (pageStatus: PageStatus) => void,
   ready: () => void,
+  notFound: () => void,
 }
 
 export const PageContext = createContext<PageContextProps>({} as PageContextProps);
@@ -24,9 +25,13 @@ export function PageContextProvider({ children }: { children: ReactNode }) {
     setPageStatus(PageStatus.Ready);
   }
 
+  const notFound = () => {
+    setPageStatus(PageStatus.NotFound);
+  }
+
   return (
     <PageContext.Provider
-      value={{ pageStatus, setPageStatus, ready }}
+      value={{ pageStatus, setPageStatus, ready, notFound }}
     >
       {children}
     </PageContext.Provider>
