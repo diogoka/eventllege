@@ -8,7 +8,9 @@ const alertFn = (title: string, message: string, severity: AlertColor, onCloseFn
         onClose={onCloseFn}
         variant='filled'
         sx={{
-          position: 'absolute',
+          width: 'fit-content',
+          position: title=='Updated' || title=='Created'? 'sticky' : 'absolute',
+          // position: 'sticky',
           top: '10px',
           left: '50%',
           transform: 'translateX(-50%)',

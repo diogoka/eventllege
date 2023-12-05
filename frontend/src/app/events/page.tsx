@@ -6,9 +6,6 @@ import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
 import { PageContext } from "@/context/pageContext";
-import { useSearchParams } from 'next/navigation';
-import { usePathname, useRouter } from 'next/navigation';
-import alertFn from '@/components/common/alertFunction';
 
 export type Event = {
   capacity_event: number;
@@ -45,14 +42,9 @@ export default function EventsPage() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [justCreated, setJustCreated] = useState<boolean>(false);
-  const [justUpdated, setJustUpdated] = useState<boolean>(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );
-
-  const searchParams = useSearchParams();
 
   const [alert, setAlert] = useState<AlertState>({
     status: false,
@@ -64,9 +56,6 @@ export default function EventsPage() {
     id: user?.id,
     role: user?.roleName,
   };
-
-  const pathname = usePathname();
-  const router = useRouter();
 
   const getEvents = async () => {
     await axios.get('http://localhost:3001/api/events').then((res) => {
@@ -88,17 +77,8 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
-    if (searchParams.get('isPublished')) {
-      setJustCreated(true);
-      setShowAlert(true);
-    }
-    if (searchParams.get('isUpdated')) {
-      setJustUpdated(true);
-      setShowAlert(true);
-    }
-
     getEvents();
-  }, [justCreated, justUpdated, searchParams]);
+  }, []);
 
   const searchEvents = (text: string) => {
     axios
@@ -140,12 +120,6 @@ export default function EventsPage() {
       });
   };
 
-  const message = justCreated
-    ? 'Event was created successfully.'
-    : 'Event was updated successfully.';
-
-  const title = justCreated ? 'Created' : 'Updated';
-
   return (
     <Box
       sx={{
@@ -155,8 +129,6 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-      {showAlert &&
-        alertFn(title, message, 'success', () => setShowAlert(false))}
 
       {alert.status && (
         <Alert
