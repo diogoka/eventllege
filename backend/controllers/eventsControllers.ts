@@ -35,10 +35,43 @@ export const getEvents = async (
       .replace('T', ' ');
 
     const events = req.query.past
-      ? await pool.query(
-          `SELECT * FROM events where events.date_event_start <= $1 ORDER BY events.date_event_start ASC`,
-          [today]
-        )
+      ? req.query.attendees
+        ? await pool.query(
+            `SELECT
+              events.id_event,
+              events.name_event,
+              events.date_event_start,
+              events.date_event_end,
+              events.location_event,
+              events.description_event,
+              events.price_event,
+              events.capacity_event,
+              events.category_event,
+              json_agg(attendees) AS attendees
+            FROM
+              events
+            LEFT JOIN
+              attendees ON events.id_event = attendees.id_event
+            WHERE
+              events.date_event_start < $1
+            GROUP BY
+              events.id_event,
+              events.name_event,
+              events.date_event_start,
+              events.date_event_end,
+              events.location_event,
+              events.description_event,
+              events.price_event,
+              events.capacity_event,
+              events.category_event
+            ORDER BY
+              events.date_event_start ASC`,
+            [today]
+          )
+        : await pool.query(
+            `SELECT * FROM events where events.date_event_start <= $1 ORDER BY events.date_event_start ASC`,
+            [today]
+          )
       : await pool.query(
           `SELECT * FROM events where events.date_event_start >= $1 and events.date_event_start < $2 ORDER BY events.date_event_start ASC`,
           [today, dayFromNow]

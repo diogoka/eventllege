@@ -60,7 +60,7 @@ export default function OrganizerListItemPC() {
           color={
             showedPage &&
             (showedPage.path === button.path ||
-              showedPage?.path === `/events/?isUpdated=true` ||
+              showedPage?.path === '/events/?isUpdated=true' ||
               showedPage?.path === '/events/?isPublished=true')
               ? 'primary'
               : 'secondary'

@@ -6,10 +6,10 @@ import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
 import { Box, Typography } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
-import { PageContext, PageStatus } from "@/context/pageContext";
+import { PageContext, PageStatus } from '@/context/pageContext';
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
-import Loading from "@/app/loading";
+import Loading from '@/app/loading';
 
 enum Limitation {
   None,       // Pages with no limitation

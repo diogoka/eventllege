@@ -10,7 +10,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button';
 import { useSearchParams } from 'next/navigation';
-import MapWithMarker from "@/components/map/mapWithMarker";
+import MapWithMarker from '@/components/map/mapWithMarker';
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;
