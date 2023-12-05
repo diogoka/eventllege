@@ -189,17 +189,23 @@ export const getEventsByUser = async (
         });
       });
 
-      if (filteredEvents.length === 0) {
-        res.status(200).json({
-          events: [],
-          tags: [],
+      if (req.query.past) {
+        const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        let pastEvents = filteredEvents.filter((event: any) => {
+          return new Date(event.date_event_start).toISOString() < today;
         });
-        return;
-      } else {
-        const ids = filteredEvents.map((val: any) => {
-          return val.id_event;
-        });
-        tags = await pool.query(`
+
+        if (pastEvents.length === 0) {
+          res.status(200).json({
+            events: [],
+            tags: [],
+          });
+          return;
+        } else {
+          const ids = pastEvents.map((val: any) => {
+            return val.id_event;
+          });
+          tags = await pool.query(`
           SELECT 
             events.id_event, 
             tags.name_tag 
@@ -212,10 +218,40 @@ export const getEventsByUser = async (
           WHERE 
             events.id_event IN (${ids.join(',')});
         `);
-        res.status(200).json({
-          events: filteredEvents,
-          tags: tags.rows,
-        });
+          res.status(200).json({
+            events: pastEvents,
+            tags: tags.rows,
+          });
+        }
+      } else {
+        if (filteredEvents.length === 0) {
+          res.status(200).json({
+            events: [],
+            tags: [],
+          });
+          return;
+        } else {
+          const ids = filteredEvents.map((val: any) => {
+            return val.id_event;
+          });
+          tags = await pool.query(`
+          SELECT 
+            events.id_event, 
+            tags.name_tag 
+          FROM 
+            events
+          INNER JOIN 
+            events_tags ON events.id_event = events_tags.id_event
+          INNER JOIN 
+            tags ON events_tags.id_tag = tags.id_tag 
+          WHERE 
+            events.id_event IN (${ids.join(',')});
+        `);
+          res.status(200).json({
+            events: filteredEvents,
+            tags: tags.rows,
+          });
+        }
       }
     } else {
       res.status(200).json({
@@ -273,7 +309,6 @@ export const searchEvents = async (
       `);
 
     const id = req.query.id ? req.query.id : null;
-    console.log('id', id);
 
     if (id) {
       let eventsByUser = events.rows.filter((event: any) => {
@@ -507,7 +542,6 @@ export const updateEvents = async (
     tagId,
     category,
   } = req.body;
-  console.log('backend update events', tagId);
 
   if (!id) {
     res.status(404).send('Update events failed');
@@ -532,8 +566,6 @@ export const updateEvents = async (
 
         await pool.query(`DELETE FROM events_tags WHERE id_event = $1`, [id]);
         tagId.forEach(async (tag: number) => {
-          console.log('backend tag', tag);
-
           await pool.query(
             `INSERT INTO events_tags (id_event, id_tag) VALUES ($1, $2) RETURNING *;`,
             [id, tag]

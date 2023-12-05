@@ -95,39 +95,40 @@ export default function PastEvent() {
   }, [allEvents]);
 
   const searchEvents = (text: string) => {
-    axios
-      .get(`http://localhost:3001/api/events/search/?text=${text}&past=true`)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          setEvents([]);
+    let url = allEvents
+      ? `http://localhost:3001/api/events/search/?text=${text}&past=true`
+      : `http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}&past=true`;
+    axios.get(url).then((res) => {
+      if (res.data.events.length === 0) {
+        setEvents([]);
+        setAlertSearchBar({
+          status: true,
+          message: 'No events found',
+        });
+        setTimeout(() => {
           setAlertSearchBar({
-            status: true,
-            message: 'No events found',
+            status: false,
+            message: '',
           });
-          setTimeout(() => {
-            setAlertSearchBar({
-              status: false,
-              message: '',
-            });
-          }, 3000);
-        } else {
-          setEvents(res.data.events);
-          setTags(res.data.tags);
+        }, 3000);
+      } else {
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+        setAlertSearchBar({
+          status: true,
+          message:
+            res.data.events.length === 1
+              ? `${res.data.events.length} event found`
+              : `${res.data.events.length} events found`,
+        });
+        setTimeout(() => {
           setAlertSearchBar({
-            status: true,
-            message:
-              res.data.events.length === 1
-                ? `${res.data.events.length} event found`
-                : `${res.data.events.length} events found`,
+            status: false,
+            message: '',
           });
-          setTimeout(() => {
-            setAlertSearchBar({
-              status: false,
-              message: '',
-            });
-          }, 3000);
-        }
-      });
+        }, 3000);
+      }
+    });
   };
 
   return (
