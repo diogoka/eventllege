@@ -15,9 +15,9 @@ export default function TitleContainer() {
 
   const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCountedTTL(32 - event.target.value.length);
-    if (countedTTL < 0) {
-      alert('Your title is too long');
-    }
+    // if (countedTTL < 0) {
+    //   alert('Your title is too long');
+    // }
     dispatch({
       type: 'UPDATE_TITLE',
       payload: { ...createdEvent, name_event: event.target.value },

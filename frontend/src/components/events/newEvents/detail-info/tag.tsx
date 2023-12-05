@@ -55,6 +55,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       setSelectedTags(selectedTagsName);
     }
   };
+  console.log('tags selected:', selectedTags);
 
   return (
     <Stack

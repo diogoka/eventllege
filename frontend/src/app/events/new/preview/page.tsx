@@ -77,7 +77,7 @@ export default function PreviewEventPage() {
       capacity_event: createdEvent.capacity_event,
       location_event: createdEvent.location_event,
       price_event: createdEvent.price_event,
-      tags: createdEvent.selectedTags,
+      tags: [...createdEvent.selectedTags, createdEvent.modality],
       category_event: createdEvent.category_event,
     });
 
