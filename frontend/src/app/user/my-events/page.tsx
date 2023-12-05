@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';

@@ -3,9 +3,10 @@ import { Button, Box, Switch } from '@mui/material';
 
 type Props = {
   setSwitchButtonState: (state: boolean) => void;
+  titles: string[];
 };
 
-function SwitchButtonOrganizer({ setSwitchButtonState }: Props) {
+function SwitchButton({ setSwitchButtonState, titles }: Props) {
   const [checked, setChecked] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,10 +43,10 @@ function SwitchButtonOrganizer({ setSwitchButtonState }: Props) {
           height: '2rem',
         }}
       >
-        Past Events
+        {titles[checked ? 0 : 1]}
       </Button>
     </Box>
   );
 }
 
-export default SwitchButtonOrganizer;
+export default SwitchButton;

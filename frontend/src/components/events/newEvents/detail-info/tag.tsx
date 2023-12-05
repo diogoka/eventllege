@@ -95,7 +95,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
                   ? ''
                   : tag.name_tag
               );
-            return selectedNames.join(`,`);
+            return selectedNames.join(',');
           }}
         >
           {tags.map((tag) =>
