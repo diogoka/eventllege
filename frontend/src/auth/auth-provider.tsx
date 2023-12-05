@@ -10,6 +10,7 @@ import { PageContext, PageStatus } from "@/context/pageContext";
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
 import Loading from "@/app/loading";
+import NotFound from "@/components/common/notFound";
 
 enum Limitation {
   None,       // Pages with no limitation
@@ -251,7 +252,7 @@ export default function AuthProvider({
         )
       case PageStatus.NotFound:
         return (
-          <Typography>Not Found</Typography>
+          <NotFound />
         )
     }
   }
