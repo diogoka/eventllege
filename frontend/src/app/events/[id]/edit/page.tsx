@@ -54,7 +54,7 @@ type EventData = {
 
 export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
-  const { ready } = useContext(PageContext);
+  const { ready, notFound } = useContext(PageContext);
   const { createdEvent, dispatch, setImage } = useContext(EventContext);
 
   const [eventId, setEventId] = useState<number>();
@@ -63,11 +63,17 @@ export default function EditEventPage({ params }: Params) {
     axios
       .get(`http://localhost:3001/api/events/${params.id}`)
       .then((res) => {
-        setEditEvent(res.data.event);
-        setEventId(res.data.event.id_event);
+        if(res.data.event.id_event) {
+          setEditEvent(res.data.event);
+          setEventId(res.data.event.id_event);
+          ready();
+        } else {
+          notFound();
+        }
       })
       .catch((error) => {
         console.error(error.response.data);
+        notFound();
       });
 
     const setEventImage = async () => {
@@ -79,7 +85,6 @@ export default function EditEventPage({ params }: Params) {
 
           const file = new File([blob], 'hoge', { type: blob.type });
           setImage(file);
-          ready();
         }
       } catch (error: any) {
         console.error(error);

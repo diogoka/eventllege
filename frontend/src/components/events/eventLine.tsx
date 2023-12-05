@@ -17,10 +17,7 @@ type Props = {
   avgRating?: number;
   iconsComponent?: JSX.Element;
   tags: Tag[];
-  modalities: {
-    inPerson: boolean;
-    online: boolean;
-  };
+  modality: string;
 };
 
 function EventLine({
@@ -35,7 +32,7 @@ function EventLine({
   avgRating,
   iconsComponent,
   tags,
-  modalities,
+  modality,
 }: Props) {
   const BoxStyle = {
     display: 'grid',
@@ -110,22 +107,12 @@ function EventLine({
   };
 
   const renderModalities = () => {
-    let modalitiesString = '';
-
-    if (modalities.inPerson && modalities.online) {
-      modalitiesString = 'In Person & Online';
-    } else if (modalities.inPerson) {
-      modalitiesString = 'In Person';
-    } else if (modalities.online) {
-      modalitiesString = 'Online';
-    }
-
     const modalitiesColor = () => {
-      if (modalitiesString === 'In Person') {
+      if (modality === 'In Person') {
         return '#FF5733';
-      } else if (modalitiesString === 'Online') {
+      } else if (modality === 'Online') {
         return '#FFD700';
-      } else {
+      } else if (modality === 'Online & In Person') {
         return '#FFA500';
       }
     };
@@ -145,12 +132,12 @@ function EventLine({
         }}
       >
         <Typography
-          color='black'
+          color={modality === 'Online' ? 'black' : 'white'}
           fontSize={'0.5rem'}
           textAlign={'center'}
           fontWeight={'bold'}
         >
-          {modalitiesString}
+          {modality}
         </Typography>
       </Box>
     );
