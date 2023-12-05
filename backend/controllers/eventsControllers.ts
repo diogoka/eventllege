@@ -272,10 +272,23 @@ export const searchEvents = async (
       ORDER BY events.date_event_start ASC
       `);
 
-    res.status(200).json({
-      events: events.rows,
-      tags: tags.rows,
-    });
+    const id = req.query.id ? req.query.id : null;
+    console.log('id', id);
+
+    if (id) {
+      let eventsByUser = events.rows.filter((event: any) => {
+        return event.id_owner === id;
+      });
+      return res.status(200).json({
+        events: eventsByUser,
+        tags: tags.rows,
+      });
+    } else {
+      return res.status(200).json({
+        events: events.rows,
+        tags: tags.rows,
+      });
+    }
   } catch (err: any) {
     res.status(500).send(err.message);
   }

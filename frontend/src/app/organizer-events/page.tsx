@@ -96,7 +96,28 @@ export default function OrganizerEventsPage() {
   }, [switchButtonState]);
 
   const searchEvents = (text: string) => {
-    console.log(text);
+    let url = switchButtonState
+      ? `http://localhost:3001/api/events/search/?text=${text}&id=${
+          user!.id
+        }&past=true`
+      : `http://localhost:3001/api/events/search/?text=${text}&id=${user!.id}`;
+    axios
+      .get(url)
+      .then((res) => {
+        if (res.data.events.length === 0) {
+          setHasEvents({
+            eventFound: false,
+            message: 'No events found.',
+          });
+        } else {
+          setHasEvents({ eventFound: true, message: '' });
+        }
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+      });
   };
 
   const handleCreateEvent = () => {

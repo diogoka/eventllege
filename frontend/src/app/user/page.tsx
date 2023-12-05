@@ -49,9 +49,15 @@ export default function UserPage() {
           />
         )}
 
-        <UserInfoItem icon={<BsFillPersonFill />} value={user!.name} />
-        <UserInfoItem icon={<HiMail />} value={user!.email} />
-        <UserInfoItem icon={<IoIosSchool />} value={user!.courseName} />
+        <UserInfoItem
+          icon={<BsFillPersonFill />}
+          value={user ? user!.name : ''}
+        />
+        <UserInfoItem icon={<HiMail />} value={user ? user!.email : ''} />
+        <UserInfoItem
+          icon={<IoIosSchool />}
+          value={user ? user!.courseName : ''}
+        />
 
         <Button
           variant='contained'
