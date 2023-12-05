@@ -10,88 +10,88 @@ import { PageContext, PageStatus } from '@/context/pageContext';
 import Header from '@/components/header/header';
 import Footer from '@/components/footer';
 import Loading from '@/app/loading';
+import NotFound from '@/components/common/notFound';
 
 enum Limitation {
-  None,       // Pages with no limitation
-  LoggedIn,   // Pages only for logged in users
-  Organizer,  // Pages only for organizers
-  Admin       // Pages only for administrators
+  None, // Pages with no limitation
+  LoggedIn, // Pages only for logged in users
+  Organizer, // Pages only for organizers
+  Admin, // Pages only for administrators
 }
 
 type Page = {
   path: RegExp;
   limitation: Limitation;
   isLoadingRequired: boolean;
-}
+};
 
 const PAGES: Page[] = [
   {
     path: /^\/$/,
     limitation: Limitation.None,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/events$/,
     limitation: Limitation.None,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
   {
     path: /^\/events\/\d+$/,
     limitation: Limitation.None,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
   {
     path: /^\/signup$/,
     limitation: Limitation.None,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/login$/,
     limitation: Limitation.None,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/user$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/user\/edit$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/history$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
   {
     path: /^\/user\/my-events$/,
     limitation: Limitation.LoggedIn,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
   {
     path: /^\/events\/new$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/events\/new\/preview$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: false
+    isLoadingRequired: false,
   },
   {
     path: /^\/events\/\d+\/edit$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
   {
     path: /^\/organizer-events$/,
     limitation: Limitation.Organizer,
-    isLoadingRequired: true
+    isLoadingRequired: true,
   },
-]
-
+];
 
 export default function AuthProvider({
   children,
@@ -102,8 +102,8 @@ export default function AuthProvider({
   const pathname = usePathname();
 
   const { pageStatus, setPageStatus } = useContext(PageContext);
-  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } = useContext(UserContext);
-
+  const { user, setUser, setFirebaseAccount, loginStatus, setLoginStatus } =
+    useContext(UserContext);
 
   useEffect(() => {
     initializeFirebase();
@@ -156,12 +156,18 @@ export default function AuthProvider({
       if (user) {
         if (user.roleName === 'student') {
           // Give permission only to allowed pages
-          if (!(page.limitation === Limitation.None || page.limitation === Limitation.LoggedIn)) {
+          if (
+            !(
+              page.limitation === Limitation.None ||
+              page.limitation === Limitation.LoggedIn
+            )
+          ) {
             return { isAllowed: false, redirection: '/events' };
           }
         }
       } else {
-        console.error('User is logged in but the data doesn\'t exist');
+        // eslint-disable-next-line quotes
+        console.error("User is logged in but the data doesn't exist");
         return { isAllowed: false, redirection: '/events' };
       }
     }
@@ -204,7 +210,7 @@ export default function AuthProvider({
         setPageStatus(PageStatus.Ready);
       }
     }
-  }, [pathname, loginStatus])
+  }, [pathname, loginStatus]);
 
   const getComponent = () => {
     switch (pageStatus) {
@@ -213,7 +219,7 @@ export default function AuthProvider({
           <>
             <Loading />
           </>
-        )
+        );
       case PageStatus.PageLoading:
         if (isAllowedPage().isAllowed) {
           return (
@@ -230,9 +236,9 @@ export default function AuthProvider({
                 {children}
               </Box>
             </>
-          )
+          );
         } else {
-          return <></>
+          return <></>;
         }
       case PageStatus.Ready:
         return (
@@ -248,13 +254,11 @@ export default function AuthProvider({
               {children}
             </Box>
           </>
-        )
+        );
       case PageStatus.NotFound:
-        return (
-          <Typography>Not Found</Typography>
-        )
+        return <NotFound />;
     }
-  }
+  };
 
   return (
     <>
@@ -265,9 +269,8 @@ export default function AuthProvider({
   );
 }
 
-
 function getPage(pathname: string): Page | undefined {
   return PAGES.find((PAGE: Page) => {
     return PAGE.path.test(pathname);
-  })
+  });
 }

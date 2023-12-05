@@ -20,6 +20,11 @@ export default function AttendeesRow({ attendees }: Props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const number_attendees =
+  attendees.length==0? 'No attendee' :
+  attendees.length==1? `1 person` :
+  `${attendees.length} people`;
+
   return (
     <>
       <Box
@@ -27,8 +32,9 @@ export default function AttendeesRow({ attendees }: Props) {
         justifyContent='space-between'
         alignItems='center'
       >
-        <Typography>{attendees.length}</Typography>
+        <Box>{ number_attendees }</Box>
         <Link
+          display= { attendees.length==0? 'none':'block' }
           color={theme.palette.info.main}
           component='button'
           sx={{

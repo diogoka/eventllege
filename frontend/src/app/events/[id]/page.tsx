@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext, createContext } from 'react';
 import axios from 'axios';
-import { notFound, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
 import { Box, Stack, Typography, Link } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
@@ -15,7 +15,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
-import Loading from '@/app/loading';
+import NotFound from "@/components/common/notFound";
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -63,7 +63,7 @@ export type OtherInfo = {
 };
 
 export default function EventPage() {
-  const { ready } = useContext(PageContext);
+  const { ready, notFound } = useContext(PageContext);
   const { user, loginStatus } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
   const [otherInfo, setOtherInfo] = useState<OtherInfo>();
@@ -86,6 +86,11 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
+
+        if(!res.data.event.id_event) {
+          notFound();
+          return;
+        }
         ready();
 
         setEvent({
@@ -121,6 +126,8 @@ export default function EventPage() {
       })
       .catch((error) => {
         console.error(error.response);
+
+        notFound();
       });
   }, [applied]);
 
@@ -139,7 +146,7 @@ export default function EventPage() {
   const eventCapacity = event?.capacity_event;
 
   if (!otherInfo?.id_event) {
-    return <Box marginTop='100px'>No event found.</Box>;
+    return <></>
   } else if (forMobile) {
     ///////////////////// Mobile /////////////////////
     return (
