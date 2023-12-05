@@ -37,12 +37,17 @@ export default function DetailInfo(props: Props) {
         >
           <DetailInfoRow
             title='Price'
-            content={props.price === 0 ? 'Free' : props.price.toString()}
+            content={
+              props.price === 0 ? 'Free' : `$ ${props.price.toString()}`
+            }
           />
           <DetailInfoRow
             title='Available spots'
             content={
-              props.maxSpots <= -1 ? 'No limit' : props.maxSpots.toString()
+              props.maxSpots <=-1 ? 'No limit' :
+              props.maxSpots == 0 ? 'No Spot Available' :
+              props.maxSpots == 1 ? `${props.maxSpots.toString()} person` :
+              `${props.maxSpots.toString()} people`
             }
           />
           {!props.forPreview && loginStatus === LoginStatus.LoggedIn && (
