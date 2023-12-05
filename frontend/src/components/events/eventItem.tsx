@@ -52,15 +52,14 @@ function EventItem({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avgRating, setAvgRating] = useState(0);
   const laptopQuery = useMediaQuery('(min-width:769px)');
-  const [modalities, setModalities] = useState({
-    inPerson: false,
-    online: false,
-  });
+
   const [alertMessage, setAlertMessage] = useState<AlertState>({
     title: '',
     message: '',
     severity: 'success',
   });
+
+  const [modality, setModality] = useState('');
 
   useEffect(() => {
     getAverageRating();
@@ -78,17 +77,17 @@ function EventItem({
   };
 
   const checkModalities = () => {
-    let online = false;
-    let inPerson = false;
     tags.map((tag) => {
       if (tag.name_tag === 'In Person') {
-        inPerson = true;
+        setModality('In Person');
       }
       if (tag.name_tag === 'Online') {
-        online = true;
+        setModality('Online');
+      }
+      if (tag.name_tag === 'Online and In Person') {
+        setModality('Online & In Person');
       }
     });
-    setModalities({ inPerson, online });
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -171,7 +170,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
-            modalities={modalities}
+            modality={modality}
           />
           {isAlertVisible &&
             alertFn(
@@ -207,7 +206,7 @@ function EventItem({
             startTime={startTime}
             endTime={endTime}
             laptopQuery={laptopQuery}
-            modalities={modalities}
+            modality={modality}
           />
           {isAlertVisible && alertCopyURLFn()}
           <ModalDelete
