@@ -18,7 +18,7 @@ type Props = {
 };
 
 const today = dayjs();
-const hourOfToday = today.add(1, 'minute');
+const hourOfToday = today.add(5, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates, isMobile }: Props) {

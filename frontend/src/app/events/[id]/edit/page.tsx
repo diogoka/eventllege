@@ -114,7 +114,6 @@ export default function EditEventPage({ params }: Params) {
         selectedTags: editEvent?.tags,
         category_event: editEvent?.category_event,
       };
-      // console.log('newObj', newObj);
 
       dispatch({
         type: 'GET_WHOLE_DATA',
@@ -122,6 +121,9 @@ export default function EditEventPage({ params }: Params) {
       });
     }
   }, [editEvent, dispatch]);
+
+  // console.log('selected tags', editEvent?.tags);
+
   return (
     <Stack>
       <EventsControl eventId={eventId!} />

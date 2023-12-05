@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useEffect, useState, useReducer } from 'react';
-import { EventContext } from '@/context/eventContext';
+import { EventContext, Tag } from '@/context/eventContext';
 import axios from 'axios';
 import {
   Box,
@@ -11,11 +11,6 @@ import {
   FormLabel,
   SelectChangeEvent,
 } from '@mui/material';
-
-type Tag = {
-  id_tag: number;
-  name_tag: string;
-};
 
 export default function RadioBtn() {
   const [radioTags, setRadioTags] = useState<Tag[]>([]);
@@ -38,34 +33,29 @@ export default function RadioBtn() {
       const value = +event.target.value;
       setSelectedRadio(value);
 
-      let selectedTags: Tag[] = [];
+      const selectedModality = radioTags.find((tag) => tag.id_tag === value);
 
-      const selectedTag = radioTags.find((tag) => tag.id_tag === value);
-      selectedTags = selectedTag ? [selectedTag] : [];
+      console.log('selectedModality', selectedModality);
 
-      // if (value === 18) {
-      //   selectedTags = radioTags.filter(
-      //     (tag) => tag.id_tag === 16 || tag.id_tag === 17
-      //   );
-      // } else {
-      //   const selectedTag = radioTags.find((tag) => tag.id_tag === value);
-      //   selectedTags = selectedTag ? [selectedTag] : [];
-      // }
-
-      dispatch({
-        type: 'UPDATE_SELECTED_TAGS',
-        payload: {
-          ...createdEvent,
-          selectedTags,
-        },
-      });
+      if (selectedModality) {
+        dispatch({
+          type: 'UPDATE_MODALITY',
+          payload: {
+            ...createdEvent,
+            modality: selectedModality,
+          },
+        });
+      }
+      console.log('selectedModality', selectedModality);
     }
   };
+
+  console.log('radio selected', createdEvent.modality);
 
   return (
     <FormControl>
       <FormLabel id='radio-buttons' sx={{ fontSize: '1.125rem' }}>
-        Place {''}
+        Modality {''}
         <Box component={'span'} sx={{ color: '#f14c4c' }}>
           *
         </Box>
@@ -81,28 +71,19 @@ export default function RadioBtn() {
           value={16}
           control={<Radio />}
           label='Online'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some((tag) => tag.id_tag === 16)
-          }
+          checked={createdEvent && createdEvent.modality.id_tag === 16}
         />
         <FormControlLabel
           value={17}
           control={<Radio />}
           label='In Person'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some((tag) => tag.id_tag === 17)
-          }
+          checked={createdEvent && createdEvent.modality.id_tag === 17}
         />
         <FormControlLabel
           value={18}
           control={<Radio />}
           label='Online and In Person'
-          checked={
-            createdEvent &&
-            createdEvent.selectedTags.some((tag) => tag.id_tag === 18)
-          }
+          checked={createdEvent && createdEvent.modality.id_tag === 18}
         />
       </RadioGroup>
     </FormControl>
