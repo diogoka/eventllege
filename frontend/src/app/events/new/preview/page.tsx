@@ -11,6 +11,8 @@ import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button';
 import { useSearchParams } from 'next/navigation';
 import MapWithMarker from "@/components/map/mapWithMarker";
+import alertFn from '@/components/common/alertFunction';
+import { useRouter } from 'next/navigation';
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;
@@ -20,6 +22,12 @@ export interface DateRange {
 type Tag = {
   id_tag: number;
   name_tag: string;
+};
+
+export type ShowAlert = {
+  show: boolean;
+  title: string;
+  message: string;
 };
 
 export type EventData = {
@@ -42,6 +50,10 @@ export default function PreviewEventPage() {
   const [eventId, setEventId] = useState<number>();
   const forMobile = useMediaQuery('(max-width: 768px)');
   const [tempImage, setTempImage] = useState('');
+  const [showAlert, setShowAlert] = useState<ShowAlert>({show:false, title:'', message:''});
+
+  const router = useRouter();
+
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
@@ -69,9 +81,17 @@ export default function PreviewEventPage() {
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
 
+  const onClose =()=> {
+    setShowAlert({show:false, title:'', message:''})
+    router.replace('/events');
+    }
+
   if (forMobile) {
     return (
       <Stack>
+        {showAlert.show &&
+        alertFn(showAlert.title, showAlert.message, 'success', onClose)
+        }
         <Typography
           margin='30px auto 0'
           fontSize='1.3em'
@@ -116,113 +136,118 @@ export default function PreviewEventPage() {
           forMobile={forMobile}
           tempState={tempState!}
           eventId={eventId!}
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
         />
       </Stack>
     );
   } else {
     return (
-      <>
-        <Stack>
-          <Typography
-            margin='40px auto 0'
-            fontSize='1.3em'
-            color='crimson'
-            width='fit-content'
-          >
-            {eventId! > 0
-              ? 'Event is not updated yet.'
-              : 'Event is not created yet.'}
-          </Typography>
+      <Stack>
+        {showAlert.show &&
+        alertFn(showAlert.title, showAlert.message, 'success', onClose)
+          }
+        <Typography
+          margin='40px auto 0'
+          fontSize='1.3em'
+          color='crimson'
+          width='fit-content'
+        >
+          {eventId! > 0
+            ? 'Event is not updated yet.'
+            : 'Event is not created yet.'}
+        </Typography>
 
-          <Box display='flex' margin='0 auto 90px'>
-            {/* /////////// Left /////////// */}
-            <Box minWidth='70%' marginRight='40px'>
-              <DetailContainer
-                event={tempState!}
-                otherInfo={{
-                  image_event: '',
-                  id_event: NaN,
-                  id_owner: '',
-                }}
-                applied={false}
-                organizerEvent={false}
+        <Box display='flex' margin='0 auto 90px'>
+          {/* /////////// Left /////////// */}
+          <Box minWidth='70%' marginRight='40px'>
+            <DetailContainer
+              event={tempState!}
+              otherInfo={{
+                image_event: '',
+                id_event: NaN,
+                id_owner: '',
+              }}
+              applied={false}
+              organizerEvent={false}
+              forMobile={forMobile!}
+              forPreview={forPreview}
+            />
+            {tempState && (
+              <DetailInfo
+                price={tempState.price_event}
+                maxSpots={tempState.capacity_event}
+                attendees={[
+                  {
+                    id: undefined,
+                    name: undefined,
+                  },
+                ]}
+                tags={tempState.tags}
+                category={tempState.category_event}
                 forMobile={forMobile!}
                 forPreview={forPreview}
               />
-              {tempState && (
-                <DetailInfo
-                  price={tempState.price_event}
-                  maxSpots={tempState.capacity_event}
-                  attendees={[
+            )}
+          </Box>
+
+          {/* /////////// Right /////////// */}
+          <Box>
+            <DetailIconContainer
+              event={tempState!}
+              otherInfo={{
+                image_event: '',
+                id_event: NaN,
+                id_owner: '',
+              }}
+              applied={false}
+              organizerEvent={false}
+              forMobile={forMobile!}
+              forPreview={forPreview}
+            />
+            <Box borderRadius='7px' overflow='hidden'>
+              <ImageHelper
+                src={tempImage}
+                width='320px'
+                height='220px'
+                alt={tempState?.name_event ?? 'Event'}
+              />
+            </Box>
+
+            <Link
+              href={`https://maps.google.com/?q=${tempState?.location_event}`}
+              target='_blank'
+            >
+              <Box display='flex' marginTop='20px'>
+                <IconsContainer
+                  icons={[
                     {
-                      id: undefined,
-                      name: undefined,
+                      name: 'FaLocationArrow',
+                      isClickable: false,
+                      color: 'navy',
                     },
                   ]}
-                  tags={tempState.tags}
-                  category={tempState.category_event}
-                  forMobile={forMobile!}
-                  forPreview={forPreview}
+                  onIconClick={() => {
+                    return;
+                  }}
                 />
-              )}
-            </Box>
-
-            {/* /////////// Right /////////// */}
-            <Box>
-              <DetailIconContainer
-                event={tempState!}
-                otherInfo={{
-                  image_event: '',
-                  id_event: NaN,
-                  id_owner: '',
-                }}
-                applied={false}
-                organizerEvent={false}
-                forMobile={forMobile!}
-                forPreview={forPreview}
-              />
-              <Box borderRadius='7px' overflow='hidden'>
-                <ImageHelper
-                  src={tempImage}
-                  width='320px'
-                  height='220px'
-                  alt={tempState?.name_event ?? 'Event'}
-                />
+                <Typography>{tempState?.location_event}</Typography>
               </Box>
+            </Link>
 
-              <Link
-                href={`https://maps.google.com/?q=${tempState?.location_event}`}
-                target='_blank'
-              >
-                <Box display='flex' marginTop='20px'>
-                  <IconsContainer
-                    icons={[
-                      {
-                        name: 'FaLocationArrow',
-                        isClickable: false,
-                        color: 'navy',
-                      },
-                    ]}
-                    onIconClick={() => {
-                      return;
-                    }}
-                  />
-                  <Typography>{tempState?.location_event}</Typography>
-                </Box>
-              </Link>
-
-              <MapWithMarker location={createdEvent.location_event} />
-            </Box>
-            {/* //right */}
+            <MapWithMarker location={createdEvent.location_event} />
           </Box>
-          {/* //flex */}
-          <ButtonsForPreview
-            forMobile={forMobile!}
-            tempState={tempState!}
-            eventId={eventId!}
-          />
-        </Stack>
-      </>
+          {/* //right */}
+        </Box>
+        {/* //flex */}
+        <ButtonsForPreview
+          forMobile={forMobile!}
+          tempState={tempState!}
+          eventId={eventId!}
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+        />
+      </Stack>
     );
   }
 }
