@@ -164,7 +164,7 @@ const DetailButtonContainer = ({
               fullWidth
               onClick={() => editEventHandler(otherInfo.id_event)}
             >
-              Edit
+              Edit Event
             </Button>
           ) : (
             <Box>Id is not found</Box>

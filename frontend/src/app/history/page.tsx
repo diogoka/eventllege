@@ -1,13 +1,15 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
 import { Box, Alert, Typography } from '@mui/material';
-import axios from 'axios';
+import axios, { all } from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
+import SwitchButton from '@/components/events/switchButton';
 
 type Event = {
+  attendees?: any;
   capacity_event: number;
   category_event: string;
   date_event_end: string;
@@ -46,21 +48,25 @@ export default function PastEvent() {
   const oldEvent = true;
 
   const currentUser: CurrentUser = {
-    id: user!.id,
-    role: user!.roleName,
+    id: user ? user!.id : '',
+    role: user ? user!.roleName : '',
   };
+
+  const [allEvents, setAllEvents] = useState(false);
 
   const getEvents = async () => {
     await axios
-      .get('http://localhost:3001/api/events/?past=true')
+      .get('http://localhost:3001/api/events/?past=true&attendees=true')
       .then((res) => {
-        setEvents(res.data.events);
+        let eventsUserAttended = getEventsUserAttended(res.data.events);
+        allEvents ? setEvents(res.data.events) : setEvents(eventsUserAttended);
         setTags(res.data.tags);
       });
     const attendingEvents: [number, boolean][] = [];
     await axios
       .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
       .then((res) => {
+        // console.log(res.data.events);
         res.data.events.map((event: Event) => {
           let attendingEvent: [number, boolean] = [event.id_event, true];
           attendingEvents.push(attendingEvent);
@@ -70,44 +76,59 @@ export default function PastEvent() {
     setEventsOfUser(attendingEvents);
   };
 
-  useEffect(() => {
-    getEvents();
-  }, []);
-
-  const searchEvents = (text: string) => {
-    axios
-      .get(`http://localhost:3001/api/events/search/?text=${text}&past=true`)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          setEvents([]);
-          setAlertSearchBar({
-            status: true,
-            message: 'No events found',
-          });
-          setTimeout(() => {
-            setAlertSearchBar({
-              status: false,
-              message: '',
-            });
-          }, 3000);
-        } else {
-          setEvents(res.data.events);
-          setTags(res.data.tags);
-          setAlertSearchBar({
-            status: true,
-            message:
-              res.data.events.length === 1
-                ? `${res.data.events.length} event found`
-                : `${res.data.events.length} events found`,
-          });
-          setTimeout(() => {
-            setAlertSearchBar({
-              status: false,
-              message: '',
-            });
-          }, 3000);
+  const getEventsUserAttended = (events: Array<Event>) => {
+    const attendingEvents: Array<Event> = [];
+    events.filter((event) => {
+      event.attendees.map((attendee: any) => {
+        if (attendee) {
+          if (attendee.id_user === currentUser.id) {
+            attendingEvents.push(event);
+          }
         }
       });
+    });
+    return attendingEvents;
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, [allEvents]);
+
+  const searchEvents = (text: string) => {
+    let url = allEvents
+      ? `http://localhost:3001/api/events/search/?text=${text}&past=true`
+      : `http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}&past=true`;
+    axios.get(url).then((res) => {
+      if (res.data.events.length === 0) {
+        setEvents([]);
+        setAlertSearchBar({
+          status: true,
+          message: 'No events found',
+        });
+        setTimeout(() => {
+          setAlertSearchBar({
+            status: false,
+            message: '',
+          });
+        }, 3000);
+      } else {
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+        setAlertSearchBar({
+          status: true,
+          message:
+            res.data.events.length === 1
+              ? `${res.data.events.length} event found`
+              : `${res.data.events.length} events found`,
+        });
+        setTimeout(() => {
+          setAlertSearchBar({
+            status: false,
+            message: '',
+          });
+        }, 3000);
+      }
+    });
   };
 
   return (
@@ -130,6 +151,12 @@ export default function PastEvent() {
         </Alert>
       )}
       <SearchBar searchEvents={searchEvents} />
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}>
+        <SwitchButton
+          setSwitchButtonState={setAllEvents}
+          titles={['All events', 'Attended events']}
+        />
+      </Box>
       {events.length === 0 ? (
         <Typography
           sx={{

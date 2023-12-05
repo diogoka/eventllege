@@ -10,7 +10,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import ButtonsForPreview from './button';
 import { useSearchParams } from 'next/navigation';
-import MapWithMarker from "@/components/map/mapWithMarker";
+import MapWithMarker from '@/components/map/mapWithMarker';
 import alertFn from '@/components/common/alertFunction';
 import { useRouter } from 'next/navigation';
 
@@ -50,7 +50,11 @@ export default function PreviewEventPage() {
   const [eventId, setEventId] = useState<number>();
   const forMobile = useMediaQuery('(max-width: 768px)');
   const [tempImage, setTempImage] = useState('');
-  const [showAlert, setShowAlert] = useState<ShowAlert>({show:false, title:'', message:''});
+  const [showAlert, setShowAlert] = useState<ShowAlert>({
+    show: false,
+    title: '',
+    message: '',
+  });
 
   const router = useRouter();
 
@@ -61,7 +65,6 @@ export default function PreviewEventPage() {
   }, [image]);
 
   useEffect(() => {
-
     const newArray = createdEvent.dates.map((date) => ({
       date_event_start: date.dateStart,
       date_event_end: date.dateEnd,
@@ -81,17 +84,16 @@ export default function PreviewEventPage() {
     setEventId(parseInt(searchParams.get('eventId')!));
   }, []);
 
-  const onClose =()=> {
-    setShowAlert({show:false, title:'', message:''})
+  const onClose = () => {
+    setShowAlert({ show: false, title: '', message: '' });
     router.replace('/events');
-    }
+  };
 
   if (forMobile) {
     return (
       <Stack>
         {showAlert.show &&
-        alertFn(showAlert.title, showAlert.message, 'success', onClose)
-        }
+          alertFn(showAlert.title, showAlert.message, 'success', onClose)}
         <Typography
           margin='30px auto 0'
           fontSize='1.3em'
@@ -145,8 +147,7 @@ export default function PreviewEventPage() {
     return (
       <Stack>
         {showAlert.show &&
-        alertFn(showAlert.title, showAlert.message, 'success', onClose)
-          }
+          alertFn(showAlert.title, showAlert.message, 'success', onClose)}
         <Typography
           margin='40px auto 0'
           fontSize='1.3em'

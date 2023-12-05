@@ -5,7 +5,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 
 export type Event = {
   capacity_event: number;
@@ -129,7 +129,6 @@ export default function EventsPage() {
         flexDirection: 'column',
       }}
     >
-
       {alert.status && (
         <Alert
           severity='info'
