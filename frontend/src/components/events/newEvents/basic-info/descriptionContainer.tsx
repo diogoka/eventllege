@@ -1,14 +1,26 @@
 import React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { EventContext } from '@/context/eventContext';
-import { TextField, InputLabel, Box, Stack } from '@mui/material';
+import {
+  TextField,
+  InputLabel,
+  Box,
+  Stack,
+  InputAdornment,
+} from '@mui/material';
 
 type Props = {
   isMobile: boolean;
 };
 export default function DescriptionContainer({ isMobile }: Props) {
   const { createdEvent, dispatch } = useContext(EventContext);
+  const [countedDesc, setCountedDesc] = useState<number>(200);
+
   const changeDesc = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCountedDesc(200 - event.target.value.length);
+    if (countedDesc < 0) {
+      alert('Your description is too long');
+    }
     dispatch({
       type: 'UPDATE_DESCRIPTION',
       payload: { ...createdEvent, description_event: event.target.value },
@@ -45,6 +57,22 @@ export default function DescriptionContainer({ isMobile }: Props) {
         rows={isMobile ? 5 : 8}
         value={createdEvent.description_event}
         onChange={changeDesc}
+        sx={{ position: 'relative' }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment
+              position='end'
+              sx={{
+                color: countedDesc < 0 ? 'red' : '#CACFD2',
+                position: 'absolute',
+                bottom: '1rem',
+                right: '1rem',
+              }}
+            >
+              {countedDesc}
+            </InputAdornment>
+          ),
+        }}
       />
     </Stack>
   );

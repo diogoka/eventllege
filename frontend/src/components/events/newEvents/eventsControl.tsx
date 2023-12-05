@@ -14,8 +14,13 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   const { image, setImage, createdEvent, dispatch } = useContext(EventContext);
   const [tempImage, setTempImage] = useState('');
   const isMobile = useMediaQuery('(max-width:768px)');
+  const [checkedTime, setCheckedTime] = useState(false);
 
-  const { image: inputImage, warning, onFileInputChange } = useUploadImage(20, 10, 480);
+  const {
+    image: inputImage,
+    warning,
+    onFileInputChange,
+  } = useUploadImage(20, 10, 480);
 
   useEffect(() => {
     if (inputImage) {
@@ -27,18 +32,40 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     if (image) {
       setTempImage(URL.createObjectURL(image));
     }
-  }, [image])
+  }, [image]);
 
+  useEffect(() => {
+    createdEvent.dates.some((date) => {
+      if (date.dateEnd.isBefore(date.dateStart, 'minute')) {
+        setCheckedTime(true);
+      } else {
+        setCheckedTime(false);
+      }
+      console.log('here', checkedTime);
+    });
+  }, [createdEvent.dates]);
+
+  console.log(checkedTime);
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!createdEvent.name_event) {
       alert('Please enter a title');
+      return;
+    } else if (createdEvent.name_event.length > 32) {
+      alert('Your title is too long');
       return;
     } else if (!createdEvent.description_event) {
       alert('Please enter a description');
       return;
+    } else if (createdEvent.description_event.length > 200) {
+      alert('Your description is too long');
+      return;
     } else if (!createdEvent.dates) {
       alert('Please choose dates');
+      return;
+    } else if (checkedTime === true) {
+      alert('Please choose correct time');
       return;
     } else if (!createdEvent.location_event) {
       alert('Please enter a location');

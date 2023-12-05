@@ -14,6 +14,7 @@ type Props = {
 
 export default function Dropdown({ anchorEl, open, handleClose }: Props) {
   const { user, setUser, setLoginStatus } = useContext(UserContext);
+
   const router = useRouter();
   const clickHandler = () => {
     router.push('/user');
@@ -28,6 +29,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       .catch((error) => {
         console.error(error);
       });
+    router.push('/');
   };
   return (
     <Menu

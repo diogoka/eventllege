@@ -22,14 +22,14 @@ const hourOfToday = today.add(1, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates, isMobile }: Props) {
-  const deleteDateHandler = (index: number) => {
+  const deleteDateBtnHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;
     });
     setDates(updatedDate);
   };
 
-  const addDateHandler = () => {
+  const addDateBtnHandler = () => {
     setDates([...dates, { dateStart: hourOfToday, dateEnd: endHourOfToday }]);
   };
 
@@ -39,7 +39,10 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
     newDateEnd: dayjs.Dayjs
   ) => {
     const updatedDates = [...dates];
-    updatedDates[index] = { dateStart: newDateStart, dateEnd: newDateEnd };
+    updatedDates[index] = {
+      dateStart: newDateStart,
+      dateEnd: newDateEnd,
+    };
     setDates(updatedDates);
   };
 
@@ -61,7 +64,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           </Box>
         </Typography>
         <Button
-          onClick={addDateHandler}
+          onClick={addDateBtnHandler}
           startIcon={<AddCircleOutlineIcon />}
           size='medium'
           variant='text'
@@ -76,9 +79,6 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           sx={{
             width: '100%',
             height: isMobile ? '10rem' : '6rem',
-            '& .MuiBox-root': {
-              backgroundColor: 'red',
-            },
             position: 'relative',
           }}
         >
@@ -100,7 +100,9 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                       ? updateDateHandler(index, newDateStart, date.dateEnd)
                       : null;
                   }}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
@@ -110,21 +112,24 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
                   disablePast
                   label={`End Date ${index + 1}`}
                   value={date.dateEnd}
+                  minDateTime={date.dateStart}
                   onChange={(newDateEnd) => {
                     newDateEnd
                       ? updateDateHandler(index, date.dateStart, newDateEnd)
                       : null;
                   }}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
           </Grid>
           {index === 0 ? (
-            <></>
+            <Box sx={{ display: 'none' }}></Box>
           ) : (
             <Button
-              onClick={() => deleteDateHandler(index)}
+              onClick={() => deleteDateBtnHandler(index)}
               variant='text'
               startIcon={<RemoveCircleOutlineIcon />}
               size='medium'

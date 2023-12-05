@@ -76,10 +76,6 @@ let theme = createTheme({
       dark: '#970303',
       contrastText: '#fff',
     },
-    action: {
-      disabledBackground: '	#D3D3D3',
-      disabled: '	#D3D3D3',
-    },
   },
   breakpoints: {
     values: {

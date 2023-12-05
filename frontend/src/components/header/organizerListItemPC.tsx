@@ -67,8 +67,8 @@ export default function OrganizerListItemPC() {
           }
           sx={{
             width: 'auto',
-            margin: '0 .5rem',
-            padding: '0 .5rem',
+            padding: '2rem 1rem',
+            borderRadius: 0,
           }}
         >
           {button.label}

@@ -88,15 +88,19 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
             const selectedNames = selectedTags
               .filter((tag) => selectedIds.includes(tag.id_tag))
               .map((tag) =>
-                tag.name_tag === 'Online' || tag.name_tag === 'In Person'
+                tag.name_tag === 'Online' ||
+                tag.name_tag === 'In Person' ||
+                tag.name_tag === 'Online and In Person'
                   ? ''
                   : tag.name_tag
               );
-            return selectedNames.join(`\t\t`);
+            return selectedNames.join(`,`);
           }}
         >
           {tags.map((tag) =>
-            tag.name_tag !== 'Online' && tag.name_tag !== 'In Person' ? (
+            tag.name_tag !== 'Online' &&
+            tag.name_tag !== 'In Person' &&
+            tag.name_tag !== 'Online and In Person' ? (
               <MenuItem key={tag.id_tag} value={tag.id_tag}>
                 <Checkbox checked={selectedId.indexOf(tag.id_tag) > -1} />
                 <ListItemText primary={tag.name_tag} />

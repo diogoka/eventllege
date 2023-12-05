@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 import { EventContext } from '@/context/eventContext';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
@@ -81,12 +81,10 @@ export default function EditEventPage({ params }: Params) {
           setImage(file);
           ready();
         }
-
-
       } catch (error: any) {
         console.error(error);
       }
-    }
+    };
 
     setEventImage();
   }, [params.id]);

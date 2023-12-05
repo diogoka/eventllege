@@ -15,7 +15,6 @@ import {
 export default function Capacity() {
   const { createdEvent, dispatch } = useContext(EventContext);
   const [isChecked, setIsChecked] = useState(false);
-  const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
   const [spotValue, setSpotValue] = useState<string>();
 
@@ -28,7 +27,6 @@ export default function Capacity() {
         capacity_event: event.target.checked ? -1 : 1,
       },
     });
-    setDisabled((prevDisabled) => !prevDisabled);
     setError(false);
   };
 
@@ -43,12 +41,9 @@ export default function Capacity() {
   useEffect(() => {
     if (createdEvent.capacity_event === -1) {
       setIsChecked(true);
-      setDisabled(false);
       setSpotValue('');
     } else if (createdEvent.capacity_event >= 1) {
       setIsChecked(false);
-      setDisabled(false);
-
       setError(false);
       setSpotValue(createdEvent.capacity_event.toString());
     } else {
@@ -57,8 +52,6 @@ export default function Capacity() {
       setSpotValue('');
     }
   }, [createdEvent.capacity_event]);
-
-  console.log('spots', createdEvent.capacity_event);
 
   return (
     <Stack
@@ -89,7 +82,6 @@ export default function Capacity() {
           variant='outlined'
           type='number'
           fullWidth
-          disabled={disabled}
           value={spotValue}
           onChange={handleTextSpotsChange}
           error={error}
