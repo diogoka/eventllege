@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
 import { PageContext } from '@/context/pageContext';
-import { EventContext } from '@/context/eventContext';
+import { EventContext, EventData, Tag } from '@/context/eventContext';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
@@ -31,25 +31,9 @@ type SelectedEvent = {
   tags: Array<Tag>;
 };
 
-type Tag = {
-  id_tag: number;
-  name_tag: string;
-};
-
 type ReplaceDates = {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
-};
-
-type EventData = {
-  name_event: string;
-  description_event: string;
-  dates: ReplaceDates[];
-  capacity_event: number;
-  location_event: string;
-  price_event: number;
-  selectedTags: Tag[];
-  category_event: string;
 };
 
 export default function EditEventPage({ params }: Params) {
@@ -63,7 +47,7 @@ export default function EditEventPage({ params }: Params) {
     axios
       .get(`http://localhost:3001/api/events/${params.id}`)
       .then((res) => {
-        if(res.data.event.id_event) {
+        if (res.data.event.id_event) {
           setEditEvent(res.data.event);
           setEventId(res.data.event.id_event);
           ready();
@@ -109,6 +93,19 @@ export default function EditEventPage({ params }: Params) {
         dateStart: convertedStartDay,
         dateEnd: convertedEndDay,
       });
+
+      let newModality = {};
+
+      const tagsArr = editEvent?.tags;
+      console.log('tagsArr', tagsArr);
+
+      const dividedModality = tagsArr.find((tag) => {
+        if (tag.id_tag === 16 || tag.id_tag === 17 || tag.id_tag === 18) {
+          newModality = { id_tag: tag.id_tag, name_tag: tag.name_tag };
+        }
+      });
+      console.log('newModality', dividedModality);
+
       const newObj: EventData = {
         name_event: editEvent?.name_event,
         description_event: editEvent?.description_event,
@@ -117,6 +114,7 @@ export default function EditEventPage({ params }: Params) {
         location_event: editEvent?.location_event,
         price_event: editEvent?.price_event,
         selectedTags: editEvent?.tags,
+        modality: dividedModality!,
         category_event: editEvent?.category_event,
       };
 
