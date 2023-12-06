@@ -21,7 +21,7 @@ const today = dayjs();
 const hourOfToday = today.add(5, 'minute');
 const endHourOfToday = hourOfToday.add(30, 'minute');
 
-export default function DateList({ dates, setDates, isMobile }: Props) {
+export default function DateList({ dates, setDates }: Props) {
   const deleteDateBtnHandler = (index: number) => {
     const updatedDate = dates.filter((date, i) => {
       return i !== index;
@@ -71,7 +71,7 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           color='info'
           sx={{
             height: 'auto',
-            '&:hover': { background: 'none' }
+            '&:hover': { background: 'none' },
           }}
           disableRipple
         >
@@ -141,13 +141,13 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
             {dates.length > 1 && (
               <Button
                 onClick={() => deleteDateBtnHandler(index)}
+                color='secondary'
                 variant='text'
                 startIcon={<RemoveCircleOutlineIcon />}
                 size='medium'
-                disableRipple
                 sx={{
                   height: 'auto',
-                  '&:hover': { background: 'none' }
+                  '&:hover': { background: 'none' },
                 }}
               >
                 Delete Date

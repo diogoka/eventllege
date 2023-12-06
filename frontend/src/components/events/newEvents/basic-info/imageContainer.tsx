@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Input, Typography } from '@mui/material';
+import Image from 'next/image';
 import CollectionsIcon from '@mui/icons-material/Collections';
 
 type Props = {
@@ -13,27 +14,27 @@ export default function ImageContainer({
   warning,
   onFileInputChange,
   isMobile,
-  tempImage
+  tempImage,
 }: Props) {
   return (
     <>
-      {tempImage &&
-        <img
+      {tempImage && (
+        <Image
           src={tempImage}
           alt=''
+          width={320}
+          height={220}
           style={{
-            width: '320px',
-            height: '220px',
-            objectFit: 'cover'
+            objectFit: 'cover',
           }}
-        />}
+        />
+      )}
       <Button
         component='label'
         variant='outlined'
         startIcon={<CollectionsIcon />}
         color='info'
         fullWidth
-        disableRipple
         sx={{
           width: isMobile ? '100%' : '40%',
         }}
