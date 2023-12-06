@@ -39,6 +39,9 @@ let theme = createTheme({
       },
     },
     MuiButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
       styleOverrides: {
         root: {
           fontSize: '18px',
@@ -46,7 +49,6 @@ let theme = createTheme({
           padding: 0,
           borderRadius: 5,
           textTransform: 'none',
-          disableRipple: true,
         },
       },
     },

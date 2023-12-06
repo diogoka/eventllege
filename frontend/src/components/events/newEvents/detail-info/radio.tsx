@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useEffect, useState, useReducer } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { EventContext, Tag } from '@/context/eventContext';
 import axios from 'axios';
 import {
@@ -28,14 +28,19 @@ export default function RadioBtn() {
       });
   }, []);
 
+  // Set selectedRadio based on createdEvent.modality when it exists
+  useEffect(() => {
+    if (createdEvent.modality) {
+      setSelectedRadio(createdEvent.modality.id_tag);
+    }
+  }, [createdEvent.modality]);
+
   const handleChange = (event: SelectChangeEvent<typeof selectedRadio>) => {
     if (event.target.value) {
       const value = +event.target.value;
       setSelectedRadio(value);
 
       const selectedModality = radioTags.find((tag) => tag.id_tag === value);
-
-      console.log('selectedModality', selectedModality);
 
       if (selectedModality) {
         dispatch({
@@ -46,11 +51,8 @@ export default function RadioBtn() {
           },
         });
       }
-      console.log('selectedModality', selectedModality);
     }
   };
-
-  console.log('radio selected', createdEvent.modality);
 
   return (
     <FormControl>
@@ -71,19 +73,31 @@ export default function RadioBtn() {
           value={16}
           control={<Radio />}
           label='Online'
-          checked={createdEvent && createdEvent.modality.id_tag === 16}
+          checked={
+            createdEvent &&
+            createdEvent.modality &&
+            createdEvent.modality.id_tag === 16
+          }
         />
         <FormControlLabel
           value={17}
           control={<Radio />}
           label='In Person'
-          checked={createdEvent && createdEvent.modality.id_tag === 17}
+          checked={
+            createdEvent &&
+            createdEvent.modality &&
+            createdEvent.modality.id_tag === 17
+          }
         />
         <FormControlLabel
           value={18}
           control={<Radio />}
           label='Online and In Person'
-          checked={createdEvent && createdEvent.modality.id_tag === 18}
+          checked={
+            createdEvent &&
+            createdEvent.modality &&
+            createdEvent.modality.id_tag === 18
+          }
         />
       </RadioGroup>
     </FormControl>
