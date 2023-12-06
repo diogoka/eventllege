@@ -6,7 +6,7 @@ import React, {
   useReducer,
   Dispatch,
 } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import dayjs from 'dayjs';
 
 interface Page {
@@ -62,7 +62,7 @@ export const initialState: EventData = {
   location_event: '',
   price_event: 0,
   selectedTags: [],
-  modality: { id_tag: 16, name_tag: 'Online' },
+  modality: {} as Tag,
   category_event: '',
 };
 

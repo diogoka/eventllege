@@ -43,6 +43,8 @@ export default function EditEventPage({ params }: Params) {
 
   const [eventId, setEventId] = useState<number>();
 
+  // console.log('edit event page', createdEvent.modality);
+
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/events/${params.id}`)
@@ -94,17 +96,15 @@ export default function EditEventPage({ params }: Params) {
         dateEnd: convertedEndDay,
       });
 
-      let newModality = {};
-
-      const tagsArr = editEvent?.tags;
-      console.log('tagsArr', tagsArr);
-
-      const dividedModality = tagsArr.find((tag) => {
+      let dividedModality = null;
+      const dividedSelectedTags = [];
+      for (const tag of editEvent?.tags) {
         if (tag.id_tag === 16 || tag.id_tag === 17 || tag.id_tag === 18) {
-          newModality = { id_tag: tag.id_tag, name_tag: tag.name_tag };
+          dividedModality = tag;
+        } else {
+          dividedSelectedTags.push(tag);
         }
-      });
-      console.log('newModality', dividedModality);
+      }
 
       const newObj: EventData = {
         name_event: editEvent?.name_event,
@@ -113,7 +113,7 @@ export default function EditEventPage({ params }: Params) {
         capacity_event: editEvent?.capacity_event,
         location_event: editEvent?.location_event,
         price_event: editEvent?.price_event,
-        selectedTags: editEvent?.tags,
+        selectedTags: dividedSelectedTags,
         modality: dividedModality!,
         category_event: editEvent?.category_event,
       };
@@ -124,8 +124,6 @@ export default function EditEventPage({ params }: Params) {
       });
     }
   }, [editEvent, dispatch]);
-
-  // console.log('selected tags', editEvent?.tags);
 
   return (
     <Stack>

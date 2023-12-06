@@ -68,6 +68,9 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     } else if (!createdEvent.location_event) {
       alert('Please enter a location');
       return;
+    } else if (!createdEvent.modality) {
+      alert('Please choose a modality');
+      return;
     } else if (createdEvent.price_event < 0) {
       alert('Please choose price');
       return;
@@ -81,8 +84,8 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       alert('Please choose tags');
       return;
     } else {
+      router.push(`/events/new/preview/?eventId=${eventId}`);
     }
-    router.push(`/events/new/preview/?eventId=${eventId}`);
   };
 
   const cancelHandler = () => {
