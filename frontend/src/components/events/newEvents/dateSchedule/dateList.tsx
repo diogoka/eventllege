@@ -69,81 +69,93 @@ export default function DateList({ dates, setDates, isMobile }: Props) {
           size='medium'
           variant='text'
           color='info'
+          sx={{
+            height: 'auto',
+            '&:hover': { background: 'none' }
+          }}
+          disableRipple
         >
           Add Date
         </Button>
       </Stack>
-      {dates.map((date, index) => (
-        <Box
-          key={index}
-          sx={{
-            width: '100%',
-            height: isMobile ? '10rem' : '6rem',
-            position: 'relative',
-          }}
-        >
-          <Grid
-            container
-            justifyContent='center'
-            alignItems='center'
-            rowSpacing={1}
-            columnSpacing={{ md: 2 }}
+      <Stack
+        width='100%'
+        alignItems='center'
+        rowGap='.5rem'
+        marginTop='0!important'
+      >
+        {dates.map((date, index) => (
+          <Box
+            key={index}
+            display='flex'
+            flexDirection='column'
+            alignItems='flex-end'
+            marginTop='8px!important'
+            sx={{
+              width: '100%',
+            }}
           >
-            <Grid item sm={12} md={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  disablePast
-                  label={`Start Date ${index + 1}`}
-                  value={date.dateStart}
-                  onChange={(newDateStart) => {
-                    newDateStart
-                      ? updateDateHandler(index, newDateStart, date.dateEnd)
-                      : null;
-                  }}
-                  sx={{
-                    width: '100%',
-                  }}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item sm={12} md={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  disablePast
-                  label={`End Date ${index + 1}`}
-                  value={date.dateEnd}
-                  minDateTime={date.dateStart}
-                  onChange={(newDateEnd) => {
-                    newDateEnd
-                      ? updateDateHandler(index, date.dateStart, newDateEnd)
-                      : null;
-                  }}
-                  sx={{
-                    width: '100%',
-                  }}
-                />
-              </LocalizationProvider>
-            </Grid>
-          </Grid>
-          {index === 0 ? (
-            <Box sx={{ display: 'none' }}></Box>
-          ) : (
-            <Button
-              onClick={() => deleteDateBtnHandler(index)}
-              variant='text'
-              startIcon={<RemoveCircleOutlineIcon />}
-              size='medium'
-              sx={{
-                position: 'absolute',
-                right: '1rem',
-                bottom: '-.6rem',
-              }}
+            <Grid
+              container
+              justifyContent='center'
+              alignItems='center'
+              rowSpacing={1}
+              columnSpacing={{ md: 2 }}
             >
-              Delete
-            </Button>
-          )}
-        </Box>
-      ))}
+              <Grid item sm={12} md={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    disablePast
+                    label={`Start Date ${index + 1}`}
+                    value={date.dateStart}
+                    onChange={(newDateStart) => {
+                      newDateStart
+                        ? updateDateHandler(index, newDateStart, date.dateEnd)
+                        : null;
+                    }}
+                    sx={{
+                      width: '100%',
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    disablePast
+                    label={`End Date ${index + 1}`}
+                    value={date.dateEnd}
+                    minDateTime={date.dateStart}
+                    onChange={(newDateEnd) => {
+                      newDateEnd
+                        ? updateDateHandler(index, date.dateStart, newDateEnd)
+                        : null;
+                    }}
+                    sx={{
+                      width: '100%',
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
+            {dates.length > 1 && (
+              <Button
+                onClick={() => deleteDateBtnHandler(index)}
+                variant='text'
+                startIcon={<RemoveCircleOutlineIcon />}
+                size='medium'
+                disableRipple
+                sx={{
+                  height: 'auto',
+                  '&:hover': { background: 'none' }
+                }}
+              >
+                Delete Date
+              </Button>
+            )}
+          </Box>
+        ))}
+      </Stack>
     </>
   );
 }
