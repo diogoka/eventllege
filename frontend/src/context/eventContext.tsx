@@ -62,7 +62,7 @@ export const initialState: EventData = {
   location_event: '',
   price_event: 0,
   selectedTags: [],
-  modality: {} as Tag,
+  modality: { id_tag: 16, name_tag: 'Online' } as Tag,
   category_event: '',
 };
 
