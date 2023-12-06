@@ -1,18 +1,14 @@
-'use client'
-import { useState, useEffect, useContext } from 'react'
+'use client';
+import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTheme, Stack, Button, FormControl, TextField, InputLabel, Box } from '@mui/material';
+import { useTheme, Stack, Button, InputLabel, Box } from '@mui/material';
 import axios from 'axios';
 import useUploadImage from '@/services/imageInput';
-import { useMediaQuery, Select, MenuItem, Avatar } from '@mui/material';
+import { useMediaQuery, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';
 import { FaCirclePlus } from 'react-icons/fa6';
 import NameInput from '@/components/user/form/name-input';
 import CourseInput from '@/components/user/form/course-input';
-// import {
-//   getAuth,
-//   updateEmail
-// } from 'firebase/auth';
 
 export default function UserEditPage() {
   const router = useRouter();
@@ -30,7 +26,9 @@ export default function UserEditPage() {
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
   const { image, warning, onFileInputChange } = useUploadImage(10, 1, 480);
-  const [tempImageSrc, setTempImageSrc] = useState(`http://localhost:3001/img/users/${user?.id}`);
+  const [tempImageSrc, setTempImageSrc] = useState(
+    `http://localhost:3001/img/users/${user?.id}`
+  );
 
   useEffect(() => {
     if (user) {
@@ -46,7 +44,7 @@ export default function UserEditPage() {
     if (image) {
       setTempImageSrc(URL.createObjectURL(image));
     }
-  }, [image])
+  }, [image]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,7 +78,7 @@ export default function UserEditPage() {
 
     axios
       .put('http://localhost:3001/api/users', formData, {
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {
         setUser(res.data);
@@ -88,7 +86,7 @@ export default function UserEditPage() {
       })
       .catch((error) => {
         console.error(error.response.data);
-      })
+      });
   };
 
   return (
@@ -107,7 +105,6 @@ export default function UserEditPage() {
                 position: 'relative',
               }}
             >
-
               <Avatar
                 src={tempImageSrc}
                 alt={user?.name}
@@ -127,7 +124,8 @@ export default function UserEditPage() {
                   inset: '80% 0 0 80%',
                   transform: 'translate(-50%, -50%)',
                   borderRadius: '50%',
-                }}>
+                }}
+              >
                 <FaCirclePlus
                   style={{
                     width: '100%',
@@ -138,7 +136,9 @@ export default function UserEditPage() {
               </Box>
             </InputLabel>
             <input
-              id='avatar' type='file' accept='image/*'
+              id='avatar'
+              type='file'
+              accept='image/*'
               onChange={onFileInputChange}
               style={{ display: 'none' }}
             />
@@ -154,7 +154,12 @@ export default function UserEditPage() {
 
           <div>{warning}</div>
 
-          <Box width='100%' display='flex' justifyContent='space-between' columnGap='1.5rem'>
+          <Box
+            width='100%'
+            display='flex'
+            justifyContent='space-between'
+            columnGap='1.5rem'
+          >
             <Button
               variant='outlined'
               color='error'
@@ -175,5 +180,5 @@ export default function UserEditPage() {
         </Stack>
       </form>
     </Stack>
-  )
+  );
 }

@@ -18,9 +18,6 @@ export default function DescriptionContainer({ isMobile }: Props) {
 
   const changeDesc = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCountedDesc(200 - event.target.value.length);
-    // if (countedDesc < 0) {
-    //   alert('Your description is too long');
-    // }
     dispatch({
       type: 'UPDATE_DESCRIPTION',
       payload: { ...createdEvent, description_event: event.target.value },

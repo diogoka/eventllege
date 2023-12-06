@@ -39,11 +39,9 @@ type ReplaceDates = {
 export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
   const { ready, notFound } = useContext(PageContext);
-  const { createdEvent, dispatch, setImage } = useContext(EventContext);
+  const { dispatch, setImage } = useContext(EventContext);
 
   const [eventId, setEventId] = useState<number>();
-
-  // console.log('edit event page', createdEvent.modality);
 
   useEffect(() => {
     axios

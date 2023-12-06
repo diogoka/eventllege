@@ -15,7 +15,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
-import NotFound from "@/components/common/notFound";
+import NotFound from '@/components/common/notFound';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -64,7 +64,7 @@ export type OtherInfo = {
 
 export default function EventPage() {
   const { ready, notFound } = useContext(PageContext);
-  const { user, loginStatus } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [event, setEvent] = useState<Event>();
   const [otherInfo, setOtherInfo] = useState<OtherInfo>();
   const [applied, setApplied] = useState<boolean>(false);
@@ -86,8 +86,7 @@ export default function EventPage() {
     axios
       .get(`http://localhost:3001/api/events/${EVENT_ID}`)
       .then((res) => {
-
-        if(!res.data.event.id_event) {
+        if (!res.data.event.id_event) {
           notFound();
           return;
         }
@@ -146,7 +145,7 @@ export default function EventPage() {
   const eventCapacity = event?.capacity_event;
 
   if (!otherInfo?.id_event) {
-    return <></>
+    return <></>;
   } else if (forMobile) {
     ///////////////////// Mobile /////////////////////
     return (

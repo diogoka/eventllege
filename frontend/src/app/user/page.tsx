@@ -1,5 +1,5 @@
 'use client';
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Stack, Button, Chip, Avatar } from '@mui/material';
 import { UserContext } from '@/context/userContext';

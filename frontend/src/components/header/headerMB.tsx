@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/userContext';
 import Logo from './logo';
 import PageTitle from './pageTitle';
-import { Stack, Button, Box } from '@mui/material';
+import { Stack, Button } from '@mui/material';
 import AvatarIcon from './avatar';
 import LoginIcon from '@mui/icons-material/Login';
 

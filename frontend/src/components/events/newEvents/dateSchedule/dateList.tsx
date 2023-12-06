@@ -73,12 +73,12 @@ export default function DateList({ dates, setDates }: Props) {
             height: 'auto',
             '&:hover': { background: 'none' },
           }}
-          disableRipple
         >
           Add Date
         </Button>
       </Stack>
       <Stack
+        id='date'
         width='100%'
         alignItems='center'
         rowGap='.5rem'
