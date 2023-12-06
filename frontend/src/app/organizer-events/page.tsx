@@ -4,10 +4,10 @@ import { Box, Button, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { PageContext } from "@/context/pageContext";
+import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
-import SwitchButtonOrganizer from '@/components/events/switchButtonOrganizer';
+import SwitchButton from '@/components/events/switchButton';
 
 type Event = {
   id_event: number;
@@ -63,7 +63,6 @@ export default function OrganizerEventsPage() {
     axios
       .get(url)
       .then((res) => {
-        // console.log(res.data);
         if (res.data.events.length === 0) {
           setHasEvents({
             eventFound: false,
@@ -97,7 +96,28 @@ export default function OrganizerEventsPage() {
   }, [switchButtonState]);
 
   const searchEvents = (text: string) => {
-    console.log(text);
+    let url = switchButtonState
+      ? `http://localhost:3001/api/events/search/?text=${text}&id=${
+          user!.id
+        }&past=true`
+      : `http://localhost:3001/api/events/search/?text=${text}&id=${user!.id}`;
+    axios
+      .get(url)
+      .then((res) => {
+        if (res.data.events.length === 0) {
+          setHasEvents({
+            eventFound: false,
+            message: 'No events found.',
+          });
+        } else {
+          setHasEvents({ eventFound: true, message: '' });
+        }
+        setEvents(res.data.events);
+        setTags(res.data.tags);
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+      });
   };
 
   const handleCreateEvent = () => {
@@ -122,7 +142,10 @@ export default function OrganizerEventsPage() {
             width: '98%',
           }}
         >
-          <SwitchButtonOrganizer setSwitchButtonState={setSwitchButtonState} />
+          <SwitchButton
+            setSwitchButtonState={setSwitchButtonState}
+            titles={['Past Events', 'Upcoming Events']}
+          />
           <Button
             type='submit'
             variant='outlined'

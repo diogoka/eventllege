@@ -164,7 +164,7 @@ const DetailButtonContainer = ({
               fullWidth
               onClick={() => editEventHandler(otherInfo.id_event)}
             >
-              Edit
+              Edit Event
             </Button>
           ) : (
             <Box>Id is not found</Box>
@@ -202,9 +202,9 @@ const DetailButtonContainer = ({
         onClick={() => {
           applied ? cancelEvent() : addAttendee();
         }}
-        disabled={maxSpots! <= 0 && !applied}
+        disabled={maxSpots! === 0 && !applied}
       >
-        {applied ? 'Cancel' : maxSpots! <= 0 ? 'No spot available' : 'Apply'}
+        {applied ? 'Cancel' : maxSpots! === 0 ? 'No spot available' : 'Apply'}
       </Button>
       <ModalCancelParticipation
         isOpen={isModalOpen}

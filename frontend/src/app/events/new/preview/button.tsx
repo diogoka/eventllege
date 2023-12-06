@@ -5,16 +5,20 @@ import { EventContext } from '@/context/eventContext';
 import { Box, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { EventData } from './page';
+import { EventData, ShowAlert } from './page';
 
 export default function ButtonsForPreview({
   forMobile,
   tempState,
   eventId,
+  showAlert,
+  setShowAlert
 }: {
   forMobile: boolean;
   tempState: EventData;
   eventId: number;
+  showAlert: ShowAlert
+  setShowAlert: (state: ShowAlert) => void;
 }) {
   const { user } = useContext(UserContext);
   const {
@@ -68,7 +72,16 @@ export default function ButtonsForPreview({
             });
           }
 
-          router.replace('/events/?isUpdated=true');
+          setShowAlert({
+            show: true,
+            title: 'Updated',
+            message: 'Event was updated successfully!'
+          });
+
+          setTimeout(()=>{
+            router.replace('/events');
+            setShowAlert({show:false, title:'', message:''})
+          }, 3500)
 
           dispatch({
             type: 'RESET',
@@ -92,7 +105,17 @@ export default function ButtonsForPreview({
             });
           }
           console.log('axios', res.data);
-          router.replace('/events/?isPublished=true');
+
+          setShowAlert({
+            show: true,
+            title: 'Created',
+            message: 'Event was created successfully!'
+          });
+
+          setTimeout(()=>{
+            router.replace('/events');
+            setShowAlert({show:false, title:'', message:''})
+          }, 3500)
 
           dispatch({
             type: 'RESET',

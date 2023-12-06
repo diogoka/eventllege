@@ -41,11 +41,9 @@ export default function EventsControl({ eventId }: { eventId: number }) {
       } else {
         setCheckedTime(false);
       }
-      console.log('here', checkedTime);
     });
   }, [createdEvent.dates]);
 
-  console.log(checkedTime);
   const clickHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -93,7 +91,6 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     router.push('/');
   };
 
-  // console.log('createdEvent in eventsControl', createdEvent);
   return (
     <Stack
       direction='column'

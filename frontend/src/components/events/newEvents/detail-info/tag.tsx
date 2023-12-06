@@ -55,6 +55,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
       setSelectedTags(selectedTagsName);
     }
   };
+  console.log('tags selected:', selectedTags);
 
   return (
     <Stack
@@ -94,7 +95,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
                   ? ''
                   : tag.name_tag
               );
-            return selectedNames.join(`,`);
+            return selectedNames.join(',');
           }}
         >
           {tags.map((tag) =>

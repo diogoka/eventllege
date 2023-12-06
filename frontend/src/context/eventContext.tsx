@@ -34,6 +34,7 @@ export type EventData = {
   location_event: string;
   price_event: number;
   selectedTags: Array<Tag>;
+  modality: Tag;
   category_event: string;
 };
 
@@ -61,6 +62,7 @@ export const initialState: EventData = {
   location_event: '',
   price_event: 0,
   selectedTags: [],
+  modality: { id_tag: 16, name_tag: 'Online' },
   category_event: '',
 };
 
@@ -82,6 +84,8 @@ export const eventReducer = (state: EventData, action: EventAction) => {
       return { ...state, category_event: action.payload.category_event };
     case 'UPDATE_SELECTED_TAGS':
       return { ...state, selectedTags: action.payload.selectedTags };
+    case 'UPDATE_MODALITY':
+      return { ...state, modality: action.payload.modality };
     case 'GET_WHOLE_DATA':
       return action.payload;
     case 'RESET':
