@@ -11,7 +11,9 @@ export default function Logo() {
       sp={
         <Button
           onClick={() => router.push('/')}
-          sx={{ width: '3.125rem', height: '3.125rem' }}
+          sx={{ width: '3.125rem', height: '3.125rem', '&:hover': { background: 'none' } }}
+          disableRipple
+          disableTouchRipple
         >
           <Image
             src='/eventllege_Icon.svg'
@@ -25,7 +27,9 @@ export default function Logo() {
       pc={
         <Button
           onClick={() => router.push('/')}
-          sx={{ width: '10rem', height: '1.875rem' }}
+          sx={{ width: '10rem', height: '1.875rem', '&:hover': { background: 'none' } }}
+          disableRipple
+          disableTouchRipple
         >
           <Image
             src='/eventllege_logoIcon.svg'
