@@ -12,29 +12,21 @@ export default function ButtonsForPreview({
   tempState,
   eventId,
   showAlert,
-  setShowAlert
+  setShowAlert,
 }: {
   forMobile: boolean;
   tempState: EventData;
   eventId: number;
-  showAlert: ShowAlert
+  showAlert: ShowAlert;
   setShowAlert: (state: ShowAlert) => void;
 }) {
   const { user } = useContext(UserContext);
-  const {
-    dispatch,
-    initialState,
-    image,
-    showedPage,
-    setShowedPage,
-    pathName,
-  } = useContext(EventContext);
+  const { dispatch, initialState, image, showedPage, setShowedPage, pathName } =
+    useContext(EventContext);
 
   const router = useRouter();
 
   const submitEventHandler = (id: number) => {
-    console.log('update tags', tempState.tags);
-
     const formData = new FormData();
 
     formData.append('owner', user!.id);
@@ -75,13 +67,13 @@ export default function ButtonsForPreview({
           setShowAlert({
             show: true,
             title: 'Updated',
-            message: 'Event was updated successfully!'
+            message: 'Event was updated successfully!',
           });
 
-          setTimeout(()=>{
+          setTimeout(() => {
             router.replace('/events');
-            setShowAlert({show:false, title:'', message:''})
-          }, 3500)
+            setShowAlert({ show: false, title: '', message: '' });
+          }, 3500);
 
           dispatch({
             type: 'RESET',
@@ -104,18 +96,17 @@ export default function ButtonsForPreview({
               path: '/',
             });
           }
-          console.log('axios', res.data);
 
           setShowAlert({
             show: true,
             title: 'Created',
-            message: 'Event was created successfully!'
+            message: 'Event was created successfully!',
           });
 
-          setTimeout(()=>{
+          setTimeout(() => {
             router.replace('/events');
-            setShowAlert({show:false, title:'', message:''})
-          }, 3500)
+            setShowAlert({ show: false, title: '', message: '' });
+          }, 3500);
 
           dispatch({
             type: 'RESET',
@@ -123,7 +114,6 @@ export default function ButtonsForPreview({
           });
         })
         .catch((err) => {
-          // console.error('Err:',err.response.data);
           console.error('Err:', err.response);
         });
     }
@@ -142,16 +132,13 @@ export default function ButtonsForPreview({
           variant='outlined'
           color='primary'
           fullWidth
-          onClick={() =>
-            // editEventHandler()
-            {
-              router.push(
-                eventId > 0
-                  ? `/events/${eventId}/edit`
-                  : '/events/new?preview=true'
-              );
-            }
-          }
+          onClick={() => {
+            router.push(
+              eventId > 0
+                ? `/events/${eventId}/edit`
+                : '/events/new?preview=true'
+            );
+          }}
         >
           Edit
         </Button>

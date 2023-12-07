@@ -11,9 +11,6 @@ type Props = {
 
 function ReviewItem({ review, laptopQuery }: Props) {
   const today = new Date(review.date_review);
-  // const daysAgo = Math.floor(
-  //   (new Date().getTime() - today.getTime()) / (1000 * 3600 * 24)
-  // );
   const daysAgo = Math.floor(
     (new Date().setHours(0, 0, 0, 0) -
       new Date(review.date_review).setHours(0, 0, 0, 0)) /

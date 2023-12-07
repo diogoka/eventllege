@@ -36,8 +36,6 @@ export default function Location({ location, setLocation }: Props) {
         fullWidth
         disablePortal
         renderInput={(params) => {
-          // console.log(params);
-
           return (
             <Stack
               direction='column'

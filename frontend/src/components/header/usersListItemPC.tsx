@@ -19,8 +19,8 @@ export default function UsersListItemPC() {
   const pathName = usePathname();
   const [currentPage, setCurrentPage] = useState<Page | null>(usersBtns[0]);
 
+  // Update the currentPage when the path changes
   useEffect(() => {
-    // Update the currentPage when the path changes
     const page = usersBtns.find((p) => p.path === pathName);
     if (page) {
       setCurrentPage(page);
@@ -48,7 +48,6 @@ export default function UsersListItemPC() {
           }
           sx={{
             width: 'auto',
-            margin: '0 .5rem',
             padding: '2rem 1rem',
             borderRadius: 0,
           }}

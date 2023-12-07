@@ -68,6 +68,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
     >
       <MenuItem
         onClick={clickHandler}
+        disableRipple
         sx={{
           padding: '0 2rem',
           height: '4rem',
@@ -84,6 +85,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       </MenuItem>
       <MenuItem
         onClick={handleLogout}
+        disableRipple
         sx={{ padding: '.5rem 2rem', height: '4rem' }}
       >
         <ListItemIcon>

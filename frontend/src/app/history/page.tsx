@@ -66,7 +66,6 @@ export default function PastEvent() {
     await axios
       .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
       .then((res) => {
-        // console.log(res.data.events);
         res.data.events.map((event: Event) => {
           let attendingEvent: [number, boolean] = [event.id_event, true];
           attendingEvents.push(attendingEvent);

@@ -1,10 +1,10 @@
 'use client';
-import React, { use, useContext, useEffect, useState } from 'react';
-import { useRouter, usePathname, redirect } from 'next/navigation';
+import React, { useContext, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import { PageContext, PageStatus } from '@/context/pageContext';
 import Header from '@/components/header/header';

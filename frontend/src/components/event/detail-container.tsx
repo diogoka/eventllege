@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react';
-import { Box, Typography, AlertTitle, Alert, Link } from '@mui/material';
+import { useContext } from 'react';
+import { Box, Typography, Link } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
 import {
   Event,
@@ -111,8 +111,7 @@ const DetailContainer = ({
           'The event URL has been copied to your clipboard.',
           'success',
           () => setIsAlertVisible(false)
-        )
-      }
+        )}
     </>
   );
 };

@@ -41,7 +41,6 @@ function UserEvents() {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
     []
   );

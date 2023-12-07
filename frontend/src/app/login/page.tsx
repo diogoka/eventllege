@@ -132,6 +132,7 @@ export default function LoginPage() {
             width={170}
             height={108}
             alt='logo'
+            priority
           />
         </Container>
         <Stack rowGap={'20px'}>

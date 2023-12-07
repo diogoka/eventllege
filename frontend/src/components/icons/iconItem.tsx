@@ -1,7 +1,6 @@
 'use client';
 import { IconContext } from 'react-icons';
 import * as IconLibrary from 'react-icons/fa';
-import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
 
 interface Props {

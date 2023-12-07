@@ -23,8 +23,8 @@ export default function OrganizerListItemPC() {
   const { showedPage, setShowedPage, pathName, dispatch, setImage } =
     useContext(EventContext);
 
+  // Update the currentPage when the path changes
   useEffect(() => {
-    // Update the currentPage when the path changes
     if (pathName !== '/user') {
       const page = organizerBtns.find((p) => p.path === pathName);
       if (page) {

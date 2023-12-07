@@ -14,13 +14,13 @@ interface Page {
   path: string;
 }
 
-interface DateRange {
+export interface DateRange {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
 }
-const today = dayjs();
-const hourOfToday = today.add(1, 'minute');
-const endHourOfToday = hourOfToday.add(30, 'minute');
+export const today = dayjs();
+export const hourOfToday = today.add(5, 'minute');
+export const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export type Tag = {
   id_tag: number;
@@ -62,7 +62,7 @@ export const initialState: EventData = {
   location_event: '',
   price_event: 0,
   selectedTags: [],
-  modality: {} as Tag,
+  modality: { id_tag: 16, name_tag: 'Online' } as Tag,
   category_event: '',
 };
 
