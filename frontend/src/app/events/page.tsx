@@ -142,7 +142,7 @@ export default function EventsPage() {
           {alert.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar searchEvents={searchEvents} isDisabled={events.length === 0 ? true:false}/>
       {events.length === 0 ? (
         <Typography
           sx={{

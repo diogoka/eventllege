@@ -51,8 +51,8 @@ function UserEvents() {
   });
 
   const currentUser: CurrentUser = {
-    id: user!.id,
-    role: user!.roleName,
+    id: user?.id ? user!.id : '',
+    role: user?.roleName ? user!.roleName : '',
   };
 
   const getEvents = async () => {
@@ -156,7 +156,10 @@ function UserEvents() {
         </Alert>
       )}
 
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={!hasEvents.eventFound}
+      />
       {events.length === 0 ? (
         <Typography
           sx={{

@@ -45,7 +45,6 @@ export default function PastEvent() {
     status: false,
     message: '',
   });
-  const oldEvent = true;
 
   const currentUser: CurrentUser = {
     id: user ? user!.id : '',
@@ -151,7 +150,10 @@ export default function PastEvent() {
           {alertSearchBar.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={events.length === 0 ? true : false}
+      />
       <Box
         sx={{
           width: '98%',
@@ -190,7 +192,6 @@ export default function PastEvent() {
           user={currentUser}
           setEvents={setEvents}
           attendance={eventsOfUser}
-          oldEvent={oldEvent}
         ></EventList>
       )}
     </Box>

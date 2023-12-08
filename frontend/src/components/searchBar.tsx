@@ -5,9 +5,10 @@ import IconItem from './icons/iconItem';
 
 type Props = {
   searchEvents: (text: string) => void;
+  isDisabled: boolean;
 };
 
-function SearchBar({ searchEvents }: Props) {
+function SearchBar({ searchEvents, isDisabled }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
@@ -50,16 +51,20 @@ function SearchBar({ searchEvents }: Props) {
     <Grid container spacing={0} style={gridContainerStyle}>
       <Grid item xs={9.5} sx={{ height: '3rem' }}>
         <TextField
-          value={searchTerm}
+          value={isDisabled? '': searchTerm}
           onChange={handleInputChange}
           fullWidth
           InputProps={{
             style: textFieldStyle,
           }}
-        />
+          sx={{ backgroundColor: isDisabled? '#eeeeee':'transparent' }} disabled={isDisabled}/>
       </Grid>
       <Grid item xs={2.5} style={gridIconContainerStyle}>
-        <Button sx={{ width: '100%' }} onClick={handleSearch}>
+        <Button
+          sx={{ width: '100%', backgroundColor: isDisabled? '#606080': null }}
+          onClick={handleSearch}
+          disabled={isDisabled}
+        >
           <IconItem
             iconName='FaSearch'
             onClick={handleSearch}
