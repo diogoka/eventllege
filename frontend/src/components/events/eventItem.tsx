@@ -66,7 +66,7 @@ function EventItem({
   useEffect(() => {
     getAverageRating();
     checkModalities();
-  }, [page]);
+  });
 
   const getAverageRating = async () => {
     if (oldEvent) {
