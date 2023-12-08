@@ -126,7 +126,7 @@ export default function EventPage() {
       .catch((error) => {
         console.error(error.response);
 
-        notFound();
+        // notFound();
       });
   }, [applied]);
 
