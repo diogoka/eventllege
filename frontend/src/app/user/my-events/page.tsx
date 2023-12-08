@@ -154,7 +154,7 @@ function UserEvents() {
         </Alert>
       )}
 
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar searchEvents={searchEvents} isDisabled={!hasEvents.eventFound}/>
       {events.length === 0 ? (
         <Typography
           sx={{

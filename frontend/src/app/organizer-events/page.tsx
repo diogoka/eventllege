@@ -133,7 +133,7 @@ export default function OrganizerEventsPage() {
         flexDirection: 'column',
       }}
     >
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar searchEvents={searchEvents} isDisabled={!hasEvents.eventFound}/>
       {laptopQuery && (
         <Box
           sx={{
