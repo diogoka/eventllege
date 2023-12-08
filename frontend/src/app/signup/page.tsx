@@ -66,7 +66,7 @@ export default function SignUpPage() {
           setAlertMessage(getErrorMessage(error.code));
         });
     } else {
-      setAlertMessage("Password and Confirm Password doesn't match");
+      setAlertMessage('Password and Confirm Password doesn\'t match');
     }
   };
 

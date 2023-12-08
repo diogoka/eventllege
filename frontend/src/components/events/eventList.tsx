@@ -82,6 +82,7 @@ function EventList({
               deleteEvent={deleteEvent}
               attending={attending}
               oldEvent={oldEvent}
+              page={currentPage}
             />
           );
         })}

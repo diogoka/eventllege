@@ -26,6 +26,7 @@ type Props = {
   };
   attending: boolean;
   oldEvent?: boolean;
+  page?: number;
 };
 
 interface AlertState {
@@ -41,6 +42,7 @@ function EventItem({
   deleteEvent,
   attending,
   oldEvent,
+  page,
 }: Props) {
   const router = useRouter();
   const weekDay = weekDayFn(event.date_event_start);
@@ -64,7 +66,7 @@ function EventItem({
   useEffect(() => {
     getAverageRating();
     checkModalities();
-  }, []);
+  }, [page]);
 
   const getAverageRating = async () => {
     if (oldEvent) {

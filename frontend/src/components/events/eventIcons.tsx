@@ -39,8 +39,8 @@ function EventIcons({
   const router = useRouter();
   const pathName = usePathname();
   const { setShowedPage } = useContext(EventContext);
+
   const handleOrganizerClick = (iconName: string) => {
-    console.log('clicked');
     if (iconName === 'FaEdit') {
       if (pathName === '/events' || 'organizer-events') {
         setShowedPage({
@@ -80,7 +80,10 @@ function EventIcons({
         }, 3000);
       })
       .catch((err) => {
-        console.error('Failed to copy URL: ', err);
+        handleAlertFn(true, 'Failed to copy URL', 'Please try again.', 'error');
+        setTimeout(() => {
+          handleAlertFn(false, '', '', 'error');
+        }, 3000);
       });
   };
 
