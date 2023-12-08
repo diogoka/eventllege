@@ -41,6 +41,7 @@ function SwitchButton({ setSwitchButtonState, titles }: Props) {
           paddingLeft: '1rem',
           paddingRight: '1rem',
           height: '2rem',
+          minWidth: '11.5rem',
         }}
       >
         {titles[checked ? 0 : 1]}

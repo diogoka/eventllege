@@ -131,6 +131,7 @@ export default function OrganizerEventsPage() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        position: 'relative',
       }}
     >
       <SearchBar searchEvents={searchEvents} />
@@ -174,7 +175,21 @@ export default function OrganizerEventsPage() {
           attendance={eventsOfUser}
         ></EventList>
       ) : (
-        <Typography sx={{ position: 'relative', top: '16.3125rem' }}>
+        <Typography
+          sx={{
+            position: 'absolute',
+            top: '20rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'white',
+            backgroundColor: '#141D4F',
+            width: '50%',
+            height: '5rem',
+            padding: '1rem',
+            borderRadius: '5px',
+          }}
+        >
           {hasEvents.message}
         </Typography>
       )}

@@ -141,6 +141,8 @@ function UserEvents() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        // minHeight: '304px',
+        position: 'relative',
       }}
     >
       {alertSearchBar.status && (
@@ -158,17 +160,18 @@ function UserEvents() {
       {events.length === 0 ? (
         <Typography
           sx={{
-            position: 'relative',
-            top: '12.3125rem',
+            position: 'absolute',
+            // top: '12.3125rem',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: 'white',
-            backgroundColor: '#2b3467',
-            padding: '1rem',
-            borderRadius: '5px',
+            backgroundColor: '#141D4F',
             width: '50%',
             height: '5rem',
+            padding: '1rem',
+            borderRadius: '5px',
           }}
         >
           {hasEvents.message !== '' ? hasEvents.message : 'No events found'}
