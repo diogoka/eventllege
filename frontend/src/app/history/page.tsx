@@ -149,7 +149,7 @@ export default function PastEvent() {
           {alertSearchBar.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar searchEvents={searchEvents} isDisabled={events.length === 0 ? true:false}/>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}>
         <SwitchButton
           setSwitchButtonState={setAllEvents}
