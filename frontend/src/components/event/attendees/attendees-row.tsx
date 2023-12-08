@@ -22,7 +22,7 @@ export default function AttendeesRow({ attendees }: Props) {
 
   const number_attendees =
   attendees.length==0? 'No attendee' :
-  attendees.length==1? `1 person` :
+  attendees.length==1? '1 person' :
   `${attendees.length} people`;
 
   return (
