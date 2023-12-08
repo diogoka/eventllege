@@ -15,7 +15,6 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
-import NotFound from '@/components/common/notFound';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -63,8 +62,9 @@ export type OtherInfo = {
 };
 
 export default function EventPage() {
-  const { ready, notFound } = useContext(PageContext);
+  const { notFound } = useContext(PageContext);
   const { user } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [event, setEvent] = useState<Event>();
   const [otherInfo, setOtherInfo] = useState<OtherInfo>();
   const [applied, setApplied] = useState<boolean>(false);
@@ -90,7 +90,6 @@ export default function EventPage() {
           notFound();
           return;
         }
-        ready();
 
         setEvent({
           ...res.data.event,
@@ -122,6 +121,8 @@ export default function EventPage() {
         eventDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
         eventDate < today && setOldEvent(true);
+
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error.response);

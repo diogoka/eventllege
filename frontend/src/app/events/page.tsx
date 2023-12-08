@@ -38,13 +38,13 @@ interface AlertState {
 }
 
 export default function EventsPage() {
-  const { ready } = useContext(PageContext);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(UserContext);
+  if(!user) return;
+  
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
-    []
-  );
+  const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>([]);
 
   const [alert, setAlert] = useState<AlertState>({
     status: false,
@@ -58,20 +58,21 @@ export default function EventsPage() {
   };
 
   const getEvents = async () => {
-    await axios.get('http://localhost:3001/api/events').then((res) => {
-      setEvents(res.data.events);
-      setTags(res.data.tags);
-    });
+    const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events');
+    setEvents(events);
+    setTags(tags);
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
-      });
-    ready();
+
+    const { data: { events: userEvents } } = await axios.get(
+      `http://localhost:3001/api/events/user/${currentUser.id}`
+    );
+    
+    userEvents.map((event: Event) => {
+      let attendingEvent: [number, boolean] = [event.id_event, true];
+      attendingEvents.push(attendingEvent);
+    });
+
+    setIsLoading(false);
     setEventsOfUser(attendingEvents);
   };
 
@@ -119,6 +120,7 @@ export default function EventsPage() {
       });
   };
 
+  if(isLoading) return <></>
   return (
     <Box
       sx={{
