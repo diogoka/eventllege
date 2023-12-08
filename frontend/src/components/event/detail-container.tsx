@@ -31,11 +31,11 @@ const DetailContainer = ({
 }: Props) => {
   const { isAlertVisible, setIsAlertVisible } = useContext(DetailPageContext);
   const locationContainerStyle = {
-    fontSize: forMobile ? 'auto' : '1.2em',
+    fontSize: forMobile ? 'auto' : '1.2rem',
     marginTop: '3px',
   };
   const h1Style = !forMobile
-    ? { textAlign: 'left', fontWeight: 'bold', fontSize: '2.5em' }
+    ? { textAlign: 'left', fontWeight: 'bold', fontSize: '2.5rem' }
     : null;
   const timeContainerStyle = { margin: forMobile ? '10px auto' : '40px auto' };
 

@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, createContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
-import { Box, Stack, Typography, Link } from '@mui/material';
+import { Box, Stack, Typography, Link, Grid } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
 import DetailIconContainer from '@/components/event/detail-icon-container';
 import DetailTimeContainer from '@/components/event/detail-time-container';
@@ -194,75 +194,85 @@ export default function EventPage() {
     return (
       <DetailPageContext.Provider value={provider}>
         <>
-          <Stack>
-            <Box width='100%' display='flex' margin='30px auto 90px'>
-              {/* /////////// Left /////////// */}
-              <Box minWidth='70%' marginRight='40px'>
-                <DetailContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
+          <Grid
+            container
+            direction='row'
+            justifyContent='center'
+            alignItems='center'
+            spacing={1}
+            maxWidth={960}
+            sx={{
+              margin: '30px auto 90px',
+            }}
+          >
+            {/* <Box width='100%' display='flex' margin='30px auto 90px'> */}
+            {/* /////////// Left /////////// */}
+            <Grid item md={7}>
+              <DetailContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+                forPreview={forPreview}
+              />
+              {event && (
+                <DetailInfo
+                  price={event.price_event}
+                  maxSpots={event.capacity_event}
+                  attendees={attendees!}
+                  tags={event.tags}
+                  category={event.category_event}
                   forMobile={forMobile!}
                   forPreview={forPreview}
                 />
-                {event && (
-                  <DetailInfo
-                    price={event.price_event}
-                    maxSpots={event.capacity_event}
-                    attendees={attendees!}
-                    tags={event.tags}
-                    category={event.category_event}
-                    forMobile={forMobile!}
-                    forPreview={forPreview}
-                  />
-                )}
-              </Box>
+              )}
+            </Grid>
 
-              {/* /////////// Right /////////// */}
-              <Box>
-                <DetailIconContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
-                  forPreview={forPreview}
+            {/* /////////// Right /////////// */}
+            <Grid item md={5}>
+              <DetailIconContainer
+                event={event!}
+                otherInfo={otherInfo!}
+                applied={applied}
+                organizerEvent={organizerEvent}
+                forMobile={forMobile!}
+                forPreview={forPreview}
+              />
+              <Box borderRadius='7px' overflow='hidden'>
+                <ImageHelper
+                  src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+                  width='320px'
+                  height='220px'
+                  alt={event?.name_event ?? 'Event'}
                 />
-                <Box borderRadius='7px' overflow='hidden'>
-                  <ImageHelper
-                    src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
-                    width='320px'
-                    height='220px'
-                    alt={event?.name_event ?? 'Event'}
-                  />
-                </Box>
-                <Link
-                  href={`https://maps.google.com/?q=${event?.location_event}`}
-                  target='_blank'
-                >
-                  <Box display='flex' marginTop='20px'>
-                    <IconsContainer
-                      icons={[
-                        {
-                          name: 'FaLocationArrow',
-                          isClickable: false,
-                          color: 'navy',
-                        },
-                      ]}
-                      onIconClick={() => {
-                        return;
-                      }}
-                    />
-                    <Typography>{event?.location_event}</Typography>
-                  </Box>
-                </Link>
-                <MapWithMarker location={event?.location_event ?? ''} />
               </Box>
-              {/* //right */}
-            </Box>
+              <Link
+                href={`https://maps.google.com/?q=${event?.location_event}`}
+                target='_blank'
+              >
+                <Box display='flex' marginTop='20px'>
+                  <IconsContainer
+                    icons={[
+                      {
+                        name: 'FaLocationArrow',
+                        isClickable: false,
+                        color: 'navy',
+                      },
+                    ]}
+                    onIconClick={() => {
+                      return;
+                    }}
+                  />
+                  <Typography>{event?.location_event}</Typography>
+                </Box>
+              </Link>
+              <MapWithMarker location={event?.location_event ?? ''} />
+            </Grid>
+            {/* //right */}
+            {/* </Box> */}
             {/* //flex */}
-          </Stack>
+          </Grid>
 
           {oldEvent && (
             <Review id_event={otherInfo!.id_event} applied={applied} />
@@ -272,8 +282,8 @@ export default function EventPage() {
           {!oldEvent && (
             <Box
               padding='0 30px'
-              display='flex'
-              justifyContent='space-between'
+              // display='flex'
+              // justifyContent='space-between'
               left='0'
               width='100%'
               margin='0 auto'
@@ -282,34 +292,46 @@ export default function EventPage() {
               zIndex='201'
               style={{ backgroundColor: '#dedede' }}
             >
-              <Box
-                display='flex'
-                flexDirection='column'
-                justifyContent='center'
+              <Stack
+                direction='row'
+                justifyContent='space-between'
+                alignItems='center'
+                spacing={1}
+                sx={{
+                  width: '100%',
+                  maxWidth: '960px',
+                  margin: '0 auto',
+                }}
               >
-                <DetailTimeContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
-                />
-                <Box marginLeft='10px' fontWeight='bold'>
-                  {event?.name_event}
+                <Box
+                  display='flex'
+                  flexDirection='column'
+                  justifyContent='center'
+                >
+                  <DetailTimeContainer
+                    event={event!}
+                    otherInfo={otherInfo!}
+                    applied={applied}
+                    organizerEvent={organizerEvent}
+                    forMobile={forMobile!}
+                  />
+                  <Box marginLeft='10px' fontWeight='bold'>
+                    {event?.name_event}
+                  </Box>
                 </Box>
-              </Box>
 
-              <Box width='30%'>
-                <DetailButtonContainer
-                  event={event!}
-                  otherInfo={otherInfo!}
-                  applied={applied}
-                  organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
-                  forPreview={forPreview}
-                  maxSpots={eventCapacity}
-                />
-              </Box>
+                <Box width='30%'>
+                  <DetailButtonContainer
+                    event={event!}
+                    otherInfo={otherInfo!}
+                    applied={applied}
+                    organizerEvent={organizerEvent}
+                    forMobile={forMobile!}
+                    forPreview={forPreview}
+                    maxSpots={eventCapacity}
+                  />
+                </Box>
+              </Stack>
             </Box>
           )}
         </>
