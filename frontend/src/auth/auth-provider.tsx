@@ -208,6 +208,13 @@ export default function AuthProvider({
     }
   }, [pathname, loginStatus]);
 
+  const isHeaderReady = (): boolean => {
+    if(pathname.length > 0 && pathname !== '/login' && pageStatus === PageStatus.Ready) {
+      return true;
+    }
+    return false;
+  }
+
   const getComponent = () => {
     switch (pageStatus) {
       case PageStatus.Loading:
@@ -238,7 +245,7 @@ export default function AuthProvider({
 
   return (
     <>
-      {pathname.length > 0 && pathname !== '/login' && <Header />}
+      {isHeaderReady() && <Header />}
       {getComponent()}
       <Footer />
     </>
