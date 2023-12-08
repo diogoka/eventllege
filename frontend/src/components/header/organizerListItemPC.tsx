@@ -13,7 +13,7 @@ const organizerBtns: Page[] = [
   { label: 'My events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
   { label: 'Created Events', path: '/organizer-events' },
-  { label: 'Create Events', path: '/events/new' },
+  { label: 'Create an event', path: '/events/new' },
 ];
 
 export default function OrganizerListItemPC() {
