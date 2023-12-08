@@ -131,7 +131,7 @@ const DetailButtonContainer = ({
         variant='filled'
         sx={{
           position: 'absolute',
-          bottom: '50rem',
+          bottom: '48rem',
           left: '35%',
           zIndex: 9999,
         }}
