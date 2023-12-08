@@ -73,7 +73,7 @@ export default function ButtonsForPreview({
           setTimeout(() => {
             router.replace('/events');
             setShowAlert({ show: false, title: '', message: '' });
-          }, 3500);
+          }, 2500);
 
           dispatch({
             type: 'RESET',
@@ -106,7 +106,7 @@ export default function ButtonsForPreview({
           setTimeout(() => {
             router.replace('/events');
             setShowAlert({ show: false, title: '', message: '' });
-          }, 3500);
+          }, 2500);
 
           dispatch({
             type: 'RESET',
