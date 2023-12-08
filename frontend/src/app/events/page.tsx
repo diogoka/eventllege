@@ -40,8 +40,7 @@ interface AlertState {
 export default function EventsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(UserContext);
-  if(!user) return;
-  
+
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>([]);
@@ -61,19 +60,22 @@ export default function EventsPage() {
     const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events');
     setEvents(events);
     setTags(tags);
-    const attendingEvents: [number, boolean][] = [];
-
-    const { data: { events: userEvents } } = await axios.get(
-      `http://localhost:3001/api/events/user/${currentUser.id}`
-    );
     
-    userEvents.map((event: Event) => {
-      let attendingEvent: [number, boolean] = [event.id_event, true];
-      attendingEvents.push(attendingEvent);
-    });
+    if(currentUser.id) {
+      const attendingEvents: [number, boolean][] = [];
+      const { data: { events: userEvents } } = await axios.get(
+        `http://localhost:3001/api/events/user/${currentUser.id}`
+      );
+      
+      userEvents.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
+      });
+  
+      setEventsOfUser(attendingEvents);
+    }
 
     setIsLoading(false);
-    setEventsOfUser(attendingEvents);
   };
 
   useEffect(() => {
