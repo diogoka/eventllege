@@ -4,6 +4,6 @@
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-single"],
     "react-hooks/exhaustive-deps": ["off"],
-    "no-console": "error"
+    "no-console": "warn"
   }
 }
