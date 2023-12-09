@@ -126,6 +126,8 @@ export default function EventsPage() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        minHeight: '304px',
+        position: 'relative',
       }}
     >
       {alert.status && (
@@ -144,15 +146,17 @@ export default function EventsPage() {
       {events.length === 0 ? (
         <Typography
           sx={{
+            position: 'absolute',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#141D4F',
             color: 'white',
+            backgroundColor: '#141D4F',
             width: '50%',
             height: '5rem',
-            borderRadius: '5px',
             padding: '1rem',
+            borderRadius: '5px',
           }}
         >
           No events found

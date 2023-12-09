@@ -136,6 +136,8 @@ export default function PastEvent() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        // minHeight: '304px',
+        position: 'relative',
       }}
     >
       {alertSearchBar.status && (
@@ -152,7 +154,14 @@ export default function PastEvent() {
         searchEvents={searchEvents}
         isDisabled={events.length === 0 ? true : false}
       />
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}>
+      <Box
+        sx={{
+          width: '98%',
+          display: 'flex',
+          justifyContent: 'start',
+          minHeight: '64px',
+        }}
+      >
         <SwitchButton
           setSwitchButtonState={setAllEvents}
           titles={['All events', 'Attended events']}
@@ -161,15 +170,17 @@ export default function PastEvent() {
       {events.length === 0 ? (
         <Typography
           sx={{
+            position: 'absolute',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#141D4F',
             color: 'white',
+            backgroundColor: '#141D4F',
             width: '50%',
             height: '5rem',
-            borderRadius: '5px',
             padding: '1rem',
+            borderRadius: '5px',
           }}
         >
           No events found
