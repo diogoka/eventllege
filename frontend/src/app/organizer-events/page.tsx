@@ -134,7 +134,10 @@ export default function OrganizerEventsPage() {
         position: 'relative',
       }}
     >
-      <SearchBar searchEvents={searchEvents} isDisabled={!hasEvents.eventFound}/>
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={!hasEvents.eventFound}
+      />
       {laptopQuery && (
         <Box
           sx={{
@@ -162,7 +165,7 @@ export default function OrganizerEventsPage() {
               },
             }}
           >
-            Create an event
+            Create events
           </Button>
         </Box>
       )}

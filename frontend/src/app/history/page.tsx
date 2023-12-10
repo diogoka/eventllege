@@ -136,7 +136,6 @@ export default function PastEvent() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        // minHeight: '304px',
         position: 'relative',
       }}
     >
