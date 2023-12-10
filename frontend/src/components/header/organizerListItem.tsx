@@ -8,7 +8,7 @@ type Props = {
 
 const OrganizerBtns = [
   { label: 'Created Events', path: '/organizer-events' },
-  { label: 'Create an event', path: '/events/new' },
+  { label: 'Create events', path: '/events/new' },
 ];
 
 export default function OrganizerListItem({ toggleMenu }: Props) {
