@@ -48,21 +48,22 @@ function ReviewsList({ reviews, laptopQuery }: Props) {
           />
         ))}
       </Stack>
-      {totalReviews > 6 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button
-            variant='outlined'
-            color='primary'
-            sx={{
-              marginTop: '1rem',
-              width: laptopQuery ? '18.4375rem' : '100%',
-            }}
-            onClick={() => setShowAllReviews(!showAllReviews)}
-          >
-            {showAllReviews ? 'Show less reviews' : 'See all reviews'}
-          </Button>
-        </Box>
-      )}
+      {(totalReviews > 6 && laptopQuery) ||
+        (totalReviews > 3 && !laptopQuery && (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant='outlined'
+              color='primary'
+              sx={{
+                marginTop: '1rem',
+                width: laptopQuery ? '18.4375rem' : '100%',
+              }}
+              onClick={() => setShowAllReviews(!showAllReviews)}
+            >
+              {showAllReviews ? 'Show less reviews' : 'See all reviews'}
+            </Button>
+          </Box>
+        ))}
     </Stack>
   );
 }
