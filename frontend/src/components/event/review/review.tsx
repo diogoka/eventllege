@@ -55,6 +55,7 @@ function Review({ id_event, applied }: Props) {
   const updateReviews = (newReview: Review) => {
     setReviews((prevReviews) => [newReview, ...prevReviews]);
     setHasReview(true);
+    setUserHasReviewed(true);
     handleClose();
   };
 
