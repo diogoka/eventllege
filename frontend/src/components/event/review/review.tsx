@@ -37,6 +37,7 @@ function Review({ id_event, applied }: Props) {
   const laptopQuery = useMediaQuery('(min-width:769px)');
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const [userHasReviewed, setUserHasReviewed] = useState<boolean>(false);
 
   useEffect(() => {
     axios
@@ -47,6 +48,7 @@ function Review({ id_event, applied }: Props) {
         if (res.data.reviews.length > 0) {
           setHasReview(true);
         }
+        userHasReviewedEvent(res.data.reviews);
       });
   }, []);
 
@@ -64,13 +66,23 @@ function Review({ id_event, applied }: Props) {
     });
   };
 
+  const userHasReviewedEvent = (reviews: Review[]) => {
+    if (user) {
+      reviews.forEach((review) => {
+        if (review.id_user === user.id) {
+          setUserHasReviewed(true);
+        }
+      });
+    }
+  };
+
   return (
     <>
       <Box sx={{ marginTop: '1rem' }}>
         <Typography variant='h2' fontWeight='bold'>
           Reviews
         </Typography>
-        {applied && (
+        {applied && !userHasReviewed && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               variant='contained'
