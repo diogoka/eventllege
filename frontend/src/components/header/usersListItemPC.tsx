@@ -10,7 +10,7 @@ interface Page {
 
 const usersBtns: Page[] = [
   { label: 'Events', path: '/' },
-  { label: 'My events', path: '/user/my-events' },
+  { label: 'My Events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
 ];
 
