@@ -37,22 +37,44 @@ function Review({ id_event, applied }: Props) {
   const laptopQuery = useMediaQuery('(min-width:769px)');
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const [userHasReviewed, setUserHasReviewed] = useState<boolean>(false);
 
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/events/reviews/${id_event}`)
       .then((res) => {
+        res.data.reviews = orderReviews(res.data.reviews);
         setReviews(res.data.reviews);
         if (res.data.reviews.length > 0) {
           setHasReview(true);
         }
+        userHasReviewedEvent(res.data.reviews);
       });
   }, []);
 
   const updateReviews = (newReview: Review) => {
-    setReviews((prevReviews) => [...prevReviews, newReview]);
+    setReviews((prevReviews) => [newReview, ...prevReviews]);
     setHasReview(true);
+    setUserHasReviewed(true);
     handleClose();
+  };
+
+  const orderReviews = (reviews: Review[]) => {
+    return reviews.sort((a, b) => {
+      return (
+        new Date(b.date_review).getTime() - new Date(a.date_review).getTime()
+      );
+    });
+  };
+
+  const userHasReviewedEvent = (reviews: Review[]) => {
+    if (user) {
+      reviews.forEach((review) => {
+        if (review.id_user === user.id) {
+          setUserHasReviewed(true);
+        }
+      });
+    }
   };
 
   return (
@@ -61,7 +83,7 @@ function Review({ id_event, applied }: Props) {
         <Typography variant='h2' fontWeight='bold'>
           Reviews
         </Typography>
-        {applied && (
+        {applied && !userHasReviewed && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               variant='contained'
