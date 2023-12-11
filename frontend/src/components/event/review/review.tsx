@@ -42,6 +42,7 @@ function Review({ id_event, applied }: Props) {
     axios
       .get(`http://localhost:3001/api/events/reviews/${id_event}`)
       .then((res) => {
+        res.data.reviews = orderReviews(res.data.reviews);
         setReviews(res.data.reviews);
         if (res.data.reviews.length > 0) {
           setHasReview(true);
@@ -50,9 +51,17 @@ function Review({ id_event, applied }: Props) {
   }, []);
 
   const updateReviews = (newReview: Review) => {
-    setReviews((prevReviews) => [...prevReviews, newReview]);
+    setReviews((prevReviews) => [newReview, ...prevReviews]);
     setHasReview(true);
     handleClose();
+  };
+
+  const orderReviews = (reviews: Review[]) => {
+    return reviews.sort((a, b) => {
+      return (
+        new Date(b.date_review).getTime() - new Date(a.date_review).getTime()
+      );
+    });
   };
 
   return (

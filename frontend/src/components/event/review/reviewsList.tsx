@@ -14,7 +14,7 @@ function ReviewsList({ reviews, laptopQuery }: Props) {
   const totalReviews = reviews.length;
   const displayedReviews = showAllReviews
     ? reviews
-    : reviews.slice(0, laptopQuery ? 6 : 3);
+    : reviews.slice(0, laptopQuery ? 5 : 3);
 
   const boxReviewStyle = {
     backgroundColor: '#3333330D',
