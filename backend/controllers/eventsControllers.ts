@@ -509,7 +509,10 @@ export const createEvents = async (
       `);
 
       if (req.file) {
-        moveImage(req.file.filename, events.rows[0].id_event);
+        copyImage(req.file.filename, events.rows[0].id_event);
+        setTimeout(() => {
+          deleteImage(req.file.filename);
+        }, 3000);
       }
 
       tagId.forEach((id: string) => {
@@ -573,7 +576,10 @@ export const updateEvents = async (
         });
 
         if (req.file) {
-          moveImage(req.file.filename, events.rows[0].id_event);
+          copyImage(req.file.filename, events.rows[0].id_event);
+          setTimeout(() => {
+            deleteImage(req.file.filename);
+          }, 3000);
         }
       });
 
@@ -823,10 +829,10 @@ function validateEventInput(eventInput: EventInput): {
   };
 }
 
-function moveImage(filename: string, eventId: number) {
+function copyImage(filename: string, eventId: number) {
   const oldPath = `${__dirname}/../public/img/events/temp/${filename}`;
   const newPath = `${__dirname}/../public/img/events/${eventId}`;
-  fs.moveSync(oldPath, newPath, { overwrite: true });
+  fs.copySync(oldPath, newPath, { overwrite: true });
 }
 
 function deleteImage(filename: string) {
