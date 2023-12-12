@@ -161,7 +161,7 @@ export default function PreviewEventPage() {
 
         <Box display='flex' margin='0 auto 90px'>
           {/* /////////// Left /////////// */}
-          <Box minWidth='70%' marginRight='40px'>
+          <Box minWidth='67%' marginRight='40px' justifyContent='space-between'>
             <DetailContainer
               event={tempState!}
               otherInfo={{
@@ -193,7 +193,7 @@ export default function PreviewEventPage() {
           </Box>
 
           {/* /////////// Right /////////// */}
-          <Box>
+          <Box width='30%'>
             <DetailIconContainer
               event={tempState!}
               otherInfo={{
@@ -209,8 +209,8 @@ export default function PreviewEventPage() {
             <Box borderRadius='7px' overflow='hidden'>
               <ImageHelper
                 src={tempImage}
-                width='320px'
-                height='220px'
+                width='100%'
+                height='auto'
                 alt={tempState?.name_event ?? 'Event'}
               />
             </Box>
