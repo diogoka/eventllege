@@ -196,9 +196,9 @@ export default function EventPage() {
       <DetailPageContext.Provider value={provider}>
         <>
           <Stack>
-            <Box width='100%' display='flex' margin='30px auto 90px'>
+            <Box width='100%' display='flex' paddingTop='50px' justifyContent='space-between'>
               {/* /////////// Left /////////// */}
-              <Box minWidth='70%' marginRight='40px'>
+              <Box width='67%'>
                 <DetailContainer
                   event={event!}
                   otherInfo={otherInfo!}
@@ -221,7 +221,7 @@ export default function EventPage() {
               </Box>
 
               {/* /////////// Right /////////// */}
-              <Box>
+              <Box width='30%'>
                 <DetailIconContainer
                   event={event!}
                   otherInfo={otherInfo!}
@@ -233,8 +233,8 @@ export default function EventPage() {
                 <Box borderRadius='7px' overflow='hidden'>
                   <ImageHelper
                     src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
-                    width='320px'
-                    height='220px'
+                    width='100%'
+                    height='auto'
                     alt={event?.name_event ?? 'Event'}
                   />
                 </Box>
@@ -282,8 +282,9 @@ export default function EventPage() {
               style={{ backgroundColor: '#dedede' }}
             >
               <Box
-                maxWidth='960px'
+                maxWidth='1280px'
                 width='100%'
+                paddingInline='40px'
                 marginInline='auto'
                 display='flex'
                 justifyContent='space-between'
