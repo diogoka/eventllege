@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Modal, Box, Typography } from '@mui/material';
+import { Button, Modal, Box, Typography, Stack } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { RiErrorWarningFill } from "react-icons/ri";
+import { fontSize } from "@mui/system";
 
 type Props = {
   isOpen: boolean;
@@ -69,10 +70,18 @@ function ModalAttendParticipation({
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography variant='h2' sx={{ textAlign: 'center' }}>
-            Please make sure to complete the payment using the method specified
-            in the description after application.<br/>
-            Would you like to attend this event?
+          <Stack direction='row' alignItems='center' justifyContent='center' columnGap='.125rem'>
+            <RiErrorWarningFill style={{ fontSize: '1.5rem', color: '#D22B2B', marginBottom: '2px' }} />
+            <Typography
+              variant='h2'
+              fontWeight='bold'
+              sx={{ textAlign: 'center' }}
+            >
+              Payment Required!
+            </Typography>
+          </Stack>
+          <Typography sx={{ textAlign: 'center' }}>
+            Please follow the instruction for payment.
           </Typography>
           <Box sx={iconContainer}>
             <Button
@@ -91,7 +100,7 @@ function ModalAttendParticipation({
                 addAttendee();
               }}
             >
-              Apply
+              OK
             </Button>
           </Box>
         </Box>
