@@ -45,6 +45,7 @@ export default function PastEvent() {
     status: false,
     message: '',
   });
+  const [noEvents, setNoEvents] = useState<boolean>(false);
 
   const currentUser: CurrentUser = {
     id: user ? user!.id : '',
@@ -58,7 +59,14 @@ export default function PastEvent() {
       .get('http://localhost:3001/api/events/?past=true&attendees=true')
       .then((res) => {
         let eventsUserAttended = getEventsUserAttended(res.data.events);
-        allEvents ? setEvents(res.data.events) : setEvents(eventsUserAttended);
+        // allEvents ? setEvents(res.data.events) : setEvents(eventsUserAttended);
+        if(allEvents){
+          setEvents(res.data.events);
+          res.data.events.length===0 ? setNoEvents(true) : setNoEvents(false);
+        }else{
+          setEvents(eventsUserAttended);
+          eventsUserAttended.length===0 ? setNoEvents(true) : setNoEvents(false);
+        }
         setTags(res.data.tags);
       });
     const attendingEvents: [number, boolean][] = [];
@@ -151,7 +159,7 @@ export default function PastEvent() {
       )}
       <SearchBar
         searchEvents={searchEvents}
-        isDisabled={events.length === 0 ? true : false}
+        isDisabled={noEvents}
       />
       <Box
         sx={{

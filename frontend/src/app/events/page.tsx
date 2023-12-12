@@ -51,6 +51,7 @@ export default function EventsPage() {
     message: '',
     severity: 'info',
   });
+  const [noEvents, setNoEvents] = useState<boolean>(false);
 
   const currentUser: CurrentUser = {
     id: user?.id,
@@ -61,6 +62,7 @@ export default function EventsPage() {
     await axios.get('http://localhost:3001/api/events').then((res) => {
       setEvents(res.data.events);
       setTags(res.data.tags);
+      res.data.events.length==0 ? setNoEvents(true) : setNoEvents(false);
     });
     const attendingEvents: [number, boolean][] = [];
     await axios
@@ -142,7 +144,7 @@ export default function EventsPage() {
           {alert.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} isDisabled={events.length === 0 ? true:false}/>
+      <SearchBar searchEvents={searchEvents} isDisabled={noEvents}/>
       {events.length === 0 ? (
         <Typography
           sx={{
