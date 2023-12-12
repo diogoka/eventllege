@@ -210,7 +210,8 @@ export default function PreviewEventPage() {
               <ImageHelper
                 src={tempImage}
                 width='100%'
-                height='auto'
+                height='20vw'
+                maxHeight='260px'
                 alt={tempState?.name_event ?? 'Event'}
               />
             </Box>
