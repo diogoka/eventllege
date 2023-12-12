@@ -40,16 +40,16 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile }: Props) => {
       date_event_start: `
       ${getDayName(startDate.getDay())}, 
       ${getMonthName(startDate.getMonth())} ${startDate.getDate()}, 
-      ${startDate.getFullYear()}, ${getTimeString(startDate)}`,
+      ${startDate.getFullYear()}, ${getTimeString(startDate, otherInfo.id_event)}`,
 
       date_event_end:
         startDate.getMonth() == endDate.getMonth() &&
         startDate.getDate() == endDate.getDate() &&
         startDate.getFullYear() == endDate.getFullYear()
-          ? `${getTimeString(endDate)}`
+          ? `${getTimeString(endDate, otherInfo.id_event)}`
           : `${getDayName(endDate.getDay())}, 
       ${getMonthName(endDate.getMonth())} ${endDate.getDate()}, 
-      ${endDate.getFullYear()}, ${getTimeString(endDate)}`,
+      ${endDate.getFullYear()}, ${getTimeString(endDate, otherInfo.id_event)}`,
     };
   };
 
