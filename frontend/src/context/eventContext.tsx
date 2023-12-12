@@ -19,7 +19,7 @@ export interface DateRange {
   dateEnd: dayjs.Dayjs;
 }
 export const today = dayjs();
-export const hourOfToday = today.add(5, 'minute');
+export const hourOfToday = today.add(1, 'hour');
 export const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export type Tag = {
