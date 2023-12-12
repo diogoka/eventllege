@@ -49,6 +49,7 @@ function UserEvents() {
     status: false,
     message: '',
   });
+  const [noEvents, setNoEvents] = useState<boolean>(false);
 
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
@@ -68,11 +69,13 @@ function UserEvents() {
             eventFound: false,
             message: 'You have not attended any events yet',
           });
+          setNoEvents(true);
         } else {
           setHasEvents({
             eventFound: true,
             message: '',
           });
+          setNoEvents(false);
         }
         setEvents(res.data.events);
         setTags(res.data.tags);
@@ -159,7 +162,7 @@ function UserEvents() {
 
       <SearchBar
         searchEvents={searchEvents}
-        isDisabled={!hasEvents.eventFound}
+        isDisabled={noEvents}
       />
       {events.length === 0 ? (
         <Typography
