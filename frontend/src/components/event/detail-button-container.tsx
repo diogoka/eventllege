@@ -13,7 +13,8 @@ import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
 import { EventContext } from '@/context/eventContext';
 import { Props } from './detail-container';
-import ModalCancelParticipation from './modalCancelParticipation';
+import ModalAttendParticipation from "./modal-attend-participation";
+import ModalCancelParticipation from './modal-cancel-participation';
 
 interface AlertState {
   title: string;
@@ -22,6 +23,7 @@ interface AlertState {
 }
 
 const DetailButtonContainer = ({
+  event,
   otherInfo,
   applied,
   organizerEvent,
@@ -48,6 +50,14 @@ const DetailButtonContainer = ({
 
   const cancelEvent = () => {
     setIsCancelModalOpen(true);
+  };
+
+  const handleAttendEvent = () => {
+    if(event.price_event > 0) {
+      setIsAttendModalOpen(true);
+    } else {
+      addAttendee();
+    }
   };
 
   const addAttendee = () => {
@@ -100,8 +110,9 @@ const DetailButtonContainer = ({
       color: '#fff',
     },
   };
-  const openModal = () => setIsCancelModalOpen(true);
-  const closeModal = () => setIsCancelModalOpen(false);
+
+  const closeAttendModal = () => setIsAttendModalOpen(false);
+  const closeCancelModal = () => setIsCancelModalOpen(false);
   const id_event = otherInfo?.id_event;
   const id_user = user?.id;
 
@@ -201,7 +212,7 @@ const DetailButtonContainer = ({
         color={applied ? 'error' : 'primary'}
         sx={margin}
         onClick={() => {
-          applied ? cancelEvent() : addAttendee();
+          applied ? cancelEvent() : handleAttendEvent();
         }}
         disabled={maxSpots! === 0 && !applied}
       >
@@ -225,9 +236,16 @@ const DetailButtonContainer = ({
         {`Log In`}
       </Button>
 
+      <ModalAttendParticipation
+        isOpen={isAttendModalOpen}
+        onClose={closeAttendModal}
+        laptopQuery={laptopQuery}
+        addAttendee={addAttendee}
+      />
+
       <ModalCancelParticipation
         isOpen={isCancelModalOpen}
-        onClose={closeModal}
+        onClose={closeCancelModal}
         laptopQuery={laptopQuery}
         setApplied={setApplied}
         setAttendees={setAttendees}
