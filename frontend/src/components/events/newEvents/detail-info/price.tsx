@@ -10,6 +10,7 @@ import {
   Stack,
   FormControl,
   FormLabel,
+  FormHelperText,
 } from '@mui/material';
 
 export default function Price() {
@@ -67,16 +68,30 @@ export default function Price() {
             *
           </Box>
         </FormLabel>
-        <FormControlLabel
-          label='Free'
-          control={
-            <Checkbox
-              id='Free'
-              checked={checked}
-              onChange={handlePriceChange}
-            />
-          }
-        />
+        <Stack
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
+          spacing={1}
+        >
+          <FormControlLabel
+            label='Free'
+            control={
+              <Checkbox
+                id='Free'
+                checked={checked}
+                onChange={handlePriceChange}
+              />
+            }
+          />
+          <FormHelperText
+            sx={{ color: '#D00000', fontSize: '1rem', lineHeight: '1.5rem' }}
+          >
+            {priceValue && !error
+              ? 'Do not forget explain how to pay fees'
+              : ''}
+          </FormHelperText>
+        </Stack>
 
         <TextField
           variant='outlined'
@@ -85,7 +100,7 @@ export default function Price() {
           value={priceValue}
           onChange={handleTextPriceChange}
           error={error}
-          helperText={error ? 'Price must be greater than 1' : ''}
+          helperText={error ? 'Price must be greater than 0' : ''}
           InputProps={{
             startAdornment: <InputAdornment position='start'>$</InputAdornment>,
           }}
