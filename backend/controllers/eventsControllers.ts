@@ -511,7 +511,9 @@ export const createEvents = async (
       if (req.file) {
         copyImage(req.file.filename, events.rows[0].id_event);
         setTimeout(() => {
-          deleteImage(req.file.filename);
+          if(req.file) {
+            deleteImage(req.file.filename);
+          }
         }, 3000);
       }
 
@@ -578,7 +580,9 @@ export const updateEvents = async (
         if (req.file) {
           copyImage(req.file.filename, events.rows[0].id_event);
           setTimeout(() => {
-            deleteImage(req.file.filename);
+            if(req.file){
+              deleteImage(req.file.filename);
+            }
           }, 3000);
         }
       });
