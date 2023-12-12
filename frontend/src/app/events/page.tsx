@@ -1,6 +1,12 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box, Alert, Typography, AlertColor } from '@mui/material';
+import {
+  Box,
+  Alert,
+  Typography,
+  AlertColor,
+  useMediaQuery,
+} from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
@@ -51,6 +57,8 @@ export default function EventsPage() {
     message: '',
     severity: 'info',
   });
+
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const currentUser: CurrentUser = {
     id: user?.id,
@@ -142,7 +150,10 @@ export default function EventsPage() {
           {alert.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} isDisabled={events.length === 0 ? true:false}/>
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={events.length === 0 ? true : false}
+      />
       {events.length === 0 ? (
         <Typography
           sx={{
@@ -153,7 +164,7 @@ export default function EventsPage() {
             alignItems: 'center',
             color: 'white',
             backgroundColor: '#141D4F',
-            width: '50%',
+            width: laptopQuery ? '50%' : '100%',
             height: '5rem',
             padding: '1rem',
             borderRadius: '5px',

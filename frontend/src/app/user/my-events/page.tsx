@@ -5,7 +5,7 @@ import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { Typography, Box, Alert } from '@mui/material';
+import { Typography, Box, Alert, useMediaQuery } from '@mui/material';
 
 type Event = {
   capacity_event: number;
@@ -49,6 +49,8 @@ function UserEvents() {
     status: false,
     message: '',
   });
+
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const currentUser: CurrentUser = {
     id: user?.id ? user!.id : '',
@@ -141,7 +143,6 @@ function UserEvents() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        // minHeight: '304px',
         position: 'relative',
       }}
     >
@@ -164,14 +165,13 @@ function UserEvents() {
         <Typography
           sx={{
             position: 'absolute',
-            // top: '12.3125rem',
             top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: 'white',
             backgroundColor: '#141D4F',
-            width: '50%',
+            width: laptopQuery ? '50%' : '100%',
             height: '5rem',
             padding: '1rem',
             borderRadius: '5px',
