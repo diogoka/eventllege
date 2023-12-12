@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box, Alert, Typography } from '@mui/material';
+import { Box, Alert, Typography, useMediaQuery } from '@mui/material';
 import axios, { all } from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
@@ -45,7 +45,9 @@ export default function PastEvent() {
     status: false,
     message: '',
   });
-  const oldEvent = true;
+  const [noEvents, setNoEvents] = useState<boolean>(false);
+
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const currentUser: CurrentUser = {
     id: user ? user!.id : '',
@@ -57,8 +59,13 @@ export default function PastEvent() {
   const getEvents = async () => {
     const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events/?past=true&attendees=true');
     let eventsUserAttended = getEventsUserAttended(events);
-    allEvents ? setEvents(events) : setEvents(eventsUserAttended);
-    setTags(tags);
+    if (allEvents) {
+      setEvents(events);
+      events.length===0 ? setNoEvents(true) : setNoEvents(false);
+    } else {
+      setEvents(eventsUserAttended);
+      eventsUserAttended.length===0 ? setNoEvents(true) : setNoEvents(false);
+    }
 
     const attendingEvents: [number, boolean][] = [];
     const {data: {events: userEvents}} = await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`);
@@ -134,6 +141,7 @@ export default function PastEvent() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        position: 'relative',
       }}
     >
       {alertSearchBar.status && (
@@ -146,8 +154,18 @@ export default function PastEvent() {
           {alertSearchBar.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} />
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}>
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={noEvents}
+      />
+      <Box
+        sx={{
+          width: '98%',
+          display: 'flex',
+          justifyContent: 'start',
+          minHeight: '64px',
+        }}
+      >
         <SwitchButton
           setSwitchButtonState={setAllEvents}
           titles={['All events', 'Attended events']}
@@ -156,15 +174,17 @@ export default function PastEvent() {
       {events.length === 0 ? (
         <Typography
           sx={{
+            position: 'absolute',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#141D4F',
             color: 'white',
-            width: '50%',
+            backgroundColor: '#141D4F',
+            width: laptopQuery ? '50%' : '100%',
             height: '5rem',
-            borderRadius: '5px',
             padding: '1rem',
+            borderRadius: '5px',
           }}
         >
           No events found
@@ -176,7 +196,6 @@ export default function PastEvent() {
           user={currentUser}
           setEvents={setEvents}
           attendance={eventsOfUser}
-          oldEvent={oldEvent}
         ></EventList>
       )}
     </Box>

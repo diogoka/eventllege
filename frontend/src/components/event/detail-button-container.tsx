@@ -206,6 +206,24 @@ const DetailButtonContainer = ({
       >
         {applied ? 'Cancel' : maxSpots! === 0 ? 'No spot available' : 'Apply'}
       </Button>
+
+      <Button
+        style={{
+          display: loginStatus !== 'Logged In' ? 'block' : 'none',
+          marginLeft: 'auto',
+          width: forMobile ? '100%' : '70%',
+        }}
+        type='submit'
+        variant='contained'
+        color='primary'
+        sx={margin}
+        onClick={() => {
+          router.replace('/login/');
+        }}
+      >
+        {`Log In`}
+      </Button>
+
       <ModalCancelParticipation
         isOpen={isModalOpen}
         onClose={closeModal}

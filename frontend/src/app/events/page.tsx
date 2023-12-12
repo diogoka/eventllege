@@ -1,6 +1,12 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { Box, Alert, Typography, AlertColor } from '@mui/material';
+import {
+  Box,
+  Alert,
+  Typography,
+  AlertColor,
+  useMediaQuery,
+} from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
@@ -50,6 +56,9 @@ export default function EventsPage() {
     message: '',
     severity: 'info',
   });
+  const [noEvents, setNoEvents] = useState<boolean>(false);
+
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const currentUser: CurrentUser = {
     id: user?.id,
@@ -60,6 +69,7 @@ export default function EventsPage() {
     const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events');
     setEvents(events);
     setTags(tags);
+    events.length == 0 ? setNoEvents(true) : setNoEvents(false);
     
     if(currentUser.id) {
       const attendingEvents: [number, boolean][] = [];
@@ -130,6 +140,8 @@ export default function EventsPage() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        minHeight: '304px',
+        position: 'relative',
       }}
     >
       {alert.status && (
@@ -144,19 +156,21 @@ export default function EventsPage() {
           {alert.message}
         </Alert>
       )}
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar searchEvents={searchEvents} isDisabled={noEvents} />
       {events.length === 0 ? (
         <Typography
           sx={{
+            position: 'absolute',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#141D4F',
             color: 'white',
-            width: '50%',
+            backgroundColor: '#141D4F',
+            width: laptopQuery ? '50%' : '100%',
             height: '5rem',
-            borderRadius: '5px',
             padding: '1rem',
+            borderRadius: '5px',
           }}
         >
           No events found

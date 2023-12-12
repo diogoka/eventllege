@@ -15,17 +15,9 @@ type Props = {
     role: string | undefined;
   };
   attendance: [number, boolean][];
-  oldEvent?: boolean;
 };
 
-function EventList({
-  events,
-  tags,
-  user,
-  setEvents,
-  attendance,
-  oldEvent,
-}: Props) {
+function EventList({ events, tags, user, setEvents, attendance }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const laptopQuery = useMediaQuery('(min-width:769px)');
   const eventsPerPage = laptopQuery ? 6 : 5;
@@ -53,6 +45,8 @@ function EventList({
     return false;
   };
 
+  const today = new Date();
+
   return (
     <>
       <Stack
@@ -73,6 +67,7 @@ function EventList({
             (tag) => tag.id_event === event.id_event
           );
           const attending = checkAttendance(event.id_event);
+          let oldEvent = new Date(event.date_event_end) < today;
           return (
             <EventItem
               event={event}

@@ -10,10 +10,10 @@ interface Page {
 
 const organizerBtns: Page[] = [
   { label: 'Events', path: '/' || '/events?isPublished=true' },
-  { label: 'My events', path: '/user/my-events' },
+  { label: 'My Events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
   { label: 'Created Events', path: '/organizer-events' },
-  { label: 'Create an event', path: '/events/new' },
+  { label: 'New Event', path: '/events/new' },
 ];
 
 export default function OrganizerListItemPC() {

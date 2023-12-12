@@ -4,7 +4,7 @@ import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { Typography, Box, Alert } from '@mui/material';
+import { Typography, Box, Alert, useMediaQuery } from '@mui/material';
 
 type Event = {
   capacity_event: number;
@@ -50,10 +50,13 @@ function UserEvents() {
     status: false,
     message: '',
   });
+  const [noEvents, setNoEvents] = useState<boolean>(false);
+
+  const laptopQuery = useMediaQuery('(min-width:769px)');
 
   const currentUser: CurrentUser = {
-    id: user!.id,
-    role: user!.roleName,
+    id: user?.id ? user!.id : '',
+    role: user?.roleName ? user!.roleName : '',
   };
 
   const getEvents = async () => {
@@ -64,11 +67,13 @@ function UserEvents() {
         eventFound: false,
         message: 'You have not attended any events yet',
       });
+      setNoEvents(true);
     } else {
       setHasEvents({
         eventFound: true,
         message: '',
       });
+      setNoEvents(false);
     }
     setEvents(events);
     setTags(tags);
@@ -140,6 +145,7 @@ function UserEvents() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        position: 'relative',
       }}
     >
       {alertSearchBar.status && (
@@ -153,21 +159,24 @@ function UserEvents() {
         </Alert>
       )}
 
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={noEvents}
+      />
       {events.length === 0 ? (
         <Typography
           sx={{
-            position: 'relative',
-            top: '12.3125rem',
+            position: 'absolute',
+            top: '20rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: 'white',
-            backgroundColor: '#2b3467',
+            backgroundColor: '#141D4F',
+            width: laptopQuery ? '50%' : '100%',
+            height: '5rem',
             padding: '1rem',
             borderRadius: '5px',
-            width: '50%',
-            height: '5rem',
           }}
         >
           {hasEvents.message !== '' ? hasEvents.message : 'No events found'}

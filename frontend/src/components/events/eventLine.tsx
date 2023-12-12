@@ -3,6 +3,7 @@ import ImageHelper from '../common/image-helper';
 import { AiFillClockCircle } from 'react-icons/ai';
 import StarIcon from '@mui/icons-material/Star';
 import { Event, Tag } from '@/app/events/page';
+import { StarRounded } from '@mui/icons-material';
 
 type Props = {
   handleCardClick: () => void;
@@ -180,15 +181,19 @@ function EventLine({
 
       {oldEvent ? (
         <Box sx={iconContainerStyle}>
-          <Rating
-            name='read-only'
-            value={avgRating}
-            readOnly
-            precision={0.5}
-            size='small'
-            emptyIcon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-            icon={<StarIcon sx={{ fontSize: '1.125rem' }} />}
-          />
+          {avgRating ? (
+            <Rating
+              name='read-only'
+              value={avgRating}
+              readOnly
+              precision={0.5}
+              size='small'
+              emptyIcon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+              icon={<StarRounded sx={{ fontSize: '1.125rem' }} />}
+            />
+          ) : (
+            <Typography sx={{ fontSize: '0.7rem' }}>No reviews yet</Typography>
+          )}
         </Box>
       ) : (
         <Box sx={iconContainerStyle}>{iconsComponent}</Box>

@@ -50,6 +50,7 @@ export default function OrganizerEventsPage() {
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
   const router = useRouter();
   const [switchButtonState, setSwitchButtonState] = useState<boolean>(false);
+  const [noEvents, setNoEvents] = useState<boolean>(false);
 
   const currentUser: CurrentUser = {
     id: user!.id,
@@ -73,8 +74,10 @@ export default function OrganizerEventsPage() {
             : // eslint-disable-next-line quotes
               "You don't have upcoming events yet.",
         });
+        setNoEvents(true);
       } else {
         setHasEvents({ eventFound: true, message: '' });
+        setNoEvents(false);
       }
       setEvents(events);
       setTags(tags);
@@ -133,9 +136,13 @@ export default function OrganizerEventsPage() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        position: 'relative',
       }}
     >
-      <SearchBar searchEvents={searchEvents} />
+      <SearchBar
+        searchEvents={searchEvents}
+        isDisabled={noEvents}
+      />
       {laptopQuery && (
         <Box
           sx={{
@@ -163,7 +170,7 @@ export default function OrganizerEventsPage() {
               },
             }}
           >
-            Create an event
+            New Event
           </Button>
         </Box>
       )}
@@ -176,7 +183,21 @@ export default function OrganizerEventsPage() {
           attendance={eventsOfUser}
         ></EventList>
       ) : (
-        <Typography sx={{ position: 'relative', top: '16.3125rem' }}>
+        <Typography
+          sx={{
+            position: 'absolute',
+            top: '20rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'white',
+            backgroundColor: '#141D4F',
+            width: laptopQuery ? '50%' : '100%',
+            height: '5rem',
+            padding: '1rem',
+            borderRadius: '5px',
+          }}
+        >
           {hasEvents.message}
         </Typography>
       )}

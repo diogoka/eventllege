@@ -9,7 +9,7 @@ const currentPages = [
   { label: 'History', path: '/history' },
   { label: 'My Profile', path: '/user' },
   { label: 'Created Events', path: '/organizer-events' },
-  { label: 'Create Event', path: '/events/new' },
+  { label: 'New Event', path: '/events/new' },
 ];
 
 export default function PageTitle() {

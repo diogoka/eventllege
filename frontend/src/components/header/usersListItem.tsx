@@ -8,9 +8,9 @@ type Props = {
 
 const UsersBtns = [
   { label: 'Home', path: '/' },
-  { label: 'My events', path: '/user/my-events' },
+  { label: 'My Events', path: '/user/my-events' },
   { label: 'History', path: '/history' },
-  { label: 'My profile', path: '/user' },
+  { label: 'My Profile', path: '/user' },
 ];
 
 export default function UsersListItem({ toggleMenu }: Props) {
