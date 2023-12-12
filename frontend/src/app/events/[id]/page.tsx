@@ -15,6 +15,7 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
+import { borderRadius } from '@mui/system';
 
 type DetailPageContextProps = {
   isAlertVisible: boolean;
@@ -196,7 +197,12 @@ export default function EventPage() {
       <DetailPageContext.Provider value={provider}>
         <>
           <Stack>
-            <Box width='100%' display='flex' paddingTop='50px' justifyContent='space-between'>
+            <Box
+              width='100%'
+              display='flex'
+              paddingTop='50px'
+              justifyContent='space-between'
+            >
               {/* /////////// Left /////////// */}
               <Box width='67%'>
                 <DetailContainer
@@ -230,12 +236,15 @@ export default function EventPage() {
                   forMobile={forMobile!}
                   forPreview={forPreview}
                 />
-                <Box borderRadius='7px' overflow='hidden'>
+                <Box overflow='hidden'>
                   <ImageHelper
                     src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
                     width='100%'
                     height='20vw'
-                    maxHeight='260px'
+                    style={{
+                      maxHeight: '260px',
+                      borderRadius: '.5rem',
+                    }}
                     alt={event?.name_event ?? 'Event'}
                   />
                 </Box>
