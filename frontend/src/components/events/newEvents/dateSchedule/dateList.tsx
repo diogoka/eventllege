@@ -5,7 +5,7 @@ import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import { Grid, Box, Stack, Button, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-
+import { hourOfToday, endHourOfToday } from '@/context/eventContext';
 interface DateRange {
   dateStart: dayjs.Dayjs;
   dateEnd: dayjs.Dayjs;
@@ -16,10 +16,6 @@ type Props = {
   setDates: (dates: DateRange[]) => void;
   isMobile: boolean;
 };
-
-const today = dayjs();
-const hourOfToday = today.add(5, 'minute');
-const endHourOfToday = hourOfToday.add(30, 'minute');
 
 export default function DateList({ dates, setDates }: Props) {
   const deleteDateBtnHandler = (index: number) => {
