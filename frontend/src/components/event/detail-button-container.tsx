@@ -13,7 +13,8 @@ import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
 import { EventContext } from '@/context/eventContext';
 import { Props } from './detail-container';
-import ModalCancelParticipation from './modalCancelParticipation';
+import ModalAttendParticipation from "./modal-attend-participation";
+import ModalCancelParticipation from './modal-cancel-participation';
 
 interface AlertState {
   title: string;
@@ -22,6 +23,7 @@ interface AlertState {
 }
 
 const DetailButtonContainer = ({
+  event,
   otherInfo,
   applied,
   organizerEvent,
@@ -31,7 +33,8 @@ const DetailButtonContainer = ({
   const { setAttendees, setApplied } = useContext(DetailPageContext);
   const { loginStatus, user } = useContext(UserContext);
   const { showedPage, setShowedPage } = useContext(EventContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAttendModalOpen, setIsAttendModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const laptopQuery = useMediaQuery('(min-width:769px)');
   const [alertMessage, setAlertMessage] = useState<AlertState>({
     title: '',
@@ -46,7 +49,15 @@ const DetailButtonContainer = ({
   const params = useParams();
 
   const cancelEvent = () => {
-    setIsModalOpen(true);
+    setIsCancelModalOpen(true);
+  };
+
+  const handleAttendEvent = () => {
+    if(event.price_event > 0) {
+      setIsAttendModalOpen(true);
+    } else {
+      addAttendee();
+    }
   };
 
   const addAttendee = () => {
@@ -89,7 +100,7 @@ const DetailButtonContainer = ({
   };
 
   const deleteEvent = (id: number) => {
-    setIsModalOpen(true);
+    setIsCancelModalOpen(true);
   };
 
   const margin = {
@@ -99,8 +110,9 @@ const DetailButtonContainer = ({
       color: '#fff',
     },
   };
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
+  const closeAttendModal = () => setIsAttendModalOpen(false);
+  const closeCancelModal = () => setIsCancelModalOpen(false);
   const id_event = otherInfo?.id_event;
   const id_user = user?.id;
 
@@ -200,7 +212,7 @@ const DetailButtonContainer = ({
         color={applied ? 'error' : 'primary'}
         sx={margin}
         onClick={() => {
-          applied ? cancelEvent() : addAttendee();
+          applied ? cancelEvent() : handleAttendEvent();
         }}
         disabled={maxSpots! === 0 && !applied}
       >
@@ -224,9 +236,16 @@ const DetailButtonContainer = ({
         {`Log In`}
       </Button>
 
+      <ModalAttendParticipation
+        isOpen={isAttendModalOpen}
+        onClose={closeAttendModal}
+        laptopQuery={laptopQuery}
+        addAttendee={addAttendee}
+      />
+
       <ModalCancelParticipation
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isCancelModalOpen}
+        onClose={closeCancelModal}
         laptopQuery={laptopQuery}
         setApplied={setApplied}
         setAttendees={setAttendees}

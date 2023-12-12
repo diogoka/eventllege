@@ -35,7 +35,7 @@ export default function MapWithMarker({ location }: Props) {
   return (isLoaded && coordinate) && (
     <GoogleMap
       mapContainerStyle={{
-        widows: '100%',
+        width: '100%',
         height: '250px',
         borderRadius: '7px',
       }}

@@ -4,7 +4,6 @@ import { Box, Alert, Typography, useMediaQuery } from '@mui/material';
 import axios, { all } from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
 import SwitchButton from '@/components/events/switchButton';
 
@@ -34,8 +33,9 @@ type CurrentUser = {
 };
 
 export default function PastEvent() {
-  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
+  if(!user) return;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
@@ -57,31 +57,25 @@ export default function PastEvent() {
   const [allEvents, setAllEvents] = useState(false);
 
   const getEvents = async () => {
-    await axios
-      .get('http://localhost:3001/api/events/?past=true&attendees=true')
-      .then((res) => {
-        let eventsUserAttended = getEventsUserAttended(res.data.events);
-        // allEvents ? setEvents(res.data.events) : setEvents(eventsUserAttended);
-        if(allEvents){
-          setEvents(res.data.events);
-          res.data.events.length===0 ? setNoEvents(true) : setNoEvents(false);
-        }else{
-          setEvents(eventsUserAttended);
-          eventsUserAttended.length===0 ? setNoEvents(true) : setNoEvents(false);
-        }
-        setTags(res.data.tags);
-      });
+    const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events/?past=true&attendees=true');
+    let eventsUserAttended = getEventsUserAttended(events);
+    if (allEvents) {
+      setEvents(events);
+      events.length===0 ? setNoEvents(true) : setNoEvents(false);
+    } else {
+      setEvents(eventsUserAttended);
+      eventsUserAttended.length===0 ? setNoEvents(true) : setNoEvents(false);
+    }
+
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
-      });
-    ready();
+    const {data: {events: userEvents}} = await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`);
+    userEvents.map((event: Event) => {
+      let attendingEvent: [number, boolean] = [event.id_event, true];
+      attendingEvents.push(attendingEvent);
+    });
     setEventsOfUser(attendingEvents);
+
+    setIsLoading(false);
   };
 
   const getEventsUserAttended = (events: Array<Event>) => {
@@ -139,6 +133,7 @@ export default function PastEvent() {
     });
   };
 
+  if(isLoading) return <></>
   return (
     <Box
       sx={{

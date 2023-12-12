@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState, useContext } from 'react';
-import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
@@ -37,8 +36,10 @@ interface HasEvents {
 }
 
 function UserEvents() {
-  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
+  if(!user) return;
+  
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
@@ -60,32 +61,29 @@ function UserEvents() {
 
   const getEvents = async () => {
     const attendingEvents: [number, boolean][] = [];
-    await axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          console.log('res.data.events', res.data.events.length);
-          setHasEvents({
-            eventFound: false,
-            message: 'You have not attended any events yet',
-          });
-          setNoEvents(true);
-        } else {
-          setHasEvents({
-            eventFound: true,
-            message: '',
-          });
-          setNoEvents(false);
-        }
-        setEvents(res.data.events);
-        setTags(res.data.tags);
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
-        });
-        ready();
+    const { data: { events, tags } } = await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`);
+    if (events.length === 0) {
+      setHasEvents({
+        eventFound: false,
+        message: 'You have not attended any events yet',
       });
+      setNoEvents(true);
+    } else {
+      setHasEvents({
+        eventFound: true,
+        message: '',
+      });
+      setNoEvents(false);
+    }
+    setEvents(events);
+    setTags(tags);
+    events.map((event: Event) => {
+      let attendingEvent: [number, boolean] = [event.id_event, true];
+      attendingEvents.push(attendingEvent);
+    });
     setEventsOfUser(attendingEvents);
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -139,6 +137,7 @@ function UserEvents() {
     }, 1000);
   };
 
+  if(isLoading) return <></>
   return (
     <Box
       sx={{
