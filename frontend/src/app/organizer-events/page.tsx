@@ -165,7 +165,7 @@ export default function OrganizerEventsPage() {
               },
             }}
           >
-            Create events
+            New Event
           </Button>
         </Box>
       )}

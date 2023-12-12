@@ -74,7 +74,7 @@ export default function DateList({ dates, setDates }: Props) {
             '&:hover': { background: 'none' },
           }}
         >
-          Add Date
+          Recurring Date
         </Button>
       </Stack>
       <Stack
