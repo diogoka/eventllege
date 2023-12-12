@@ -190,7 +190,7 @@ export default function OrganizerEventsPage() {
             alignItems: 'center',
             color: 'white',
             backgroundColor: '#141D4F',
-            width: '50%',
+            width: laptopQuery ? '50%' : '100%',
             height: '5rem',
             padding: '1rem',
             borderRadius: '5px',
