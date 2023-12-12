@@ -49,6 +49,7 @@ export default function OrganizerEventsPage() {
   const [hasEvents, setHasEvents] = useState<HasEvents>({} as HasEvents);
   const router = useRouter();
   const [switchButtonState, setSwitchButtonState] = useState<boolean>(false);
+  const [noEvents, setNoEvents] = useState<boolean>(false);
 
   const currentUser: CurrentUser = {
     id: user!.id,
@@ -72,8 +73,10 @@ export default function OrganizerEventsPage() {
               : // eslint-disable-next-line quotes
                 "You don't have upcoming events yet.",
           });
+          setNoEvents(true);
         } else {
           setHasEvents({ eventFound: true, message: '' });
+          setNoEvents(false);
         }
         setEvents(res.data.events);
         setTags(res.data.tags);
@@ -136,7 +139,7 @@ export default function OrganizerEventsPage() {
     >
       <SearchBar
         searchEvents={searchEvents}
-        isDisabled={!hasEvents.eventFound}
+        isDisabled={noEvents}
       />
       {laptopQuery && (
         <Box
