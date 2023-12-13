@@ -108,6 +108,8 @@ export function EventContextProvider({ children }: { children: ReactNode }) {
   const [createdEvent, dispatch]: [EventData, Dispatch<EventAction>] =
     useReducer(eventReducer, initialState);
 
+  console.log('dates in context', createdEvent.dates);
+
   return (
     <EventContext.Provider
       value={{

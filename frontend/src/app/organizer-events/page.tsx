@@ -39,7 +39,6 @@ interface HasEvents {
 
 export default function OrganizerEventsPage() {
   const { user } = useContext(UserContext);
-  if(!user) return;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -64,7 +63,9 @@ export default function OrganizerEventsPage() {
         ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
         : `http://localhost:3001/api/events/owner/${currentUser.id}`;
 
-      const { data: { events, tags } } = await axios.get(url);
+      const {
+        data: { events, tags },
+      } = await axios.get(url);
       if (events.length === 0) {
         setHasEvents({
           eventFound: false,
@@ -83,7 +84,9 @@ export default function OrganizerEventsPage() {
       setTags(tags);
 
       const attendingEvents: [number, boolean][] = [];
-      const { data: { events: userEvents } } = await axios.get(
+      const {
+        data: { events: userEvents },
+      } = await axios.get(
         `http://localhost:3001/api/events/user/${currentUser.id}`
       );
       userEvents.map((event: Event) => {
@@ -98,6 +101,8 @@ export default function OrganizerEventsPage() {
 
     fetchData();
   }, [switchButtonState]);
+
+  if (!user) return;
 
   const searchEvents = (text: string) => {
     let url = switchButtonState
@@ -128,7 +133,7 @@ export default function OrganizerEventsPage() {
     router.push('/events/new');
   };
 
-  if(isLoading) return <></>
+  if (isLoading) return <></>;
   return (
     <Box
       sx={{
@@ -139,10 +144,7 @@ export default function OrganizerEventsPage() {
         position: 'relative',
       }}
     >
-      <SearchBar
-        searchEvents={searchEvents}
-        isDisabled={noEvents}
-      />
+      <SearchBar searchEvents={searchEvents} isDisabled={noEvents} />
       {laptopQuery && (
         <Box
           sx={{

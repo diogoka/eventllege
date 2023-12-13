@@ -26,7 +26,9 @@ export const getEvents = async (
 ) => {
   try {
     const numOfDays = Number(req.query.numOfDays ? req.query.numOfDays : 60);
-    const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const today = new Date().toLocaleString('en-US', {
+      timeZone: 'America/Vancouver',
+    });
     const dayFromNow = new Date(
       new Date().getTime() + numOfDays * 24 * 60 * 60 * 1000
     )
@@ -499,12 +501,26 @@ export const createEvents = async (
     category,
   } = req.body;
 
+  console.log('dates', req.body.dates);
+
+  const formatToPST = (date: string) => {
+    return new Date(date).toLocaleString('en-US', {
+      timeZone: 'America/Vancouver',
+    });
+  };
+
+  console.log('Formatted', formatToPST(dates[0].dateStart));
+
   try {
     dates.forEach(async (date: Date) => {
       const events = await pool.query(`
         INSERT INTO
         events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event)
-        VALUES ('${owner}','${title}','${description}','${date.dateStart}','${date.dateEnd}','${location}','${spots}','${price}','${category}')
+        VALUES ('${owner}','${title}','${description}','${formatToPST(
+        date.dateStart
+      )}','${formatToPST(
+        date.dateEnd
+      )}','${location}','${spots}','${price}','${category}')
         RETURNING *;
       `);
 
