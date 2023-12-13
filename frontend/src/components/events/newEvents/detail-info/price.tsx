@@ -85,10 +85,10 @@ export default function Price() {
             }
           />
           <FormHelperText
-            sx={{ color: '#D00000', fontSize: '1rem', lineHeight: '1.5rem' }}
+            sx={{ color: '#D00000', fontSize: '.8rem', lineHeight: '1.5rem' }}
           >
             {priceValue && !error
-              ? 'Do not forget the payment instructions'
+              ? 'Do not forget the payment instructions.'
               : ''}
           </FormHelperText>
         </Stack>
