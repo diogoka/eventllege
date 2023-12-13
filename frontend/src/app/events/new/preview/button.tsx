@@ -21,7 +21,7 @@ export default function ButtonsForPreview({
   setShowAlert: (state: ShowAlert) => void;
 }) {
   const { user } = useContext(UserContext);
-  const { dispatch, initialState, image, showedPage, setShowedPage, pathName } =
+  const { dispatch, initialState, image, showedPage, setShowedPage, pathName, setImage } =
     useContext(EventContext);
 
   const router = useRouter();
@@ -79,6 +79,8 @@ export default function ButtonsForPreview({
             type: 'RESET',
             payload: initialState,
           });
+          setImage(null);
+
         })
         .catch((err) => {
           // console.error('Err:',err.response.data);
@@ -112,6 +114,7 @@ export default function ButtonsForPreview({
             type: 'RESET',
             payload: initialState,
           });
+          setImage(null);
         })
         .catch((err) => {
           console.error('Err:', err.response);
