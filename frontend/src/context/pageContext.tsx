@@ -1,9 +1,8 @@
 'use client'
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 export enum PageStatus {
-  UserLoading = 'User Loading',
-  PageLoading = 'Page Loading',
+  Loading = 'Loading',
   NotFound = 'Not Found',
   Ready = 'Ready',
 }
@@ -11,7 +10,6 @@ export enum PageStatus {
 type PageContextProps = {
   pageStatus: PageStatus,
   setPageStatus: (pageStatus: PageStatus) => void,
-  ready: () => void,
   notFound: () => void,
 }
 
@@ -19,19 +17,15 @@ export const PageContext = createContext<PageContextProps>({} as PageContextProp
 
 export function PageContextProvider({ children }: { children: ReactNode }) {
 
-  const [pageStatus, setPageStatus] = useState<PageStatus>(PageStatus.UserLoading);
-
-  const ready = () => {
-    setPageStatus(PageStatus.Ready);
-  }
-
+  const [pageStatus, setPageStatus] = useState<PageStatus>(PageStatus.Loading);
+  
   const notFound = () => {
     setPageStatus(PageStatus.NotFound);
   }
 
   return (
     <PageContext.Provider
-      value={{ pageStatus, setPageStatus, ready, notFound }}
+      value={{ pageStatus, setPageStatus, notFound }}
     >
       {children}
     </PageContext.Provider>

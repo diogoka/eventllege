@@ -159,9 +159,14 @@ export default function PreviewEventPage() {
             : 'Event is not created yet.'}
         </Typography>
 
-        <Box display='flex' margin='0 auto 90px'>
+        <Box
+          width='100%'
+          display='flex'
+          paddingTop='50px'
+          justifyContent='space-between'
+        >
           {/* /////////// Left /////////// */}
-          <Box minWidth='70%' marginRight='40px'>
+          <Box minWidth='67%' marginRight='40px' justifyContent='space-between'>
             <DetailContainer
               event={tempState!}
               otherInfo={{
@@ -193,7 +198,7 @@ export default function PreviewEventPage() {
           </Box>
 
           {/* /////////// Right /////////// */}
-          <Box>
+          <Box width='30%'>
             <DetailIconContainer
               event={tempState!}
               otherInfo={{
@@ -206,11 +211,15 @@ export default function PreviewEventPage() {
               forMobile={forMobile!}
               forPreview={forPreview}
             />
-            <Box borderRadius='7px' overflow='hidden'>
+            <Box overflow='hidden'>
               <ImageHelper
                 src={tempImage}
-                width='320px'
-                height='220px'
+                width='100%'
+                height='20vw'
+                style={{
+                  maxHeight: '260px',
+                  borderRadius: '.5rem',
+                }}
                 alt={tempState?.name_event ?? 'Event'}
               />
             </Box>

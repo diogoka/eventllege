@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import axios from 'axios';
 import initializeFirebase from '@/auth/firebase';
 import { getAuth } from 'firebase/auth';
-import { Box } from '@mui/material';
+import { useMediaQuery, Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import { PageContext, PageStatus } from '@/context/pageContext';
 import Header from '@/components/header/header';
@@ -202,44 +202,27 @@ export default function AuthProvider({
 
   useEffect(() => {
     if (loginStatus === LoginStatus.Unknown) {
-      setPageStatus(PageStatus.UserLoading);
+      setPageStatus(PageStatus.Loading);
     } else {
-      if (getPage(pathname)?.isLoadingRequired) {
-        setPageStatus(PageStatus.PageLoading);
-      } else {
-        setPageStatus(PageStatus.Ready);
-      }
+      setPageStatus(PageStatus.Ready);
     }
   }, [pathname, loginStatus]);
 
+  const isHeaderReady = (): boolean => {
+    if(pathname.length > 0 && pathname !== '/login' && pageStatus === PageStatus.Ready) {
+      return true;
+    }
+    return false;
+  }
+
   const getComponent = () => {
     switch (pageStatus) {
-      case PageStatus.UserLoading:
+      case PageStatus.Loading:
         return (
           <>
             <Loading />
           </>
         );
-      case PageStatus.PageLoading:
-        if (isAllowedPage().isAllowed) {
-          return (
-            <>
-              <Loading />
-              <Box
-                component='main'
-                maxWidth='1280px'
-                minHeight='100vh'
-                paddingInline='40px'
-                paddingBlock='50px'
-                marginInline='auto'
-              >
-                {children}
-              </Box>
-            </>
-          );
-        } else {
-          return <></>;
-        }
       case PageStatus.Ready:
         return (
           <>
@@ -262,7 +245,7 @@ export default function AuthProvider({
 
   return (
     <>
-      {pathname !== '/login' && <Header />}
+      {isHeaderReady() && <Header />}
       {getComponent()}
       <Footer />
     </>

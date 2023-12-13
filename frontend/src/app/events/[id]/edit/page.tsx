@@ -38,7 +38,7 @@ type ReplaceDates = {
 
 export default function EditEventPage({ params }: Params) {
   const [editEvent, setEditEvent] = useState<SelectedEvent>();
-  const { ready, notFound } = useContext(PageContext);
+  const { notFound } = useContext(PageContext);
   const { dispatch, setImage } = useContext(EventContext);
 
   const [eventId, setEventId] = useState<number>();
@@ -50,13 +50,12 @@ export default function EditEventPage({ params }: Params) {
         if (res.data.event.id_event) {
           setEditEvent(res.data.event);
           setEventId(res.data.event.id_event);
-          ready();
         } else {
           notFound();
         }
       })
       .catch((error) => {
-        console.error(error.response.data);
+        console.error(error);
         notFound();
       });
 

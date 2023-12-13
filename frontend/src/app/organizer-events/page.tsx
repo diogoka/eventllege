@@ -4,7 +4,6 @@ import { Box, Button, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
-import { PageContext } from '@/context/pageContext';
 import { UserContext } from '@/context/userContext';
 import { useRouter } from 'next/navigation';
 import SwitchButton from '@/components/events/switchButton';
@@ -39,8 +38,10 @@ interface HasEvents {
 }
 
 export default function OrganizerEventsPage() {
-  const { ready } = useContext(PageContext);
   const { user } = useContext(UserContext);
+  if(!user) return;
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
   const [eventsOfUser, setEventsOfUser] = useState<Array<[number, boolean]>>(
@@ -58,44 +59,44 @@ export default function OrganizerEventsPage() {
   const laptopQuery = useMediaQuery('(min-width:769px)');
 
   useEffect(() => {
-    let url = switchButtonState
-      ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
-      : `http://localhost:3001/api/events/owner/${currentUser.id}`;
-    axios
-      .get(url)
-      .then((res) => {
-        if (res.data.events.length === 0) {
-          setHasEvents({
-            eventFound: false,
-            message: switchButtonState
-              ? // eslint-disable-next-line quotes
-                "You don't have past events"
-              : // eslint-disable-next-line quotes
-                "You don't have upcoming events yet.",
-          });
-          setNoEvents(true);
-        } else {
-          setHasEvents({ eventFound: true, message: '' });
-          setNoEvents(false);
-        }
-        setEvents(res.data.events);
-        setTags(res.data.tags);
+    const fetchData = async () => {
+      let url = switchButtonState
+        ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
+        : `http://localhost:3001/api/events/owner/${currentUser.id}`;
 
-        ready();
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      });
-    const attendingEvents: [number, boolean][] = [];
-    axios
-      .get(`http://localhost:3001/api/events/user/${currentUser.id}`)
-      .then((res) => {
-        res.data.events.map((event: Event) => {
-          let attendingEvent: [number, boolean] = [event.id_event, true];
-          attendingEvents.push(attendingEvent);
+      const { data: { events, tags } } = await axios.get(url);
+      if (events.length === 0) {
+        setHasEvents({
+          eventFound: false,
+          message: switchButtonState
+            ? // eslint-disable-next-line quotes
+              "You don't have past events"
+            : // eslint-disable-next-line quotes
+              "You don't have upcoming events yet.",
         });
+        setNoEvents(true);
+      } else {
+        setHasEvents({ eventFound: true, message: '' });
+        setNoEvents(false);
+      }
+      setEvents(events);
+      setTags(tags);
+
+      const attendingEvents: [number, boolean][] = [];
+      const { data: { events: userEvents } } = await axios.get(
+        `http://localhost:3001/api/events/user/${currentUser.id}`
+      );
+      userEvents.map((event: Event) => {
+        let attendingEvent: [number, boolean] = [event.id_event, true];
+        attendingEvents.push(attendingEvent);
       });
-    setEventsOfUser(attendingEvents);
+
+      setEventsOfUser(attendingEvents);
+
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [switchButtonState]);
 
   const searchEvents = (text: string) => {
@@ -127,6 +128,7 @@ export default function OrganizerEventsPage() {
     router.push('/events/new');
   };
 
+  if(isLoading) return <></>
   return (
     <Box
       sx={{
