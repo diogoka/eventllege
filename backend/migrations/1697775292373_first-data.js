@@ -11,52 +11,252 @@ exports.up = async (pgm) => {
 
   const usersData = [
     {
-      id_user: 'A',
+      id_user: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       id_user_type: 1,
-      name_user: 'Diogo Krub de Almeida',
-      email_user: 'diogokalmeida@test.com',
+      name_user: 'Hannah Abbott',
+      email_user: 'hannah.abbott@gmail.com',
       postal_code_user: 'V5K2X1',
       phone_user: '123-456-7890',
     },
     {
-      id_user: 'B',
+      id_user: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
       id_user_type: 1,
-      name_user: 'Daisuke Seki',
-      email_user: 'ds@example.com',
-      postal_code_user: '54321',
-      phone_user: '987-654-3210',
-    },
-    {
-      id_user: 'C',
-      id_user_type: 1,
-      name_user: 'Seisuke Yamada',
-      email_user: 'sei@gmail.com',
-      postal_code_user: '12345',
-      phone_user: '123-456-7890',
-    },
-    {
-      id_user: 'D',
-      id_user_type: 1,
-      name_user: 'Masashi Sawada',
-      email_user: 'mas@gmail.com',
-      postal_code_user: '54321',
-      phone_user: '987-654-3210',
-    },
-    {
-      id_user: 'E',
-      id_user_type: 2,
-      name_user: 'Takashi Nakamura',
-      email_user: 'takashi@gmail.conm',
+      name_user: 'Bathilda Bagshot',
+      email_user: 'bathilda.bagshot@gmail.com',
       postal_code_user: 'V5K2X1',
       phone_user: '123-456-7890',
     },
     {
-      id_user: 'F',
+      id_user: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
+      id_user_type: 1,
+      name_user: 'Katie Bell',
+      email_user: 'katie.bell@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '2ek278A9t3c8iOzJ81sd4vS17hl2',
+      id_user_type: 1,
+      name_user: 'Cuthbert Binns',
+      email_user: 'cuthbert.binns@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
+      id_user_type: 1,
+      name_user: 'Phineas Nigellus',
+      email_user: 'phineas.nigellus@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
+      id_user_type: 1,
+      name_user: 'Sirius Black',
+      email_user: 'sirius.black@gmail.com',
+      postal_code_user: 'sirius.black@gmail.com',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'qF6KDpmaBUgyyFcBPqw5cXVCP4f2',
       id_user_type: 2,
-      name_user: 'Yusuke Takahashi',
-      email_user: 'yt@gmail.com',
-      postal_code_user: '54321',
-      phone_user: '987-654-3210',
+      name_user: 'Amelia Bones',
+      email_user: 'amelia.bones@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '5XUb1fmI5VORuTiVFI4KjMdsq0s1',
+      id_user_type: 2,
+      name_user: 'Terry Boot',
+      email_user: 'terry.boot@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'IueNDcn3M9Uwf2rQvUncIAz5GI53',
+      id_user_type: 2,
+      name_user: 'Lavender Brown',
+      email_user: 'lavender.brow@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'ZcTbQOHgHjd4C5NRd2xayQTjnxH2',
+      id_user_type: 2,
+      name_user: 'Charity Burbage',
+      email_user: 'charity.burbage@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'LpYzcAxalOdUAiPAvjSkWYZynrW2',
+      id_user_type: 2,
+      name_user: 'Frank Bryce',
+      email_user: 'frank.bryce@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'mjPHwkQiWpeerSpdQTFb6taGhtJ3',
+      id_user_type: 2,
+      name_user: 'Alecto Carrow',
+      email_user: 'alecto.carrow@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '5yDFGlMhRkVpOli88hkrUuB9rT02',
+      id_user_type: 2,
+      name_user: 'Amycus Carrow',
+      email_user: 'amycus.carrow@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'FWd5HFhLwqQ0kTiQtyZL1uKfmC42',
+      id_user_type: 2,
+      name_user: 'John Dawlish',
+      email_user: 'john.dawlish@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'efUQXwLszSW0pmy7Pc9xj2wmYQy1',
+      id_user_type: 2,
+      name_user: 'Fleur Delacour',
+      email_user: 'fleur.delacour@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '38Y3pNidYySVu3Mnbr1bE0j8pmE2',
+      id_user_type: 2,
+      name_user: 'Marietta Edgecombe',
+      email_user: 'marietta.edgecombe@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'LuOmfDHZOXQqZ9tmY1Vh6eSoxkW2',
+      id_user_type: 2,
+      name_user: 'Arabella Figg',
+      email_user: 'arabella.figg@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '4OLXHwPmYrW8QLllteWgRHAvRLf1',
+      id_user_type: 2,
+      name_user: 'Cornelius Fudge',
+      email_user: 'cornelius.fudge@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'ssPO91r1d2U3hBfKxBnqDylXEaq2',
+      id_user_type: 2,
+      name_user: 'Gregory Goyle',
+      email_user: 'gregory.goyle@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '6dcX3QXJOVZS06IpcEdAl9bq3qk1',
+      id_user_type: 2,
+      name_user: 'Fenrir Greyback',
+      email_user: 'fenrir.greyback@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '237GeIZsKrhsgCf7m3z7QWzSf872',
+      id_user_type: 2,
+      name_user: 'Rubeus Hagrid',
+      email_user: 'rubeus.hagrid@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'isrYIQyDKrP9tVPiyTHRz1oHCGQ2',
+      id_user_type: 2,
+      name_user: 'Mafalda Hopkirk',
+      email_user: 'mafalda.hopkirk@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'hXUewvFREwQ2RYLpmdVCyVFGSNw1',
+      id_user_type: 2,
+      name_user: 'Angelina Johnson',
+      email_user: 'angelina.johnson@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'dMm2Xd8FcoT1gl7cq9Hn0pI7NUH2',
+      id_user_type: 2,
+      name_user: 'Igor Karkaroff',
+      email_user: 'igor.karkaroff@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'kKdhxTqV2Bdy8TLYWQ04qFm7D2j1',
+      id_user_type: 2,
+      name_user: 'Silvanus Kettleburn',
+      email_user: 'silvanus.kettleburn@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'k14ukzruSWQJFkIyjxFZcMdOA3u1',
+      id_user_type: 2,
+      name_user: 'Luna Lovegood',
+      email_user: 'luna.lovegood@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'lB3hQ3fFkAOSxMLeHzZEk9tvHWC3',
+      id_user_type: 2,
+      name_user: 'Draco Malfoy',
+      email_user: 'draco.malfoy@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '3eqO0wPZ22RtOXdQPBP53GyyzUm1',
+      id_user_type: 2,
+      name_user: 'Olympe Maxime',
+      email_user: 'olympe.maxime@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: '3zyuD87sh2d88QSivlzneLPO4bx2',
+      id_user_type: 2,
+      name_user: 'Padma Patil',
+      email_user: 'padma.patil@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'CLridLsKAmN72Ui2XEY5ignuPXI3',
+      id_user_type: 2,
+      name_user: 'Sturgis Podmore',
+      email_user: 'sturgis.podmore@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
+    },
+    {
+      id_user: 'fZhC84DlxsXGVQFOcJMRIMfWBl93',
+      id_user_type: 2,
+      name_user: 'Thomas Riddle',
+      email_user: 'thomas.riddle@gmail.com',
+      postal_code_user: 'V5K2X1',
+      phone_user: '123-456-7890',
     },
   ];
 
@@ -119,12 +319,39 @@ exports.up = async (pgm) => {
   }
 
   const users_courses = [
-    { id_user: 'A', id_course: 14 },
-    { id_user: 'B', id_course: 14 },
-    { id_user: 'C', id_course: 14 },
-    { id_user: 'D', id_course: 14 },
-    { id_user: 'E', id_course: 16 },
-    { id_user: 'F', id_course: 16 },
+    { id_user: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1', id_course: 1 },
+    { id_user: 't2aZqoHmdsQtRbYfp0TR6dI08q43', id_course: 2 },
+    { id_user: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2', id_course: 3 },
+    { id_user: '2ek278A9t3c8iOzJ81sd4vS17hl2', id_course: 4 },
+    { id_user: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1', id_course: 5 },
+    { id_user: '62UDtCUi4FgFqeyDOfyrnZTSgGD2', id_course: 6 },
+    { id_user: 'qF6KDpmaBUgyyFcBPqw5cXVCP4f2', id_course: 7 },
+    { id_user: '5XUb1fmI5VORuTiVFI4KjMdsq0s1', id_course: 8 },
+    { id_user: 'IueNDcn3M9Uwf2rQvUncIAz5GI53', id_course: 9 },
+    { id_user: 'ZcTbQOHgHjd4C5NRd2xayQTjnxH2', id_course: 10 },
+    { id_user: 'LpYzcAxalOdUAiPAvjSkWYZynrW2', id_course: 11 },
+    { id_user: 'mjPHwkQiWpeerSpdQTFb6taGhtJ3', id_course: 12 },
+    { id_user: '5yDFGlMhRkVpOli88hkrUuB9rT02', id_course: 13 },
+    { id_user: 'FWd5HFhLwqQ0kTiQtyZL1uKfmC42', id_course: 14 },
+    { id_user: 'efUQXwLszSW0pmy7Pc9xj2wmYQy1', id_course: 15 },
+    { id_user: '38Y3pNidYySVu3Mnbr1bE0j8pmE2', id_course: 16 },
+    { id_user: 'LuOmfDHZOXQqZ9tmY1Vh6eSoxkW2', id_course: 17 },
+    { id_user: '4OLXHwPmYrW8QLllteWgRHAvRLf1', id_course: 18 },
+    { id_user: 'ssPO91r1d2U3hBfKxBnqDylXEaq2', id_course: 19 },
+    { id_user: '6dcX3QXJOVZS06IpcEdAl9bq3qk1', id_course: 20 },
+    { id_user: '237GeIZsKrhsgCf7m3z7QWzSf872', id_course: 21 },
+    { id_user: 'isrYIQyDKrP9tVPiyTHRz1oHCGQ2', id_course: 22 },
+    { id_user: 'hXUewvFREwQ2RYLpmdVCyVFGSNw1', id_course: 1 },
+    { id_user: 'dMm2Xd8FcoT1gl7cq9Hn0pI7NUH2', id_course: 2 },
+    { id_user: 'kKdhxTqV2Bdy8TLYWQ04qFm7D2j1', id_course: 3 },
+    { id_user: 'k14ukzruSWQJFkIyjxFZcMdOA3u1', id_course: 4 },
+    { id_user: 'lB3hQ3fFkAOSxMLeHzZEk9tvHWC3', id_course: 5 },
+    { id_user: '3eqO0wPZ22RtOXdQPBP53GyyzUm1', id_course: 6 },
+    { id_user: '3zyuD87sh2d88QSivlzneLPO4bx2', id_course: 7 },
+    { id_user: 'CLridLsKAmN72Ui2XEY5ignuPXI3', id_course: 8 },
+    { id_user: 'fZhC84DlxsXGVQFOcJMRIMfWBl93', id_course: 9 },
+
+
   ];
 
   for (const user_course of users_courses) {
@@ -164,46 +391,46 @@ exports.up = async (pgm) => {
 
   const events = [
     {
-      id_owner: 'A',
+      id_owner: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       name_event: 'Demo Day',
       description_event:
-        'Demo Day is a showcase of the projects that our students have been working on during their time at RED Academy. This is a great opportunity for students to show off their work to friends, family, and industry professionals. It is also a chance for prospective students to get a glimpse of what they can expect to learn at RED Academy.',
+        'Demo Day is a showcase of the projects that our students have been working on during their time at Cornerstone. This is a great opportunity for students to show off their work to friends, family, and industry professionals. It is also a chance for prospective students to get a glimpse of what they can expect to learn at Cornerstone.',
       date_event_start: '2023-12-01 01:00:00',
       date_event_end: '2023-12-01 03:00:00',
-      location_event: '1490 W Broadway #200, Vancouver, BC V6H 4E8',
+      location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
       image_event: null,
       category_event: 'Tech',
     },
     {
-      id_owner: 'A',
-      name_event: 'RED Talks',
+      id_owner: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
+      name_event: 'Cornerstone Talks',
       description_event:
-        'RED Talks is a series of presentations by industry experts on a wide range of topics relevant to people in tech. RED Talks are a great opportunity to learn something new and network with other people in the industry.',
+        'Cornerstone Talks is a series of presentations by industry experts on a wide range of topics relevant to people in tech. Cornerstone Talks are a great opportunity to learn something new and network with other people in the industry.',
       date_event_start: '2023-12-01 01:00:00',
       date_event_end: '2023-12-01 03:00:00',
-      location_event: '1490 W Broadway #200, Vancouver, BC V6H 4E8',
+      location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
       image_event: null,
       category_event: 'Tech',
     },
     {
-      id_owner: 'B',
-      name_event: 'RED Academy Open House',
+      id_owner: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
+      name_event: 'Cornerstone College Open House',
       description_event:
-        'Our Open House is a great opportunity to learn more about our programs, tour our campus, and meet our team. Come and see why RED Academy is a great place to learn.',
+        'Our Open House is a great opportunity to learn more about our programs, tour our campus, and meet our team. Come and see why Cornerstone College is a great place to learn.',
       date_event_start: '2023-12-01 01:00:00',
       date_event_end: '2023-12-01 03:00:00',
-      location_event: '1490 W Broadway #200, Vancouver, BC V6H 4E8',
+      location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
       image_event: null,
       category_event: 'Tech',
     },
     {
-      id_owner: 'C',
+      id_owner: '2ek278A9t3c8iOzJ81sd4vS17hl2',
       name_event: 'English Languages Course 3.0 Workshop',
       description_event:
         'Interactive workshop for English Language Course 3.0 students to practice language skills.',
@@ -216,7 +443,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'D',
+      id_owner: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
       name_event: 'Tech Networking Night',
       description_event:
         'An evening of networking for tech enthusiasts and professionals.',
@@ -229,7 +456,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'E',
+      id_owner: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       name_event: 'Digital Marketing Strategies Workshop',
       description_event:
         'Learn effective digital marketing strategies from industry experts.',
@@ -242,7 +469,7 @@ exports.up = async (pgm) => {
       category_event: 'Digital Marketing',
     },
     {
-      id_owner: 'F',
+      id_owner: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       name_event: 'Music Night in the Park',
       description_event:
         'Enjoy live music performances in the beautiful city park.',
@@ -255,7 +482,7 @@ exports.up = async (pgm) => {
       category_event: 'Music',
     },
     {
-      id_owner: 'A',
+      id_owner: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
       name_event: 'Web Development Workshop',
       description_event:
         'Hands-on workshop for aspiring web developers to build and deploy their first website.',
@@ -268,7 +495,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'B',
+      id_owner: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
       name_event: 'Tech and Business Panel Discussion',
       description_event:
         'Insightful panel discussion on the intersection of technology and business in todays market.',
@@ -281,7 +508,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'C',
+      id_owner: '2ek278A9t3c8iOzJ81sd4vS17hl2',
       name_event: 'English Language Course 4.5 Graduation Ceremony',
       description_event:
         'A celebration of achievement for English Language Course 4.5 students and their language proficiency.',
@@ -294,7 +521,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'D',
+      id_owner: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
       name_event: 'Digital Art Exhibition',
       description_event:
         'Showcasing digital artworks from talented local artists in a gallery setting.',
@@ -307,7 +534,7 @@ exports.up = async (pgm) => {
       category_event: 'Design',
     },
     {
-      id_owner: 'E',
+      id_owner: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       name_event: 'Customer Relations Workshop',
       description_event:
         'Interactive workshop focusing on improving customer relations skills for businesses and professionals.',
@@ -320,7 +547,7 @@ exports.up = async (pgm) => {
       category_event: 'Customer Relations',
     },
     {
-      id_owner: 'F',
+      id_owner: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       name_event: 'Holiday Party Extravaganza',
       description_event:
         'Year-end holiday party with music, dance, and festive activities for all attendees.',
@@ -333,7 +560,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'A',
+      id_owner: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
       name_event: 'Tech Startups Pitch Night',
       description_event:
         'An evening where tech startups pitch their innovative ideas to potential investors and partners.',
@@ -346,7 +573,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'B',
+      id_owner: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
       name_event: 'Digital Marketing Trends Seminar',
       description_event:
         'Seminar discussing the latest trends and strategies in digital marketing for businesses and marketers.',
@@ -359,7 +586,7 @@ exports.up = async (pgm) => {
       category_event: 'Digital Marketing',
     },
     {
-      id_owner: 'C',
+      id_owner: '2ek278A9t3c8iOzJ81sd4vS17hl2',
       name_event: 'Artists Networking Mixer',
       description_event:
         'Networking event for local artists to connect, collaborate, and showcase their creative works.',
@@ -372,7 +599,7 @@ exports.up = async (pgm) => {
       category_event: 'Design',
     },
     {
-      id_owner: 'D',
+      id_owner: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
       name_event: 'Web Development Hackathon',
       description_event:
         'Intense 24-hour hackathon challenging web developers to build innovative web applications.',
@@ -385,7 +612,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'E',
+      id_owner: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       name_event: 'English Language Course 6.0 Graduation Ceremony',
       description_event:
         'A prestigious graduation ceremony honoring high-achieving English Language Course 6.0 students.',
@@ -398,7 +625,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'C',
+      id_owner: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       name_event: 'Creative Photography Workshop',
       description_event:
         'A hands-on workshop for photography enthusiasts to learn creative photography techniques and explore their artistic skills.',
@@ -411,7 +638,7 @@ exports.up = async (pgm) => {
       category_event: 'Design',
     },
     {
-      id_owner: 'D',
+      id_owner: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
       name_event: 'Charity Gala Dinner',
       description_event:
         'A fundraising gala dinner to support local charities and community projects. Join us for an elegant evening of fine dining and charitable giving.',
@@ -424,7 +651,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'E',
+      id_owner: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
       name_event: 'Outdoor Movie Night',
       description_event:
         'Enjoy a night under the stars with a screening of a popular movie. Bring your blankets and snacks for a cozy outdoor cinema experience.',
@@ -437,7 +664,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'F',
+      id_owner: '2ek278A9t3c8iOzJ81sd4vS17hl2',
       name_event: 'Entrepreneurship Conference 2024',
       description_event:
         'A comprehensive conference for aspiring and experienced entrepreneurs. Gain insights from successful business leaders, attend workshops, and network with potential investors.',
@@ -450,7 +677,7 @@ exports.up = async (pgm) => {
       category_event: 'IBM',
     },
     {
-      id_owner: 'A',
+      id_owner: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
       name_event: 'Comedy Night Live',
       description_event:
         'Laugh out loud with stand-up comedy performances by local comedians. A night of humor and entertainment for everyone.',
@@ -463,7 +690,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'B',
+      id_owner: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       name_event: 'Contemporary Art Exhibition',
       description_event:
         'Explore a diverse collection of contemporary artworks by local and international artists. Immerse yourself in the world of modern art.',
@@ -476,7 +703,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'C',
+      id_owner: 'dYcwyptf86XjtaVf5NtKF9iH0Fz1',
       name_event: 'Science and Technology Lecture Series',
       description_event:
         'Engage in enlightening talks by experts in the fields of science and technology. Discover cutting-edge advancements and their impact on society.',
@@ -489,7 +716,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'D',
+      id_owner: 't2aZqoHmdsQtRbYfp0TR6dI08q43',
       name_event: 'Robotics Competition 2024',
       description_event:
         'Witness the creativity and innovation of student-built robots in action. Teams compete in exciting challenges, showcasing their technical skills.',
@@ -502,7 +729,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'E',
+      id_owner: 'XV9Z4l0wMYaLLtyRbwMfb2sbW2g2',
       name_event: 'Local Music Festival',
       description_event:
         'Celebrate the vibrant music scene of Vancouver with live performances by talented local musicians. Enjoy a day filled with diverse musical genres.',
@@ -515,7 +742,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'F',
+      id_owner: '2ek278A9t3c8iOzJ81sd4vS17hl2',
       name_event: 'Culinary Competition',
       description_event:
         'Top chefs compete in a culinary showdown, showcasing their creativity and culinary expertise. Experience gourmet dishes and culinary delights.',
@@ -528,7 +755,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'F',
+      id_owner: 'Qtqd29YdOVWOYrKJXHu58kGCjjn1',
       name_event: 'Wine Wonderland',
       description_event:
         'Savor the rich flavors of handpicked wines from renowned vineyards. Explore the world of wine with experts guiding you through a delightful tasting journey.',
@@ -541,7 +768,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'F',
+      id_owner: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       name_event: 'Harmony Fest',
       description_event:
         'Immerse yourself in a day of musical bliss. Live performances by top artists across genres. Enjoy good music, good company, and good vibes.',
@@ -554,7 +781,7 @@ exports.up = async (pgm) => {
       category_event: 'ESL',
     },
     {
-      id_owner: 'A',
+      id_owner: 'qF6KDpmaBUgyyFcBPqw5cXVCP4f2',
       name_event: 'Innovation Expo',
       description_event:
         'Witness the latest in technology and innovation. From cutting-edge gadgets to futuristic concepts, explore the tech landscape and meet industry pioneers.',
@@ -567,7 +794,7 @@ exports.up = async (pgm) => {
       category_event: 'Tech',
     },
     {
-      id_owner: 'A',
+      id_owner: '5XUb1fmI5VORuTiVFI4KjMdsq0s1',
       name_event: 'Chic Couture Showcase',
       description_event:
         'Experience the glamour of haute couture. Top designers present their latest collections in a dazzling runway show. A night of style and sophistication.',
@@ -638,9 +865,9 @@ exports.up = async (pgm) => {
   }
 
   const attendees = [
-    { id_user: 'C', id_event: 1 },
-    { id_user: 'D', id_event: 2 },
-    { id_user: 'E', id_event: 2 },
+    { id_user: '5XUb1fmI5VORuTiVFI4KjMdsq0s1', id_event: 1 },
+    { id_user: 'qF6KDpmaBUgyyFcBPqw5cXVCP4f2', id_event: 2 },
+    { id_user: '62UDtCUi4FgFqeyDOfyrnZTSgGD2', id_event: 2 },
   ];
 
   for (const attendee of attendees) {
@@ -652,19 +879,19 @@ exports.up = async (pgm) => {
 
   const reviews = [
     {
-      id_user: 'C',
+      id_user: '5XUb1fmI5VORuTiVFI4KjMdsq0s1',
       description_review: 'Great event!',
       rating: 5,
       date_review: '2023-11-01 01:00:00',
     },
     {
-      id_user: 'D',
+      id_user: 'qF6KDpmaBUgyyFcBPqw5cXVCP4f2',
       description_review: 'Great event!',
       rating: 3,
       date_review: '2023-11-01 01:00:00',
     },
     {
-      id_user: 'E',
+      id_user: '62UDtCUi4FgFqeyDOfyrnZTSgGD2',
       description_review: 'Great event!',
       rating: 2,
       date_review: '2023-11-01 01:00:00',
