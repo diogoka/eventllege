@@ -56,7 +56,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
     } else if (!createdEvent.description_event) {
       alert('Please enter a description');
       return;
-    } else if (createdEvent.description_event.length > 200) {
+    } else if (createdEvent.description_event.length > 500) {
       alert('Your description is too long');
       return;
     } else if (!createdEvent.dates) {
