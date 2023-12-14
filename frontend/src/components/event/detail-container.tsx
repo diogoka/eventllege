@@ -102,7 +102,15 @@ const DetailContainer = ({
         margin={forMobile ? '10px auto' : '30px auto'}
       >
         <Box fontWeight='bold'>About this event:</Box>
-        {event?.description_event}
+        <pre
+          style={{
+            fontFamily: 'inherit',
+            margin: 0,
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          {event?.description_event}
+        </pre>
       </Box>
 
       {isAlertVisible &&

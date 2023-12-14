@@ -508,6 +508,8 @@ export const createEvents = async (
     category,
   } = req.body;
 
+  console.log('req.body', req.body);
+
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
       timeZone: 'America/Vancouver',
@@ -516,16 +518,25 @@ export const createEvents = async (
 
   try {
     dates.forEach(async (date: Date) => {
-      const events = await pool.query(`
+      const events = await pool.query(
+        `
         INSERT INTO
         events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event)
-        VALUES ('${owner}','${title}','${description}','${formatToPST(
-        date.dateStart
-      )}','${formatToPST(
-        date.dateEnd
-      )}','${location}','${spots}','${price}','${category}')
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
         RETURNING *;
-      `);
+      `,
+        [
+          owner,
+          title,
+          description,
+          formatToPST(date.dateStart),
+          formatToPST(date.dateEnd),
+          location,
+          spots,
+          price,
+          category,
+        ]
+      );
 
       if (req.file) {
         copyImage(req.file.filename, events.rows[0].id_event);

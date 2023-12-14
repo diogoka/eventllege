@@ -53,7 +53,7 @@ const DetailButtonContainer = ({
   };
 
   const handleAttendEvent = () => {
-    if(event.price_event > 0) {
+    if (event.price_event > 0) {
       setIsAttendModalOpen(true);
     } else {
       addAttendee();
@@ -233,7 +233,7 @@ const DetailButtonContainer = ({
           router.replace('/login/');
         }}
       >
-        {'Log In'}
+        {'Log in to apply'}
       </Button>
 
       <ModalAttendParticipation

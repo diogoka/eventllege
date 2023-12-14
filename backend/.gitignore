@@ -41,6 +41,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+public/img/events
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -130,4 +131,5 @@ dist
 .pnp.*
 
 .DS_Store
+*./public/*
 

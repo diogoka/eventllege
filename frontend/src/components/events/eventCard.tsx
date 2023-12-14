@@ -47,6 +47,8 @@ function EventCard({
 }: Props) {
   const eventId = event.id_event;
 
+  console.log(event.description_event);
+
   const renderModalities = () => {
     const modalitiesColor = () => {
       if (modality === 'In Person') {
