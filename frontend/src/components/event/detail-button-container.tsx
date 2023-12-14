@@ -233,7 +233,7 @@ const DetailButtonContainer = ({
           router.replace('/login/');
         }}
       >
-        {`Log In`}
+        {`Log in to apply`}
       </Button>
 
       <ModalAttendParticipation

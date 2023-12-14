@@ -65,17 +65,20 @@ export const getMonthName = (num: number): string => {
   }
 };
 
-export const getTimeString = (DateObj: any): any => {
-  return DateObj.getHours() == 0
+export const getTimeString = (DateObj: any, id: number): any => {
+
+  const Hour= id? DateObj.getHours()-8 : DateObj.getHours();
+
+  return Hour == 0
     ? `12:${DateObj.getMinutes().toString().padStart(2, '0')} AM`
-    : 0 < DateObj.getHours() && DateObj.getHours() <= 11
-    ? `${DateObj.getHours()}:${DateObj.getMinutes()
+    : 0 < Hour && Hour <= 11
+    ? `${Hour}:${DateObj.getMinutes()
         .toString()
         .padStart(2, '0')} AM`
-    : DateObj.getHours() == 12
+    : Hour == 12
     ? `12:${DateObj.getMinutes().toString().padStart(2, '0')} PM`
-    : 12 < DateObj.getHours() && DateObj.getHours() <= 23
-    ? `${DateObj.getHours() - 12}:${DateObj.getMinutes()
+    : 12 < Hour && Hour <= 23
+    ? `${Hour - 12}:${DateObj.getMinutes()
         .toString()
         .padStart(2, '0')} PM`
     : null;
