@@ -179,7 +179,7 @@ function EventCard({
             gridArea: 'description',
             textAlign: 'justify',
             fontSize: '0.75rem',
-            height: '3rem',
+            height: '2.3rem',
           }}
         >
           {event.description_event.length > 100
@@ -193,6 +193,7 @@ function EventCard({
               display: 'flex',
               justifyContent: 'flex-end',
               marginTop: '0.3rem',
+              paddingLeft: '0',
             }}
           >
             <Box
@@ -230,6 +231,7 @@ function EventCard({
               justifyContent: 'flex-end',
               padding: '0',
               width: '100%',
+              paddingLeft: '0',
             }}
           >
             <Box
