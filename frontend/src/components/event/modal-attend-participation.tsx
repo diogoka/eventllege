@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Modal, Box, Typography, Stack } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { RiErrorWarningFill } from "react-icons/ri";
-import { fontSize } from "@mui/system";
+import { RiErrorWarningFill } from 'react-icons/ri';
+import { fontSize } from '@mui/system';
 
 type Props = {
   isOpen: boolean;

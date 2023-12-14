@@ -2,6 +2,7 @@ import pool from '../db/db';
 import express from 'express';
 import { sendEmail, EmailOption } from '../helpers/mail';
 import fs from 'fs-extra';
+import moment from 'moment-timezone';
 
 type EventInput = {
   owner: string;
@@ -401,21 +402,27 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
       [EVENT_ID]
     );
 
+    const dataUTC = events.rows[0].date_event_start;
+
+    const convertDate = (date: string) => {
+      const dataUTCObj = moment.utc(date);
+      const dataPSTObj = dataUTCObj.tz('America/Vancouver');
+      return dataPSTObj.format();
+    };
+
     res.status(200).json({
       event: {
         ...events.rows[0],
-        tags: tags.rows.map((val) => {
-          return {
-            id_tag: val.id_tag,
-            name_tag: val.name_tag,
-          };
-        }),
-        attendees: attendees.rows.map((val) => {
-          return {
-            id: val.id_user,
-            name: val.name_user,
-          };
-        }),
+        date_event_start: convertDate(events.rows[0].date_event_start),
+        date_event_end: convertDate(events.rows[0].date_event_end),
+        tags: tags.rows.map((val) => ({
+          id_tag: val.id_tag,
+          name_tag: val.name_tag,
+        })),
+        attendees: attendees.rows.map((val) => ({
+          id: val.id_user,
+          name: val.name_user,
+        })),
       },
     });
   } catch (err: any) {
@@ -501,15 +508,11 @@ export const createEvents = async (
     category,
   } = req.body;
 
-  console.log('dates', req.body.dates);
-
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
       timeZone: 'America/Vancouver',
     });
   };
-
-  console.log('Formatted', formatToPST(dates[0].dateStart));
 
   try {
     dates.forEach(async (date: Date) => {

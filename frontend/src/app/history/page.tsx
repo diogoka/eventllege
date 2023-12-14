@@ -34,7 +34,6 @@ type CurrentUser = {
 
 export default function PastEvent() {
   const { user } = useContext(UserContext);
-  if(!user) return;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -57,18 +56,26 @@ export default function PastEvent() {
   const [allEvents, setAllEvents] = useState(false);
 
   const getEvents = async () => {
-    const { data: { events, tags } } = await axios.get('http://localhost:3001/api/events/?past=true&attendees=true');
+    const {
+      data: { events, tags },
+    } = await axios.get(
+      'http://localhost:3001/api/events/?past=true&attendees=true'
+    );
     let eventsUserAttended = getEventsUserAttended(events);
     if (allEvents) {
       setEvents(events);
-      events.length===0 ? setNoEvents(true) : setNoEvents(false);
+      events.length === 0 ? setNoEvents(true) : setNoEvents(false);
     } else {
       setEvents(eventsUserAttended);
-      eventsUserAttended.length===0 ? setNoEvents(true) : setNoEvents(false);
+      eventsUserAttended.length === 0 ? setNoEvents(true) : setNoEvents(false);
     }
 
     const attendingEvents: [number, boolean][] = [];
-    const {data: {events: userEvents}} = await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`);
+    const {
+      data: { events: userEvents },
+    } = await axios.get(
+      `http://localhost:3001/api/events/user/${currentUser.id}`
+    );
     userEvents.map((event: Event) => {
       let attendingEvent: [number, boolean] = [event.id_event, true];
       attendingEvents.push(attendingEvent);
@@ -95,6 +102,8 @@ export default function PastEvent() {
   useEffect(() => {
     getEvents();
   }, [allEvents]);
+
+  if (!user) return;
 
   const searchEvents = (text: string) => {
     let url = allEvents
@@ -133,7 +142,7 @@ export default function PastEvent() {
     });
   };
 
-  if(isLoading) return <></>
+  if (isLoading) return <></>;
   return (
     <Box
       sx={{
@@ -154,10 +163,7 @@ export default function PastEvent() {
           {alertSearchBar.message}
         </Alert>
       )}
-      <SearchBar
-        searchEvents={searchEvents}
-        isDisabled={noEvents}
-      />
+      <SearchBar searchEvents={searchEvents} isDisabled={noEvents} />
       <Box
         sx={{
           width: '98%',

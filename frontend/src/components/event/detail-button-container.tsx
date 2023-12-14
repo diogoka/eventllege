@@ -13,7 +13,7 @@ import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
 import { UserContext } from '@/context/userContext';
 import { EventContext } from '@/context/eventContext';
 import { Props } from './detail-container';
-import ModalAttendParticipation from "./modal-attend-participation";
+import ModalAttendParticipation from './modal-attend-participation';
 import ModalCancelParticipation from './modal-cancel-participation';
 
 interface AlertState {
@@ -233,7 +233,7 @@ const DetailButtonContainer = ({
           router.replace('/login/');
         }}
       >
-        {`Log In`}
+        {'Log In'}
       </Button>
 
       <ModalAttendParticipation

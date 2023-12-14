@@ -73,7 +73,6 @@ export default function ModalDelete({
 
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    console.log('delete');
     const response = await axios
       .delete(`http://localhost:3001/api/events/${eventId}`)
       .then((res) => {

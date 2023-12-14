@@ -37,8 +37,7 @@ interface HasEvents {
 
 function UserEvents() {
   const { user } = useContext(UserContext);
-  if(!user) return;
-  
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [events, setEvents] = useState<Array<Event>>([]);
   const [tags, setTags] = useState<Array<Tag>>([]);
@@ -61,7 +60,11 @@ function UserEvents() {
 
   const getEvents = async () => {
     const attendingEvents: [number, boolean][] = [];
-    const { data: { events, tags } } = await axios.get(`http://localhost:3001/api/events/user/${currentUser.id}`);
+    const {
+      data: { events, tags },
+    } = await axios.get(
+      `http://localhost:3001/api/events/user/${currentUser.id}`
+    );
     if (events.length === 0) {
       setHasEvents({
         eventFound: false,
@@ -89,6 +92,8 @@ function UserEvents() {
   useEffect(() => {
     getEvents();
   }, []);
+
+  if (!user) return;
 
   const searchEvents = (text: string) => {
     axios
@@ -137,7 +142,7 @@ function UserEvents() {
     }, 1000);
   };
 
-  if(isLoading) return <></>
+  if (isLoading) return <></>;
   return (
     <Box
       sx={{
@@ -159,10 +164,7 @@ function UserEvents() {
         </Alert>
       )}
 
-      <SearchBar
-        searchEvents={searchEvents}
-        isDisabled={noEvents}
-      />
+      <SearchBar searchEvents={searchEvents} isDisabled={noEvents} />
       {events.length === 0 ? (
         <Typography
           sx={{
