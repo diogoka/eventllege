@@ -508,8 +508,6 @@ export const createEvents = async (
     category,
   } = req.body;
 
-  console.log('req.body', req.body);
-
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
       timeZone: 'America/Vancouver',

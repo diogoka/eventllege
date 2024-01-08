@@ -70,8 +70,19 @@ function ModalAttendParticipation({
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Stack direction='row' alignItems='center' justifyContent='center' columnGap='.125rem'>
-            <RiErrorWarningFill style={{ fontSize: '1.5rem', color: '#D22B2B', marginBottom: '2px' }} />
+          <Stack
+            direction='row'
+            alignItems='center'
+            justifyContent='center'
+            columnGap='.125rem'
+          >
+            <RiErrorWarningFill
+              style={{
+                fontSize: '1.5rem',
+                color: '#D22B2B',
+                marginBottom: '2px',
+              }}
+            />
             <Typography
               variant='h2'
               fontWeight='bold'

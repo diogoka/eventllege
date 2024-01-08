@@ -145,7 +145,7 @@ const DetailButtonContainer = ({
           position: 'absolute',
           bottom: '48rem',
           left: '35%',
-          zIndex: 9999,
+          zIndex: 9999999,
         }}
       >
         <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
