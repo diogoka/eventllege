@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Box } from '@mui/material';
-import { DetailPageContext } from '../../app/events/[id]/page';
+
 import IconsContainer from '../icons/iconsContainer';
 import { UserContext } from '@/context/userContext';
 import { Props } from './detail-container';
@@ -10,9 +10,9 @@ const DetailIconContainer = ({
   applied,
   organizerEvent,
   forPreview,
+  setIsAlertVisible,
 }: Props) => {
   const { loginStatus } = useContext(UserContext);
-  const { setIsAlertVisible } = useContext(DetailPageContext);
 
   const handleUserClick = () => {
     navigator.clipboard
