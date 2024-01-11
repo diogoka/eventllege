@@ -1,18 +1,24 @@
 import { useContext } from 'react';
 import { Box } from '@mui/material';
-import { DetailPageContext } from '../../app/events/[id]/page';
+
 import IconsContainer from '../icons/iconsContainer';
 import { UserContext } from '@/context/userContext';
-import { Props } from './detail-container'
+import { Props } from './detail-container';
 
-const DetailIconContainer = ({ otherInfo, applied, organizerEvent, forPreview }: Props) => {
-
+const DetailIconContainer = ({
+  otherInfo,
+  applied,
+  organizerEvent,
+  forPreview,
+  setIsAlertVisible,
+}: Props) => {
   const { loginStatus } = useContext(UserContext);
-  const { setIsAlertVisible } = useContext(DetailPageContext);
 
   const handleUserClick = () => {
     navigator.clipboard
-      .writeText(`http://localhost:3000/events/${otherInfo?.id_event}`)
+      .writeText(
+        `https://eventllege-frontend.onrender.com/events/${otherInfo?.id_event}`
+      )
       .then(() => {
         setIsAlertVisible(true);
         setTimeout(() => {
@@ -26,12 +32,12 @@ const DetailIconContainer = ({ otherInfo, applied, organizerEvent, forPreview }:
 
   return (
     <Box
-      display={ loginStatus == 'Logged In' ? 'flex' : 'none' }
+      display={loginStatus == 'Logged In' ? 'flex' : 'none'}
       justifyContent='space-between'
-      visibility={ forPreview? 'hidden' : 'visible' }
+      visibility={forPreview ? 'hidden' : 'visible'}
     >
       <Box
-        visibility={ applied && !organizerEvent ? 'visible' : 'hidden'}
+        visibility={applied && !organizerEvent ? 'visible' : 'hidden'}
         display='flex'
         alignItems='center'
       >
@@ -46,7 +52,12 @@ const DetailIconContainer = ({ otherInfo, applied, organizerEvent, forPreview }:
         <Box sx={{ display: 'inline', marginTop: '3px' }}>Applied</Box>
       </Box>
       <Box>
-        <IconsContainer icons={[{ name: 'FaShareSquare', isClickable: true, color: '#333333' }]} onIconClick={handleUserClick} />
+        <IconsContainer
+          icons={[
+            { name: 'FaShareSquare', isClickable: true, color: '#333333' },
+          ]}
+          onIconClick={handleUserClick}
+        />
       </Box>
     </Box>
   );

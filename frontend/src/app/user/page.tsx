@@ -26,7 +26,7 @@ export default function UserPage() {
     <Stack width='100%' paddingBlock='4rem'>
       <Stack alignItems='center' rowGap='1rem'>
         <Avatar
-          src={`http://localhost:3001/img/users/${
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
             user?.id
           }?${new Date().getTime()}`}
           alt={user?.name}

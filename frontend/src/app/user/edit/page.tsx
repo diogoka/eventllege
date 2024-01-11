@@ -27,7 +27,7 @@ export default function UserEditPage() {
   const [phone, setPhone] = useState('');
   const { image, warning, onFileInputChange } = useUploadImage(10, 1, 480);
   const [tempImageSrc, setTempImageSrc] = useState(
-    `http://localhost:3001/img/users/${user?.id}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${user?.id}`
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function UserEditPage() {
     if (image) formData.append('avatar', image);
 
     axios
-      .put('http://localhost:3001/api/users', formData, {
+      .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`, formData, {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {

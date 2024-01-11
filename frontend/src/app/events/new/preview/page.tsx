@@ -55,6 +55,7 @@ export default function PreviewEventPage() {
     title: '',
     message: '',
   });
+  const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -116,6 +117,7 @@ export default function PreviewEventPage() {
           organizerEvent={false}
           forMobile={true}
           forPreview={forPreview}
+          setIsAlertVisible={setIsAlertVisible}
         />
 
         {tempState && (
@@ -178,6 +180,7 @@ export default function PreviewEventPage() {
               organizerEvent={false}
               forMobile={forMobile!}
               forPreview={forPreview}
+              setIsAlertVisible={setIsAlertVisible}
             />
             {tempState && (
               <DetailInfo
@@ -210,6 +213,7 @@ export default function PreviewEventPage() {
               organizerEvent={false}
               forMobile={forMobile!}
               forPreview={forPreview}
+              setIsAlertVisible={setIsAlertVisible}
             />
             <Box overflow='hidden'>
               <ImageHelper

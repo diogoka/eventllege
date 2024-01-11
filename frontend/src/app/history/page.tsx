@@ -59,7 +59,7 @@ export default function PastEvent() {
     const {
       data: { events, tags },
     } = await axios.get(
-      'http://localhost:3001/api/events/?past=true&attendees=true'
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/?past=true&attendees=true`
     );
     let eventsUserAttended = getEventsUserAttended(events);
     if (allEvents) {
@@ -74,7 +74,7 @@ export default function PastEvent() {
     const {
       data: { events: userEvents },
     } = await axios.get(
-      `http://localhost:3001/api/events/user/${currentUser.id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}`
     );
     userEvents.map((event: Event) => {
       let attendingEvent: [number, boolean] = [event.id_event, true];
@@ -107,8 +107,8 @@ export default function PastEvent() {
 
   const searchEvents = (text: string) => {
     let url = allEvents
-      ? `http://localhost:3001/api/events/search/?text=${text}&past=true`
-      : `http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}&past=true`;
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/search/?text=${text}&past=true`
+      : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}/?search=${text}&past=true`;
     axios.get(url).then((res) => {
       if (res.data.events.length === 0) {
         setEvents([]);

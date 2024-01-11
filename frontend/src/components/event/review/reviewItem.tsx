@@ -60,7 +60,7 @@ function ReviewItem({ review, laptopQuery }: Props) {
           }}
         >
           <Avatar
-            src={`http://localhost:3001/img/users/${
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
               review.id_user
             }?${new Date().getTime()}`}
             alt={review.name_user}

@@ -95,7 +95,7 @@ export default function ModalRating({
     }
 
     const postReview = await axios
-      .post('http://localhost:3001/api/events/review/new', {
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/review/new`, {
         id_user: user_id,
         id_event: event_id,
         review: {

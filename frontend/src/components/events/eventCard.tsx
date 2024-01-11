@@ -119,7 +119,7 @@ function EventCard({
       </Box>
       <CardMedia>
         <ImageHelper
-          src={`http://localhost:3001/img/events/${eventId}`}
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${eventId}`}
           width='23.75rem'
           height='13.75rem'
           alt={event.name_event}

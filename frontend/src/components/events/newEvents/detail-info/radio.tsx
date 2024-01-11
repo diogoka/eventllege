@@ -19,7 +19,7 @@ export default function RadioBtn() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/tags')
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tags`)
       .then((res) => {
         setRadioTags(res.data);
       })

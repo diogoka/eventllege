@@ -9,18 +9,64 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useRouter, usePathname, useParams } from 'next/navigation';
-import { DetailPageContext, Attendee } from '../../app/events/[id]/page';
+
 import { UserContext } from '@/context/userContext';
 import { EventContext } from '@/context/eventContext';
-import { Props } from './detail-container';
+
 import ModalAttendParticipation from './modal-attend-participation';
 import ModalCancelParticipation from './modal-cancel-participation';
-
+import dayjs from 'dayjs';
 interface AlertState {
   title: string;
   message: string;
   severity: AlertColor;
 }
+
+export type EventDate = {
+  date_event_start: dayjs.Dayjs;
+  date_event_end: dayjs.Dayjs;
+};
+
+type Event = {
+  name_event: string;
+  description_event: string;
+  dates_event: Array<EventDate>;
+  location_event: string;
+  capacity_event: number;
+  price_event: number;
+  category_event: string;
+  tags: Array<Tag>;
+};
+
+export type Tag = {
+  id_tag: number;
+  name_tag: string;
+};
+
+export type Attendee = {
+  id: string | undefined;
+  name: string | undefined;
+};
+
+export type OtherInfo = {
+  image_event: string;
+  id_event: number;
+  id_owner: string;
+};
+
+type Props = {
+  event: Event;
+  otherInfo: OtherInfo;
+  applied: boolean;
+  organizerEvent: boolean;
+  forMobile: boolean;
+  maxSpots?: number;
+  setApplied: React.Dispatch<React.SetStateAction<boolean>>;
+  setAttendees: React.Dispatch<
+    React.SetStateAction<Array<Attendee> | undefined>
+  >;
+  forPreview?: boolean;
+};
 
 const DetailButtonContainer = ({
   event,
@@ -29,8 +75,9 @@ const DetailButtonContainer = ({
   organizerEvent,
   forMobile,
   maxSpots,
+  setApplied,
+  setAttendees,
 }: Props) => {
-  const { setAttendees, setApplied } = useContext(DetailPageContext);
   const { loginStatus, user } = useContext(UserContext);
   const { showedPage, setShowedPage } = useContext(EventContext);
   const [isAttendModalOpen, setIsAttendModalOpen] = useState(false);
@@ -62,7 +109,7 @@ const DetailButtonContainer = ({
 
   const addAttendee = () => {
     axios
-      .post('http://localhost:3001/api/events/attendee', {
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/attendee`, {
         id_event: otherInfo?.id_event,
         id_user: user?.id,
       })

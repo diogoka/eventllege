@@ -17,7 +17,7 @@ export default function Category({ category, setCategory }: Props) {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/courses/category')
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/courses/category`)
       .then((res) => {
         setCategories(res.data);
       })

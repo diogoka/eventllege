@@ -49,7 +49,7 @@ export default function LoginPage() {
 
   const getUserFromServer = (uid: string) => {
     axios
-      .get(`http://localhost:3001/api/users/${uid}`)
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${uid}`)
       .then((res: any) => {
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);

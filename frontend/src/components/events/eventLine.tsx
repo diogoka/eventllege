@@ -171,7 +171,7 @@ function EventLine({
           : event.description_event}
       </Typography>
       <ImageHelper
-        src={`http://localhost:3001/img/events/${event.id_event}`}
+        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${event.id_event}`}
         width='6.25rem'
         height='4.0625rem'
         style={imageContainerStyle}

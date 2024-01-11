@@ -41,7 +41,9 @@ function Review({ id_event, applied }: Props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/events/reviews/${id_event}`)
+      .get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/reviews/${id_event}`
+      )
       .then((res) => {
         res.data.reviews = orderReviews(res.data.reviews);
         setReviews(res.data.reviews);

@@ -5,6 +5,7 @@ import ThemeRegistry from './theme-registry';
 import { PageContextProvider } from '@/context/pageContext';
 import { UserContextProvider } from '@/context/userContext';
 import { EventContextProvider } from '@/context/eventContext';
+import { DetailPageContextProvider } from '@/context/pageDetailContext';
 import AuthProvider from '@/auth/auth-provider';
 import { Box } from '@mui/material';
 
@@ -33,11 +34,13 @@ export default function RootLayout({
       <Box component='body' position='relative'>
         <ThemeRegistry options={{ key: 'mui' }}>
           <PageContextProvider>
-            <UserContextProvider>
-              <EventContextProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </EventContextProvider>
-            </UserContextProvider>
+            <DetailPageContextProvider>
+              <UserContextProvider>
+                <EventContextProvider>
+                  <AuthProvider>{children}</AuthProvider>
+                </EventContextProvider>
+              </UserContextProvider>
+            </DetailPageContextProvider>
           </PageContextProvider>
         </ThemeRegistry>
       </Box>

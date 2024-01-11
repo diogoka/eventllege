@@ -119,7 +119,9 @@ export default function AuthProvider({
 
         // Get user data from server
         axios
-          .get(`http://localhost:3001/api/users/${firebaseAccount.uid}`)
+          .get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${firebaseAccount.uid}`
+          )
           .then((res: any) => {
             setUser(res.data);
             setLoginStatus(LoginStatus.LoggedIn);
@@ -209,11 +211,15 @@ export default function AuthProvider({
   }, [pathname, loginStatus]);
 
   const isHeaderReady = (): boolean => {
-    if(pathname.length > 0 && pathname !== '/login' && pageStatus === PageStatus.Ready) {
+    if (
+      pathname.length > 0 &&
+      pathname !== '/login' &&
+      pageStatus === PageStatus.Ready
+    ) {
       return true;
     }
     return false;
-  }
+  };
 
   const getComponent = () => {
     switch (pageStatus) {

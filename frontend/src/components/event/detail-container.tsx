@@ -1,11 +1,7 @@
 import { useContext } from 'react';
 import { Box, Typography, Link } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
-import {
-  Event,
-  OtherInfo,
-  DetailPageContext,
-} from '../../app/events/[id]/page';
+import { Event, OtherInfo } from '../../app/events/[id]/page';
 import IconsContainer from '../icons/iconsContainer';
 import DetailIconContainer from './detail-icon-container';
 import DetailTimeContainer from './detail-time-container';
@@ -19,6 +15,8 @@ export type Props = {
   forMobile: boolean;
   forPreview: boolean;
   maxSpots?: number;
+  isAlertVisible?: boolean;
+  setIsAlertVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DetailContainer = ({
@@ -28,8 +26,9 @@ const DetailContainer = ({
   organizerEvent,
   forMobile,
   forPreview,
+  isAlertVisible,
+  setIsAlertVisible,
 }: Props) => {
-  const { isAlertVisible, setIsAlertVisible } = useContext(DetailPageContext);
   const locationContainerStyle = {
     fontSize: forMobile ? 'auto' : '1.2rem',
     marginTop: '3px',
@@ -50,7 +49,7 @@ const DetailContainer = ({
         style={{ marginInline: 'auto' }}
       >
         <ImageHelper
-          src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${otherInfo?.id_event}`}
           width='100%'
           height='auto'
           alt={event?.name_event ?? 'Event'}
@@ -65,6 +64,7 @@ const DetailContainer = ({
           organizerEvent={organizerEvent}
           forMobile={forMobile}
           forPreview={forPreview}
+          setIsAlertVisible={setIsAlertVisible}
         />
       </Box>
 

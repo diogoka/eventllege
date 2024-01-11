@@ -77,7 +77,7 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
       >
         <Avatar
           alt={user?.name}
-          src={`http://localhost:3001/img/users/${
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
             user?.id
           }?${new Date().getTime()}`}
         />{' '}

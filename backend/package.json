@@ -5,9 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "bun --watch run server.ts",
     "migrate": "node-pg-migrate",
-    "serverw": "nodemon server.ts"
+    "start": "ts-node server.ts",
+    "build": "tsc"
   },
   "author": "DDMS",
   "license": "ISC",
