@@ -16,7 +16,9 @@ const DetailIconContainer = ({
 
   const handleUserClick = () => {
     navigator.clipboard
-      .writeText(`frontend/events/${otherInfo?.id_event}`)
+      .writeText(
+        `https://eventllege-frontend.onrender.com/events/${otherInfo?.id_event}`
+      )
       .then(() => {
         setIsAlertVisible(true);
         setTimeout(() => {
