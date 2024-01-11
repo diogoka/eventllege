@@ -66,6 +66,7 @@ export default function SignUpPage() {
           setAlertMessage(getErrorMessage(error.code));
         });
     } else {
+      //eslint-disable-next-line
       setAlertMessage("Password and Confirm Password doesn't match");
     }
   };

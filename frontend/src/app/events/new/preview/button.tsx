@@ -99,7 +99,7 @@ export default function ButtonsForPreview({
     } else {
       axios
         .post(
-          '${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/new',
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/new`,
           formData,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
