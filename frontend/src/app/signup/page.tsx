@@ -66,7 +66,7 @@ export default function SignUpPage() {
           setAlertMessage(getErrorMessage(error.code));
         });
     } else {
-      setAlertMessage('Password and Confirm Password doesn\'t match');
+      setAlertMessage("Password and Confirm Password doesn't match");
     }
   };
 
@@ -101,7 +101,7 @@ export default function SignUpPage() {
     if (phone) formData.append('phone', phone);
 
     axios
-      .post('http://localhost:3001/api/users', formData, {
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`, formData, {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {

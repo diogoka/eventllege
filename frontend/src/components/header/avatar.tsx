@@ -29,7 +29,7 @@ export default function AvatarIcon() {
           <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
             <Avatar
               alt={user?.name}
-              src={`http://localhost:3001/img/users/${
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
                 user?.id
               }?${new Date().getTime()}`}
             ></Avatar>
@@ -55,7 +55,7 @@ export default function AvatarIcon() {
           >
             <Avatar
               alt={user?.name}
-              src={`http://localhost:3001/img/users/${
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
                 user?.id
               }?${new Date().getTime()}`}
             ></Avatar>

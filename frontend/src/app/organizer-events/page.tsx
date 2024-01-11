@@ -60,8 +60,8 @@ export default function OrganizerEventsPage() {
   useEffect(() => {
     const fetchData = async () => {
       let url = switchButtonState
-        ? `http://localhost:3001/api/events/owner/${currentUser.id}?past=true`
-        : `http://localhost:3001/api/events/owner/${currentUser.id}`;
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/owner/${currentUser.id}?past=true`
+        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/owner/${currentUser.id}`;
 
       const {
         data: { events, tags },
@@ -87,7 +87,7 @@ export default function OrganizerEventsPage() {
       const {
         data: { events: userEvents },
       } = await axios.get(
-        `http://localhost:3001/api/events/user/${currentUser.id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}`
       );
       userEvents.map((event: Event) => {
         let attendingEvent: [number, boolean] = [event.id_event, true];
@@ -106,10 +106,12 @@ export default function OrganizerEventsPage() {
 
   const searchEvents = (text: string) => {
     let url = switchButtonState
-      ? `http://localhost:3001/api/events/search/?text=${text}&id=${
-          user!.id
-        }&past=true`
-      : `http://localhost:3001/api/events/search/?text=${text}&id=${user!.id}`;
+      ? `${
+          process.env.NEXT_PUBLIC_BACKEND_URL
+        }/api/events/search/?text=${text}&id=${user!.id}&past=true`
+      : `${
+          process.env.NEXT_PUBLIC_BACKEND_URL
+        }/api/events/search/?text=${text}&id=${user!.id}`;
     axios
       .get(url)
       .then((res) => {

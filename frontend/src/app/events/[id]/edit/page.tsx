@@ -45,7 +45,7 @@ export default function EditEventPage({ params }: Params) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/events/${params.id}`)
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${params.id}`)
       .then((res) => {
         console.log('coming from server', res.data.event);
         if (res.data.event.id_event) {
@@ -62,7 +62,7 @@ export default function EditEventPage({ params }: Params) {
 
     const setEventImage = async () => {
       try {
-        const imagePath = `http://localhost:3001/img/events/${params.id}`;
+        const imagePath = `${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${params.id}`;
         const response = await fetch(imagePath);
         if (response.status === 200) {
           const blob = await response.blob();

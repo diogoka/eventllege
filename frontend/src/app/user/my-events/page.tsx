@@ -63,7 +63,7 @@ function UserEvents() {
     const {
       data: { events, tags },
     } = await axios.get(
-      `http://localhost:3001/api/events/user/${currentUser.id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}`
     );
     if (events.length === 0) {
       setHasEvents({
@@ -98,7 +98,7 @@ function UserEvents() {
   const searchEvents = (text: string) => {
     axios
       .get(
-        `http://localhost:3001/api/events/user/${currentUser.id}/?search=${text}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}/?search=${text}`
       )
       .then((res) => {
         if (res.data.events.length === 0) {

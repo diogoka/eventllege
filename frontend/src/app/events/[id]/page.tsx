@@ -85,7 +85,7 @@ export default function EventPage() {
     window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
 
     axios
-      .get(`http://localhost:3001/api/events/${EVENT_ID}`)
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${EVENT_ID}`)
       .then((res) => {
         if (!res.data.event.id_event) {
           notFound();
@@ -238,7 +238,7 @@ export default function EventPage() {
                 />
                 <Box overflow='hidden'>
                   <ImageHelper
-                    src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${otherInfo?.id_event}`}
                     width='100%'
                     height='20vw'
                     style={{

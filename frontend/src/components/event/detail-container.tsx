@@ -50,7 +50,7 @@ const DetailContainer = ({
         style={{ marginInline: 'auto' }}
       >
         <ImageHelper
-          src={`http://localhost:3001/img/events/${otherInfo?.id_event}`}
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${otherInfo?.id_event}`}
           width='100%'
           height='auto'
           alt={event?.name_event ?? 'Event'}

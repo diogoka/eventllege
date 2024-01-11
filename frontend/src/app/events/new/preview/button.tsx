@@ -21,8 +21,15 @@ export default function ButtonsForPreview({
   setShowAlert: (state: ShowAlert) => void;
 }) {
   const { user } = useContext(UserContext);
-  const { dispatch, initialState, image, showedPage, setShowedPage, pathName, setImage } =
-    useContext(EventContext);
+  const {
+    dispatch,
+    initialState,
+    image,
+    showedPage,
+    setShowedPage,
+    pathName,
+    setImage,
+  } = useContext(EventContext);
 
   const router = useRouter();
 
@@ -53,9 +60,13 @@ export default function ButtonsForPreview({
 
     if (id > 0) {
       axios
-        .put(`http://localhost:3001/api/events/${id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+        .put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${id}`,
+          formData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        )
         .then((res) => {
           if (pathName === '/events/new/preview') {
             setShowedPage({
@@ -80,7 +91,6 @@ export default function ButtonsForPreview({
             payload: initialState,
           });
           setImage(null);
-
         })
         .catch((err) => {
           // console.error('Err:',err.response.data);
@@ -88,9 +98,13 @@ export default function ButtonsForPreview({
         });
     } else {
       axios
-        .post('http://localhost:3001/api/events/new', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+        .post(
+          '${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/new',
+          formData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        )
         .then((res) => {
           if (pathName === '/events/new/preview') {
             setShowedPage({

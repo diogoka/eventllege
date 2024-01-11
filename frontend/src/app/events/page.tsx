@@ -70,7 +70,7 @@ export default function EventsPage() {
   const getEvents = async () => {
     const {
       data: { events, tags },
-    } = await axios.get('http://localhost:3001/api/events');
+    } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events`);
     console.log(events);
     setEvents(events);
     setTags(tags);
@@ -81,7 +81,7 @@ export default function EventsPage() {
       const {
         data: { events: userEvents },
       } = await axios.get(
-        `http://localhost:3001/api/events/user/${currentUser.id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/user/${currentUser.id}`
       );
 
       userEvents.map((event: Event) => {
@@ -101,7 +101,9 @@ export default function EventsPage() {
 
   const searchEvents = (text: string) => {
     axios
-      .get('http://localhost:3001/api/events/search/?text=' + text)
+      .get(
+        '${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/search/?text=' + text
+      )
       .then((res) => {
         if (res.data.events.length === 0) {
           setEvents([]);

@@ -62,7 +62,7 @@ const DetailButtonContainer = ({
 
   const addAttendee = () => {
     axios
-      .post('http://localhost:3001/api/events/attendee', {
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/attendee`, {
         id_event: otherInfo?.id_event,
         id_user: user?.id,
       })

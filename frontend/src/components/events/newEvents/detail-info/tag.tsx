@@ -28,7 +28,7 @@ export default function Tag({ selectedTags, setSelectedTags }: Props) {
   // Tag data from server
   useEffect(() => {
     axios
-      .get('http://localhost:3001/api/tags')
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tags`)
       .then((res) => {
         setTags(res.data);
       })

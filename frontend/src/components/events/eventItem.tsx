@@ -71,7 +71,9 @@ function EventItem({
   const getAverageRating = async () => {
     if (oldEvent) {
       await axios
-        .get(`http://localhost:3001/api/events/reviews/${eventId}`)
+        .get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/reviews/${eventId}`
+        )
         .then((res) => {
           setAvgRating(averageRatingFn(res.data.reviews));
         });
