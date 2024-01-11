@@ -102,7 +102,7 @@ export default function EventsPage() {
   const searchEvents = (text: string) => {
     axios
       .get(
-        '${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/search/?text=' + text
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/search/?text=` + text
       )
       .then((res) => {
         if (res.data.events.length === 0) {
