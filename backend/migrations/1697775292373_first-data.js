@@ -400,7 +400,7 @@ exports.up = async (pgm) => {
       location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -413,7 +413,7 @@ exports.up = async (pgm) => {
       location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -426,7 +426,7 @@ exports.up = async (pgm) => {
       location_event: '816 Granville Street, Vancouver, BC, Canada',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -439,7 +439,7 @@ exports.up = async (pgm) => {
       location_event: '123 Main St, Vancouver, BC V6H 1A1',
       capacity_event: 30,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -452,7 +452,7 @@ exports.up = async (pgm) => {
       location_event: '456 Tech Blvd, Vancouver, BC V6H 2B2',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -465,7 +465,7 @@ exports.up = async (pgm) => {
       location_event: '789 Marketing Lane, Vancouver, BC V6H 3C3',
       capacity_event: 40,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Digital Marketing',
     },
     {
@@ -478,7 +478,7 @@ exports.up = async (pgm) => {
       location_event: 'City Park, Vancouver, BC V6H 4F4',
       capacity_event: 100,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Music',
     },
     {
@@ -491,7 +491,7 @@ exports.up = async (pgm) => {
       location_event: '567 Coding Avenue, Vancouver, BC V6H 5E5',
       capacity_event: 40,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -504,7 +504,7 @@ exports.up = async (pgm) => {
       location_event: '789 Business Tower, Vancouver, BC V6H 6F6',
       capacity_event: 60,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -517,7 +517,7 @@ exports.up = async (pgm) => {
       location_event: '321 Language Hall, Vancouver, BC V6H 7G7',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -530,7 +530,7 @@ exports.up = async (pgm) => {
       location_event: '234 Art Avenue, Vancouver, BC V6H 8H8',
       capacity_event: 80,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Design',
     },
     {
@@ -543,7 +543,7 @@ exports.up = async (pgm) => {
       location_event: '345 Service Street, Vancouver, BC V6H 9I9',
       capacity_event: 35,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Customer Relations',
     },
     {
@@ -556,7 +556,7 @@ exports.up = async (pgm) => {
       location_event: '456 Celebration Plaza, Vancouver, BC V6H 0A0',
       capacity_event: 100,
       price_event: 10,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -569,7 +569,7 @@ exports.up = async (pgm) => {
       location_event: '123 Startup Lane, Vancouver, BC V6H 1A1',
       capacity_event: 30,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -582,7 +582,7 @@ exports.up = async (pgm) => {
       location_event: '234 Marketing Center, Vancouver, BC V6H 2B2',
       capacity_event: 50,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Digital Marketing',
     },
     {
@@ -595,7 +595,7 @@ exports.up = async (pgm) => {
       location_event: '345 Creative Space, Vancouver, BC V6H 3C3',
       capacity_event: 40,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Design',
     },
     {
@@ -608,7 +608,7 @@ exports.up = async (pgm) => {
       location_event: '456 Code Hub, Vancouver, BC V6H 4D4',
       capacity_event: 20,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -621,7 +621,7 @@ exports.up = async (pgm) => {
       location_event: '567 Language Hall, Vancouver, BC V6H 5E5',
       capacity_event: 60,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -634,7 +634,7 @@ exports.up = async (pgm) => {
       location_event: '678 Shutter Street, Vancouver, BC V6H 2W2',
       capacity_event: 25,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Design',
     },
     {
@@ -647,7 +647,7 @@ exports.up = async (pgm) => {
       location_event: '789 Charity Avenue, Vancouver, BC V6H 3B3',
       capacity_event: 150,
       price_event: 100,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -660,7 +660,7 @@ exports.up = async (pgm) => {
       location_event: 'City Park, Vancouver, BC V6H 4G4',
       capacity_event: 80,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -673,7 +673,7 @@ exports.up = async (pgm) => {
       location_event: '567 Business Center, Vancouver, BC V6H 5F5',
       capacity_event: 200,
       price_event: 50,
-      image_event: null,
+      image_url_event: null,
       category_event: 'IBM',
     },
     {
@@ -686,7 +686,7 @@ exports.up = async (pgm) => {
       location_event: '789 Comedy Club, Vancouver, BC V6H 6G6',
       capacity_event: 120,
       price_event: 20,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -699,7 +699,7 @@ exports.up = async (pgm) => {
       location_event: '456 Art Gallery, Vancouver, BC V6H 7G7',
       capacity_event: 75,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -712,7 +712,7 @@ exports.up = async (pgm) => {
       location_event: '789 Science Hall, Vancouver, BC V6H 8H8',
       capacity_event: 100,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -725,7 +725,7 @@ exports.up = async (pgm) => {
       location_event: '567 Robotics Arena, Vancouver, BC V6H 9I9',
       capacity_event: 200,
       price_event: 0,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -738,7 +738,7 @@ exports.up = async (pgm) => {
       location_event: '123 Music Park, Vancouver, BC V6H 0A0',
       capacity_event: 300,
       price_event: 10,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -751,7 +751,7 @@ exports.up = async (pgm) => {
       location_event: '789 Culinary Center, Vancouver, BC V6H 1A1',
       capacity_event: 150,
       price_event: 25,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -764,7 +764,7 @@ exports.up = async (pgm) => {
       location_event: 'Vineyard Haven, Napa Valley, CA 94558',
       capacity_event: 100,
       price_event: 35,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -777,7 +777,7 @@ exports.up = async (pgm) => {
       location_event: 'Meadow Park, Chicago, IL 60601',
       capacity_event: 500,
       price_event: 40,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
     {
@@ -790,7 +790,7 @@ exports.up = async (pgm) => {
       location_event: 'Tech Hub Convention Center, San Francisco, CA 94105',
       capacity_event: 300,
       price_event: 30,
-      image_event: null,
+      image_url_event: null,
       category_event: 'Tech',
     },
     {
@@ -803,15 +803,15 @@ exports.up = async (pgm) => {
       location_event: 'Fashion Center, New York, NY 10001',
       capacity_event: 200,
       price_event: 50,
-      image_event: null,
+      image_url_event: null,
       category_event: 'ESL',
     },
   ];
 
   for (const event of events) {
     await pgm.sql(`
-            INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_event, category_event)
-            VALUES ('${event.id_owner}', '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_event}, '${event.category_event}');
+            INSERT INTO events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, image_url_event, category_event)
+            VALUES ('${event.id_owner}', '${event.name_event}', '${event.description_event}', '${event.date_event_start}', '${event.date_event_end}', '${event.location_event}', ${event.capacity_event}, ${event.price_event}, ${event.image_url_event}, '${event.category_event}');
         `);
   }
 

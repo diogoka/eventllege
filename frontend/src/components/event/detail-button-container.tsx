@@ -133,7 +133,7 @@ const DetailButtonContainer = ({
 
   const editEventHandler = (id: number) => {
     if (!id) {
-      console.log('Id does not exist');
+      //generate an alert here instead of console
     } else {
       if (pathName === `/events/${params.id}`) {
         setShowedPage({

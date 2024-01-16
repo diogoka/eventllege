@@ -25,6 +25,7 @@ export type Event = {
   location_event: string;
   name_event: string;
   price_event: number;
+  image_url_event: string;
 };
 
 export type Tag = {
@@ -71,7 +72,6 @@ export default function EventsPage() {
     const {
       data: { events, tags },
     } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events`);
-    console.log(events);
     setEvents(events);
     setTags(tags);
     events.length == 0 ? setNoEvents(true) : setNoEvents(false);

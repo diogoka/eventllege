@@ -2,7 +2,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import axios from 'axios';
-import initializeFirebase from '@/auth/firebase';
+import { initializeFirebase } from '@/auth/firebase';
+
 import { getAuth } from 'firebase/auth';
 import { useMediaQuery, Box } from '@mui/material';
 import { UserContext, LoginStatus } from '@/context/userContext';
@@ -106,7 +107,7 @@ export default function AuthProvider({
     useContext(UserContext);
 
   useEffect(() => {
-    initializeFirebase();
+    initializeFirebase;
 
     getAuth().onAuthStateChanged(async (firebaseAccount) => {
       // Use this handler only when user accesses to our page

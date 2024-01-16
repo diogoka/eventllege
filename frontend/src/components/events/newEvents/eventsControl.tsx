@@ -31,6 +31,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
+      console.log('tempImage', tempImage);
     }
   }, [image]);
 
@@ -147,6 +148,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
         onFileInputChange={onFileInputChange}
         isMobile={isMobile}
         tempImage={tempImage}
+        imageURL={createdEvent.image_event}
       />
       <Box sx={{ width: '100%' }}>
         <Grid

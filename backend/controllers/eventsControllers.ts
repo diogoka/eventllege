@@ -50,6 +50,7 @@ export const getEvents = async (
               events.price_event,
               events.capacity_event,
               events.category_event,
+              events.urlimage,
               json_agg(attendees) AS attendees
             FROM
               events
@@ -503,12 +504,10 @@ export const createEvents = async (
     location,
     spots,
     price,
-    // picture,
     tagId,
     category,
+    imageURL,
   } = req.body;
-
-  console.log('req.body', req.body);
 
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
@@ -521,8 +520,8 @@ export const createEvents = async (
       const events = await pool.query(
         `
         INSERT INTO
-        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+        events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event, image_url_event)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, $10)
         RETURNING *;
       `,
         [
@@ -535,24 +534,17 @@ export const createEvents = async (
           spots,
           price,
           category,
+          imageURL,
         ]
       );
-
-      if (req.file) {
-        copyImage(req.file.filename, events.rows[0].id_event);
-        setTimeout(() => {
-          deleteImage(req.file.filename);
-        }, 3000);
-      }
 
       tagId.forEach((id: string) => {
         pool.query(
           `INSERT INTO events_tags (id_event, id_tag) VALUES ('${events.rows[0].id_event}','${id}') RETURNING *;`
         );
       });
-      // res.status(201).json(events.rows);
+      res.status(201).json(events.rows[0].id_event);
     });
-    res.status(201).json({});
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -574,6 +566,7 @@ export const updateEvents = async (
     image,
     tagId,
     category,
+    imageURL,
   } = req.body;
 
   if (!id) {
@@ -582,7 +575,7 @@ export const updateEvents = async (
     try {
       dates.forEach(async (date: Date) => {
         const events = await pool.query(
-          `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, image_event = $8, category_event = $9 WHERE id_event = $10 RETURNING *`,
+          `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, category_event = $8, image_url_event = $9 WHERE id_event = $10 RETURNING *`,
           [
             title,
             description,
@@ -591,8 +584,8 @@ export const updateEvents = async (
             location,
             spots,
             price,
-            image,
             category,
+            imageURL,
             id,
           ]
         );
@@ -604,13 +597,6 @@ export const updateEvents = async (
             [id, tag]
           );
         });
-
-        if (req.file) {
-          copyImage(req.file.filename, events.rows[0].id_event);
-          setTimeout(() => {
-            deleteImage(req.file.filename);
-          }, 3000);
-        }
       });
 
       res.status(200).json({});

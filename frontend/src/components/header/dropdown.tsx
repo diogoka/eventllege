@@ -13,7 +13,8 @@ type Props = {
 };
 
 export default function Dropdown({ anchorEl, open, handleClose }: Props) {
-  const { user, setUser, setLoginStatus } = useContext(UserContext);
+  const { user, setUser, setLoginStatus, firebaseAccount } =
+    useContext(UserContext);
 
   const router = useRouter();
   const clickHandler = () => {
@@ -75,13 +76,8 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
           borderBottom: '1px solid rgba(51, 51, 51, 0.1)',
         }}
       >
-        <Avatar
-          alt={user?.name}
-          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
-            user?.id
-          }?${new Date().getTime()}`}
-        />{' '}
-        My Profile
+        <Avatar alt={user?.name} src={`${firebaseAccount?.photoURL}`} /> My
+        Profile
       </MenuItem>
       <MenuItem
         onClick={handleLogout}

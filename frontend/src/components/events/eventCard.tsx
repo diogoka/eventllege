@@ -47,8 +47,6 @@ function EventCard({
 }: Props) {
   const eventId = event.id_event;
 
-  console.log(event.description_event);
-
   const renderModalities = () => {
     const modalitiesColor = () => {
       if (modality === 'In Person') {
@@ -119,7 +117,7 @@ function EventCard({
       </Box>
       <CardMedia>
         <ImageHelper
-          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${eventId}`}
+          src={`${event.image_url_event}`}
           width='23.75rem'
           height='13.75rem'
           alt={event.name_event}

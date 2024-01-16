@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
 import ThemeRegistry from './theme-registry';
 import { PageContextProvider } from '@/context/pageContext';
 import { UserContextProvider } from '@/context/userContext';

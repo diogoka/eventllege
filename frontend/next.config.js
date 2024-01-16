@@ -8,7 +8,8 @@ const nextConfig = {
         port: '3001',
         pathname: '/img/**',
       }
-    ]
+    ],
+    domains: ['firebasestorage.googleapis.com'],
   }
 }
 

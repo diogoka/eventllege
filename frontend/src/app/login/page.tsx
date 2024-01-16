@@ -83,6 +83,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
       .then((result) => {
+        console.log('result', result.user);
         setFirebaseAccount(result.user);
         getUserFromServer(result.user.uid);
       })
