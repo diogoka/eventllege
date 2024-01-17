@@ -17,6 +17,7 @@ import axios from 'axios';
 import { UserContext } from '@/context/userContext';
 import { storage } from '@/auth/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface DateRange {
   date_event_start: dayjs.Dayjs;
@@ -75,10 +76,14 @@ export default function PreviewEventPage() {
   const uploadImage = async (image: Blob) => {
     try {
       let url = '';
-      if (image) {
+      if (image != null) {
+        console.log('upload');
         let reference: any = '';
 
-        const imageRef = ref(storage, `events/${createdEvent.name_event}`);
+        const imageRef = ref(
+          storage,
+          `events/${createdEvent.name_event}+${uuidv4()}`
+        );
         const imageToUpload = image!;
 
         await uploadBytes(imageRef, imageToUpload).then((response) => {
@@ -88,7 +93,7 @@ export default function PreviewEventPage() {
         });
         return url;
       } else {
-        return (url = `${process.env.URL_EVENT_IMAGE_DEFAULT}`);
+        return (url = `${process.env.NEXT_PUBLIC_URL_EVENT_IMAGE_DEFAULT}`);
       }
     } catch (error) {
       throw error;

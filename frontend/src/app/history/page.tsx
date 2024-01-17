@@ -59,7 +59,7 @@ export default function PastEvent() {
     const {
       data: { events, tags },
     } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/?past=true&attendees=true`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events?past=true&attendees=true`
     );
     let eventsUserAttended = getEventsUserAttended(events);
     if (allEvents) {

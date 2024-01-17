@@ -50,7 +50,7 @@ export const getEvents = async (
               events.price_event,
               events.capacity_event,
               events.category_event,
-              events.urlimage,
+              events.image_url_event,
               json_agg(attendees) AS attendees
             FROM
               events

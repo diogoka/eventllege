@@ -47,6 +47,7 @@ export default function EditEventPage({ params }: Params) {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${params.id}`)
       .then((res) => {
+        console.log('res', res.data.event);
         if (res.data.event.id_event) {
           setEditEvent(res.data.event);
           setEventId(res.data.event.id_event);

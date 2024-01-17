@@ -25,7 +25,7 @@ export type Event = {
   location_event: string;
   name_event: string;
   price_event: number;
-  image_url_event: string;
+  image_url_event?: string;
 };
 
 export type Tag = {
