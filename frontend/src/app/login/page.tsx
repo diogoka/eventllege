@@ -51,6 +51,7 @@ export default function LoginPage() {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${uid}`)
       .then((res: any) => {
+        console.log('res', res);
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);
         route.replace('/events');
@@ -83,7 +84,6 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
       .then((result) => {
-        console.log('result', result.user);
         setFirebaseAccount(result.user);
         getUserFromServer(result.user.uid);
       })

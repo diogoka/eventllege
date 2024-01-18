@@ -76,8 +76,15 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
           borderBottom: '1px solid rgba(51, 51, 51, 0.1)',
         }}
       >
-        <Avatar alt={user?.name} src={`${firebaseAccount?.photoURL}`} /> My
-        Profile
+        <Avatar
+          alt={user?.name}
+          src={`${
+            user?.provider === 'password'
+              ? user.avatar_url
+              : firebaseAccount?.photoURL
+          }`}
+        />{' '}
+        My Profile
       </MenuItem>
       <MenuItem
         onClick={handleLogout}

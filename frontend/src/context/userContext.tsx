@@ -19,6 +19,8 @@ export type User = {
   postalCode: string;
   phone: string;
   profilePhoto?: string;
+  provider?: string;
+  avatar_url: string;
 };
 
 export type FirebaseAccount = {
@@ -26,6 +28,11 @@ export type FirebaseAccount = {
   email: string | null;
   displayName?: string | null;
   photoURL?: string | null;
+  providerData?: Array<ProviderData>;
+};
+
+type ProviderData = {
+  providerId: string;
 };
 
 type UserContextProps = {

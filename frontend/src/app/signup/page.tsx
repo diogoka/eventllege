@@ -98,6 +98,7 @@ export default function SignUpPage() {
     formData.append('type', '2');
     formData.append('courseId', courseId.toString());
     formData.append('name', name);
+    formData.append('provider', firebaseAccount.providerData![0].providerId);
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
 

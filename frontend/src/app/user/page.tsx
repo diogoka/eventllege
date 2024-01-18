@@ -26,7 +26,11 @@ export default function UserPage() {
     <Stack width='100%' paddingBlock='4rem'>
       <Stack alignItems='center' rowGap='1rem'>
         <Avatar
-          src={`${firebaseAccount?.photoURL}`}
+          src={`${
+            user?.provider === 'password'
+              ? user.avatar_url
+              : firebaseAccount?.photoURL
+          }`}
           alt={user?.name}
           sx={{
             width: isMobile ? '7.5rem' : '10rem',
