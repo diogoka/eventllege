@@ -18,31 +18,27 @@ export default function ImageContainer({
   tempImage,
   imageURL,
 }: Props) {
-  console.log('temp', tempImage);
-  console.log('imageURL', imageURL);
+  const renderImage = (imgTemporary: string, imgURL: string) => {
+    if (imgTemporary || imgURL) {
+      return (
+        <Image
+          src={imgTemporary ? imgTemporary : imgURL}
+          alt=''
+          width={320}
+          height={220}
+          style={{
+            objectFit: 'cover',
+          }}
+        />
+      );
+    } else {
+      return <></>;
+    }
+  };
+
   return (
     <>
-      {tempImage ? (
-        <Image
-          src={tempImage}
-          alt=''
-          width={320}
-          height={220}
-          style={{
-            objectFit: 'cover',
-          }}
-        />
-      ) : (
-        <Image
-          src={imageURL}
-          alt=''
-          width={320}
-          height={220}
-          style={{
-            objectFit: 'cover',
-          }}
-        />
-      )}
+      {renderImage(tempImage, imageURL)}
       <Button
         component='label'
         variant='outlined'
@@ -53,7 +49,7 @@ export default function ImageContainer({
           width: isMobile ? '100%' : '40%',
         }}
       >
-        {'Edit Image'}
+        {tempImage || imageURL ? 'Edit Image' : 'Add Image'}
         <Input
           type='file'
           onChange={onFileInputChange}
