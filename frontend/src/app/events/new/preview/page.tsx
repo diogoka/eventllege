@@ -77,7 +77,6 @@ export default function PreviewEventPage() {
     try {
       let url = '';
       if (image != null) {
-        console.log('upload');
         let reference: any = '';
 
         const imageRef = ref(

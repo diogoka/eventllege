@@ -51,7 +51,6 @@ export default function LoginPage() {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${uid}`)
       .then((res: any) => {
-        console.log('res', res);
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);
         route.replace('/events');

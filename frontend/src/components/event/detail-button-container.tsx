@@ -190,8 +190,8 @@ const DetailButtonContainer = ({
         variant='filled'
         sx={{
           position: 'absolute',
-          bottom: '48rem',
-          left: '35%',
+          bottom: '70rem',
+          left: '39%',
           zIndex: 9999,
         }}
       >

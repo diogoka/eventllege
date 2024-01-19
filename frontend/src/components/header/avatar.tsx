@@ -22,8 +22,6 @@ export default function AvatarIcon() {
     setAnchorEl(null);
   };
 
-  console.log('user no avatar', user);
-
   return (
     <Switcher
       sp={

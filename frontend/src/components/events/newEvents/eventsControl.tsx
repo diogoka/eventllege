@@ -31,7 +31,6 @@ export default function EventsControl({ eventId }: { eventId: number }) {
   useEffect(() => {
     if (image) {
       setTempImage(URL.createObjectURL(image));
-      console.log('tempImage', tempImage);
     }
   }, [image]);
 

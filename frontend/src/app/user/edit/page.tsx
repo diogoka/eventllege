@@ -120,10 +120,6 @@ export default function UserEditPage() {
       });
   };
 
-  console.log('user', user?.avatar_url);
-  console.log('temp', tempImageSrc);
-  console.log('img', image);
-
   return (
     <Stack
       width='100%'

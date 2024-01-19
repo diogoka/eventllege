@@ -31,11 +31,6 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile }: Props) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
 
-    console.log(
-      'If remove this console.log, detail page might not show image any more:',
-      otherInfo?.id_event
-    );
-
     return {
       date_event_start: `
       ${getDayName(startDate.getDay())}, 

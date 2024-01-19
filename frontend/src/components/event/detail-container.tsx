@@ -38,6 +38,8 @@ const DetailContainer = ({
     : null;
   const timeContainerStyle = { margin: forMobile ? '10px auto' : '40px auto' };
 
+  console.log('event', event);
+
   return (
     <>
       <Typography variant='h1' sx={h1Style}>
@@ -49,7 +51,7 @@ const DetailContainer = ({
         style={{ marginInline: 'auto' }}
       >
         <ImageHelper
-          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${otherInfo?.id_event}`}
+          src={event?.image_url_event}
           width='100%'
           height='auto'
           alt={event?.name_event ?? 'Event'}
@@ -99,7 +101,7 @@ const DetailContainer = ({
 
       <Box
         fontSize={forMobile ? '1em' : '1.1em'}
-        margin={forMobile ? '10px auto' : '30px auto'}
+        margin={forMobile ? '1rem 1rem 1rem 0.5rem' : '30px auto'}
       >
         <Box fontWeight='bold'>About this event:</Box>
         <pre

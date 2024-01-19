@@ -573,6 +573,18 @@ export const updateEvents = async (
     res.status(404).send('Update events failed');
   } else {
     try {
+      const numberOfAttendees = await pool.query(
+        `SELECT COUNT(*) FROM attendees WHERE id_event = $1`,
+        [id]
+      );
+
+      const updatedSpots = (spots: number) => {
+        const count = parseInt(numberOfAttendees.rows[0].count);
+        return spots - count;
+      };
+
+      console.log(updatedSpots(spots));
+
       dates.forEach(async (date: Date) => {
         const events = await pool.query(
           `UPDATE events SET name_event = $1, description_event = $2, date_event_start = $3, date_event_end = $4, location_event = $5, capacity_event = $6, price_event = $7, category_event = $8, image_url_event = $9 WHERE id_event = $10 RETURNING *`,
@@ -582,7 +594,7 @@ export const updateEvents = async (
             date.dateStart,
             date.dateEnd,
             location,
-            spots,
+            updatedSpots(spots),
             price,
             category,
             imageURL,
