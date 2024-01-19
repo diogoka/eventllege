@@ -9,7 +9,7 @@ export default function NewEventPage() {
   useEffect(() => {
     dispatch({ type: 'RESET', payload: initialState });
     setImage(null);
-  });
+  }, []);
   return (
     <>
       <EventsControl eventId={-1} />

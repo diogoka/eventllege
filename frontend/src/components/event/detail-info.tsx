@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { UserContext, LoginStatus } from '@/context/userContext';
 import { Table, TableBody, TableContainer } from '@mui/material';
 import DetailInfoRow from './detail-info-row';
-import { Attendee, Tag } from '@/app/events/[id]/page';
+import { Attendee, Tag } from '@/types/types';
 import AttendeesRow from './attendees/attendees-row';
 
 type Props = {
@@ -37,17 +37,18 @@ export default function DetailInfo(props: Props) {
         >
           <DetailInfoRow
             title='Price'
-            content={
-              props.price === 0 ? 'Free' : `$ ${props.price.toString()}`
-            }
+            content={props.price === 0 ? 'Free' : `$ ${props.price.toString()}`}
           />
           <DetailInfoRow
             title='Available spots'
             content={
-              props.maxSpots <=-1 ? 'No limit' :
-              props.maxSpots == 0 ? 'No Spot Available' :
-              props.maxSpots == 1 ? `${props.maxSpots.toString()} person` :
-              `${props.maxSpots.toString()} people`
+              props.maxSpots <= -1
+                ? 'No limit'
+                : props.maxSpots == 0
+                ? 'No Spot Available'
+                : props.maxSpots == 1
+                ? `${props.maxSpots.toString()} person`
+                : `${props.maxSpots.toString()} people`
             }
           />
           {!props.forPreview && loginStatus === LoginStatus.LoggedIn && (

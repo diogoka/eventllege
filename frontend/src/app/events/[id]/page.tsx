@@ -8,8 +8,10 @@ import {
   Stack,
   Typography,
   Link,
-  Grid,
   useMediaQuery,
+  AlertColor,
+  AlertTitle,
+  Alert,
 } from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
 import DetailIconContainer from '@/components/event/detail-icon-container';
@@ -22,39 +24,14 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
-
-export type Attendee = {
-  id: string | undefined;
-  name: string | undefined;
-};
-
-export type EventDate = {
-  date_event_start: dayjs.Dayjs;
-  date_event_end: dayjs.Dayjs;
-};
-
-export type Tag = {
-  id_tag: number;
-  name_tag: string;
-};
-
-export type Event = {
-  name_event: string;
-  description_event: string;
-  dates_event: Array<EventDate>;
-  location_event: string;
-  capacity_event: number;
-  price_event: number;
-  category_event: string;
-  tags: Array<Tag>;
-  image_url_event: string;
-};
-
-export type OtherInfo = {
-  image_event: string;
-  id_event: number;
-  id_owner: string;
-};
+import {
+  Attendee,
+  EventDate,
+  Tag,
+  Event,
+  OtherInfo,
+  AlertState,
+} from '@/types/types';
 
 export default function EventPage() {
   const { notFound } = useContext(PageContext);
@@ -66,15 +43,57 @@ export default function EventPage() {
   const [attendees, setAttendees] = useState<Array<Attendee>>();
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
   const [oldEvent, setOldEvent] = useState<boolean>(false);
-
   const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
-
   const [forPreview, setForPreview] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertState>({
+    title: '',
+    message: '',
+    severity: 'success',
+  });
 
   const params = useParams();
 
   const EVENT_ID = params.id;
   const laptopQuery = useMediaQuery('(max-width:769px)');
+
+  const handleAlert = (
+    isOpen: boolean,
+    titleParam: string,
+    messageParam: string,
+    severityParam: AlertColor
+  ) => {
+    setAlertMessage({
+      title: titleParam,
+      message: messageParam,
+      severity: severityParam,
+    });
+    setIsAlertVisible(isOpen);
+  };
+
+  const handleAlertClose = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    setIsAlertVisible(false);
+  };
+
+  const alertFn = (title: string, message: string, severity: AlertColor) => {
+    console.log('alertFn');
+    return (
+      <Alert
+        severity={severity}
+        onClose={handleAlertClose}
+        variant='filled'
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 99999999,
+        }}
+      >
+        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
+        {message}
+      </Alert>
+    );
+  };
 
   useEffect(() => {
     axios
@@ -120,8 +139,6 @@ export default function EventPage() {
       })
       .catch((error) => {
         console.error(error.response);
-
-        // notFound();
       });
   }, [applied]);
 
@@ -133,6 +150,13 @@ export default function EventPage() {
     ///////////////////// Mobile /////////////////////
     return (
       <Stack>
+        {isAlertVisible &&
+          alertFn(
+            alertMessage.title,
+            alertMessage.message,
+            alertMessage.severity
+          )}
+
         <DetailContainer
           event={event!}
           otherInfo={otherInfo!}
@@ -169,6 +193,7 @@ export default function EventPage() {
             maxSpots={eventCapacity}
             setAttendees={setAttendees}
             setApplied={setApplied}
+            handleAlertFn={handleAlert}
           />
         )}
       </Stack>
@@ -178,6 +203,12 @@ export default function EventPage() {
 
     return (
       <>
+        {isAlertVisible &&
+          alertFn(
+            alertMessage.title,
+            alertMessage.message,
+            alertMessage.severity
+          )}
         <Stack>
           <Box
             width='100%'
@@ -312,6 +343,7 @@ export default function EventPage() {
                   maxSpots={eventCapacity}
                   setApplied={setApplied}
                   setAttendees={setAttendees}
+                  handleAlertFn={handleAlert}
                 />
               </Box>
             </Box>

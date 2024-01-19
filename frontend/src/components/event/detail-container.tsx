@@ -1,11 +1,10 @@
 import { useContext } from 'react';
 import { Box, Typography, Link } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
-import { Event, OtherInfo } from '../../app/events/[id]/page';
+import { Event, OtherInfo } from '@/types/types';
 import IconsContainer from '../icons/iconsContainer';
 import DetailIconContainer from './detail-icon-container';
 import DetailTimeContainer from './detail-time-container';
-import alertFn from '@/components/common/alertFunction';
 
 export type Props = {
   event: Event;
@@ -37,8 +36,6 @@ const DetailContainer = ({
     ? { textAlign: 'left', fontWeight: 'bold', fontSize: '2.5rem' }
     : null;
   const timeContainerStyle = { margin: forMobile ? '10px auto' : '40px auto' };
-
-  console.log('event', event);
 
   return (
     <>
@@ -114,14 +111,6 @@ const DetailContainer = ({
           {event?.description_event}
         </pre>
       </Box>
-
-      {isAlertVisible &&
-        alertFn(
-          'URL Copied',
-          'The event URL has been copied to your clipboard.',
-          'success',
-          () => setIsAlertVisible(false)
-        )}
     </>
   );
 };
