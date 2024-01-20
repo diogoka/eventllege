@@ -13,12 +13,12 @@ const alertFn = (
       onClose={onCloseFn}
       variant='filled'
       sx={{
-        width: 'fit-content',
-        position: 'fixed',
-        top: '10px',
+        width: 'max-content',
+        position: 'absolute',
         left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 9999,
+        bottom: '79%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 9999999,
       }}
     >
       <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>

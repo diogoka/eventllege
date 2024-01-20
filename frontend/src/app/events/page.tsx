@@ -11,7 +11,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
-import { PageContext } from '@/context/pageContext';
+import { Tag } from '@/types/types';
 
 export type Event = {
   capacity_event: number;
@@ -26,11 +26,6 @@ export type Event = {
   name_event: string;
   price_event: number;
   image_url_event?: string;
-};
-
-export type Tag = {
-  id_event: number;
-  name_tag: string;
 };
 
 type CurrentUser = {

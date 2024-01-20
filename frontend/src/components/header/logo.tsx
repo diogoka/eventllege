@@ -11,7 +11,13 @@ export default function Logo() {
       sp={
         <Button
           onClick={() => router.push('/')}
-          sx={{ width: '3.125rem', height: '3.125rem', '&:hover': { background: 'none' } }}
+          sx={{
+            minWidth: 0,
+
+            width: 'auto',
+            height: 'auto',
+            '&:hover': { background: 'none' },
+          }}
           disableRipple
           disableTouchRipple
         >
@@ -27,7 +33,11 @@ export default function Logo() {
       pc={
         <Button
           onClick={() => router.push('/')}
-          sx={{ width: '10rem', height: '1.875rem', '&:hover': { background: 'none' } }}
+          sx={{
+            width: '10rem',
+            height: '1.875rem',
+            '&:hover': { background: 'none' },
+          }}
           disableRipple
           disableTouchRipple
         >

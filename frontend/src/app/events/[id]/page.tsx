@@ -251,6 +251,7 @@ export default function EventPage() {
                 forMobile={laptopQuery}
                 forPreview={forPreview}
                 setIsAlertVisible={setIsAlertVisible}
+                handleAlertFn={handleAlert}
               />
               <Box overflow='hidden'>
                 <ImageHelper

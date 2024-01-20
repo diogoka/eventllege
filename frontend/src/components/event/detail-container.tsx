@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Box, Typography, Link } from '@mui/material';
+import { Box, Typography, Link, AlertColor } from '@mui/material';
 import ImageHelper from '@/components/common/image-helper';
 import { Event, OtherInfo } from '@/types/types';
 import IconsContainer from '../icons/iconsContainer';
@@ -16,6 +16,12 @@ export type Props = {
   maxSpots?: number;
   isAlertVisible?: boolean;
   setIsAlertVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  handleAlertFn?: (
+    isOpen: boolean,
+    title: string,
+    message: string,
+    severity: AlertColor
+  ) => void;
 };
 
 const DetailContainer = ({

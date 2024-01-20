@@ -11,6 +11,7 @@ const DetailIconContainer = ({
   organizerEvent,
   forPreview,
   setIsAlertVisible,
+  handleAlertFn,
 }: Props) => {
   const { loginStatus } = useContext(UserContext);
 
@@ -20,9 +21,15 @@ const DetailIconContainer = ({
         `https://eventllege-frontend.onrender.com/events/${otherInfo?.id_event}`
       )
       .then(() => {
-        setIsAlertVisible(true);
+        handleAlertFn(
+          true,
+          'URL Copied',
+          'The Event URL has been copied to your clipboard.',
+          'success'
+        );
+
         setTimeout(() => {
-          setIsAlertVisible(false);
+          handleAlertFn(false, '', '', 'success');
         }, 3000);
       })
       .catch((err) => {
