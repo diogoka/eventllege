@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Avatar, Typography } from '@mui/material';
-import { Attendee } from '@/app/events/[id]/page';
+
+import { Attendee } from '@/types/types';
 
 type Props = {
   attendee: Attendee;

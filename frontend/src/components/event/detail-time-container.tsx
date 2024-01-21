@@ -5,7 +5,7 @@ import {
   getMonthName,
   getTimeString,
 } from '../../common/functions';
-import { Event, OtherInfo, EventDate } from '../../app/events/[id]/page';
+import { Event, OtherInfo, EventDate } from '@/types/types';
 import IconsContainer from '../icons/iconsContainer';
 
 type Props = {

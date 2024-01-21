@@ -44,6 +44,7 @@ export type EventData = {
   price_event: number;
   tags: Tag[];
   category_event: string;
+  image_url_event: string;
 };
 
 export default function PreviewEventPage() {
@@ -229,6 +230,7 @@ export default function PreviewEventPage() {
       price_event: createdEvent.price_event,
       tags: [...createdEvent.selectedTags, createdEvent.modality],
       category_event: createdEvent.category_event,
+      image_url_event: '',
     });
 
     setEventId(parseInt(searchParams.get('eventId')!));

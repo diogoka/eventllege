@@ -21,7 +21,7 @@ const DetailIconContainer = ({
         `https://eventllege-frontend.onrender.com/events/${otherInfo?.id_event}`
       )
       .then(() => {
-        handleAlertFn(
+        handleAlertFn!(
           true,
           'URL Copied',
           'The Event URL has been copied to your clipboard.',
@@ -29,7 +29,7 @@ const DetailIconContainer = ({
         );
 
         setTimeout(() => {
-          handleAlertFn(false, '', '', 'success');
+          handleAlertFn!(false, '', '', 'success');
         }, 3000);
       })
       .catch((err) => {

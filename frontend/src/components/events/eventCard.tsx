@@ -8,7 +8,8 @@ import {
   Rating,
 } from '@mui/material';
 import ImageHelper from '../common/image-helper';
-import { Event, Tag } from '@/app/events/page';
+import { Event } from '@/app/events/page';
+import { Tag } from '@/types/types';
 import {
   StarRounded,
   EventRounded,

@@ -12,8 +12,8 @@ export type EventDate = {
 };
 
 export type Tag = {
-  id_tag: number;
-  name_tag: string;
+  id_tag?: number;
+  name_tag?: string;
   id_event?: number;
 };
 
