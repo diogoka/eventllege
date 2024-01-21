@@ -76,8 +76,24 @@ export default function EventPage() {
   };
 
   const alertFn = (title: string, message: string, severity: AlertColor) => {
-    console.log('alertFn');
-    return (
+    return laptopQuery ? (
+      <Alert
+        severity={severity}
+        onClose={handleAlertClose}
+        variant='filled'
+        sx={{
+          position: 'absolute',
+          width: '90%',
+          top: '5rem',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 99999999,
+        }}
+      >
+        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
+        {message}
+      </Alert>
+    ) : (
       <Alert
         severity={severity}
         onClose={handleAlertClose}
@@ -178,11 +194,9 @@ export default function EventPage() {
             forPreview={forPreview}
           />
         )}
-        {oldEvent && (
+        {oldEvent ? (
           <Review id_event={otherInfo!.id_event} applied={applied} />
-        )}
-
-        {!oldEvent && (
+        ) : (
           <DetailButtonContainer
             event={event!}
             otherInfo={otherInfo!}

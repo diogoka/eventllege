@@ -16,7 +16,7 @@ const alertFn = (
         width: 'max-content',
         position: 'absolute',
         left: '50%',
-        bottom: '79%',
+        bottom: '76%',
         transform: 'translate(-50%, -50%)',
         zIndex: 9999999,
       }}
