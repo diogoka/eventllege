@@ -509,9 +509,6 @@ export const createEvents = async (
     imageURL,
   } = req.body;
 
-  console.log('body', req.body);
-  console.log('url', imageURL);
-
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
       timeZone: 'America/Vancouver',
@@ -524,7 +521,7 @@ export const createEvents = async (
         `
         INSERT INTO
         events (id_owner, name_event, description_event, date_event_start, date_event_end, location_event, capacity_event, price_event, category_event, image_url_event)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, $10)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
         RETURNING *;
       `,
         [
