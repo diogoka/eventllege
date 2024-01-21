@@ -8,7 +8,7 @@ import Dropdown from './dropdown';
 
 export default function AvatarIcon() {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, firebaseAccount } = useContext(UserContext);
   const toggleMenu = (isMenuOpen: boolean) => {
     setMenuOpen(isMenuOpen);
   };
@@ -29,9 +29,11 @@ export default function AvatarIcon() {
           <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
             <Avatar
               alt={user?.name}
-              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
-                user?.id
-              }?${new Date().getTime()}`}
+              src={`${
+                user?.provider === 'password'
+                  ? user.avatar_url
+                  : firebaseAccount?.photoURL
+              }`}
             ></Avatar>
           </IconButton>
           <Drawer
@@ -55,9 +57,11 @@ export default function AvatarIcon() {
           >
             <Avatar
               alt={user?.name}
-              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
-                user?.id
-              }?${new Date().getTime()}`}
+              src={`${
+                user?.provider === 'password'
+                  ? user.avatar_url
+                  : firebaseAccount?.photoURL
+              }`}
             ></Avatar>
           </IconButton>
           <Dropdown anchorEl={anchorEl} open={open} handleClose={handleClose} />

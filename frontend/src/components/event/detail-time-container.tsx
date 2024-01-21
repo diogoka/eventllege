@@ -5,7 +5,7 @@ import {
   getMonthName,
   getTimeString,
 } from '../../common/functions';
-import { Event, OtherInfo, EventDate } from '../../app/events/[id]/page';
+import { Event, OtherInfo, EventDate } from '@/types/types';
 import IconsContainer from '../icons/iconsContainer';
 
 type Props = {
@@ -30,11 +30,6 @@ const DetailTimeContainer = ({ event, otherInfo, forMobile }: Props) => {
   const setDate = (start: string, end: string) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
-
-    console.log(
-      'If remove this console.log, detail page might not show image any more:',
-      otherInfo?.id_event
-    );
 
     return {
       date_event_start: `

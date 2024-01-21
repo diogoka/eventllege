@@ -5,16 +5,10 @@ import EventsControl from '@/components/events/newEvents/eventsControl';
 
 export default function NewEventPage() {
   const { createdEvent, dispatch, setImage } = useContext(EventContext);
+
   useEffect(() => {
-    if (createdEvent) {
-      dispatch({
-        type: 'GET_WHOLE_DATA',
-        payload: createdEvent,
-      });
-    } else {
-      dispatch({ type: 'RESET', payload: initialState });
-      setImage(null);
-    }
+    dispatch({ type: 'RESET', payload: initialState });
+    setImage(null);
   }, []);
   return (
     <>

@@ -23,7 +23,7 @@ type SelectedEvent = {
   description_event: string;
   date_event_start: string;
   date_event_end: string;
-  image_event: string;
+  image_url_event: string;
   location_event: string;
   capacity_event: number;
   price_event: number;
@@ -47,7 +47,6 @@ export default function EditEventPage({ params }: Params) {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${params.id}`)
       .then((res) => {
-        console.log('coming from server', res.data.event);
         if (res.data.event.id_event) {
           setEditEvent(res.data.event);
           setEventId(res.data.event.id_event);
@@ -59,23 +58,6 @@ export default function EditEventPage({ params }: Params) {
         console.error(error);
         notFound();
       });
-
-    const setEventImage = async () => {
-      try {
-        const imagePath = `${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${params.id}`;
-        const response = await fetch(imagePath);
-        if (response.status === 200) {
-          const blob = await response.blob();
-
-          const file = new File([blob], 'hoge', { type: blob.type });
-          setImage(file);
-        }
-      } catch (error: any) {
-        console.error(error);
-      }
-    };
-
-    setEventImage();
   }, [params.id]);
 
   useEffect(() => {
@@ -114,6 +96,7 @@ export default function EditEventPage({ params }: Params) {
         selectedTags: dividedSelectedTags,
         modality: dividedModality!,
         category_event: editEvent?.category_event,
+        image_event: editEvent.image_url_event,
       };
 
       dispatch({

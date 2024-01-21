@@ -9,6 +9,8 @@ import { UserContext } from '@/context/userContext';
 import { FaCirclePlus } from 'react-icons/fa6';
 import NameInput from '@/components/user/form/name-input';
 import CourseInput from '@/components/user/form/course-input';
+import { storage } from '@/auth/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function UserEditPage() {
   const router = useRouter();
@@ -17,7 +19,7 @@ export default function UserEditPage() {
 
   const theme = useTheme();
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, firebaseAccount } = useContext(UserContext);
 
   // User Input
   const [courseId, setCourseId] = useState('');
@@ -29,6 +31,8 @@ export default function UserEditPage() {
   const [tempImageSrc, setTempImageSrc] = useState(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${user?.id}`
   );
+
+  let url = firebaseAccount?.photoURL;
 
   useEffect(() => {
     if (user) {
@@ -46,8 +50,34 @@ export default function UserEditPage() {
     }
   }, [image]);
 
+  const uploadAvatar = async (image: Blob) => {
+    try {
+      let url = '';
+
+      let reference: any = '';
+
+      const imageRef = ref(storage, `users/${user?.id}`);
+      const imageToUpload = image!;
+
+      await uploadBytes(imageRef, imageToUpload).then((response) => {
+        return getDownloadURL(response.ref).then((res) => {
+          return (url = res);
+        });
+      });
+      return url;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    let url: any;
+
+    if (image) {
+      url = await uploadAvatar(image!);
+    }
 
     if (!user) {
       return;
@@ -72,9 +102,10 @@ export default function UserEditPage() {
     formData.append('courseId', courseId.toString());
     formData.append('email', email);
     formData.append('name', name);
+
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
-    if (image) formData.append('avatar', image);
+    if (image) formData.append('avatarURL', url);
 
     axios
       .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`, formData, {
@@ -98,51 +129,64 @@ export default function UserEditPage() {
     >
       <form onSubmit={handleSubmit}>
         <Stack alignItems='center' rowGap='1rem'>
-          <Box>
-            <InputLabel
-              htmlFor='avatar'
-              style={{
-                position: 'relative',
+          {user?.provider === 'google.com' ? (
+            <Avatar
+              src={`${url}`}
+              alt={user?.name}
+              sx={{
+                width: isMobile ? '7.5rem' : '10rem',
+                height: isMobile ? '7.5rem' : '10rem',
+                fontSize: isMobile ? '3rem' : '4rem',
               }}
-            >
-              <Avatar
-                src={tempImageSrc}
-                alt={user?.name}
-                sx={{
-                  width: isMobile ? '7.5rem' : '10rem',
-                  height: isMobile ? '7.5rem' : '10rem',
-                  fontSize: isMobile ? '3rem' : '4rem',
-                }}
-              />
-
-              <Box
-                bgcolor='white'
-                width='2rem'
-                height='2rem'
-                sx={{
-                  position: 'absolute',
-                  inset: '80% 0 0 80%',
-                  transform: 'translate(-50%, -50%)',
-                  borderRadius: '50%',
+            />
+          ) : (
+            <Box>
+              <InputLabel
+                htmlFor='avatar'
+                style={{
+                  position: 'relative',
                 }}
               >
-                <FaCirclePlus
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    color: theme.palette.primary.main,
+                <Avatar
+                  src={image ? tempImageSrc : user?.avatar_url}
+                  alt={user?.name}
+                  sx={{
+                    width: isMobile ? '7.5rem' : '10rem',
+                    height: isMobile ? '7.5rem' : '10rem',
+                    fontSize: isMobile ? '3rem' : '4rem',
                   }}
                 />
-              </Box>
-            </InputLabel>
-            <input
-              id='avatar'
-              type='file'
-              accept='image/*'
-              onChange={onFileInputChange}
-              style={{ display: 'none' }}
-            />
-          </Box>
+
+                <Box
+                  bgcolor='white'
+                  width='2rem'
+                  height='2rem'
+                  sx={{
+                    position: 'absolute',
+                    inset: '80% 0 0 80%',
+                    transform: 'translate(-50%, -50%)',
+                    borderRadius: '50%',
+                  }}
+                >
+                  <FaCirclePlus
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      color: theme.palette.primary.main,
+                    }}
+                  />
+                </Box>
+              </InputLabel>
+
+              <input
+                id='avatar'
+                type='file'
+                accept='image/*'
+                onChange={onFileInputChange}
+                style={{ display: 'none' }}
+              />
+            </Box>
+          )}
 
           <NameInput name={name} setName={setName} />
 

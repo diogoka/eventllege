@@ -50,7 +50,7 @@ export default function Location({ location, setLocation }: Props) {
                   *
                 </Box>
               </InputLabel>
-              <TextField {...params} placeholder='please enter location' />
+              <TextField {...params} placeholder='Please enter location' />
             </Stack>
           );
         }}

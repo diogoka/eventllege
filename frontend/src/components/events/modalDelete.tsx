@@ -86,13 +86,14 @@ export default function ModalDelete({
           handleAlertFn(false, '', '', 'success');
         }, 2000);
         setOpen(false);
-        deleteEvent(eventId);
+        setTimeout(() => {
+          deleteEvent(eventId);
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    closingModal();
+    await closingModal();
   };
 
   const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {

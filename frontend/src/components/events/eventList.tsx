@@ -1,6 +1,7 @@
 'use client';
 import { Stack } from '@mui/material';
-import { Event, Tag } from '@/app/events/page';
+import { Event } from '@/app/events/page';
+import { Tag } from '@/types/types';
 import EventItem from '@/components/events/eventItem';
 import Pagination from '@mui/material/Pagination';
 import { useState } from 'react';

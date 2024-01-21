@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, Box, Typography, AlertColor } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Attendee } from '@/app/events/[id]/page';
+import { Attendee } from '@/types/types';
 import { useRouter } from 'next/navigation';
 
 type Props = {
@@ -34,7 +34,9 @@ function ModalCancelParticipation({
   handleAlertFn,
 }: Props) {
   const [open, setOpen] = useState(isOpen);
+
   const router = useRouter();
+
   const iconContainer = {
     display: 'flex',
     justifyContent: 'space-evenly',

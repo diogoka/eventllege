@@ -8,6 +8,7 @@ type Props = {
   onFileInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isMobile: boolean;
   tempImage: string;
+  imageURL: string;
 };
 
 export default function ImageContainer({
@@ -15,12 +16,13 @@ export default function ImageContainer({
   onFileInputChange,
   isMobile,
   tempImage,
+  imageURL,
 }: Props) {
-  return (
-    <>
-      {tempImage && (
+  const renderImage = (imgTemporary: string, imgURL: string) => {
+    if (imgTemporary || imgURL) {
+      return (
         <Image
-          src={tempImage}
+          src={imgTemporary ? imgTemporary : imgURL}
           alt=''
           width={320}
           height={220}
@@ -28,7 +30,15 @@ export default function ImageContainer({
             objectFit: 'cover',
           }}
         />
-      )}
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  return (
+    <>
+      {renderImage(tempImage, imageURL)}
       <Button
         component='label'
         variant='outlined'
@@ -39,7 +49,7 @@ export default function ImageContainer({
           width: isMobile ? '100%' : '40%',
         }}
       >
-        {tempImage ? 'Edit Image' : 'Add Image'}
+        {tempImage || imageURL ? 'Edit Image' : 'Add Image'}
         <Input
           type='file'
           onChange={onFileInputChange}

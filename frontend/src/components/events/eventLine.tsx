@@ -1,8 +1,8 @@
 import { Box, Typography, Rating } from '@mui/material';
 import ImageHelper from '../common/image-helper';
 import { AiFillClockCircle } from 'react-icons/ai';
-import StarIcon from '@mui/icons-material/Star';
-import { Event, Tag } from '@/app/events/page';
+import { Event } from '@/app/events/page';
+import { Tag } from '@/types/types';
 import { StarRounded } from '@mui/icons-material';
 
 type Props = {
@@ -171,7 +171,7 @@ function EventLine({
           : event.description_event}
       </Typography>
       <ImageHelper
-        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${event.id_event}`}
+        src={`${event.image_url_event}`}
         width='6.25rem'
         height='4.0625rem'
         style={imageContainerStyle}

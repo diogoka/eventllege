@@ -1,5 +1,6 @@
 'use client';
-import { Event, Tag } from '@/app/events/page';
+import { Event } from '@/app/events/page';
+import { Tag } from '@/types/types';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { AlertTitle, Alert, useMediaQuery, AlertColor } from '@mui/material';
@@ -212,7 +213,13 @@ function EventItem({
             laptopQuery={laptopQuery}
             modality={modality}
           />
-          {isAlertVisible && alertCopyURLFn()}
+          {isAlertVisible &&
+            alertFn(
+              alertMessage.title,
+              alertMessage.message,
+              alertMessage.severity,
+              handleAlertClose
+            )}
           <ModalDelete
             eventId={eventId}
             eventName={event.name_event}

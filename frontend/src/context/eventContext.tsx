@@ -36,6 +36,7 @@ export type EventData = {
   selectedTags: Array<Tag>;
   modality: Tag;
   category_event: string;
+  image_event: string;
 };
 
 type EventContextProps = {
@@ -64,6 +65,7 @@ export const initialState: EventData = {
   selectedTags: [],
   modality: { id_tag: 16, name_tag: 'Online' } as Tag,
   category_event: '',
+  image_event: '',
 };
 
 export const eventReducer = (state: EventData, action: EventAction) => {

@@ -31,7 +31,9 @@ exports.up = async (pgm) => {
     email_user: { type: 'varchar(500)', notNull: true },
     postal_code_user: { type: 'varchar(500)', notNull: false },
     phone_user: { type: 'varchar(500)', notNull: false },
-    avatar_user: { type: 'bytea', notNull: false }
+    avatar_user: { type: 'bytea', notNull: false },
+    provider: { type: 'varchar(500)', notNull: false },
+    avatar_url: { type: 'varchar(500)', notNull: false },
   });
 
   pgm.createTable(courses, {
@@ -71,7 +73,7 @@ exports.up = async (pgm) => {
     location_event: { type: 'varchar(500)', notNull: true },
     capacity_event: { type: 'integer', notNull: true },
     price_event: { type: 'integer', notNull: true },
-    image_event: { type: 'bytea', notNull: false },
+    image_url_event: { type: 'string', notNull: false },
     category_event: { type: 'varchar(500)', notNull: true }
   });
 

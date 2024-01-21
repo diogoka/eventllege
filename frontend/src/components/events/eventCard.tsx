@@ -8,7 +8,8 @@ import {
   Rating,
 } from '@mui/material';
 import ImageHelper from '../common/image-helper';
-import { Event, Tag } from '@/app/events/page';
+import { Event } from '@/app/events/page';
+import { Tag } from '@/types/types';
 import {
   StarRounded,
   EventRounded,
@@ -46,8 +47,6 @@ function EventCard({
   modality,
 }: Props) {
   const eventId = event.id_event;
-
-  console.log(event.description_event);
 
   const renderModalities = () => {
     const modalitiesColor = () => {
@@ -119,7 +118,7 @@ function EventCard({
       </Box>
       <CardMedia>
         <ImageHelper
-          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${eventId}`}
+          src={`${event.image_url_event}`}
           width='23.75rem'
           height='13.75rem'
           alt={event.name_event}

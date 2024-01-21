@@ -17,7 +17,7 @@ export default function HeaderMB() {
       direction='row'
       alignItems='center'
       justifyContent='space-between'
-      sx={{ width: '90%', height: '50px', m: '0 auto' }}
+      sx={{ width: '90%', height: '59px', m: '0 auto' }}
     >
       <Logo />
       {user ? (

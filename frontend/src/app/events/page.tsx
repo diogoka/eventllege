@@ -11,7 +11,7 @@ import axios from 'axios';
 import EventList from '@/components/events/eventList';
 import SearchBar from '@/components/searchBar';
 import { UserContext } from '@/context/userContext';
-import { PageContext } from '@/context/pageContext';
+import { Tag } from '@/types/types';
 
 export type Event = {
   capacity_event: number;
@@ -25,11 +25,7 @@ export type Event = {
   location_event: string;
   name_event: string;
   price_event: number;
-};
-
-export type Tag = {
-  id_event: number;
-  name_tag: string;
+  image_url_event?: string;
 };
 
 type CurrentUser = {
@@ -71,7 +67,6 @@ export default function EventsPage() {
     const {
       data: { events, tags },
     } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events`);
-    console.log(events);
     setEvents(events);
     setTags(tags);
     events.length == 0 ? setNoEvents(true) : setNoEvents(false);

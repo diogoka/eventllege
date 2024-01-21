@@ -147,6 +147,7 @@ export default function EventsControl({ eventId }: { eventId: number }) {
         onFileInputChange={onFileInputChange}
         isMobile={isMobile}
         tempImage={tempImage}
+        imageURL={createdEvent.image_event}
       />
       <Box sx={{ width: '100%' }}>
         <Grid

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Attendee } from '@/app/events/[id]/page';
+import { Attendee } from '@/types/types';
 import {
   useTheme,
   useMediaQuery,

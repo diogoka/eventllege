@@ -2,66 +2,77 @@ import pool from '../db/db';
 import express from 'express';
 
 type UserInput = {
-    id: string;
-    type: number;
-    courseId: number;
-    name: string;
-    email: string;
-    postalCode: string;
-    phone: string;
-}
+  id: string;
+  type: number;
+  courseId: number;
+  name: string;
+  email: string;
+  postalCode: string;
+  phone: string;
+  provider: string;
+  avatarURL: string;
+};
 
 export const getUsers = async (req: express.Request, res: express.Response) => {
-    try {
-        const users = await pool.query('SELECT * FROM users');
-        res.status(200).json(users.rows);
-    } catch (err: any) {
-        res.status(500).send(err.message);
-    }
-}
+  try {
+    const users = await pool.query('SELECT * FROM users');
+    res.status(200).json(users.rows);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
 
 export const getUser = async (req: express.Request, res: express.Response) => {
+  const userId = req.params.id;
 
-    const userId = req.params.id;
-
-    try {
-        const user = await getUserResponse(userId);
-        if(user) {
-            res.status(200).json(user);
-        } else {
-            res.status(500).send('Failed to get user');
-        }
-    } catch (err: any) {
-        res.status(500).send(err.message);
+  try {
+    const user = await getUserResponse(userId);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(500).send('Failed to get user');
     }
-}
-
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
 
 export const editUser = async (req: express.Request, res: express.Response) => {
+  const userInput: UserInput = req.body;
 
-    const userInput: UserInput = req.body;
+  const { result, message } = validateUserInput(userInput);
+  if (!result) {
+    res.status(500).send(message);
+    return;
+  }
 
-    const { result, message } = validateUserInput(userInput);
-    if (!result) {
-        res.status(500).send(message);
-        return;
-    }
-
-    try {
-        // Add a new user to DB
-        await pool.query(`
+  try {
+    // Add a new user to DB
+    await pool.query(
+      `
             UPDATE
                 users
             SET
-                id_user_type = $1, name_user = $2, email_user = $3, postal_code_user = $4, phone_user = $5
+                id_user_type = $1, name_user = $2, email_user = $3, postal_code_user = $4, phone_user = $5, avatar_url = $6
             WHERE
-                id_user = $6
+                id_user = $7
             RETURNING
                 *;
-            `, [userInput.type, userInput.name, userInput.email, userInput.postalCode, userInput.phone, userInput.id]);
+            `,
+      [
+        userInput.type,
+        userInput.name,
+        userInput.email,
+        userInput.postalCode,
+        userInput.phone,
+        userInput.avatarURL,
+        userInput.id,
+      ]
+    );
 
-        // Add user's course to DB
-        await pool.query(`
+    // Add user's course to DB
+    await pool.query(
+      `
             UPDATE
                 users_courses
             SET
@@ -70,87 +81,110 @@ export const editUser = async (req: express.Request, res: express.Response) => {
                 id_user = $2
             RETURNING
                 *;
-        `, [userInput.courseId, userInput.id]);
+        `,
+      [userInput.courseId, userInput.id]
+    );
 
-        const user = await getUserResponse(userInput.id);
-        if(user) {
-            res.status(200).json(user);
-        } else {
-            res.status(500).send('Failed to edit user');
-        }
-
-    } catch (err: any) {
-        res.status(500).send(err.message);
+    const user = await getUserResponse(userInput.id);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(500).send('Failed to edit user');
     }
-}
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
 
-export const createUser = async (req: express.Request, res: express.Response) => {
+export const createUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const userInput: UserInput = req.body;
+  const { result, message } = validateUserInput(userInput);
+  if (!result) {
+    res.status(500).send(message);
+    return;
+  }
 
-    const userInput: UserInput = req.body;
-    const { result, message } = validateUserInput(userInput);
-    if (!result) {
-        res.status(500).send(message);
-        return;
-    }
-
-    try {
-        // Add a new user to DB
-        await pool.query(`
+  try {
+    // Add a new user to DB
+    await pool.query(
+      `
             INSERT INTO
-                users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user)
+                users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user, provider)
             VALUES
-                ($1, $2, $3, $4, $5, $6)
+                ($1, $2, $3, $4, $5, $6, $7)
             RETURNING
                 *;
-            `, [userInput.id, userInput.type, userInput.name, userInput.email, userInput.postalCode, userInput.phone]);
+            `,
+      [
+        userInput.id,
+        userInput.type,
+        userInput.name,
+        userInput.email,
+        userInput.postalCode,
+        userInput.phone,
+        userInput.provider,
+      ]
+    );
 
-        // Add user's course to DB
-        await pool.query(`
+    // Add user's course to DB
+    await pool.query(
+      `
             INSERT INTO
                 users_courses (id_user, id_course)
             VALUES
                 ($1, $2)
             RETURNING
                 *;
-        `, [userInput.id, userInput.courseId]);
+        `,
+      [userInput.id, userInput.courseId]
+    );
 
-        const user = await getUserResponse(userInput.id);
-        res.status(200).json(user);
+    const user = await getUserResponse(userInput.id);
+    res.status(200).json(user);
+  } catch (err: any) {
+    res.status(500).send(err.message);
+  }
+};
 
-    } catch (err: any) {
-        res.status(500).send(err.message);
-    }
-}
+function validateUserInput(userInput: UserInput): {
+  result: boolean;
+  message: string;
+} {
+  let result = false;
+  let message = '';
 
-function validateUserInput(userInput: UserInput): { result: boolean; message: string; } {
+  if (!userInput.id) {
+    message = 'Invalid user ID';
+  } else if (isNaN(userInput.type)) {
+    message = 'Invalid User Type';
+  } else if (isNaN(userInput.courseId)) {
+    message = 'Invalid Course ID';
+  } else if (!/^[^@]+@[^.]+\..+$/.test(userInput.email)) {
+    message = 'Invalid Email';
+  } else if (
+    userInput.postalCode &&
+    !/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(userInput.postalCode)
+  ) {
+    message = 'Invalid Postal Code';
+  } else if (userInput.phone && !/^[0-9-]+$/.test(userInput.phone)) {
+    message = 'Invalid Phone Number';
+  } else {
+    result = true;
+  }
 
-    let result = false;
-    let message = '';
-
-    if (!userInput.id) {
-        message = 'Invalid user ID'
-    } else if (isNaN(userInput.type)) {
-        message = 'Invalid User Type';
-    } else if (isNaN(userInput.courseId)) {
-        message = 'Invalid Course ID';
-    } else if (!/^[^@]+@[^.]+\..+$/.test(userInput.email)) {
-        message = 'Invalid Email';
-    } else if (userInput.postalCode && !/^[A-Za-z0-9]{3}[-\s]?[A-Za-z0-9]{3}$/.test(userInput.postalCode)) {
-        message = 'Invalid Postal Code';
-    } else if (userInput.phone && !/^[0-9-]+$/.test(userInput.phone)) {
-        message = 'Invalid Phone Number';
-    } else {
-        result = true;
-    }
-
-    return {
-        result, message
-    };
+  return {
+    result,
+    message,
+  };
 }
 
 async function getUserResponse(userId: string) {
-    try {
-        const userResult = await pool.query(`
+  try {
+    const userResult = await pool.query(
+      `
         SELECT
             users.id_user AS id,
             users.id_user_type AS role_id,
@@ -158,31 +192,35 @@ async function getUserResponse(userId: string) {
             users.name_user AS name,
             users.email_user AS email,
             users.postal_code_user AS postal_code,
-            users.phone_user AS phone
+            users.phone_user AS phone,
+            users.provider AS provider,
+            users.avatar_url AS avatar_url
         FROM
             users
         JOIN
             users_type ON users.id_user_type = users_type.id_user_type
         WHERE
             users.id_user = $1
-        `, [userId]);
+        `,
+      [userId]
+    );
 
-        
-        const user = userResult.rows[0];
-        if(!user) {
-            return null;
-        }
-        
-        user.roleId = user.role_id;
-        delete user.role_id;
+    const user = userResult.rows[0];
+    if (!user) {
+      return null;
+    }
 
-        user.roleName = user.role_name;
-        delete user.role_name;
+    user.roleId = user.role_id;
+    delete user.role_id;
 
-        user.postalCode = user.postal_code;
-        delete user.postal_code;
+    user.roleName = user.role_name;
+    delete user.role_name;
 
-        const courseResult = await pool.query(`
+    user.postalCode = user.postal_code;
+    delete user.postal_code;
+
+    const courseResult = await pool.query(
+      `
         SELECT
             courses.id_course AS course_id,
             courses.name_course AS course_name
@@ -192,15 +230,16 @@ async function getUserResponse(userId: string) {
             courses ON users_courses.id_course = courses.id_course
         WHERE
             users_courses.id_user = $1
-        `, [userId]);
+        `,
+      [userId]
+    );
 
-        user.courseId = courseResult.rows[0].course_id;
-        user.courseName = courseResult.rows[0].course_name;
+    user.courseId = courseResult.rows[0].course_id;
+    user.courseName = courseResult.rows[0].course_name;
 
-        return user;
-
-    } catch (err: any) {
-        console.error(err);
-        return null;
-    }
+    return user;
+  } catch (err: any) {
+    console.error(err);
+    return null;
+  }
 }

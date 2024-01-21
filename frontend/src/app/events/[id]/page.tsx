@@ -1,9 +1,18 @@
 'use client';
-import { useState, useEffect, useContext, createContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import DetailInfo from '@/components/event/detail-info';
-import { Box, Stack, Typography, Link, Grid } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Typography,
+  Link,
+  useMediaQuery,
+  AlertColor,
+  AlertTitle,
+  Alert,
+} from '@mui/material';
 import DetailContainer from '@/components/event/detail-container';
 import DetailIconContainer from '@/components/event/detail-icon-container';
 import DetailTimeContainer from '@/components/event/detail-time-container';
@@ -15,39 +24,14 @@ import ImageHelper from '@/components/common/image-helper';
 import IconsContainer from '@/components/icons/iconsContainer';
 import dayjs from 'dayjs';
 import MapWithMarker from '@/components/map/mapWithMarker';
-import { borderRadius } from '@mui/system';
-
-export type Attendee = {
-  id: string | undefined;
-  name: string | undefined;
-};
-
-export type EventDate = {
-  date_event_start: dayjs.Dayjs;
-  date_event_end: dayjs.Dayjs;
-};
-
-export type Tag = {
-  id_tag: number;
-  name_tag: string;
-};
-
-export type Event = {
-  name_event: string;
-  description_event: string;
-  dates_event: Array<EventDate>;
-  location_event: string;
-  capacity_event: number;
-  price_event: number;
-  category_event: string;
-  tags: Array<Tag>;
-};
-
-export type OtherInfo = {
-  image_event: string;
-  id_event: number;
-  id_owner: string;
-};
+import {
+  Attendee,
+  EventDate,
+  Tag,
+  Event,
+  OtherInfo,
+  AlertState,
+} from '@/types/types';
 
 export default function EventPage() {
   const { notFound } = useContext(PageContext);
@@ -59,18 +43,75 @@ export default function EventPage() {
   const [attendees, setAttendees] = useState<Array<Attendee>>();
   const [organizerEvent, setOrganizerEvent] = useState<boolean>(false);
   const [oldEvent, setOldEvent] = useState<boolean>(false);
-  const [forMobile, setForMobile] = useState<boolean>();
   const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
-
   const [forPreview, setForPreview] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertState>({
+    title: '',
+    message: '',
+    severity: 'success',
+  });
 
   const params = useParams();
 
   const EVENT_ID = params.id;
+  const laptopQuery = useMediaQuery('(max-width:769px)');
+
+  const handleAlert = (
+    isOpen: boolean,
+    titleParam: string,
+    messageParam: string,
+    severityParam: AlertColor
+  ) => {
+    setAlertMessage({
+      title: titleParam,
+      message: messageParam,
+      severity: severityParam,
+    });
+    setIsAlertVisible(isOpen);
+  };
+
+  const handleAlertClose = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    setIsAlertVisible(false);
+  };
+
+  const alertFn = (title: string, message: string, severity: AlertColor) => {
+    return laptopQuery ? (
+      <Alert
+        severity={severity}
+        onClose={handleAlertClose}
+        variant='filled'
+        sx={{
+          position: 'absolute',
+          width: '90%',
+          top: '5rem',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 99999999,
+        }}
+      >
+        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
+        {message}
+      </Alert>
+    ) : (
+      <Alert
+        severity={severity}
+        onClose={handleAlertClose}
+        variant='filled'
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 99999999,
+        }}
+      >
+        <AlertTitle sx={{ color: 'white' }}>{title}</AlertTitle>
+        {message}
+      </Alert>
+    );
+  };
 
   useEffect(() => {
-    window.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/events/${EVENT_ID}`)
       .then((res) => {
@@ -114,30 +155,30 @@ export default function EventPage() {
       })
       .catch((error) => {
         console.error(error.response);
-
-        // notFound();
       });
   }, [applied]);
-
-  window.onresize = (e) => {
-    const w = e.target as Window;
-    w.innerWidth <= 768 ? setForMobile(true) : setForMobile(false);
-  };
 
   const eventCapacity = event?.capacity_event;
 
   if (!otherInfo?.id_event) {
     return <></>;
-  } else if (forMobile) {
+  } else if (laptopQuery) {
     ///////////////////// Mobile /////////////////////
     return (
       <Stack>
+        {isAlertVisible &&
+          alertFn(
+            alertMessage.title,
+            alertMessage.message,
+            alertMessage.severity
+          )}
+
         <DetailContainer
           event={event!}
           otherInfo={otherInfo!}
           applied={applied}
           organizerEvent={organizerEvent}
-          forMobile={forMobile}
+          forMobile={laptopQuery}
           forPreview={forPreview}
           isAlertVisible={isAlertVisible}
           setIsAlertVisible={setIsAlertVisible}
@@ -149,25 +190,24 @@ export default function EventPage() {
             attendees={attendees!}
             tags={event.tags}
             category={event.category_event}
-            forMobile={forMobile!}
+            forMobile={laptopQuery}
             forPreview={forPreview}
           />
         )}
-        {oldEvent && (
+        {oldEvent ? (
           <Review id_event={otherInfo!.id_event} applied={applied} />
-        )}
-
-        {!oldEvent && (
+        ) : (
           <DetailButtonContainer
             event={event!}
             otherInfo={otherInfo!}
             applied={applied}
             organizerEvent={organizerEvent}
-            forMobile={forMobile}
+            forMobile={laptopQuery}
             forPreview={forPreview}
             maxSpots={eventCapacity}
             setAttendees={setAttendees}
             setApplied={setApplied}
+            handleAlertFn={handleAlert}
           />
         )}
       </Stack>
@@ -177,6 +217,12 @@ export default function EventPage() {
 
     return (
       <>
+        {isAlertVisible &&
+          alertFn(
+            alertMessage.title,
+            alertMessage.message,
+            alertMessage.severity
+          )}
         <Stack>
           <Box
             width='100%'
@@ -191,7 +237,7 @@ export default function EventPage() {
                 otherInfo={otherInfo!}
                 applied={applied}
                 organizerEvent={organizerEvent}
-                forMobile={forMobile!}
+                forMobile={laptopQuery}
                 forPreview={forPreview}
                 isAlertVisible={isAlertVisible}
                 setIsAlertVisible={setIsAlertVisible}
@@ -203,7 +249,7 @@ export default function EventPage() {
                   attendees={attendees!}
                   tags={event.tags}
                   category={event.category_event}
-                  forMobile={forMobile!}
+                  forMobile={laptopQuery}
                   forPreview={forPreview}
                 />
               )}
@@ -216,13 +262,14 @@ export default function EventPage() {
                 otherInfo={otherInfo!}
                 applied={applied}
                 organizerEvent={organizerEvent}
-                forMobile={forMobile!}
+                forMobile={laptopQuery}
                 forPreview={forPreview}
                 setIsAlertVisible={setIsAlertVisible}
+                handleAlertFn={handleAlert}
               />
               <Box overflow='hidden'>
                 <ImageHelper
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/events/${otherInfo?.id_event}`}
+                  src={`${event?.image_url_event}`}
                   width='100%'
                   height='20vw'
                   style={{
@@ -293,7 +340,7 @@ export default function EventPage() {
                   otherInfo={otherInfo!}
                   applied={applied}
                   organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
+                  forMobile={laptopQuery}
                 />
                 <Box marginLeft='10px' fontWeight='bold'>
                   {event?.name_event}
@@ -306,11 +353,12 @@ export default function EventPage() {
                   otherInfo={otherInfo!}
                   applied={applied}
                   organizerEvent={organizerEvent}
-                  forMobile={forMobile!}
+                  forMobile={laptopQuery}
                   forPreview={forPreview}
                   maxSpots={eventCapacity}
                   setApplied={setApplied}
                   setAttendees={setAttendees}
+                  handleAlertFn={handleAlert}
                 />
               </Box>
             </Box>
