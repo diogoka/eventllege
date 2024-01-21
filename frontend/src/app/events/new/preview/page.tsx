@@ -114,6 +114,8 @@ export default function PreviewEventPage() {
       imageURL: url,
     };
 
+    console.log('url', url);
+
     const formData = new FormData();
 
     formData.append('owner', user!.id);

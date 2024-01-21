@@ -509,6 +509,9 @@ export const createEvents = async (
     imageURL,
   } = req.body;
 
+  console.log('body', req.body);
+  console.log('url', imageURL);
+
   const formatToPST = (date: string) => {
     return new Date(date).toLocaleString('en-US', {
       timeZone: 'America/Vancouver',
