@@ -517,7 +517,6 @@ export const createEvents = async (
 
   try {
     dates.forEach(async (date: Date) => {
-      console.log('imageURL', imageURL);
       const events = await pool.query(
         `
         INSERT INTO
