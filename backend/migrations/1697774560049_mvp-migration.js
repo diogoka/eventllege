@@ -73,7 +73,7 @@ exports.up = async (pgm) => {
     location_event: { type: 'varchar(500)', notNull: true },
     capacity_event: { type: 'integer', notNull: true },
     price_event: { type: 'integer', notNull: true },
-    image_url_event: { type: 'varchar(500)', notNull: true },
+    image_url_event: { type: 'varchar(500)', notNull: false },
     category_event: { type: 'varchar(500)', notNull: true }
   });
 
