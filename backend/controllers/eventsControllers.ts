@@ -509,12 +509,6 @@ export const createEvents = async (
     imageURL,
   } = req.body;
 
-  const formatToPST = (date: string) => {
-    return new Date(date).toLocaleString('en-US', {
-      timeZone: 'America/Vancouver',
-    });
-  };
-
   try {
     dates.forEach(async (date: Date) => {
       const events = await pool.query(
@@ -543,8 +537,8 @@ export const createEvents = async (
           `INSERT INTO events_tags (id_event, id_tag) VALUES ('${events.rows[0].id_event}','${id}') RETURNING *;`
         );
       });
-      res.status(201).json(events.rows[0].id_event);
     });
+    res.status(201).json();
   } catch (err: any) {
     res.status(500).send(err.message);
   }
