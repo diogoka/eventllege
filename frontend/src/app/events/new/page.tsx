@@ -7,8 +7,15 @@ export default function NewEventPage() {
   const { createdEvent, dispatch, setImage } = useContext(EventContext);
 
   useEffect(() => {
-    dispatch({ type: 'RESET', payload: initialState });
-    setImage(null);
+    if (createdEvent) {
+      dispatch({
+        type: 'GET_WHOLE_DATA',
+        payload: createdEvent,
+      });
+    } else {
+      dispatch({ type: 'RESET', payload: initialState });
+      setImage(null);
+    }
   }, []);
   return (
     <>
