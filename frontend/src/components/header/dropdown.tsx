@@ -77,10 +77,10 @@ export default function Dropdown({ anchorEl, open, handleClose }: Props) {
         }}
       >
         <Avatar
-          alt={user?.name}
+          alt={user?.firstName}
           src={`${
             user?.provider === 'password'
-              ? user.avatar_url
+              ? user.avatarURL
               : firebaseAccount?.photoURL
           }`}
         />{' '}

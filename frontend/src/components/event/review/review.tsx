@@ -116,7 +116,7 @@ function Review({ id_event, applied }: Props) {
         <ModalRating
           user_id={user!.id}
           event_id={id_event}
-          user_name={user!.name}
+          user_name={user!.firstName}
           openModal={openModal}
           handleClose={handleClose}
           updateReviews={updateReviews}

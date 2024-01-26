@@ -804,7 +804,7 @@ export const sendTicket = async (eventId: any, userId: any) => {
         Your Ticket for ${event.name_event}
       `,
       text: `
-        Hi, ${user.name_user}. Thank you for joining our event.
+        Hi, ${user.first_name_user}. Thank you for joining our event.
         This is your ticket.
         Event Name: ${event.name_event}
         Date: ${event.date_event_start.toDateString()}

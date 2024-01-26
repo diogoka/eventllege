@@ -52,6 +52,8 @@ function EventIcons({
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
       openDeleteModal();
+    } else if (iconName === 'FaDownload') {
+      console.log('download');
     }
   };
 
@@ -114,6 +116,13 @@ function EventIcons({
           ) : (
             <IconsContainer
               icons={[
+                {
+                  name: 'FaDownload',
+                  isClickable: true,
+                  color: '#228b22',
+                  title: laptopQuery ? 'Download Attendees' : '',
+                  hoverColor: '#C2F1C1',
+                },
                 {
                   name: 'FaEdit',
                   isClickable: true,

@@ -40,3 +40,8 @@ export interface AlertState {
   message: string;
   severity: AlertColor;
 }
+
+export interface User {
+  firstName: string;
+  lastName: string;
+}

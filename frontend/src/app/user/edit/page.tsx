@@ -11,6 +11,8 @@ import NameInput from '@/components/user/form/name-input';
 import CourseInput from '@/components/user/form/course-input';
 import { storage } from '@/auth/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { User } from '@/types/types';
+import { updateFirstName, updateLastName } from '@/common/functions';
 
 export default function UserEditPage() {
   const router = useRouter();
@@ -24,7 +26,6 @@ export default function UserEditPage() {
   // User Input
   const [courseId, setCourseId] = useState('');
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
   const { image, warning, onFileInputChange } = useUploadImage(10, 1, 480);
@@ -32,11 +33,17 @@ export default function UserEditPage() {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${user?.id}`
   );
 
+  const [userName, setUserName] = useState<User>({
+    firstName: '',
+    lastName: '',
+  });
+
   let url = firebaseAccount?.photoURL;
 
   useEffect(() => {
     if (user) {
-      setName(user.name);
+      updateFirstName(user.firstName, setUserName);
+      updateLastName(user.lastName, setUserName);
       setEmail(user.email);
       setCourseId(user.courseId.toString());
       setPostalCode(user.postalCode);
@@ -101,7 +108,8 @@ export default function UserEditPage() {
     formData.append('type', user.roleId.toString());
     formData.append('courseId', courseId.toString());
     formData.append('email', email);
-    formData.append('name', name);
+    formData.append('firstName', userName.firstName);
+    formData.append('lastName', userName.lastName);
 
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
@@ -132,7 +140,7 @@ export default function UserEditPage() {
           {user?.provider === 'google.com' ? (
             <Avatar
               src={`${url}`}
-              alt={user?.name}
+              alt={user?.firstName}
               sx={{
                 width: isMobile ? '7.5rem' : '10rem',
                 height: isMobile ? '7.5rem' : '10rem',
@@ -148,8 +156,8 @@ export default function UserEditPage() {
                 }}
               >
                 <Avatar
-                  src={image ? tempImageSrc : user?.avatar_url}
-                  alt={user?.name}
+                  src={image ? tempImageSrc : user?.avatarURL}
+                  alt={user?.firstName}
                   sx={{
                     width: isMobile ? '7.5rem' : '10rem',
                     height: isMobile ? '7.5rem' : '10rem',
@@ -188,7 +196,18 @@ export default function UserEditPage() {
             </Box>
           )}
 
-          <NameInput name={name} setName={setName} />
+          <NameInput
+            name={userName.firstName}
+            setName={updateFirstName}
+            setUserName={setUserName}
+            label=''
+          />
+          <NameInput
+            name={userName.lastName}
+            setName={updateLastName}
+            setUserName={setUserName}
+            label=''
+          />
 
           <CourseInput courseId={courseId} setCourseId={setCourseId} />
 

@@ -14,13 +14,14 @@ export type User = {
   roleName: string;
   courseId: number;
   courseName: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   postalCode: string;
   phone: string;
   profilePhoto?: string;
   provider?: string;
-  avatar_url: string;
+  avatarURL: string;
 };
 
 export type FirebaseAccount = {

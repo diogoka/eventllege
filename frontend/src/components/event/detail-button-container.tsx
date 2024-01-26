@@ -80,7 +80,7 @@ const DetailButtonContainer = ({
         setApplied(true);
         setAttendees((prevData: Array<Attendee> | undefined) => [
           ...prevData!,
-          { id: user?.id, name: user?.name },
+          { id: user?.id, name: user?.firstName },
         ]);
       });
   };

@@ -1,4 +1,5 @@
 import { Review } from '../components/event/review/review';
+import { User } from '../types/types';
 
 export const getDayName = (num: number): string => {
   switch (num) {
@@ -103,3 +104,23 @@ export const monthDayFn = (date: string) =>
     month: 'short',
     day: 'numeric',
   });
+
+export const updateFirstName = (
+  newFirstName: string,
+  setUserName: React.Dispatch<React.SetStateAction<User>>
+) => {
+  setUserName((prevUser) => ({
+    ...prevUser,
+    firstName: newFirstName,
+  }));
+};
+
+export const updateLastName = (
+  newLastName: string,
+  setUserName: React.Dispatch<React.SetStateAction<User>>
+) => {
+  setUserName((prevUser) => ({
+    ...prevUser,
+    lastName: newLastName,
+  }));
+};

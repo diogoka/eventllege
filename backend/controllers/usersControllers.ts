@@ -5,12 +5,28 @@ type UserInput = {
   id: string;
   type: number;
   courseId: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   postalCode: string;
   phone: string;
   provider: string;
   avatarURL: string;
+};
+
+type UserResponse = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  provider: string;
+  avatarURL: string | null;
+  roleId: number;
+  roleName: string;
+  postalCode: string | null;
+  courseId: number;
+  courseName: string;
 };
 
 export const getUsers = async (req: express.Request, res: express.Response) => {
@@ -53,15 +69,16 @@ export const editUser = async (req: express.Request, res: express.Response) => {
             UPDATE
                 users
             SET
-                id_user_type = $1, name_user = $2, email_user = $3, postal_code_user = $4, phone_user = $5, avatar_url = $6
+                id_user_type = $1, first_name_user = $2, last_name_user = $3, email_user = $4, postal_code_user = $5, phone_user = $6, avatar_url = $7
             WHERE
-                id_user = $7
+                id_user = $8
             RETURNING
                 *;
             `,
       [
         userInput.type,
-        userInput.name,
+        userInput.firstName,
+        userInput.lastName,
         userInput.email,
         userInput.postalCode,
         userInput.phone,
@@ -112,16 +129,17 @@ export const createUser = async (
     await pool.query(
       `
             INSERT INTO
-                users (id_user, id_user_type, name_user, email_user, postal_code_user, phone_user, provider)
+                users (id_user, id_user_type, first_name_user, last_name_user, email_user, postal_code_user, phone_user, provider)
             VALUES
-                ($1, $2, $3, $4, $5, $6, $7)
+                ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING
                 *;
             `,
       [
         userInput.id,
         userInput.type,
-        userInput.name,
+        userInput.firstName,
+        userInput.lastName,
         userInput.email,
         userInput.postalCode,
         userInput.phone,
@@ -189,7 +207,8 @@ async function getUserResponse(userId: string) {
             users.id_user AS id,
             users.id_user_type AS role_id,
             users_type.role_user AS role_name,
-            users.name_user AS name,
+            users.first_name_user AS first_name,
+            users.last_name_user AS last_name,
             users.email_user AS email,
             users.postal_code_user AS postal_code,
             users.phone_user AS phone,
@@ -205,19 +224,24 @@ async function getUserResponse(userId: string) {
       [userId]
     );
 
-    const user = userResult.rows[0];
+    const user: UserResponse = {
+      id: userResult.rows[0].id,
+      roleId: userResult.rows[0].role_id,
+      roleName: userResult.rows[0].role_name,
+      firstName: userResult.rows[0].first_name,
+      lastName: userResult.rows[0].last_name,
+      email: userResult.rows[0].email,
+      postalCode: userResult.rows[0].postal_code,
+      phone: userResult.rows[0].phone,
+      provider: userResult.rows[0].provider,
+      avatarURL: userResult.rows[0].avatar_url,
+      courseId: 0,
+      courseName: '',
+    };
+
     if (!user) {
       return null;
     }
-
-    user.roleId = user.role_id;
-    delete user.role_id;
-
-    user.roleName = user.role_name;
-    delete user.role_name;
-
-    user.postalCode = user.postal_code;
-    delete user.postal_code;
 
     const courseResult = await pool.query(
       `
