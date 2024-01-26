@@ -43,7 +43,7 @@ const DetailButtonContainer = ({
   const { showedPage, setShowedPage } = useContext(EventContext);
   const [isAttendModalOpen, setIsAttendModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const laptopQuery = useMediaQuery('(min-width:769px)');
+  const laptopQuery = useMediaQuery('(max-width:769px)');
 
   const router = useRouter();
   const pathName = usePathname();
@@ -117,14 +117,35 @@ const DetailButtonContainer = ({
   const id_event = otherInfo?.id_event;
   const id_user = user?.id;
 
+  console.log('laptopQuery', laptopQuery);
+
   return (
     <>
       <Box
-        justifyContent='space-between'
+        justifyContent={laptopQuery ? 'space-evenly' : 'space-between'}
         display={organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'}
-        sx={margin}
+        sx={{ ...margin, columnGap: !laptopQuery ? '' : '1rem' }}
       >
-        <Box style={{ width: '47%' }}>
+        {!laptopQuery && (
+          <Box style={{ width: '37%' }}>
+            {otherInfo?.id_event && (
+              <Button
+                type='submit'
+                variant='outlined'
+                fullWidth
+                onClick={() => {
+                  console.log('clicked');
+                }}
+                sx={{
+                  color: '#228B22',
+                }}
+              >
+                Download Attendees
+              </Button>
+            )}
+          </Box>
+        )}
+        <Box style={{ width: laptopQuery ? '47%' : '27%' }}>
           {otherInfo?.id_event ? (
             <Button
               type='submit'
@@ -140,7 +161,7 @@ const DetailButtonContainer = ({
           )}
         </Box>
 
-        <Box style={{ width: '47%' }}>
+        <Box style={{ width: laptopQuery ? '47%' : '27%' }}>
           {otherInfo?.id_event ? (
             <Button
               type='submit'

@@ -397,7 +397,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
     );
 
     const attendees = await pool.query(
-      'SELECT users.id_user, users.name_user FROM events ' +
+      'SELECT users.id_user, users.first_name_user, users.last_name_user FROM events ' +
         'inner join attendees on events.id_event = attendees.id_event ' +
         'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
       [EVENT_ID]
@@ -422,7 +422,8 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
         })),
         attendees: attendees.rows.map((val) => ({
           id: val.id_user,
-          name: val.name_user,
+          firstName: val.first_name_user,
+          lastName: val.last_name_user,
         })),
       },
     });
@@ -457,7 +458,7 @@ export const getUserEvents = async (
     );
 
     const attendees = await pool.query(
-      `SELECT users.name_user, attendees.id_event FROM events ` +
+      `SELECT users.first_name_user, users.last_name_user, attendees.id_event FROM events ` +
         `inner join attendees on events.id_event = attendees.id_event ` +
         `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
     );
@@ -479,7 +480,7 @@ export const getUserEvents = async (
             return val.id_event == att.id_event ? true : false;
           })
           .map((a) => {
-            return a.name_user;
+            return a.first_name_user + ' ' + a.last_name_user;
           }),
       };
     });
@@ -745,7 +746,8 @@ export const getReviews = async (
     const reviews = await pool.query(
       `
     SELECT
-      u.name_user,
+      u.first_name_user,
+      u.last_name_user,
       u.id_user,
       r.description_review,
       r.rating,
