@@ -7,6 +7,7 @@ import { EventContext } from '@/context/eventContext';
 import ModalAttendParticipation from './modal-attend-participation';
 import ModalCancelParticipation from './modal-cancel-participation';
 import { OtherInfo, Attendee, Event, AlertState } from '@/types/types';
+import DownloadAttendees from './download-attendees';
 
 type Props = {
   event: Event;
@@ -117,8 +118,6 @@ const DetailButtonContainer = ({
   const id_event = otherInfo?.id_event;
   const id_user = user?.id;
 
-  console.log('laptopQuery', laptopQuery);
-
   return (
     <>
       <Box
@@ -128,21 +127,7 @@ const DetailButtonContainer = ({
       >
         {!laptopQuery && (
           <Box style={{ width: '37%' }}>
-            {otherInfo?.id_event && (
-              <Button
-                type='submit'
-                variant='outlined'
-                fullWidth
-                onClick={() => {
-                  console.log('clicked');
-                }}
-                sx={{
-                  color: '#228B22',
-                }}
-              >
-                Download Attendees
-              </Button>
-            )}
+            {otherInfo?.id_event && <DownloadAttendees eventData={event} />}
           </Box>
         )}
         <Box style={{ width: laptopQuery ? '47%' : '27%' }}>
