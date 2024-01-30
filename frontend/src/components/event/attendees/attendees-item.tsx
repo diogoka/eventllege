@@ -17,10 +17,10 @@ export default function AttendeesItem({ attendee }: Props) {
       width='48%'
     >
       <Avatar
-        alt={attendee.name}
+        alt={attendee.firstName}
         src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${attendee.id}`}
       />
-      <Typography fontSize='1.125rem'>{attendee.name}</Typography>
+      <Typography fontSize='1.125rem'>{attendee.firstName}</Typography>
     </Box>
   );
 }

@@ -8,6 +8,7 @@ type Props = {
 };
 
 export default function AttendeesList({ attendees }: Props) {
+  console.log('modal', attendees);
   return (
     <Box
       display='flex'

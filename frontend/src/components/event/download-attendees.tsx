@@ -1,13 +1,23 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { CSVLink, CSVDownload } from 'react-csv';
 import { Event } from '@/types/types';
+import IconsContainer from '../icons/iconsContainer';
+import axios from 'axios';
 
 type Props = {
-  eventData: Event;
+  eventData?: Event;
 };
 
 function DownloadAttendees({ eventData }: Props) {
+  const [download, setDownload] = useState(false);
+  const [eventToDownload, setEventToDownload] = useState<Array<Array<string>>>(
+    []
+  );
+  const [eventName, setEventName] = useState(
+    eventData ? eventData.name_event : ''
+  );
+
   const linesCSV = async (data: Event) => {
     const newDataArray: any = [
       ['Event name: ', data.name_event],
@@ -28,12 +38,8 @@ function DownloadAttendees({ eventData }: Props) {
     await setEventToDownload(newDataArray);
   };
 
-  const [eventToDownload, setEventToDownload] = useState<Array<Array<string>>>(
-    []
-  );
-
   useEffect(() => {
-    linesCSV(eventData);
+    eventData ? linesCSV(eventData!) : '';
   }, [eventData]);
 
   return (
@@ -48,7 +54,7 @@ function DownloadAttendees({ eventData }: Props) {
     >
       <CSVLink
         data={eventToDownload}
-        filename={`Attendees Report ${eventData.name_event}.csv`}
+        filename={`Attendees Report ${eventName}.csv`}
         className='btn btn-primary'
         target='_blank'
         style={{

@@ -5,6 +5,7 @@ import { AlertColor, Box, Rating, Typography } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 import { EventContext } from '@/context/eventContext';
 import { StarRounded } from '@mui/icons-material';
+import DownloadAttendees from '@/components/event/download-attendees';
 
 type Props = {
   role?: string;
@@ -52,8 +53,6 @@ function EventIcons({
       router.push(`/events/${eventId}/edit`);
     } else if (iconName === 'FaTrashAlt') {
       openDeleteModal();
-    } else if (iconName === 'FaDownload') {
-      console.log('download');
     }
   };
 
@@ -114,32 +113,27 @@ function EventIcons({
               )}
             </>
           ) : (
-            <IconsContainer
-              icons={[
-                {
-                  name: 'FaDownload',
-                  isClickable: true,
-                  color: '#228b22',
-                  title: laptopQuery ? 'Download Attendees' : '',
-                  hoverColor: '#C2F1C1',
-                },
-                {
-                  name: 'FaEdit',
-                  isClickable: true,
-                  color: '#3874CB',
-                  title: laptopQuery ? 'Edit' : '',
-                  hoverColor: '#d7e3f4',
-                },
-                {
-                  name: 'FaTrashAlt',
-                  isClickable: true,
-                  color: '#D00000',
-                  title: laptopQuery ? 'Delete' : '',
-                  hoverColor: '#ffd0d0',
-                },
-              ]}
-              onIconClick={handleOrganizerClick}
-            />
+            <>
+              <IconsContainer
+                icons={[
+                  {
+                    name: 'FaEdit',
+                    isClickable: true,
+                    color: '#3874CB',
+                    title: laptopQuery ? 'Edit' : '',
+                    hoverColor: '#d7e3f4',
+                  },
+                  {
+                    name: 'FaTrashAlt',
+                    isClickable: true,
+                    color: '#D00000',
+                    title: laptopQuery ? 'Delete' : '',
+                    hoverColor: '#ffd0d0',
+                  },
+                ]}
+                onIconClick={handleOrganizerClick}
+              />
+            </>
           )}
         </>
       );
