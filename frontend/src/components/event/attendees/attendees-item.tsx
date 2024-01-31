@@ -16,10 +16,7 @@ export default function AttendeesItem({ attendee }: Props) {
       minWidth='240px'
       width='48%'
     >
-      <Avatar
-        alt={attendee.firstName}
-        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${attendee.id}`}
-      />
+      <Avatar alt={attendee.firstName} src={attendee.avatarURL} />
       <Typography fontSize='1.125rem'>{attendee.firstName}</Typography>
     </Box>
   );

@@ -424,7 +424,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
 
     const attendees = await pool.query(
       `
-      SELECT users.id_user, users.first_name_user, users.last_name_user, users.email_user
+      SELECT users.id_user, users.first_name_user, users.last_name_user, users.email_user, users.avatar_url
       FROM events
       INNER JOIN attendees ON events.id_event = attendees.id_event
       INNER JOIN users ON attendees.id_user = users.id_user
@@ -442,6 +442,7 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
           lastName: attendee.last_name_user,
           email: attendee.email_user,
           course: course,
+          avatarURL: attendee.avatar_url,
         };
       })
     );
@@ -748,9 +749,22 @@ export const newReview = async (
          RETURNING *`,
       [id_user, review.description, review.rating, review.date_review]
     );
-    const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
+    const eventReview = await newEventReview(
+      id_event,
+      newReview.rows[0].id_review
+    );
+    const getAvatarURL = await pool.query(
+      `SELECT avatar_url FROM users WHERE id_user = $1`,
+      [id_user]
+    );
 
-    res.status(201).json(newReview.rows);
+    const avatarURL = getAvatarURL.rows[0].avatar_url;
+
+    const responseObj = {
+      ...newReview.rows[0],
+      avatar_url: avatarURL,
+    };
+    res.status(201).json(responseObj);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -781,6 +795,7 @@ export const getReviews = async (
     SELECT
       u.first_name_user,
       u.last_name_user,
+      u.avatar_url,
       u.id_user,
       r.description_review,
       r.rating,

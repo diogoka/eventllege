@@ -7,6 +7,7 @@ export type Attendee = {
   lastName: string;
   course: string;
   email: string;
+  avatarURL?: string;
 };
 
 export type EventDate = {

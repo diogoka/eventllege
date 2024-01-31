@@ -24,7 +24,8 @@ export interface Review {
   id_review: number;
   date_review: string;
   description_review: string;
-  name_user: string;
+  first_name_user: string;
+  avatar_url: string;
   rating: number;
   id_user: string;
 }

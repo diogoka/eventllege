@@ -105,6 +105,8 @@ export default function SignUpPage() {
     formData.append('firstName', userName.firstName);
     formData.append('lastName', userName.lastName);
     formData.append('provider', firebaseAccount.providerData![0].providerId);
+    formData.append('avatarURL', firebaseAccount.photoURL!);
+
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
 

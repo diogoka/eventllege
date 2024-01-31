@@ -129,9 +129,9 @@ export const createUser = async (
     await pool.query(
       `
             INSERT INTO
-                users (id_user, id_user_type, first_name_user, last_name_user, email_user, postal_code_user, phone_user, provider)
+                users (id_user, id_user_type, first_name_user, last_name_user, email_user, postal_code_user, phone_user, avatar_url, provider)
             VALUES
-                ($1, $2, $3, $4, $5, $6, $7, $8)
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             RETURNING
                 *;
             `,
@@ -143,6 +143,7 @@ export const createUser = async (
         userInput.email,
         userInput.postalCode,
         userInput.phone,
+        userInput.avatarURL,
         userInput.provider,
       ]
     );
