@@ -115,7 +115,6 @@ export default function SignUpPage() {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {
-        console.log('res.data', res.data);
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);
         router.replace('/events');

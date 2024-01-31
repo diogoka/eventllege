@@ -106,7 +106,6 @@ export default function ModalRating({
         },
       })
       .then((res) => {
-        console.log('res', res);
         res.data.first_name_user = user_name;
         updateReviews(res.data);
         setSnackbarSeverity('success');

@@ -80,8 +80,6 @@ const DetailButtonContainer = ({
         }, 3000);
         setApplied(true);
 
-        console.log('res', res.data[0]);
-
         setAttendees((prev) => {
           return prev?.concat(res.data[0]);
         });

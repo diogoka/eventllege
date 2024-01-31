@@ -13,7 +13,6 @@ type Props = {
 };
 
 export default function NameInput(props: Props) {
-  console.log('name-input', props.name);
   return (
     <FormControl required fullWidth>
       <TextField

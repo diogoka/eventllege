@@ -91,7 +91,7 @@ export default function ModalDelete({
         }, 2000);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
     await closingModal();
   };

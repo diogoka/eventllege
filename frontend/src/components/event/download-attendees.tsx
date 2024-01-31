@@ -1,9 +1,8 @@
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import { Event } from '@/types/types';
-import IconsContainer from '../icons/iconsContainer';
-import axios from 'axios';
+import { weekDayFn, TimeFn, monthDayFn } from '@/common/functions';
 
 type Props = {
   eventData?: Event;
@@ -19,10 +18,14 @@ function DownloadAttendees({ eventData }: Props) {
   );
 
   const linesCSV = async (data: Event) => {
+    const weekDay = weekDayFn(data.date_event_start!);
+    const time = TimeFn(data.date_event_start!);
+    const month = monthDayFn(data.date_event_start!);
+
     const newDataArray: any = [
       ['Event name: ', data.name_event],
       ['Event Location: ', data.location_event],
-      ['Date: ', data.date_event_start],
+      ['Date: ', `${weekDay}, ${month}, ${time}`],
       ['First Name', 'Last Name', 'Course', 'Email'],
     ];
 
