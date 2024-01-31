@@ -9,6 +9,8 @@ exports.up = async (pgm) => {
         INSERT INTO users_type (role_user) VALUES ('admin');
     `);
 
+
+
   const courses = [
     { name_course: 'English Languages Courses 1.0', category_course: 'ESL' },
     { name_course: 'English Languages Courses 1.5', category_course: 'ESL' },

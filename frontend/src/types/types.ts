@@ -3,7 +3,11 @@ import { AlertColor } from '@mui/material';
 
 export type Attendee = {
   id: string | undefined;
-  name: string | undefined;
+  firstName: string;
+  lastName: string;
+  course: string;
+  email: string;
+  avatarURL?: string;
 };
 
 export type EventDate = {
@@ -27,6 +31,14 @@ export type Event = {
   category_event: string;
   tags: Array<Tag>;
   image_url_event: string;
+  date_event_start?: string;
+  attendees?: Array<Attendee>;
+};
+
+export type EventData = {
+  name_event: string;
+  location_event: string;
+  date_event_start: string;
 };
 
 export type OtherInfo = {
@@ -39,4 +51,9 @@ export interface AlertState {
   title: string;
   message: string;
   severity: AlertColor;
+}
+
+export interface User {
+  firstName: string;
+  lastName: string;
 }

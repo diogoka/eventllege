@@ -24,7 +24,8 @@ export interface Review {
   id_review: number;
   date_review: string;
   description_review: string;
-  name_user: string;
+  first_name_user: string;
+  avatar_url: string;
   rating: number;
   id_user: string;
 }
@@ -116,7 +117,7 @@ function Review({ id_event, applied }: Props) {
         <ModalRating
           user_id={user!.id}
           event_id={id_event}
-          user_name={user!.name}
+          user_name={user!.firstName}
           openModal={openModal}
           handleClose={handleClose}
           updateReviews={updateReviews}

@@ -72,8 +72,8 @@ export default function AttendeesRow({ attendees }: Props) {
             return (
               <Avatar
                 key={index}
-                alt={attendee.name}
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${attendee.id}`}
+                alt={attendee.firstName}
+                src={attendee.avatarURL}
               />
             );
           }

@@ -18,6 +18,8 @@ export default function UserPage() {
   const { user, firebaseAccount } = useContext(UserContext);
   const { setPageStatus } = useContext(PageContext);
 
+  console.log('user in My Profile', user);
+
   useEffect(() => {
     setPageStatus(PageStatus.Ready);
   });
@@ -28,10 +30,10 @@ export default function UserPage() {
         <Avatar
           src={`${
             user?.provider === 'password'
-              ? user.avatar_url
+              ? user.avatarURL
               : firebaseAccount?.photoURL
           }`}
-          alt={user?.name}
+          alt={user?.firstName}
           sx={{
             width: isMobile ? '7.5rem' : '10rem',
             height: isMobile ? '7.5rem' : '10rem',
@@ -53,7 +55,7 @@ export default function UserPage() {
 
         <UserInfoItem
           icon={<BsFillPersonFill />}
-          value={user ? user!.name : ''}
+          value={user ? `${user!.firstName + ' ' + user!.lastName}` : ''}
         />
         <UserInfoItem icon={<HiMail />} value={user ? user!.email : ''} />
         <UserInfoItem

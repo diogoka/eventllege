@@ -60,10 +60,8 @@ function ReviewItem({ review, laptopQuery }: Props) {
           }}
         >
           <Avatar
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/img/users/${
-              review.id_user
-            }?${new Date().getTime()}`}
-            alt={review.name_user}
+            src={review.avatar_url}
+            alt={review.first_name_user}
             sx={{
               width: '2.1875rem',
               height: '2.1875rem',
@@ -72,7 +70,7 @@ function ReviewItem({ review, laptopQuery }: Props) {
           <Typography
             sx={{ fontSize: '1rem', display: 'flex', justifyContent: 'center' }}
           >
-            {review.name_user}
+            {review.first_name_user}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', columnGap: '0.8rem' }}>

@@ -28,10 +28,10 @@ export default function AvatarIcon() {
         <>
           <IconButton onClick={() => toggleMenu(true)} sx={{ p: 0 }}>
             <Avatar
-              alt={user?.name}
+              alt={user?.firstName}
               src={`${
                 user?.provider === 'password'
-                  ? user.avatar_url
+                  ? user.avatarURL
                   : firebaseAccount?.photoURL
               }`}
             ></Avatar>
@@ -56,10 +56,10 @@ export default function AvatarIcon() {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar
-              alt={user?.name}
+              alt={user?.firstName}
               src={`${
                 user?.provider === 'password'
-                  ? user.avatar_url
+                  ? user.avatarURL
                   : firebaseAccount?.photoURL
               }`}
             ></Avatar>

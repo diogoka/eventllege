@@ -347,7 +347,7 @@ export default function EventPage() {
                 </Box>
               </Box>
 
-              <Box width='30%'>
+              <Box width='55%'>
                 <DetailButtonContainer
                   event={event!}
                   otherInfo={otherInfo!}

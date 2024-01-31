@@ -18,6 +18,8 @@ import { getErrorMessage } from '@/auth/errors';
 import PasswordInput from '@/components/common/password-input';
 import NameInput from '@/components/user/form/name-input';
 import CourseInput from '@/components/user/form/course-input';
+import { User } from '@/types/types';
+import { updateFirstName, updateLastName } from '@/common/functions';
 
 import {
   getAuth,
@@ -45,7 +47,10 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
+  const [userName, setUserName] = useState<User>({
+    firstName: '',
+    lastName: '',
+  });
   const [courseId, setCourseId] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
@@ -97,8 +102,11 @@ export default function SignUpPage() {
     formData.append('email', firebaseAccount.email!);
     formData.append('type', '2');
     formData.append('courseId', courseId.toString());
-    formData.append('name', name);
+    formData.append('firstName', userName.firstName);
+    formData.append('lastName', userName.lastName);
     formData.append('provider', firebaseAccount.providerData![0].providerId);
+    formData.append('avatarURL', firebaseAccount.photoURL!);
+
     if (postalCode) formData.append('postalCode', postalCode);
     if (phone) formData.append('phone', phone);
 
@@ -107,6 +115,7 @@ export default function SignUpPage() {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then((res) => {
+        console.log('res.data', res.data);
         setUser(res.data);
         setLoginStatus(LoginStatus.LoggedIn);
         router.replace('/events');
@@ -217,7 +226,18 @@ export default function SignUpPage() {
             <form onSubmit={handleSignup}>
               <Stack rowGap={'20px'}>
                 <Stack rowGap={'10px'}>
-                  <NameInput name={name} setName={setName} />
+                  <NameInput
+                    name={userName.firstName}
+                    setName={updateFirstName}
+                    setUserName={setUserName}
+                    label='First Name'
+                  />
+                  <NameInput
+                    name={userName.lastName}
+                    setName={updateLastName}
+                    setUserName={setUserName}
+                    label='Last Name'
+                  />
                   <CourseInput courseId={courseId} setCourseId={setCourseId} />
 
                   <Typography variant='body2' align='center'>

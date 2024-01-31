@@ -7,6 +7,7 @@ import { EventContext } from '@/context/eventContext';
 import ModalAttendParticipation from './modal-attend-participation';
 import ModalCancelParticipation from './modal-cancel-participation';
 import { OtherInfo, Attendee, Event, AlertState } from '@/types/types';
+import DownloadAttendees from './download-attendees';
 
 type Props = {
   event: Event;
@@ -43,7 +44,7 @@ const DetailButtonContainer = ({
   const { showedPage, setShowedPage } = useContext(EventContext);
   const [isAttendModalOpen, setIsAttendModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const laptopQuery = useMediaQuery('(min-width:769px)');
+  const laptopQuery = useMediaQuery('(max-width:769px)');
 
   const router = useRouter();
   const pathName = usePathname();
@@ -78,10 +79,12 @@ const DetailButtonContainer = ({
           handleAlertFn(false, '', '', 'success');
         }, 3000);
         setApplied(true);
-        setAttendees((prevData: Array<Attendee> | undefined) => [
-          ...prevData!,
-          { id: user?.id, name: user?.name },
-        ]);
+
+        console.log('res', res.data[0]);
+
+        setAttendees((prev) => {
+          return prev?.concat(res.data[0]);
+        });
       });
   };
 
@@ -120,11 +123,16 @@ const DetailButtonContainer = ({
   return (
     <>
       <Box
-        justifyContent='space-between'
+        justifyContent={laptopQuery ? 'space-evenly' : 'space-between'}
         display={organizerEvent && loginStatus == 'Logged In' ? 'flex' : 'none'}
-        sx={margin}
+        sx={{ ...margin, columnGap: !laptopQuery ? '' : '1rem' }}
       >
-        <Box style={{ width: '47%' }}>
+        {!laptopQuery && (
+          <Box style={{ width: '37%' }}>
+            {otherInfo?.id_event && <DownloadAttendees eventData={event} />}
+          </Box>
+        )}
+        <Box style={{ width: laptopQuery ? '47%' : '27%' }}>
           {otherInfo?.id_event ? (
             <Button
               type='submit'
@@ -140,7 +148,7 @@ const DetailButtonContainer = ({
           )}
         </Box>
 
-        <Box style={{ width: '47%' }}>
+        <Box style={{ width: laptopQuery ? '47%' : '27%' }}>
           {otherInfo?.id_event ? (
             <Button
               type='submit'

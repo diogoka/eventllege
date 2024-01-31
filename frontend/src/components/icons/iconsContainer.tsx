@@ -11,7 +11,7 @@ type Props = {
     size?: string;
     hoverColor?: string;
   }[];
-  onIconClick: (iconName: string) => void;
+  onIconClick?: (iconName: string) => void;
 };
 
 function IconsContainer({ icons, onIconClick }: Props) {
@@ -19,7 +19,7 @@ function IconsContainer({ icons, onIconClick }: Props) {
     event.stopPropagation();
     const icon = icons.find((icon) => icon.name === iconName);
     if (icon && icon.isClickable) {
-      onIconClick(iconName);
+      onIconClick!(iconName);
     }
   };
 

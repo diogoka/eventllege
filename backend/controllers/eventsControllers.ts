@@ -4,6 +4,14 @@ import { sendEmail, EmailOption } from '../helpers/mail';
 import fs from 'fs-extra';
 import moment from 'moment-timezone';
 
+type Attendee = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  course: string;
+  email: string;
+};
+
 type EventInput = {
   owner: string;
   title: string;
@@ -381,6 +389,20 @@ export const getEventsByOwner = async (
   }
 };
 
+const getCourse = async (id: string) => {
+  const userCourse = await pool.query(
+    'SELECT id_course FROM users_courses WHERE id_user = $1',
+    [id]
+  );
+
+  const course = await pool.query(
+    'SELECT name_course FROM courses WHERE id_course = $1',
+    [userCourse.rows[0].id_course]
+  );
+
+  return course.rows[0].name_course;
+};
+
 export const getEvent = async (req: express.Request, res: express.Response) => {
   const EVENT_ID = req.originalUrl.split('/api/events/')[1];
 
@@ -390,42 +412,55 @@ export const getEvent = async (req: express.Request, res: express.Response) => {
     ]);
 
     const tags = await pool.query(
-      'SELECT tags.id_tag, tags.name_tag FROM events ' +
-        'inner join events_tags on events.id_event = events_tags.id_event ' +
-        'inner join tags on events_tags.id_tag = tags.id_tag where events.id_event=$1',
+      `
+      SELECT tags.id_tag, tags.name_tag
+      FROM events
+      INNER JOIN events_tags ON events.id_event = events_tags.id_event
+      INNER JOIN tags ON events_tags.id_tag = tags.id_tag
+      WHERE events.id_event=$1
+    `,
       [EVENT_ID]
     );
 
     const attendees = await pool.query(
-      'SELECT users.id_user, users.name_user FROM events ' +
-        'inner join attendees on events.id_event = attendees.id_event ' +
-        'inner join users on attendees.id_user = users.id_user where events.id_event=$1',
+      `
+      SELECT users.id_user, users.first_name_user, users.last_name_user, users.email_user, users.avatar_url
+      FROM events
+      INNER JOIN attendees ON events.id_event = attendees.id_event
+      INNER JOIN users ON attendees.id_user = users.id_user
+      WHERE events.id_event=$1
+    `,
       [EVENT_ID]
     );
 
-    const dataUTC = events.rows[0].date_event_start;
+    const attendeesArray: Attendee[] = await Promise.all(
+      attendees.rows.map(async (attendee) => {
+        const course = await getCourse(attendee.id_user);
+        return {
+          id: attendee.id_user,
+          firstName: attendee.first_name_user,
+          lastName: attendee.last_name_user,
+          email: attendee.email_user,
+          course: course,
+          avatarURL: attendee.avatar_url,
+        };
+      })
+    );
 
-    const convertDate = (date: string) => {
-      const dataUTCObj = moment.utc(date);
-      const dataPSTObj = dataUTCObj.tz('America/Vancouver');
-      return dataPSTObj.format();
+    const convertToPST = (date: string) => {
+      return moment.utc(date).tz('America/Vancouver').format();
     };
-
-    res.status(200).json({
-      event: {
-        ...events.rows[0],
-        date_event_start: convertDate(events.rows[0].date_event_start),
-        date_event_end: convertDate(events.rows[0].date_event_end),
-        tags: tags.rows.map((val) => ({
-          id_tag: val.id_tag,
-          name_tag: val.name_tag,
-        })),
-        attendees: attendees.rows.map((val) => ({
-          id: val.id_user,
-          name: val.name_user,
-        })),
-      },
-    });
+    const formattedEvent = {
+      ...events.rows[0],
+      date_event_start: convertToPST(events.rows[0].date_event_start),
+      date_event_end: convertToPST(events.rows[0].date_event_end),
+      tags: tags.rows.map((val) => ({
+        id_tag: val.id_tag,
+        name_tag: val.name_tag,
+      })),
+      attendees: attendeesArray,
+    };
+    res.status(200).json({ event: formattedEvent });
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -457,7 +492,7 @@ export const getUserEvents = async (
     );
 
     const attendees = await pool.query(
-      `SELECT users.name_user, attendees.id_event FROM events ` +
+      `SELECT users.first_name_user, users.last_name_user, attendees.id_event FROM events ` +
         `inner join attendees on events.id_event = attendees.id_event ` +
         `inner join users on attendees.id_user = users.id_user where attendees.id_event in (${ids})`
     );
@@ -479,7 +514,7 @@ export const getUserEvents = async (
             return val.id_event == att.id_event ? true : false;
           })
           .map((a) => {
-            return a.name_user;
+            return a.first_name_user + ' ' + a.last_name_user;
           }),
       };
     });
@@ -657,9 +692,14 @@ export const newAttendee = async (
       [id_event, id_user]
     );
 
-    await sendTicket(id_event, id_user);
+    const getAttendeeInfo = await pool.query(
+      'SELECT * FROM users where id_user = $1',
+      [id_user]
+    );
 
-    res.status(201).json(events.rows);
+    // await sendTicket(id_event, id_user);
+
+    res.status(201).json(getAttendeeInfo.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -714,9 +754,22 @@ export const newReview = async (
          RETURNING *`,
       [id_user, review.description, review.rating, review.date_review]
     );
-    const eventReview = newEventReview(id_event, newReview.rows[0].id_review);
+    const eventReview = await newEventReview(
+      id_event,
+      newReview.rows[0].id_review
+    );
+    const getAvatarURL = await pool.query(
+      `SELECT avatar_url FROM users WHERE id_user = $1`,
+      [id_user]
+    );
 
-    res.status(201).json(newReview.rows);
+    const avatarURL = getAvatarURL.rows[0].avatar_url;
+
+    const responseObj = {
+      ...newReview.rows[0],
+      avatar_url: avatarURL,
+    };
+    res.status(201).json(responseObj);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
@@ -745,7 +798,9 @@ export const getReviews = async (
     const reviews = await pool.query(
       `
     SELECT
-      u.name_user,
+      u.first_name_user,
+      u.last_name_user,
+      u.avatar_url,
       u.id_user,
       r.description_review,
       r.rating,
@@ -804,7 +859,7 @@ export const sendTicket = async (eventId: any, userId: any) => {
         Your Ticket for ${event.name_event}
       `,
       text: `
-        Hi, ${user.name_user}. Thank you for joining our event.
+        Hi, ${user.first_name_user}. Thank you for joining our event.
         This is your ticket.
         Event Name: ${event.name_event}
         Date: ${event.date_event_start.toDateString()}
