@@ -280,7 +280,10 @@ export default function PreviewEventPage() {
             attendees={[
               {
                 id: undefined,
-                name: undefined,
+                firstName: '',
+                lastName: '',
+                course: '',
+                email: '',
               },
             ]}
             tags={tempState.tags}
@@ -340,7 +343,10 @@ export default function PreviewEventPage() {
                 attendees={[
                   {
                     id: undefined,
-                    name: undefined,
+                    firstName: '',
+                    lastName: '',
+                    course: '',
+                    email: '',
                   },
                 ]}
                 tags={tempState.tags}

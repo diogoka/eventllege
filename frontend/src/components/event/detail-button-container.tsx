@@ -79,10 +79,12 @@ const DetailButtonContainer = ({
           handleAlertFn(false, '', '', 'success');
         }, 3000);
         setApplied(true);
-        setAttendees((prevData: Array<Attendee> | undefined) => [
-          ...prevData!,
-          { id: user?.id, name: user?.firstName },
-        ]);
+
+        console.log('res', res.data[0]);
+
+        setAttendees((prev) => {
+          return prev?.concat(res.data[0]);
+        });
       });
   };
 

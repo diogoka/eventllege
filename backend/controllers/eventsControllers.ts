@@ -692,9 +692,14 @@ export const newAttendee = async (
       [id_event, id_user]
     );
 
-    await sendTicket(id_event, id_user);
+    const getAttendeeInfo = await pool.query(
+      'SELECT * FROM users where id_user = $1',
+      [id_user]
+    );
 
-    res.status(201).json(events.rows);
+    // await sendTicket(id_event, id_user);
+
+    res.status(201).json(getAttendeeInfo.rows);
   } catch (err: any) {
     res.status(500).send(err.message);
   }
