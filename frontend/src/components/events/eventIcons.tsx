@@ -62,7 +62,8 @@ function EventIcons({
 
   const handleUserClick = (iconName: string) => {
     if (iconName === 'FaShareSquare') {
-      copyToClipboard(`http://localhost:3000/events/${eventId}`);
+      const currentURL = window.location.href;
+      copyToClipboard(`${currentURL}/${eventId}`);
     }
   };
 

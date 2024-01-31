@@ -16,10 +16,9 @@ const DetailIconContainer = ({
   const { loginStatus } = useContext(UserContext);
 
   const handleUserClick = () => {
+    const currentURL = window.location.href;
     navigator.clipboard
-      .writeText(
-        `https://eventllege-frontend.onrender.com/events/${otherInfo?.id_event}`
-      )
+      .writeText(`${currentURL}`)
       .then(() => {
         handleAlertFn!(
           true,

@@ -7,7 +7,7 @@ export const getLocation = async (
 ) => {
   try {
     const result = await axios.get(
-      `https://maps.googleapis.com/maps/api/place/autocomplete/json?types=address&input=${req.query.input}&components=country:ca&key=${process.env.GOOGLE_PLACES_API_KEY}`
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?types=establishment|geocode&input=${req.query.input}&components=country:ca&key=${process.env.GOOGLE_PLACES_API_KEY}`
     );
 
     const options: string[] = result.data.predictions.map((prediction: any) => {
